@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 
 // Route to display the home page after login/signup
 app.get('/recruiter/home', (req, res) => {
-  res.render('home', { title: 'Recruiter Dashboard' });
+  res.render('home', { title: 'Recruiter Dashboard'});
 });
 
 // Route to add company
@@ -30,6 +30,23 @@ app.get('/recruiter/add-company', (req, res) => {
 // Route to add job
 app.get('/recruiter/add-job', (req, res) => {
   res.render('add-job', { title: 'Add Job' });
+});
+
+app.get('/recruiter/companies', (req, res) => {
+  const companies = [
+      { logo: 'https://logo.clearbit.com/google.com', name: 'Google', date: '2024-06-14' },
+      { logo: 'https://logo.clearbit.com/microsoft.com', name: 'Microsoft', date: '2024-06-14' }
+  ];
+  res.render('companies', { companies });
+});
+
+
+app.get('/recruiter/jobs',(req,res)=>{
+  res.render('jobs',{title: 'Jobs'});
+});
+
+app.get('/recruiter/profile',(req,res)=>{
+  res.render('profile');
 });
 
 const PORT = 5000;  
