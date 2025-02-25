@@ -81,7 +81,7 @@ button {
   font-size: 20px;
 }
 
-/* login css */
+/* login css start*/
 .bodywala {
   font-family: Arial, sans-serif;
   display: flex;
@@ -230,5 +230,39 @@ button {
   text-decoration: none;
 }
 
+.login-heading {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: white;
+  text-align: left;
+}
 
-  
+.main-heading {
+  font-size: 54px;
+  font-weight: bold;
+  margin: 0;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.sub-heading {
+  font-size: 30px;
+  margin: 0;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+@media (max-width: 1260px){
+  .main-heading{
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  .sub-heading {
+    font-size: 15px;
+    margin: 0;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+}
+
+/* login css end*/

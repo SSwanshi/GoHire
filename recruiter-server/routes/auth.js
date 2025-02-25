@@ -13,7 +13,7 @@ router.post('/login', (req, res) => {
 
 router.post('/signup', (req, res) => {
   const { name, email, password } = req.body;
-  res.redirect('/auth/login');
+  res.redirect('/auth/login'); 
 });
 
 router.get('/login', (req, res) => {
