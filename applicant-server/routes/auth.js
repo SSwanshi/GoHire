@@ -8,6 +8,7 @@ router.get('/login', (req, res) => {
   res.render('login');
 });
 
+
 // Login Handle
 router.post('/login', passport.authenticate('local', {
   successRedirect: '/',
@@ -19,6 +20,7 @@ router.post('/login', passport.authenticate('local', {
 router.get('/signup', (req, res) => {
   res.render('signup');
 });
+
 
 // Signup Handle
 router.post('/signup', async (req, res) => {

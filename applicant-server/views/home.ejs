@@ -1,60 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Go Hire</title>
-  <link rel="stylesheet" href="../public/css/styles.css">
-</head>
-
-<body>
-  <nav class="navbar">
-    <div class="navbar-container">
-      <a href="#" class="navbar-logo">Go Hire</a>
-      <ul class="navbar-menu">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Services</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-      <div class="navbar-toggle" id="mobile-menu">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </div>
-    </div>
-  </nav>
-
-  <header>
-    <h1>Unlock Your Career</h1>
-    <p>Explore opportunities from across the globe to grow, showcase skills, gain CV points & get hired by your dream
-      company.</p>
-  </header>
-
-  <section class="user-story">
-    <p><strong>Asha</strong> just went Unstop Pro!</p>
-  </section>
-
-  <section class="who-is-using">
-    <h2>Who’s using Unstop?</h2>
-    <div class="user-group">
-      <h3>Students and Professionals</h3>
-      <p>Unlock Your Potential: Compete, Build Resume, Grow and get Hired!</p>
-    </div>
-    <div class="user-group">
-      <h3>Companies and Recruiters</h3>
-      <p>Discover Right Talent: Hire, Engage, and Brand Like Never Before!</p>
-    </div>
-    <div class="user-group">
-      <h3>Colleges</h3>
-      <p>Bridge Academia and Industry: Empower Students with Real-World Opportunities!</p>
-    </div>
-  </section>
-
-  <footer>
-    <p>Know How</p>
-  </footer>
-</body>
-
-</html>
+    <%- include('layout/header') %>
+    
+    <nav class="bg-blue-600 p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-white text-2xl font-bold">Go Hire</a>
+            
+            <div class="relative w-1/3">
+                <input type="text" placeholder="Search for Opportunities" class="w-full p-2 rounded-lg border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+            
+            <ul class="hidden md:flex space-x-6 text-white">
+                <li><a href="/" class="hover:text-blue-200">Home</a></li>
+                <li><a href="/jobs" class="hover:text-blue-200">Jobs</a></li>
+                <li><a href="/internships" class="hover:text-blue-200">Internship</a></li>
+                <li><a href="/contact" class="hover:text-blue-200">Contact Us</a></li>
+            </ul>
+            
+            <div class="md:hidden flex flex-col space-y-1 cursor-pointer" id="mobile-menu">
+                <span class="block w-6 h-0.5 bg-white"></span>
+                <span class="block w-6 h-0.5 bg-white"></span>
+                <span class="block w-6 h-0.5 bg-white"></span>
+            </div>
+        </div>
+    </nav>
+    
+    <header class="text-center py-16 bg-blue-500 text-white">
+        <h1 class="text-4xl font-bold">Unlock Your Career</h1>
+        <p class="text-lg mt-4">Explore opportunities from across the globe to grow, showcase skills, gain CV points & get hired by your dream company.</p>
+    </header>
+    
+    <section class="bg-blue-100 p-4 text-center">
+        <!--Empty container in middle by Sarvjeet-->
+    </section>
+    
+    <section class="text-center py-12">
+        <h2 class="text-3xl font-bold text-blue-600">Who’s using GoHire?</h2>
+        <div class="grid md:grid-cols-3 gap-8 mt-8 px-4 md:px-16">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-blue-700">Students and Professionals</h3>
+                <p class="mt-2 text-gray-600">Unlock Your Potential: Compete, Build Resume, Grow and get Hired!</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-blue-700">Companies and Recruiters</h3>
+                <p class="mt-2 text-gray-600">Discover Right Talent: Hire, Engage, and Brand Like Never Before!</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-blue-700">Colleges</h3>
+                <p class="mt-2 text-gray-600">Bridge Academia and Industry: Empower Students with Real-World Opportunities!</p>
+            </div>
+        </div>
+    </section>
+    <section class="text-center py-12">
+        <h2 class="text-3xl font-bold text-blue-600">Who’s using GoHire?</h2>
+        <div class="grid md:grid-cols-3 gap-8 mt-8 px-4 md:px-16">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-blue-700">Students and Professionals</h3>
+                <p class="mt-2 text-gray-600">Unlock Your Potential: Compete, Build Resume, Grow and get Hired!</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-blue-700">Companies and Recruiters</h3>
+                <p class="mt-2 text-gray-600">Discover Right Talent: Hire, Engage, and Brand Like Never Before!</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-blue-700">Colleges</h3>
+                <p class="mt-2 text-gray-600">Bridge Academia and Industry: Empower Students with Real-World Opportunities!</p>
+            </div>
+        </div>
+    </section>
+    
+    <%- include('layout/footer') %>

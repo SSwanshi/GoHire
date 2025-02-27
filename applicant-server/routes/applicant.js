@@ -12,15 +12,14 @@ router.get('/', (req, res) => {
 
 // Job Listings
 router.get('/jobs', async (req, res) => {
-  // const jobs = await Job.find().populate('company');
   res.render('job-list');
 });
 
-// Internship Listings
-router.get('/internships', async (req, res) => {
-  // const internships = await Internship.find().populate('company');
+//Internship List
+router.get('/internships', async (req,res)=> {
   res.render('internship-list');
-});
+})
+
 
 // Company List
 router.get('/companies', async (req, res) => {
@@ -28,11 +27,14 @@ router.get('/companies', async (req, res) => {
   res.render('companylist');
 });
 
+router.get('/contact', async (req,res)=> {
+  res.render('contact');
+})
+
+
 // Search Results
 router.get('/search', async (req, res) => {
   const query = req.query.q;
-  // const jobs = await Job.find({ $text: { $search: query } }).populate('company');
-  // const internships = await Internship.find({ $text: { $search: query } }).populate('company');
   res.render('search-results');
 });
 
