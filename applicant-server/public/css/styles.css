@@ -1,4 +1,273 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    background: #f4f4f4;
+    color: #000000;
+}
 
+footer {
+    background-color: #000000;
+    color: white;
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 10px;
+}
+
+.topnav {
+    display: flex;
+    justify-content: space-between;
+    background-color: #001aff;
+}
+
+.topnavright {
+    display: flex;
+    list-style: none;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+.navtext {
+    color: white;
+    text-decoration: none;
+}
+
+.companynav {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 20px;
+    background-color: #001aff;
+
+}
+
+.rightnav {
+    display: flex;
+    list-style: none;
+    gap: 10px;
+    margin-right: 10px;
+
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th,
+td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+img {
+    border-radius: 50%;
+}
+
+button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+/* login css start*/
+.bodywala {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('../images/LoginBackground.png');
+    background-size: cover;
+    height: 100vh;
+}
+
+.login-container {
+    display: flex;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 700px;
+    background-color: white;
+}
+
+.login-left {
+    background: #FFD700;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 40%;
+    background-image: url('../images/loginImage.webp');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+.login-image {
+    width: 100%;
+    height: auto;
+}
+
+.login-heading {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.login-right {
+    width: 60%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.toggle-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.toggle-btn {
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    background: #e9ecef;
+    flex: 1;
+}
+
+.toggle-btn.active {
+    background: #0046be;
+    color: white;
+    border-radius: 5px;
+}
+
+.social-login {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.google-login {
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.divider {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 10px;
+}
+
+.login-form {
+    width: 100%;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.forgot-password {
+    display: block;
+    text-align: right;
+    font-size: 12px;
+    color: #007bff;
+    text-decoration: none;
+    margin-bottom: 10px;
+}
+
+.login-button {
+    width: 100%;
+    background: #0046be;
+    color: white;
+    padding: 10px;
+    border: none;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.signup-text {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.signup-text a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.login-heading {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: white;
+    text-align: left;
+}
+
+.main-heading {
+    font-size: 54px;
+    font-weight: bold;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.sub-heading {
+    font-size: 30px;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+@media (max-width: 1260px) {
+    .main-heading {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .sub-heading {
+        font-size: 15px;
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+}
+
+/* login css end*/
 /* Responsive Styles */
 @media (max-width: 768px) {
     .navbar-menu {
