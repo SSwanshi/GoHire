@@ -1,71 +1,344 @@
-    <%- include('layout/header') %>
-    
-    <nav class="bg-blue-600 p-4 shadow-lg">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="#" class="text-white text-3xl font-bold">Go<span class="text-yellow-400">Hire</span></a>
-            
-            <div class="relative w-1/3">
-                <input type="text" placeholder="Search for Opportunities" class="w-full p-2 rounded-lg border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
+<%- include('layout/header') %>
+
+<nav class="bg-gradient-to-r from-blue-700 to-blue-500 p-5 shadow-xl fixed w-full z-10 transition-all duration-300" id="navbar">
+    <div class="container mx-auto flex justify-between items-center">
+        <a href="/" class="text-black text-3xl font-bold transition-transform hover:scale-105 duration-300 ml-2">Go<span class="text-yellow-400">Hire</span></a>
+        
+        <div class="relative w-1/3 group">
+            <input type="text" placeholder="Search for Opportunities" class="w-full p-3 rounded-full border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 shadow-md placeholder:text-gray-700">
+            <div class="absolute right-3 top-3.5 text-yellow-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
             </div>
             
-            <ul class="hidden md:flex space-x-6 text-white">
-                <li><a href="/" class="hover:text-blue-200">Home</a></li>
-                <li><a href="/jobs" class="hover:text-blue-200">Jobs</a></li>
-                <li><a href="/internships" class="hover:text-blue-200">Internship</a></li>
-                <li><a href="/contact" class="hover:text-blue-200">Contact Us</a></li>
-                <li><a href="/login" class="hover:text-blue-200">Login</a></li>
-            </ul>
+        </div>
+        
+        <ul class="hidden md:flex space-x-8 text-white">
+            <li><a href="/" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-yellow-300 after:transition-all after:duration-300 hover:after:w-full">Home</a></li>
+            <li><a href="/jobs" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-yellow-300 after:transition-all after:duration-300 hover:after:w-full">Jobs</a></li>
+            <li><a href="/internships" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-yellow-300 after:transition-all after:duration-300 hover:after:w-full">Internship</a></li>
+            <li><a href="/contact" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-yellow-300 after:transition-all after:duration-300 hover:after:w-full">Contact Us</a></li>
+            <li><a href="/login" class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg">Login</a></li>
+        </ul>
+        
+        
+        <div class="md:hidden flex flex-col space-y-1 cursor-pointer" id="mobile-menu">
+            <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
+            <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
+            <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
+        </div>
+    </div>
+</nav>
+
+<header class="pt-32 pb-24 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-500 text-white relative overflow-hidden">
+    <div class="absolute inset-0 bg-pattern opacity-10"></div>
+    <div class="container mx-auto px-6 relative z-10">
+        <div class="flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 text-center md:text-left transform transition-all duration-700 translate-y-8 opacity-0 text-black" id="header-text">
+                <h1 class="text-5xl font-bold leading-tight">Unlock Your <span class="text-yellow-300">Career</span> Potential</h1>
+                <p class="text-xl mt-6 text-blue-100 max-w-lg">Explore opportunities from across the globe to grow, showcase skills, gain CV points & get hired by your dream company.</p>
+                <div class="mt-8 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
+                    <a href="/jobs" class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-bold py-3 px-8 rounded-full transition-all duration-300 hover:shadow-xl transform hover:-translate-y-1">Find Jobs</a>
+                    
+                </div>
+            </div>
+            <div class="md:w-1/3 mt-12 md:mt-0 transform transition-all duration-700 translate-x-8 opacity-0" id="header-image">
+                <img src="/images/header_image.webp" alt="Career Opportunities" class="rounded-lg" height="200px" width="300px">
+            </div>
             
-            <div class="md:hidden flex flex-col space-y-1 cursor-pointer" id="mobile-menu">
-                <span class="block w-6 h-0.5 bg-white"></span>
-                <span class="block w-6 h-0.5 bg-white"></span>
-                <span class="block w-6 h-0.5 bg-white"></span>
+        </div>
+    </div>
+    <div class="absolute bottom-0 left-0 w-full overflow-hidden">
+        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 120L48 105C96 90 192 60 288 55C384 50 480 70 576 75C672 80 768 70 864 75C960 80 1056 100 1152 100C1248 100 1344 80 1392 70L1440 60V120H1392C1344 120 1248 120 1152 120C1056 120 960 120 864 120C768 120 672 120 576 120C480 120 384 120 288 120C192 120 96 120 48 120H0Z" fill="white"/>
+        </svg>
+    </div>
+</header>
+
+
+<!-- Feature Cards Section -->
+<section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center text-blue-700 mb-12">Explore Opportunities</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
+            <!-- Internships Card -->
+            <div class="bg-green-100 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 relative">
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold text-green-800 mb-2">Internships</h3>
+                    <p class="text-green-700 mb-6">
+                        Gain<br>
+                        Practical<br>
+                        Experience
+                    </p>
+                    <a href="/internships" class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300 inline-block mt-2">
+                        Find Internships
+                    </a>
+                </div>
+                <div class="absolute right-0 bottom-0 h-full max-h-48 pointer-events-none">
+                    <img src="/images/card_internship.webp" alt="Student with internship materials" class="h-full object-contain">
+                </div>
+            </div>
+
+
+            <!-- Jobs Card -->
+            <div class="bg-blue-100 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 relative">
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold text-blue-800 mb-2">Jobs</h3>
+                    <p class="text-blue-700 mb-6">
+                        Explore<br>
+                        Diverse Careers
+                    </p>
+                    <a href="/jobs" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300 inline-block mt-2">
+                        Find Jobs
+                    </a>
+                </div>
+                <div class="absolute right-0 bottom-0 h-full max-h-48 pointer-events-none">
+                    <img src="/images/card_job.webp" alt="Professional with job offers" class="h-full object-contain">
+                </div>
+            </div>
+
+
+            <!-- Premium Card -->
+            <div class="bg-yellow-100 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 relative">
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold text-yellow-800 mb-2">Premium</h3>
+                    <p class="text-yellow-700 mb-6">
+                        Battle<br>
+                        For Excellence
+                    </p>
+                    <a href="/competitions" class="bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300 inline-block mt-2">
+                        Join Competitions
+                    </a>
+                </div>
+                <div class="absolute right-0 bottom-0 h-full max-h-48 pointer-events-none">
+                    <img src="/images/card_premium.webp" alt="Trophy and competition" class="h-full object-contain">
+                </div>
+            </div>
+
+            <!-- More Card -->
+            <div class="bg-pink-100 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 relative">
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold text-pink-800 mb-2">⋮ More</h3>
+                    <p class="text-pink-700 mb-6">
+                        Discover<br>
+                        All Resources
+                    </p>
+                    <a href="/resources" class="bg-pink-500 hover:bg-pink-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300 inline-block mt-2">
+                        Explore More
+                    </a>
+                </div>
+                <div class="absolute right-0 bottom-0 h-full max-h-48 pointer-events-none">
+                    <img src="/images/card_more.webp" alt="Resource box with tools" class="h-full object-contain">
+                </div>
             </div>
         </div>
-    </nav>
-    
-    <header class="text-center py-16 bg-blue-500 text-white">
-        <h1 class="text-4xl font-bold">Unlock Your Career</h1>
-        <p class="text-lg mt-4">Explore opportunities from across the globe to grow, showcase skills, gain CV points & get hired by your dream company.</p>
-    </header>
-    
-    <section class="bg-blue-100 p-4 text-center">
-        <!--Empty container in middle by Sarvjeet-->
-    </section>
-    
-    <section class="text-center py-12">
-        <h2 class="text-3xl font-bold text-blue-600">Who’s using GoHire?</h2>
-        <div class="grid md:grid-cols-3 gap-8 mt-8 px-4 md:px-16">
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h3 class="text-xl font-semibold text-blue-700">Students and Professionals</h3>
-                <p class="mt-2 text-gray-600">Unlock Your Potential: Compete, Build Resume, Grow and get Hired!</p>
+    </div>
+</section>
+
+<section class="bg-white py-6 overflow-hidden">
+    <div class="container mx-auto px-4 relative">
+      <div class="overflow-hidden w-full">
+        <div class="flex animate-scroll hover:animate-pause" style="width: calc(200px * 14); animation: scroll 30s linear infinite;">
+          <div class="flex-shrink-0 w-[200px] h-20 p-4 hover:transition-opacity duration-300 flex justify-center items-center">
+            <img src="/images/brand_logo_amazon.webp" alt="Partner Logo" class="h-20 object-contain">
+          </div>
+          <div class="flex-shrink-0 w-[200px] h-20 p-4 hover:transition-opacity duration-300 flex justify-center items-center">
+            <img src="/images/brand_logo_flipkart.webp" alt="Partner Logo" class="h-20 object-contain">
+          </div>
+          <div class="flex-shrink-0 w-[200px] h-20 p-4 hover:transition-opacity duration-300 flex justify-center items-center">
+            <img src="/images/brand_logo_loreal.webp" alt="Partner Logo" class="h-20 object-contain">
+          </div>
+          <div class="flex-shrink-0 w-[200px] h-20 p-4 hover:transition-opacity duration-300 flex justify-center items-center">
+            <img src="/images/brand_logo_walmart.webp" alt="Partner Logo" class="h-20 object-contain">
+          </div>
+          <div class="flex-shrink-0 w-[200px] h-20 p-4 hover:transition-opacity duration-300 flex justify-center items-center">
+            <img src="/images/brand_logo_wipro.webp" alt="Partner Logo" class="h-20 object-contain">
+          </div>
+          <div class="flex-shrink-0 w-[200px] h-20 p-4 hover:transition-opacity duration-300 flex justify-center items-center">
+            <img src="/images/brand_logo_asianpaints.webp" alt="Partner Logo" class="h-20 object-contain">
+          </div>
+          <div class="flex-shrink-0 w-[200px] h-20 p-4 hover:transition-opacity duration-300 flex justify-center items-center">
+            <img src="/images/brand_logo_hp.webp" alt="Partner Logo" class="h-20 object-contain">
+          </div>
+          
+          <!-- Duplicated logos for infinite loop -->
+          <div class="flex-shrink-0 w-[200px] h-20 p-4 hover:transition-opacity duration-300 flex justify-center items-center">
+            <img src="/images/brand_logo_amazon.webp" alt="Partner Logo" class="h-20 object-contain">
+          </div>
+          <div class="flex-shrink-0 w-[200px] h-20 p-4 hover:transition-opacity duration-300 flex justify-center items-center">
+            <img src="/images/brand_logo_flipkart.webp" alt="Partner Logo" class="h-20 object-contain">
+          </div>
+          <div class="flex-shrink-0 w-[200px] h-20 p-4 hover:transition-opacity duration-300 flex justify-center items-center">
+            <img src="/images/brand_logo_walmart.webp" alt="Partner Logo" class="h-20 object-contain">
+          </div>
+          <div class="flex-shrink-0 w-[200px] h-20 p-4 hover:transition-opacity duration-300 flex justify-center items-center">
+            <img src="/images/brand_logo_wipro.webp" alt="Partner Logo" class="h-20 object-contain">
+          </div>
+          <div class="flex-shrink-0 w-[200px] h-20 p-4 hover:transition-opacity duration-300 flex justify-center items-center">
+            <img src="/images/brand_logo_asianpaints.webp" alt="Partner Logo" class="h-20 object-contain">
+          </div>
+          <div class="flex-shrink-0 w-[200px] h-20 p-4 hover:transition-opacity duration-300 flex justify-center items-center">
+            <img src="/images/brand_logo_hp.webp" alt="Partner Logo" class="h-20 object-contain">
+          </div>
+          <div class="flex-shrink-0 w-[200px] h-20 p-4 hover:transition-opacity duration-300 flex justify-center items-center">
+            <img src="/images/brand_logo_loreal.webp" alt="Partner Logo" class="h-20 object-contain">
+          </div>
+        </div>
+      </div>
+    </div>
+    <style>
+        @keyframes scroll {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(calc(-200px * 7));
+          }
+        }
+        
+        .animate-scroll {
+          animation: scroll 30s linear infinite;
+        }
+        
+        .animate-scroll:hover {
+          animation-play-state: paused;
+        }
+        
+        @media (max-width: 768px) {
+          @keyframes scroll {
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(calc(-150px * 7));
+            }
+          }
+        }
+      </style>
+</section>
+
+<section class="text-center py-20 bg-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-4xl font-bold text-blue-700 mb-3 transform transition-all duration-500 opacity-0" id="who-heading">Who's using <span class="text-yellow-500">GoHire</span>?</h2>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-16 transform transition-all duration-500 opacity-0" id="who-subheading">Join set of users who have revolutionized their hiring and job-seeking experience</p>
+        
+        <div class="grid md:grid-cols-3 gap-10 mt-8 px-4 md:px-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 opacity-0" id="card-1">
+                <div class="w-20 h-20 bg-blue-100 text-blue-700 rounded-full mx-auto flex items-center justify-center mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-semibold text-blue-700 mb-4">Students</h3>
+                <p class="text-gray-600 mb-6">Explore opportunities, apply for jobs, network, gain insights, access internships, enhance skills, receive career guidance, and connect with recruiters.</p>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h3 class="text-xl font-semibold text-blue-700">Companies and Recruiters</h3>
-                <p class="mt-2 text-gray-600">Discover Right Talent: Hire, Engage, and Brand Like Never Before!</p>
+            
+            <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 opacity-0" id="card-2">
+                <div class="w-20 h-20 bg-yellow-100 text-yellow-700 rounded-full mx-auto flex items-center justify-center mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-semibold text-blue-700 mb-4">Companies and Recruiters</h3>
+                <p class="text-gray-600 mb-6">Find talent, post jobs, screen candidates, streamline hiring, track applications, build networks, conduct interviews, and enhance employer branding.</p>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h3 class="text-xl font-semibold text-blue-700">Colleges</h3>
-                <p class="mt-2 text-gray-600">Bridge Academia and Industry: Empower Students with Real-World Opportunities!</p>
+            
+            <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 opacity-0" id="card-3">
+                <div class="w-20 h-20 bg-green-100 text-green-700 rounded-full mx-auto flex items-center justify-center mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                        <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-semibold text-blue-700 mb-4">Professionals</h3>
+                <p class="text-gray-600 mb-6">Explore new opportunities, network, upskill, track industry trends, apply for promotions, connect with recruiters, and access career resources.</p>
             </div>
         </div>
-    </section>
-    <section class="text-center py-12">
-        <h2 class="text-3xl font-bold text-blue-600">Who’s using GoHire?</h2>
-        <div class="grid md:grid-cols-3 gap-8 mt-8 px-4 md:px-16">
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h3 class="text-xl font-semibold text-blue-700">Students and Professionals</h3>
-                <p class="mt-2 text-gray-600">Unlock Your Potential: Compete, Build Resume, Grow and get Hired!</p>
+    </div>
+</section>
+
+<section class="py-20 bg-blue-600 text-white">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center justify-between">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h2 class="text-3xl font-bold mb-6">Ready to transform your career journey?</h2>
+                <p class="text-blue-100 mb-8">Join thousands of professionals who have already discovered new opportunities through GoHire.</p>
+                <a href="/login" class="bg-white text-blue-700 hover:bg-yellow-400 font-bold py-3 px-8 rounded-full transition-all duration-300 inline-block hover:shadow-lg transform hover:-translate-y-1">Get Started Now</a>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h3 class="text-xl font-semibold text-blue-700">Companies and Recruiters</h3>
-                <p class="mt-2 text-gray-600">Discover Right Talent: Hire, Engage, and Brand Like Never Before!</p>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h3 class="text-xl font-semibold text-blue-700">Colleges</h3>
-                <p class="mt-2 text-gray-600">Bridge Academia and Industry: Empower Students with Real-World Opportunities!</p>
+            <div class="md:w-5/12 grid grid-cols-2 gap-4">
+                <div class="bg-white p-6 rounded-lg transform transition-all hover:scale-105 duration-300">
+                    <h3 class="text-3xl font-bold mb-2 text-black">5K+</h3>
+                    <p class="text-blue-600 font-bold">Job Opportunities</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg transform transition-all hover:scale-105 duration-300">
+                    <h3 class="text-3xl font-bold mb-2 text-black">2K+</h3>
+                    <p class="text-blue-600 font-bold">Hiring Companies</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg transform transition-all hover:scale-105 duration-300">
+                    <h3 class="text-3xl font-bold mb-2 text-black">15K+</h3>
+                    <p class="text-blue-600 font-bold">Professionals Hired</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg transform transition-all hover:scale-105 duration-300">
+                    <h3 class="text-3xl font-bold mb-2 text-black">20K+</h3>
+                    <p class="text-blue-600 font-bold">Applicants Registered</p>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
+<%- include('layout/footer') %>
+
+<script>
+    window.addEventListener('scroll', function() {
+        const navbar = document.getElementById('navbar');
+        if (window.scrollY > 10) {
+            navbar.classList.add('py-3', 'bg-blue-700', 'shadow-2xl');
+            navbar.classList.remove('p-5');
+        } else {
+            navbar.classList.remove('py-3', 'bg-blue-700', 'shadow-2xl');
+            navbar.classList.add('p-5');
+        }
+    });
     
-    <%- include('layout/footer') %>
+    document.getElementById('mobile-menu').addEventListener('click', function() {
+        //future me use hoga
+    });
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(() => {
+            document.getElementById('header-text').classList.remove('translate-y-8', 'opacity-0');
+        }, 300);
+        
+        setTimeout(() => {
+            document.getElementById('header-image').classList.remove('translate-x-8', 'opacity-0');
+        }, 600);
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.remove('opacity-0');
+                    if (entry.target.id === 'who-heading' || entry.target.id === 'who-subheading') {
+                        entry.target.classList.add('opacity-100');
+                    } else if (entry.target.id === 'card-1') {
+                        setTimeout(() => { entry.target.classList.add('opacity-100'); }, 200);
+                    } else if (entry.target.id === 'card-2') {
+                        setTimeout(() => { entry.target.classList.add('opacity-100'); }, 400);
+                    } else if (entry.target.id === 'card-3') {
+                        setTimeout(() => { entry.target.classList.add('opacity-100'); }, 600);
+                    }
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        observer.observe(document.getElementById('who-heading'));
+        observer.observe(document.getElementById('who-subheading'));
+        observer.observe(document.getElementById('card-1'));
+        observer.observe(document.getElementById('card-2'));
+        observer.observe(document.getElementById('card-3'));
+    });
+</script>
