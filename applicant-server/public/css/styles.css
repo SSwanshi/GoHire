@@ -7,17 +7,38 @@ body {
     color: #000000;
 }
 
+/*footer css start*/
+
 footer {
-    background-color: #000000;
-    color: white;
-    bottom: 0;
-    position: fixed;
-    width: 100%;
+    background-color: #1a202c; 
+    color: #ffffff; 
+    text-align: center; 
+    padding: 1.5rem; 
+    margin-top: auto; 
+  }
+  
+  .footerbox {
+    max-width: 56rem; 
+    margin-left: auto; 
+    margin-right: auto;
     display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    padding: 10px;
-}
+    flex-direction: column; 
+    justify-content: space-between; 
+    align-items: center; 
+    gap: 1rem; 
+  }
+  
+  @media (min-width: 768px) {
+    footer .container {
+      flex-direction: row; 
+    }
+  }
+  
+  footer p {
+    font-size: 0.875rem; 
+  }
+  
+/*footer css end*/
 
 .topnav {
     display: flex;
