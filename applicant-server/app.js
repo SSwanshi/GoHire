@@ -26,6 +26,10 @@ app.get('/login', (req, res) => {
     res.render('login');
 });
 
+app.get('/signup', (req, res) => {
+    res.render('signup');
+});
+
 // Start Server
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Applicant Server running on http://localhost:${PORT}`));
