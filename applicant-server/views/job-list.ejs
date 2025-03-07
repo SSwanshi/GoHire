@@ -64,13 +64,13 @@
         </div>
 
         <div class="filter-section mb-4 border-b border-gray-200 pb-4">
-          <div class="filter-title flex justify-between items-center mb-2">
+          <div class="filter-title flex justify-between items-center mb-2 cursor-pointer" onclick="toggleDropdownRangeSalary()">
             <h4 class="font-medium">Range Salary</h4>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg id="dropdownIconSalary" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600  transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </div>
-          <div class="filter-options space-y-2">
+          <div id="filterOptionsSalary" class="filter-options space-y-2 hidden">
             <label class="flex items-center">
               <input type="checkbox" name="salary" value="less-1000" class="mr-2 h-4 w-4 text-blue-500" />
               <span class="text-sm">Less than $1000</span>
@@ -102,13 +102,14 @@
         </div>
 
         <div class="filter-section">
-          <div class="filter-title flex justify-between items-center mb-2">
+          <div 
+            class="filter-title flex justify-between items-center mb-2 cursor-pointer" onclick="toggleDropdownExperience()">
             <h4 class="font-medium">Experience</h4>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg id="dropdownIconEx" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </div>
-          <div class="filter-options space-y-2">
+          <div id="filterOptions" class="filter-options space-y-2 hidden">
             <label class="flex items-center">
               <input type="checkbox" name="experience" value="fresher" class="mr-2 h-4 w-4 text-blue-500" />
               <span class="text-sm">Fresher</span>
@@ -125,7 +126,7 @@
               <input type="checkbox" name="experience" value="3-5" class="mr-2 h-4 w-4 text-blue-500" />
               <span class="text-sm">3-5 years</span>
             </label>
-            <label class="flex items-center"> 
+            <label class="flex items-center">
               <input type="checkbox" name="experience" value="5-10" class="mr-2 h-4 w-4 text-blue-500" />
               <span class="text-sm">5-10 years</span>
             </label>
@@ -199,7 +200,6 @@
 
         <div class="job-listings grid grid-cols-3 gap-4">
           <% 
-          // Array of job listings based on the image
           const jobListings = [
             {
               title: "UI/UX Designer",
@@ -356,4 +356,21 @@
     </main>
   </body>
   <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  <script>
+    function toggleDropdownExperience() {
+      const options = document.getElementById("filterOptions");
+      const icon = document.getElementById("dropdownIconEx");
+      
+      options.classList.toggle("hidden");
+      icon.classList.toggle("rotate-180");
+    }
+
+    function toggleDropdownRangeSalary(){
+      const option = document.getElementById("filterOptionsSalary");
+      const icon = document.getElementById("dropdownIconSalary");
+
+      option.classList.toggle("hidden");
+      icon.classList.toggle("rotate-180");
+    }
+  </script>
 </html>
