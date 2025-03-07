@@ -139,36 +139,6 @@
       </div>
 
       <div class="content flex-1">
-        <div class="search-bar flex gap-2 mb-6">
-          <div class="search-input relative flex-1">
-            <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </div>
-            <input
-              type="text"
-              placeholder="UI/UX Designer"
-              value="UI/UX Designer"
-              class="w-full pl-10 pr-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div class="location-select">
-            <select class="w-36 py-2 px-3 rounded-lg border border-gray-300 appearance-none  focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option selected>India</option>
-              <option selected>USA</option>
-              <option selected>UK</option>
-              <option selected>Russia</option>
-            </select>
-          </div>
-          <div class="city-select">
-            <select class="w-36 py-2 px-3 rounded-lg border border-gray-300 appearance-none  focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option selected>All City</option>
-            </select>
-          </div>
-          <button class="search-button bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Search</button>
-        </div>
-
         <div class="search-results-header flex justify-between items-center mb-6">
           <div class="results-count text-sm">
             <span class="text-gray-600">Showing </span>
@@ -184,11 +154,6 @@
               <option selected>Relevancy</option>
             </select>
             <div class="view-options flex border rounded">
-              <button class="grid-view active p-1 bg-blue-50 border-r border-gray-300">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                </svg>
-              </button>
               <button class="list-view p-1">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -357,6 +322,18 @@
   </body>
   <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
   <script>
+
+    window.addEventListener('scroll', function() {
+        const navbar = document.getElementById('navbar');
+        if (window.scrollY > 10) {
+            navbar.classList.add('py-3', 'bg-blue-700', 'shadow-2xl');
+            navbar.classList.remove('p-5');
+        } else {
+            navbar.classList.remove('py-3', 'bg-blue-700', 'shadow-2xl');
+            navbar.classList.add('p-5');
+        }
+    });
+
     function toggleDropdownExperience() {
       const options = document.getElementById("filterOptions");
       const icon = document.getElementById("dropdownIconEx");
