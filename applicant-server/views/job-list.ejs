@@ -9,32 +9,38 @@
   </head>
   <body>
     <!-- Main content -->
-    <header class="flex items-center justify-between px-6 py-3 border-b border-gray-200">
-      <div class="text-2xl font-bold text-blue-500">Go<span style="color:rgb(194, 194, 16)">Hire</span></div>
-      <nav class="flex-1 mx-8">
-        <ul class="flex space-x-8">
-          <li><a href="/" class="text-gray-600 hover:text-blue-500">Home</a></li>
-          <li><a href="#" class="text-gray-600 hover:text-blue-500">About Us</a></li>
-          <li><a href="#" class="text-blue-500 font-medium border-b-2 border-blue-500 pb-3">Jobs</a></li>
-          <li><a href="#" class="text-gray-600 hover:text-blue-500">Insight</a></li>
-        </ul>
-      </nav>
-      <div class="flex items-center space-x-4">
-        <div class="relative">
-          <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-            </svg>
-          </div>
+    <header class="flex items-center justify-between py-10 border-b border-gray-200">
+      
+      <nav class="bg-gradient-to-r from-blue-700 to-blue-500 p-5 shadow-xl fixed w-full z-10 transition-all duration-300" id="navbar">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/" class="text-black text-3xl font-bold transition-transform hover:scale-105 duration-300 ml-2">Go<span class="text-yellow-400">Hire</span></a>
+            
+            <div class="relative w-1/3 group">
+                <input type="text" placeholder="Search for Opportunities" class="w-full p-3 rounded-full border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 shadow-md placeholder:text-gray-700">
+                <div class="absolute right-3 top-3.5 text-yellow-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                
+            </div>
+            
+            <ul class="hidden md:flex space-x-8 text-white">
+                <li><a href="/" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-yellow-300 after:transition-all after:duration-300 hover:after:w-full">Home</a></li>
+                <li><a href="/jobs" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-yellow-300 after:transition-all after:duration-300 hover:after:w-full">Jobs</a></li>
+                <li><a href="/internships" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-yellow-300 after:transition-all after:duration-300 hover:after:w-full">Internship</a></li>
+                <li><a href="/contact" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-yellow-300 after:transition-all after:duration-300 hover:after:w-full">Contact Us</a></li>
+            </ul>
+            
+            
+            <div class="md:hidden flex flex-col space-y-1 cursor-pointer" id="mobile-menu">
+                <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
+                <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
+                <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
+            </div>
         </div>
-        <div class="flex items-center space-x-2">
-          <div class="w-8 h-8 rounded-full bg-gray-300"></div>
-          <span class="text-sm font-medium">Kang Addin</span>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
-      </div>
+    </nav>
+
     </header>
 
     <main class="flex p-6 gap-6">
@@ -103,6 +109,10 @@
             </svg>
           </div>
           <div class="filter-options space-y-2">
+            <label class="flex items-center">
+              <input type="checkbox" name="experience" value="fresher" class="mr-2 h-4 w-4 text-blue-500" />
+              <span class="text-sm">Fresher</span>
+            </label>
             <label class="flex items-center">
               <input type="checkbox" name="experience" value="less-1" class="mr-2 h-4 w-4 text-blue-500" />
               <span class="text-sm">Less than a year</span>
@@ -196,7 +206,6 @@
               company: "Pixelz Studio",
               location: "Yogyakarta",
               matchProfile: true,
-              jobType: "Fulltime",
               workMode: "Hybrid",
               experienceYears: "2-4 Years",
               postedTime: "2 day ago",
@@ -209,7 +218,6 @@
               company: "Traveloka",
               location: "Jakarta, Indonesia",
               matchProfile: true,
-              jobType: "Fulltime",
               workMode: "Onsite",
               experienceYears: "2-4 Years",
               postedTime: "an hour ago",
@@ -222,7 +230,6 @@
               company: "Tokopedia",
               location: "Jakarta, Indonesia",
               matchProfile: true,
-              jobType: "Fulltime",
               workMode: "Remote",
               experienceYears: "2-4 Years",
               postedTime: "2 day ago",
@@ -235,7 +242,6 @@
               company: "GoPay",
               location: "Jakarta, Indonesia",
               matchProfile: true,
-              jobType: "Fulltime",
               workMode: "Onsite",
               experienceYears: "2-4 Years",
               postedTime: "2 day ago",
@@ -248,7 +254,6 @@
               company: "Gojek",
               location: "Jakarta, Indonesia",
               matchProfile: true,
-              jobType: "Fulltime",
               workMode: "Onsite",
               experienceYears: "0-2 Years",
               postedTime: "2 day ago",
@@ -261,7 +266,6 @@
               company: "Shopee",
               location: "Jakarta, Indonesia",
               matchProfile: true,
-              jobType: "Fulltime",
               workMode: "Hybrid",
               experienceYears: "2-4 Years",
               postedTime: "2 day ago",
@@ -274,7 +278,6 @@
               company: "OVO",
               location: "Jakarta, Indonesia",
               matchProfile: true,
-              jobType: "Fulltime",
               workMode: "Hybrid",
               experienceYears: "2-4 Years",
               postedTime: "2 day ago",
@@ -287,7 +290,6 @@
               company: "Dana",
               location: "Jakarta, Indonesia",
               matchProfile: true,
-              jobType: "Fulltime",
               workMode: "Hybrid",
               experienceYears: "2-4 Years",
               postedTime: "2 day ago",
@@ -300,7 +302,6 @@
               company: "GoPay",
               location: "Jakarta, Indonesia",
               matchProfile: true,
-              jobType: "Fulltime",
               workMode: "Hybrid",
               experienceYears: "2-4 Years",
               postedTime: "2 day ago",
@@ -333,7 +334,6 @@
               </div>
               <div class="match-info text-xs text-gray-500 mb-3">Match with your profile</div>
               <div class="job-details flex gap-2 mb-4">
-                <span class="job-type text-xs bg-gray-100 py-1 px-2 rounded"><%= job.jobType %></span>
                 <span class="work-mode text-xs bg-gray-100 py-1 px-2 rounded"><%= job.workMode %></span>
                 <span class="experience text-xs bg-gray-100 py-1 px-2 rounded"><%= job.experienceYears %></span>
               </div>
