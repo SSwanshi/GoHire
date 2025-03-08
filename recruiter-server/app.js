@@ -31,9 +31,23 @@ app.get('/recruiter/add-job', (req, res) => {
   res.render('add-job', { title: 'Add Job' });
 });
 
+app.get('/recruiter/reports', (req,res)=> {
+  res.render('reports');
+});
+
 // Route to display companies
 app.get('/recruiter/companies', (req, res) => {
   const companies = [
+    { logo: 'https://logo.clearbit.com/google.com', name: 'Google', date: '2024-06-14' },
+    { logo: 'https://logo.clearbit.com/google.com', name: 'Google', date: '2024-06-14' },
+    { logo: 'https://logo.clearbit.com/google.com', name: 'Google', date: '2024-06-14' },
+    { logo: 'https://logo.clearbit.com/google.com', name: 'Google', date: '2024-06-14' },
+    { logo: 'https://logo.clearbit.com/google.com', name: 'Google', date: '2024-06-14' },
+    { logo: 'https://logo.clearbit.com/google.com', name: 'Google', date: '2024-06-14' },
+    { logo: 'https://logo.clearbit.com/google.com', name: 'Google', date: '2024-06-14' },
+    { logo: 'https://logo.clearbit.com/google.com', name: 'Google', date: '2024-06-14' },
+    { logo: 'https://logo.clearbit.com/google.com', name: 'Google', date: '2024-06-14' },
+    { logo: 'https://logo.clearbit.com/google.com', name: 'Google', date: '2024-06-14' },
     { logo: 'https://logo.clearbit.com/google.com', name: 'Google', date: '2024-06-14' },
     { logo: 'https://logo.clearbit.com/microsoft.com', name: 'Microsoft', date: '2024-06-14' }
   ];

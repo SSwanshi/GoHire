@@ -3,10 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GoHire</title>
-
+  <title>GoHire - Recruiter Dashboard</title>
   <link rel="stylesheet" href="/css/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <style>
+    .hover-grow {
+      transition: transform 0.2s;
+    }
+    .hover-grow:hover {
+      transform: scale(1.03);
+    }
+    .gradient-blue {
+      background: linear-gradient(to right, #1d4ed8, #ffe819); 
+    }
+
+    .gradient-yellow {
+      background: linear-gradient(to right, #ffe819, #1d4ed8);
+    }
+
+    .yellow-accent {
+      background-color: #fbbf24;
+    }
+    .yellow-text {
+      color: #fbbf24; 
+    }
+    .blue-bg-light {
+      background-color: #eff6ff; 
+    }
+    .blue-bg {
+      background-color: #dbeafe; 
+    }
+    .forgradient {
+      background: linear-gradient(to right, #a1c9fa, #0044ff);
+      
+    }
+  </style>
 </head>
-<body>
-  
-  
+<body class="blue-bg-light font-sans">
+  <header class="gradient-blue shadow-md sticky top-0 z-50">
+    <div class="container mx-auto px-4">
+      <nav class="flex justify-between items-center py-4">
+        <div>
+          <h2 class="text-2xl font-bold text-white"><span style="color: #dfcc24;">Go</span>Hire</h2>
+        </div>
+        <ul class="flex space-x-8">
+          <li><a href="/recruiter/home" class="hover:text-yellow-300 font-medium transition-colors duration-300">Home</a></li>
+          <li><a href="/recruiter/companies" class="hover:text-yellow-300 font-medium transition-colors duration-300">Companies</a></li>
+          <li><a href="/recruiter/jobs" class="hover:text-yellow-300 font-medium transition-colors duration-300">Jobs</a></li>
+          <li><a href="/recruiter/profile" class="hover:text-yellow-300 font-medium transition-colors duration-300">Profile</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
