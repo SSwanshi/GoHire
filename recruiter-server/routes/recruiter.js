@@ -9,4 +9,7 @@ router.post('/add-company', addCompany);
 router.get('/add-job', (req, res) => res.render('add-job'));
 router.post('/add-job', addJob);
 
+router.get('/add-internship', (req, res) => res.render('add-internship'));
+router.post('/add-internship', addInternship);
+
 module.exports = router;
