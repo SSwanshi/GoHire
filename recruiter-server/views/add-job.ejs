@@ -3,38 +3,38 @@
 <div class="gradientyandb min-h-screen flex items-center justify-center">
   <div class="max-w-lg mx-auto p-6 bg-blue-100 rounded-lg shadow-md md:w-full max-w-[800px] mx-auto">
     <h2 class="text-2xl font-bold text-blue-800 mb-4">Post a New Job</h2>
-    <form action="/recruiter/add-job" method="POST" enctype="multipart/form-data" class="space-y-4">
+    <form action="/recruiter/add-job" method="POST" class="space-y-4">
 
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label for="title" class="block text-blue-700 font-medium">Title</label>
-          <input type="text" id="title" name="title" required
+          <label for="jobTitle" class="block text-blue-700 font-medium">Title</label>
+          <input type="text" id="jobTitle" name="jobTitle" required
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
         </div>
         <div>
-          <label for="description" class="block text-blue-700 font-medium">Description</label>
-          <input type="text" id="description" name="description" required
+          <label for="jobDescription" class="block text-blue-700 font-medium">Description</label>
+          <input type="text" id="jobDescription" name="jobDescription" required
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label for="requirements" class="block text-blue-700 font-medium">Requirements</label>
-          <input type="text" id="requirements" name="requirements" required
+          <label for="jobRequirements" class="block text-blue-700 font-medium">Requirements</label>
+          <input type="text" id="jobRequirements" name="jobRequirements" required
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
         </div>
         <div>
-          <label for="salary" class="block text-blue-700 font-medium">Salary (in LPA)</label>
-          <input type="number" id="salary" name="salary" required
+          <label for="jobSalary" class="block text-blue-700 font-medium">Salary (in LPA)</label>
+          <input type="number" id="jobSalary" name="jobSalary" required
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label for="location" class="block text-blue-700 font-medium">Location</label>
-          <input type="text" id="location" name="location" required
+          <label for="jobLocation" class="block text-blue-700 font-medium">Location</label>
+          <input type="text" id="jobLocation" name="jobLocation" required
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
         </div>
         <div>
@@ -46,27 +46,25 @@
 
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label for="experienceLevel" class="block text-blue-700 font-medium">Experience Level (in years)</label>
-          <input type="number" id="experienceLevel" name="experienceLevel" required
+          <label for="jobExperience" class="block text-blue-700 font-medium">Experience Level (in years)</label>
+          <input type="number" id="jobExperience" name="jobExperience" required
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
         </div>
         <div>
-          <label for="positions" class="block text-blue-700 font-medium">No of Positions</label>
-          <input type="number" id="positions" name="positions" required
+          <label for="noofpositions" class="block text-blue-700 font-medium">No of Positions</label>
+          <input type="number" id="noofpositions" name="noofpositions" required
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
         </div>
       </div>
 
       <div>
-        <label for="company" class="block text-blue-700 font-medium">Company</label>
-        <select id="company" name="company" required
+        <label for="jobCompany" class="block text-blue-700 font-medium">Company</label>
+        <select id="jobCompany" name="jobCompany" required
                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <option value="">Select a company</option>
-          <option value="Microsoft">Microsoft</option>
-          <option value="Google">Google</option>
-          <option value="Amazon">Amazon</option>
-          <option value="Meta">Meta</option>
-          <option value="Apple">Apple</option>
+                <option value="">Select a company</option>
+                <% companies.forEach(company => { %>
+                  <option value="<%= company.companyName %>"><%= company.companyName %></option>
+              <% }); %>
         </select>
       </div>
 

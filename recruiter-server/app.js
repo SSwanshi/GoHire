@@ -2,15 +2,30 @@ const express = require('express');
 const path = require('path');
 const authRoutes = require('./routes/auth');
 const app = express();
+const session = require('express-session');
+const { companies } = require('./routes/recruiter');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views')); 
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Middleware
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.use(session({
+  secret: 'your-secret-key', // We will work on it later for express session
+  resave: false,
+  saveUninitialized: true
+}));
+
+// Serve uploaded images statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/auth', authRoutes);
+const recruiterRoutes = require('./routes/recruiter');
+app.use('/recruiter', recruiterRoutes);
 
 
 app.get('/', (req, res) => {
@@ -24,12 +39,12 @@ app.get('/recruiter/home', (req, res) => {
 
 
 app.get('/recruiter/add-company', (req, res) => {
-  res.render('add-company', { title: 'Add Company' });
+  res.render('add-company');
 });
 
 
 app.get('/recruiter/add-job', (req, res) => {
-  res.render('add-job', { title: 'Add Job' });
+  res.render('add-job', { companies });
 });
 
 app.get('/recruiter/add-internship', (req, res) => {
@@ -38,22 +53,6 @@ app.get('/recruiter/add-internship', (req, res) => {
 
 app.get('/recruiter/reports', (req,res)=> {
   res.render('reports');
-});
-
-app.get('/recruiter/internships', (req,res)=> {
-  res.render('internships');
-});
-
-app.get('/recruiter/companies', (req, res) => {
-  const companies = [
-    { logo: 'https://logo.clearbit.com/google.com', name: 'Google', date: '2024-06-14' },
-    { logo: 'https://logo.clearbit.com/google.com', name: 'Google', date: '2024-06-14' },
-  ];
-  res.render('companies', { companies });
-});
-
-app.get('/recruiter/jobs', (req, res) => {
-  res.render('jobs', { title: 'Jobs' });
 });
 
 app.get('/recruiter/profile', (req, res) => {
