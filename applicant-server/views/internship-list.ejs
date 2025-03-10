@@ -46,7 +46,7 @@
       <div class="filter-sidebar w-64  rounded-lg shadow-sm border border-gray-200 p-4 h-fit">
         <div class="filter-header flex justify-between items-center mb-4">
           <h3 class="font-medium">Filter</h3>
-          <a href="#" class="text-blue-500 text-sm">Clear All</a>
+          <button class="text-blue-500 text-sm" onclick="clearAll()">Clear All</button>
         </div>
 
         <div class="filter-section mb-4 border-b border-gray-200 pb-4">
@@ -117,16 +117,6 @@
         </div>
 
         <div class="internships-listings grid grid-cols-3 gap-4">
-          <% 
-          const internships = [
-                        { company: "Google", title: "Software Engineer Intern", location: "Remote", type: "Remote", duration: "3-6 months", stipned: "1000", isBookmarked: false, applicants: 140,},
-                        { company: "Microsoft", title: "Product Management Intern", location: "Seattle, WA", type: "Onsite", duration: "3 months", stipned: "1000", isBookmarked: false, applicants: 140,},
-                        { company: "Amazon", title: "Data Science Intern", location: "New York, NY", type: "Hybrid", duration: "6 months", stipned: "1000", isBookmarked: false, applicants: 140,},
-                        { company: "Facebook", title: "UI/UX Designer Intern", location: "San Francisco, CA", type: "Remote", duration: "1-3 months", stipned: "1000", isBookmarked: false, applicants: 140,},
-                        { company: "Tesla", title: "Embedded Systems Intern", location: "Austin, TX", type: "Onsite", duration: "3-6 months", stipned: "1000", isBookmarked: false, applicants: 140,}
-                    ];
-          %>
-
           <% internships.forEach(internships => { %>
           <div class="internships-card  rounded-lg shadow-sm border border-gray-200 overflow-hidden">
             <div class="internships-header flex justify-between items-center p-4">
@@ -134,30 +124,23 @@
                 class="company-logo w-10 h-10 rounded flex items-center justify-center text-black font-bold"      
               >
               <%= internships.logoColor %> 
-                <%= internships.company %>
-              </div>
-              <div class="bookmark-button">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 <%= internships.isBookmarked ? 'text-yellow-500' : 'text-gray-400' %>" fill="<%= internships.isBookmarked ? 'currentColor' : 'none' %>" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                </svg>
+                <%= internships.intCompany %>
               </div>
             </div>
             <div class="internships-content px-4 pb-4">
-              <div class="internships-title font-medium text-lg mb-1"><%= internships.title %></div>
+              <div class="internships-title font-medium text-lg mb-1"><%= internships.intTitle %></div>
               <div class="company-info text-sm text-gray-600 mb-2">
-                <%= internships.company %> • <%= internships.location %>
+                <%= internships.intCompany %> • <%= internships.intLocation %>
               </div>
-              <div class="match-info text-xs text-gray-500 mb-3">Match with your profile</div>
               <div class="internships-details flex gap-2 mb-4">
-                <span class="work-mode text-xs bg-gray-100 py-1 px-2 rounded"><%= internships.type %></span>
-                <span class="experience text-xs bg-gray-100 py-1 px-2 rounded"><%= internships.duration %></span>
+                <span class="experience text-xs bg-gray-100 py-1 px-2 rounded"><%= internships.intDuration %> months</span>
               </div>
               <div class="internships-meta flex justify-between items-center text-xs text-gray-500 mb-4">
                 <div class="posting-info font-bold">
-                  <%= internships.postedTime %> • <%= internships.applicants %> Applicants
+                  <%= internships.intPositions %> Applicants
                 </div>
                 <div class="salary-info font-medium text-blue-500">
-                  $<%= internships.stipned %>/m
+                  $<%= internships.intStipned %>/m
                 </div>
               </div>
               <div class="apply-button">
@@ -190,5 +173,12 @@
       options.classList.toggle("hidden");
       icon.classList.toggle("rotate-180");
     }
+
+    function clearAll(){
+      document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+          checkbox.checked = false;
+      });
+    }
+
   </script>
 </html>

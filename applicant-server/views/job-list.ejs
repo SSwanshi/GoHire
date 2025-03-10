@@ -39,7 +39,7 @@
                 <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
             </div>
         </div>
-    </nav>
+     </nav>
 
     </header>
 
@@ -47,7 +47,7 @@
       <div class="filter-sidebar w-64  rounded-lg shadow-sm border border-gray-200 p-4 h-fit">
         <div class="filter-header flex justify-between items-center mb-4">
           <h3 class="font-medium">Filter</h3>
-          <a href="#" class="text-blue-500 text-sm">Clear All</a>
+          <button class="text-blue-500 text-sm" onclick="clearAll()">Clear All</button>
         </div>
 
         <div class="filter-section mb-4 border-b border-gray-200 pb-4">
@@ -164,150 +164,29 @@
         </div>
 
         <div class="job-listings grid grid-cols-3 gap-4">
-          <% 
-          const jobListings = [
-            {
-              title: "UI/UX Designer",
-              company: "Pixelz Studio",
-              location: "Yogyakarta",
-              matchProfile: true,
-              workMode: "Hybrid",
-              experienceYears: "2-4 Years",
-              postedTime: "2 day ago",
-              applicants: 140,
-              salary: 1000,
-              isBookmarked: false
-            },
-            {
-              title: "Product Designer",
-              company: "Traveloka",
-              location: "Jakarta, Indonesia",
-              matchProfile: true,
-              workMode: "Onsite",
-              experienceYears: "2-4 Years",
-              postedTime: "an hour ago",
-              applicants: 140,
-              salary: 1500,
-              isBookmarked: false
-            },
-            {
-              title: "UX Designer",
-              company: "Tokopedia",
-              location: "Jakarta, Indonesia",
-              matchProfile: true,
-              workMode: "Remote",
-              experienceYears: "2-4 Years",
-              postedTime: "2 day ago",
-              applicants: 140,
-              salary: 1000,
-              isBookmarked: false
-            },
-            {
-              title: "Interaction Designer",
-              company: "GoPay",
-              location: "Jakarta, Indonesia",
-              matchProfile: true,
-              workMode: "Onsite",
-              experienceYears: "2-4 Years",
-              postedTime: "2 day ago",
-              applicants: 140,
-              salary: 1000,
-              isBookmarked: false
-            },
-            {
-              title: "UI Designer",
-              company: "Gojek",
-              location: "Jakarta, Indonesia",
-              matchProfile: true,
-              workMode: "Onsite",
-              experienceYears: "0-2 Years",
-              postedTime: "2 day ago",
-              applicants: 521,
-              salary: 900,
-              isBookmarked: false
-            },
-            {
-              title: "Sr. UI/UX Designer",
-              company: "Shopee",
-              location: "Jakarta, Indonesia",
-              matchProfile: true,
-              workMode: "Hybrid",
-              experienceYears: "2-4 Years",
-              postedTime: "2 day ago",
-              applicants: 140,
-              salary: 1000,
-              isBookmarked: false
-            },
-            {
-              title: "UX Writer",
-              company: "OVO",
-              location: "Jakarta, Indonesia",
-              matchProfile: true,
-              workMode: "Hybrid",
-              experienceYears: "2-4 Years",
-              postedTime: "2 day ago",
-              applicants: 140,
-              salary: 1000,
-              isBookmarked: false
-            },
-            {
-              title: "UX Researcher",
-              company: "Dana",
-              location: "Jakarta, Indonesia",
-              matchProfile: true,
-              workMode: "Hybrid",
-              experienceYears: "2-4 Years",
-              postedTime: "2 day ago",
-              applicants: 140,
-              salary: 1000,
-              isBookmarked: false
-            },
-            {
-              title: "UI Engineer",
-              company: "GoPay",
-              location: "Jakarta, Indonesia",
-              matchProfile: true,
-              workMode: "Hybrid",
-              experienceYears: "2-4 Years",
-              postedTime: "2 day ago",
-              applicants: 140,
-              salary: 1000,
-              isBookmarked: false
-            }
-          ];
-          %>
 
-          <% jobListings.forEach(job => { %>
+          <% jobs.forEach(job => { %>
           <div class="job-card  rounded-lg shadow-sm border border-gray-200 overflow-hidden">
             <div class="job-header flex justify-between items-center p-4">
               <div
-                class="company-logo w-10 h-10 rounded flex items-center justify-center text-black font-bold"      
-              >
-              <%= job.logoColor %>
-                <%= job.company %>
-              </div>
-              <div class="bookmark-button">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 <%= job.isBookmarked ? 'text-yellow-500' : 'text-gray-400' %>" fill="<%= job.isBookmarked ? 'currentColor' : 'none' %>" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                </svg>
+                class="company-logo w-10 h-10 rounded flex items-center justify-center text-black font-bold"><%= job.logoColor %><%= job.jobCompany %>
               </div>
             </div>
             <div class="job-content px-4 pb-4">
-              <div class="job-title font-medium text-lg mb-1"><%= job.title %></div>
+              <div class="job-title font-medium text-lg mb-1"><%= job.jobTitle %></div>
               <div class="company-info text-sm text-gray-600 mb-2">
-                <%= job.company %> • <%= job.location %>
+                <%= job.jobCompany %> • <%= job.jobLocation %>
               </div>
-              <div class="match-info text-xs text-gray-500 mb-3">Match with your profile</div>
               <div class="job-details flex gap-2 mb-4">
-                <span class="work-mode text-xs bg-gray-100 py-1 px-2 rounded"><%= job.workMode %></span>
-                <span class="experience text-xs bg-gray-100 py-1 px-2 rounded"><%= job.experienceYears %></span>
+                <span class="work-mode text-xs bg-gray-100 py-1 px-2 rounded"><%= job.jobType %></span>
+                <span class="experience text-xs bg-gray-100 py-1 px-2 rounded"><%= job.jobExperience%> years</span>
               </div>
               <div class="job-meta flex justify-between items-center text-xs text-gray-500 mb-4">
                 <div class="posting-info font-bold">
-                  <%= job.postedTime %> • <%= job.applicants %> Applicants
+                  <%= job.jobDescription %> • <%= job.noofpositions %> Positions
                 </div>
                 <div class="salary-info font-medium text-blue-500">
-                  $<%= job.salary %>/m
+                  $<%= job.jobSalary %>/m
                 </div>
               </div>
               <div class="apply-button">
@@ -327,12 +206,13 @@
         const navbar = document.getElementById('navbar');
         if (window.scrollY > 10) {
             navbar.classList.add('py-3', 'bg-blue-700', 'shadow-2xl');
-            navbar.classList.remove('p-5');
+            navbar.classList.remove('p-5', 'bg-gradient-to-r', 'from-blue-700', 'to-blue-500');
         } else {
             navbar.classList.remove('py-3', 'bg-blue-700', 'shadow-2xl');
-            navbar.classList.add('p-5');
+            navbar.classList.add('p-5', 'bg-gradient-to-r', 'from-blue-700', 'to-blue-500');
         }
     });
+
 
     function toggleDropdownExperience() {
       const options = document.getElementById("filterOptions");
@@ -348,6 +228,12 @@
 
       option.classList.toggle("hidden");
       icon.classList.toggle("rotate-180");
+    }
+
+    function clearAll(){
+      document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+          checkbox.checked = false;
+      });
     }
   </script>
 </html>
