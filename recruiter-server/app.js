@@ -48,7 +48,7 @@ app.get('/recruiter/add-job', (req, res) => {
 });
 
 app.get('/recruiter/add-internship', (req, res) => {
-  res.render('add-internship');
+  res.render('add-internship', { companies });
 });
 
 app.get('/recruiter/reports', (req,res)=> {

@@ -8,8 +8,18 @@ const companies = [
     {logo: '/uploads/googlelogo.webp',companyName:"Google", website:"https://www.google.co.in",location:"USA"},
     {logo: '/uploads/amazonlogo.png',companyName:"Amazon", website:"https://www.amazon.in",location:"USA"}
 ];
-const jobs = [];
-const internships = [];
+const jobs = [
+    { jobTitle: "Full Stack Developer", jobDescription: "Design a website with good UI/UX", jobRequirements: "Nodejs, Expressjs, MongoDB, React", jobSalary: 25, jobLocation: "India", jobType:"Full-Time", jobExperience:2, noofpositions: 10, jobCompany: "Google" },
+    { jobTitle: "Full Stack Developer", jobDescription: "Design a website with good UI/UX", jobRequirements: "Nodejs, Expressjs, MongoDB, React", jobSalary: 45, jobLocation: "India", jobType:"Full-Time", jobExperience:1, noofpositions: 5, jobCompany: "Amazon" },
+    { jobTitle: "Backend Developer", jobDescription: "Design a website with good UI/UX", jobRequirements: "Nodejs, Expressjs, MongoDB, React", jobSalary: 35, jobLocation: "India", jobType:"Full-Time", jobExperience:3, noofpositions: 15, jobCompany: "Apple" },
+    { jobTitle: "Front-end Developer", jobDescription: "Design a website with good UI/UX", jobRequirements: "Nodejs, Expressjs, MongoDB, React", jobSalary: 50, jobLocation: "India", jobType:"Full-Time", jobExperience:5, noofpositions: 5, jobCompany: "Meta" }
+];
+const internships = [
+    { intTitle: "Front-end Developer", intDescription: "Design a website with good UI", intRequirements: "Nodejs, Expressjs, MongoDB, React", intStipend: 10, intLocation: "Pune", intDuration: 6, intExperience: 1, intPositions: 20, intCompany: "Google" },
+    { intTitle: "Front-end Developer", intDescription: "Design a website with good UI", intRequirements: "Nodejs, Expressjs, MongoDB, React", intStipend: 10, intLocation: "Pune", intDuration: 6, intExperience: 1, intPositions: 20, intCompany: "Amazon" },
+    { intTitle: "Front-end Developer", intDescription: "Design a website with good UI", intRequirements: "Nodejs, Expressjs, MongoDB, React", intStipend: 10, intLocation: "Pune", intDuration: 6, intExperience: 1, intPositions: 20, intCompany: "Apple" },
+    { intTitle: "Front-end Developer", intDescription: "Design a website with good UI", intRequirements: "Nodejs, Expressjs, MongoDB, React", intStipend: 10, intLocation: "Pune", intDuration: 6, intExperience: 1, intPositions: 20, intCompany: "Meta" }
+];
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -66,4 +76,6 @@ router.get('/jobs', (req,res) =>{
 });
 
 module.exports = router; 
-module.exports.companies = companies; 
+module.exports.companies = companies;
+module.exports.jobs = jobs;
+module.exports.internships = internships;
