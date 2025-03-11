@@ -1,14 +1,614 @@
+// profile.ejs
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profile</title>
+  <title>User Profile | Job Portal</title>
+  <link rel="stylesheet" href="/css/profile.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
-  <h1>Profile</h1>
-  <p>Name: <%- user.name %></p>
-  <p>Email: <%- user.email %></p>
-  <p>Role: <%- user.role %></p>
+  <div class="container">
+    <!-- Main Profile Card -->
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="profile-info">
+          <div class="profile-avatar-container">
+            <div class="profile-completion-ring" data-percentage="<%= user.profileCompletion || 80 %>">
+              <div class="profile-avatar">
+                <img src="<%= user.avatarUrl || '/images/default-avatar.png' %>" alt="Profile Picture">
+              </div>
+            </div>
+            <div class="completion-percentage">
+              <%= user.profileCompletion || 80 %>%
+            </div>
+          </div>
+          <div class="profile-details">
+            <div class="profile-name">
+              <h2>
+                <%= user.name || 'User Name' %>
+              </h2>
+              <a href="#" class="edit-icon"><i class="fas fa-pen"></i></a>
+            </div>
+            <p class="profile-education">
+              <%= user.education.degree || 'B.Tech/B.E.' %>
+            </p>
+            <p class="profile-college">
+              <%= user.education.institution || 'College Name' %>
+            </p>
+
+            <div class="profile-contact-info">
+              <div class="location">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>
+                  <%= user.location || 'City' %>
+                </span>
+              </div>
+              <div class="gender">
+                <i class="fas fa-user"></i>
+                <span>
+                  <%= user.gender || 'Gender' %>
+                </span>
+              </div>
+              <div class="dob">
+                <i class="fas fa-calendar"></i>
+                <span>
+                  <%= user.dateOfBirth || 'DD Month YYYY' %>
+                </span>
+              </div>
+              <div class="phone">
+                <i class="fas fa-phone"></i>
+                <span>
+                  <%= user.phone || 'Phone Number' %>
+                </span>
+                <% if(user.isPhoneVerified) { %><i class="fas fa-check-circle verified"></i>
+                  <% } %>
+              </div>
+              <div class="email">
+                <i class="fas fa-envelope"></i>
+                <span>
+                  <%= user.email || 'Email Address' %>
+                </span>
+                <% if(user.isEmailVerified) { %><i class="fas fa-check-circle verified"></i>
+                  <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-completion-suggestions">
+          <div class="suggestion-item">
+            <i class="fas fa-chart-line"></i>
+            <span>Add Internship</span>
+            <span class="percentage-increase">+8%</span>
+          </div>
+          <div class="suggestion-item">
+            <i class="fas fa-tasks"></i>
+            <span>Add project</span>
+            <span class="percentage-increase">+7%</span>
+          </div>
+          <div class="suggestion-item">
+            <i class="fas fa-certificate"></i>
+            <span>Add certificates</span>
+            <span class="percentage-increase">+5%</span>
+          </div>
+          <button class="add-missing-details-btn">Add 3 missing details</button>
+        </div>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="profile-tabs">
+        <div class="tab active" data-tab="view-edit">View & Edit</div>
+        <div class="tab" data-tab="activity-insights">Activity insights</div>
+      </div>
+
+      <!-- Profile Content - Will add in next parts -->
+      <div class="profile-content">
+        // Add this to profile.ejs inside the .profile-content div
+        <div class="profile-content-container">
+          <!-- Sidebar Navigation -->
+          <div class="sidebar">
+            <h3 class="sidebar-title">Quick links</h3>
+            <ul class="sidebar-nav">
+              <li class="sidebar-item active" data-section="preference">Preference</li>
+              <li class="sidebar-item" data-section="education">Education</li>
+              <li class="sidebar-item" data-section="key-skills">Key skills</li>
+              <li class="sidebar-item" data-section="languages">Languages</li>
+              <li class="sidebar-item" data-section="internships">Internships</li>
+              <li class="sidebar-item" data-section="projects">Projects</li>
+              <li class="sidebar-item" data-section="profile-summary">Profile summary</li>
+              <li class="sidebar-item" data-section="accomplishments">Accomplishments</li>
+              <li class="sidebar-item" data-section="competitive-exams">Competitive exams</li>
+              <li class="sidebar-item" data-section="employment">Employment</li>
+              <li class="sidebar-item" data-section="academic-achievements">Academic achievements</li>
+              <li class="sidebar-item" data-section="resume">Resume</li>
+            </ul>
+          </div>
+
+          <!-- Main Content Area -->
+          <div class="main-content">
+            <!-- Career Preferences Section -->
+            <div class="content-section" id="preference">
+              <div class="section-header">
+                <h3 class="section-title">Your career preferences</h3>
+                <button class="edit-button"><i class="fas fa-pen"></i></button>
+              </div>
+
+              <div class="preference-container">
+                <div class="preference-item">
+                  <h4 class="preference-title">Preferred job type</h4>
+                  <p class="preference-value">
+                    <%= user.preferences?.jobType || 'Jobs, Internships' %>
+                  </p>
+                </div>
+
+                <div class="preference-item">
+                  <h4 class="preference-title">Availability to work</h4>
+                  <p class="preference-value">
+                    <%= user.preferences?.availability || 'More than 3 Months' %>
+                  </p>
+                </div>
+              </div>
+
+              <div class="preference-container">
+                <div class="preference-item">
+                  <h4 class="preference-title">Preferred location</h4>
+                  <p class="preference-value">
+                    <%= user.preferences?.locations?.join(', ') || ' Chandigarh, New Delhi, Hyderabad/Secunderabad,
+                      Ahmedabad, Gurgaon/Gurugram, Bangalore/Bengaluru, Mumbai, Pune, Chennai, Kolkata' %>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Education Section -->
+            <div class="content-section hidden" id="education">
+              <div class="section-header">
+                <h3 class="section-title">Education</h3>
+                <button class="add-button">Add</button>
+              </div>
+
+              <% if(user.education && user.education.length> 0) { %>
+                <% user.education.forEach(edu=> { %>
+                  <div class="education-item">
+                    <div class="education-header">
+                      <h4>
+                        <%= edu.degree %> from <%= edu.institution %>
+                      </h4>
+                      <button class="edit-button"><i class="fas fa-pen"></i></button>
+                    </div>
+                    <p class="education-details">Graduating in <%= edu.gradYear %>, <%= edu.studyType %>
+                    </p>
+
+                    <% if(edu.class) { %>
+                      <div class="education-class">
+                        <div class="class-header">
+                          <h4>Class <%= edu.class %>
+                          </h4>
+                          <button class="edit-button"><i class="fas fa-pen"></i></button>
+                        </div>
+                        <p class="class-details">
+                          <%= edu.board %>, <%= edu.medium %>
+                        </p>
+                        <p class="class-score">
+                          Scored <%= edu.percentage %>%, Passed out in <%= edu.passYear %>
+                        </p>
+                      </div>
+                      <% } %>
+                  </div>
+                  <% }) %>
+                    <% } else { %>
+                      <div class="empty-state">
+                        <p>Add your education details to improve your profile.</p>
+                      </div>
+                      <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <li><a href="#education">Education</a></li>
+      <li><a href="#key-skills">Key skills</a></li>
+      <li><a href="#languages">Languages</a></li>
+      <li><a href="#internships">Internships</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#profile-summary">Profile summary</a></li>
+      <li><a href="#accomplishments">Accomplishments</a></li>
+      <li><a href="#competitive-exams">Competitive exams</a></li>
+      <li><a href="#employment">Employment</a></li>
+      <li><a href="#academic-achievements">Academic achievements</a></li>
+      </ul>
+    </div>
+
+    <div class="main-content">
+      <!-- Key Skills Section -->
+      <section id="key-skills" class="resume-section">
+        <div class="section-header">
+          <h2>Key skills</h2>
+          <button class="edit-btn" data-toggle="modal" data-target="skillsModal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="skills-container">
+          <% resumeData.keySkills.forEach(skill=> { %>
+            <div class="skill-tag">
+              <%= skill %>
+            </div>
+            <% }); %>
+        </div>
+      </section>
+
+      <!-- Languages Section -->
+      <section id="languages" class="resume-section">
+        <div class="section-header">
+          <h2>Languages</h2>
+          <div class="header-actions">
+            <button class="add-btn" data-toggle="modal" data-target="languageModal">Add</button>
+          </div>
+        </div>
+
+        <% resumeData.languages.forEach(language=> { %>
+          <div class="language-item">
+            <div class="language-header">
+              <h3>
+                <%= language.name %>
+              </h3>
+              <button class="edit-btn" data-id="<%= language.name %>">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                </svg>
+              </button>
+            </div>
+            <p>
+              <%= language.level %>
+            </p>
+          </div>
+          <% }); %>
+      </section>
+
+      <!-- Internships Section -->
+      <section id="internships" class="resume-section">
+        <div class="section-header">
+          <h2>Internships</h2>
+          <div class="header-actions">
+            <button class="add-btn" data-toggle="modal" data-target="internshipModal">Add</button>
+          </div>
+        </div>
+
+        <% if (resumeData.internships.length===0) { %>
+          <p class="instruction-text">Talk about the company you interned at, what projects you undertook and what
+            special skills you learned</p>
+          <% } else { %>
+            <% resumeData.internships.forEach(internship=> { %>
+              <div class="internship-item">
+                <h3>
+                  <%= internship.company %>
+                </h3>
+                <p>
+                  <%= internship.description %>
+                </p>
+              </div>
+              <% }); %>
+                <% } %>
+      </section>
+
+      <!-- Projects Section -->
+      <section id="projects" class="resume-section">
+        <div class="section-header">
+          <h2>Projects</h2>
+          <div class="header-actions">
+            <button class="add-btn" data-toggle="modal" data-target="projectModal">Add</button>
+          </div>
+        </div>
+
+        <% if (resumeData.projects.length===0) { %>
+          <p class="instruction-text">Talk about your projects that made you proud and contributed to your learnings</p>
+          <% } else { %>
+            <% resumeData.projects.forEach(project=> { %>
+              <div class="project-item">
+                <h3>
+                  <%= project.title %>
+                </h3>
+                <p>
+                  <%= project.description %>
+                </p>
+              </div>
+              <% }); %>
+                <% } %>
+      </section>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <!-- Skills Modal -->
+  <div id="skillsModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Edit Skills</h2>
+      <form id="addSkillForm" action="/api/skills/add" method="POST">
+        <div class="form-group">
+          <label for="skill">Add New Skill:</label>
+          <input type="text" id="skill" name="skill" required>
+        </div>
+        <button type="submit" class="submit-btn">Add Skill</button>
+      </form>
+
+      <div class="current-skills">
+        <h3>Current Skills</h3>
+        <% resumeData.keySkills.forEach(skill=> { %>
+          <div class="skill-item">
+            <span>
+              <%= skill %>
+            </span>
+            <form action="/api/skills/remove" method="POST" class="inline-form">
+              <input type="hidden" name="skill" value="<%= skill %>">
+              <button type="submit" class="remove-btn">Remove</button>
+            </form>
+          </div>
+          <% }); %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Language Modal -->
+  <div id="languageModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Add Language</h2>
+      <form action="/api/languages/add" method="POST">
+        <div class="form-group">
+          <label for="name">Language Name:</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="level">Proficiency Level:</label>
+          <select id="level" name="level" required>
+            <option value="Can speak, read and write">Can speak, read and write</option>
+            <option value="Can speak and read">Can speak and read</option>
+            <option value="Can read and write">Can read and write</option>
+            <option value="Basic knowledge">Basic knowledge</option>
+          </select>
+        </div>
+        <button type="submit" class="submit-btn">Add Language</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Internship Modal -->
+  <div id="internshipModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Add Internship</h2>
+      <form action="/api/internships/add" method="POST">
+        <div class="form-group">
+          <label for="company">Company Name:</label>
+          <input type="text" id="company" name="company" required>
+        </div>
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <textarea id="description" name="description" rows="4" required
+            placeholder="Talk about the company you interned at, what projects you undertook and what special skills you learned"></textarea>
+        </div>
+        <button type="submit" class="submit-btn">Add Internship</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Project Modal -->
+  <div id="projectModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Add Project</h2>
+      <form action="/api/projects/add" method="POST">
+        <div class="form-group">
+          <label for="title">Project Title:</label>
+          <input type="text" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <textarea id="description" name="description" rows="4" required
+            placeholder="Talk about your projects that made you proud and contributed to your learnings"></textarea>
+        </div>
+        <button type="submit" class="submit-btn">Add Project</button>
+      </form>
+    </div>
+  </div>
+  </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Set the profile completion ring percentage
+      const completionRing = document.querySelector('.profile-completion-ring');
+      if (completionRing) {
+        const percentage = completionRing.getAttribute('data-percentage');
+        completionRing.style.setProperty('--completion', percentage + '%');
+      }
+
+      // Tab switching functionality
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+
+          // Here you would load the content for that tab
+          // This will be implemented in the next parts
+        });
+      });
+
+      // Edit profile button functionality
+      const editButtons = document.querySelectorAll('.edit-icon');
+      editButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+          e.preventDefault();
+          // Toggle edit mode or open edit modal
+          // Will be implemented in next parts
+        });
+      });
+    });
+
+    // Add to profile.js
+    document.addEventListener('DOMContentLoaded', function () {
+      // Previous code...
+
+      // Sidebar navigation functionality
+      const sidebarItems = document.querySelectorAll('.sidebar-item');
+      const contentSections = document.querySelectorAll('.content-section');
+
+      sidebarItems.forEach(item => {
+        item.addEventListener('click', () => {
+          // Update active sidebar item
+          sidebarItems.forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+
+          // Show corresponding content section
+          const sectionId = item.getAttribute('data-section');
+          contentSections.forEach(section => {
+            section.classList.add('hidden');
+          });
+          document.getElementById(sectionId).classList.remove('hidden');
+        });
+      });
+
+      // Edit button functionality
+      const editButtons = document.querySelectorAll('.edit-button');
+      editButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          const section = this.closest('.content-section');
+          const sectionId = section.id;
+
+          // Here you would show an edit modal specific to this section
+          showEditModal(sectionId);
+        });
+      });
+
+      // Add button functionality
+      const addButtons = document.querySelectorAll('.add-button');
+      addButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          const section = this.closest('.content-section');
+          const sectionId = section.id;
+
+          // Here you would show an add modal specific to this section
+          showAddModal(sectionId);
+        });
+      });
+
+      // Placeholder functions for modals
+      function showEditModal(sectionId) {
+        console.log(`Edit modal for ${sectionId}`);
+        // Implementation will come in a later part
+      }
+
+      function showAddModal(sectionId) {
+        console.log(`Add modal for ${sectionId}`);
+        // Implementation will come in a later part
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      // Modal functionality
+      const modals = document.querySelectorAll('.modal');
+      const modalTriggers = document.querySelectorAll('[data-toggle="modal"]');
+      const closeButtons = document.querySelectorAll('.close');
+
+      // Open modal when trigger is clicked
+      modalTriggers.forEach(trigger => {
+        trigger.addEventListener('click', function () {
+          const targetModal = document.getElementById(this.getAttribute('data-target'));
+          if (targetModal) {
+            targetModal.style.display = 'block';
+          }
+        });
+      });
+
+      // Close modal when X is clicked
+      closeButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          const modal = this.closest('.modal');
+          if (modal) {
+            modal.style.display = 'none';
+          }
+        });
+      });
+
+      // Close modal when clicking outside the modal content
+      window.addEventListener('click', function (event) {
+        modals.forEach(modal => {
+          if (event.target === modal) {
+            modal.style.display = 'none';
+          }
+        });
+      });
+
+      // Smooth scrolling for quick links
+      document.querySelectorAll('.quick-links a').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 20,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+
+      // Form submission with AJAX (optional enhancement)
+      const ajaxifyForms = false; // Set to true to enable AJAX form submission
+
+      if (ajaxifyForms) {
+        const forms = document.querySelectorAll('form');
+
+        forms.forEach(form => {
+          form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const formObject = {};
+            formData.forEach((value, key) => {
+              formObject[key] = value;
+            });
+
+            fetch(this.action, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(formObject)
+            })
+              .then(response => response.json())
+              .then(data => {
+                // Close modal after successful submission
+                const modal = this.closest('.modal');
+                if (modal) {
+                  modal.style.display = 'none';
+                }
+
+                // Reload page to show updated data
+                window.location.reload();
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
+          });
+        });
+      }
+    });
+  </script>
 </body>
+
 </html>

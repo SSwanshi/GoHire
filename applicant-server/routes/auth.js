@@ -8,7 +8,6 @@ router.get('/login', (req, res) => {
   res.render('login');
 });
 
-
 // Login Handle
 router.post('/login', passport.authenticate('local', {
   successRedirect: '/',
@@ -16,18 +15,15 @@ router.post('/login', passport.authenticate('local', {
   failureFlash: true
 }));
 
-// Signup Page
+
 router.get('/signup', (req, res) => {
-  res.render('signup');
+  res.render('signup', { title: 'Sign Up' });
 });
 
 
-// Signup Handle
-router.post('/signup', async (req, res) => {
-  const { name, email, password, role } = req.body;
-  const user = new User({ name, email, password, role });
-  await user.save();
-  res.redirect('/login');
+router.post('/signup', (req, res) => {
+  const { name, email, password } = req.body;
+  res.redirect('/auth/login');
 });
 
 // Logout Handle

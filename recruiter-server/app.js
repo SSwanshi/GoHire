@@ -27,7 +27,6 @@ app.use('/auth', authRoutes);
 const recruiterRoutes = require('./routes/recruiter');
 app.use('/recruiter', recruiterRoutes);
 
-
 app.get('/', (req, res) => {
   res.redirect('/auth/login',);
 });

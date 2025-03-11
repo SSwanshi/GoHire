@@ -8,7 +8,6 @@ const applicantRoutes = require('./routes/applicant');
 const { ensureAuthenticated } = require('../shared/middleware/auth');
 
 const app = express();
-
 app.set('view engine', 'ejs');
 
 // Middleware
@@ -29,6 +28,7 @@ app.get('/login', (req, res) => {
 app.get('/signup', (req, res) => {
     res.render('signup');
 });
+
 
 // Start Server
 const PORT = 3000;
