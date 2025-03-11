@@ -13,4 +13,45 @@
 
 <h2 class="font-bold mt-10 flex justify-center font-sans text-xl">Here is your list of recently added Jobs</h2>
 
+<section class="my-10 flex justify-center">
+    <div class="w-full max-w-4xl">
+        <table class="w-full text-left border-collapse border border-gray-300">
+            <thead>
+                <tr class="text-gray-700 bg-gray-200">
+                    <th class="px-6 py-3 border border-gray-300">Company</th>
+                    <th class="px-6 py-3 border border-gray-300">Job Title</th>
+                    <th class="px-6 py-3 border border-gray-300">Salary</th>
+                    <th class="px-6 py-3 border border-gray-300">Location</th>
+                    <th class="px-6 py-3 border border-gray-300">Positions</th>
+                    <th class="px-6 py-3 border border-gray-300">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (jobs.length > 0) { %>
+                    <% for (var i = 0; i < jobs.length; i++) { %>
+                        <tr class="hover:bg-gray-100">
+                            <td class="px-6 py-4 border border-gray-300">
+                                <img src="<%= jobs[i].logo %>" alt="Company Logo" class="h-10 w-10 rounded-full">
+                            </td>
+                            <td class="px-6 py-4 border border-gray-300"><%= jobs[i].jobTitle %></td>
+                            <td class="px-6 py-4 border border-gray-300"><%= jobs[i].jobSalary %></td>
+                            <td class="px-6 py-4 border border-gray-300"><%= jobs[i].jobLocation %></td>
+                            <td class="px-6 py-4 border border-gray-300"><%= jobs[i].noofpositions %></td>
+                            <td class="px-6 py-4 border border-gray-300">
+                                <button class="text-blue-500 hover:underline">View</button>
+                            </td>
+                        </tr>
+                    <% } %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">No companies added yet.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+            
+        </table>
+    </div>
+</section>
+
+
 <%- include('layout/footer') %>

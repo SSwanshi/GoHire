@@ -32,6 +32,10 @@ app.get('/', (req, res) => {
   res.redirect('/auth/login',);
 });
 
+app.get('/signup', (req, res) => {
+  res.render('signup');
+});
+
 
 app.get('/recruiter/home', (req, res) => {
   res.render('home');
