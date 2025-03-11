@@ -1,3 +1,58 @@
 <%- include('layout/header') %>
-Your Internships
-<%- include('layout/footer') %>
+
+<% if (successMessage) { %>
+    <div id="toast" class="fixed top-5 right-5 bg-green-500 text-white p-3 rounded-md shadow-md mt-20">
+        <%= successMessage %>
+    </div>
+    <script>
+        setTimeout(() => {
+            document.getElementById("toast").style.display = "none";
+        }, 3000);
+    </script>
+<% } %>
+
+<h2 class="font-bold mt-10 flex justify-center font-sans text-xl">Here is your list of recently added Internships</h2>
+
+<section class="my-10 flex justify-center">
+    <div class="w-full max-w-4xl">
+        <table class="w-full text-left border-collapse border border-gray-300">
+            <thead>
+                <tr class="text-gray-700 bg-gray-200">
+                    <th class="px-6 py-3 border border-gray-300">Company</th>
+                    <th class="px-6 py-3 border border-gray-300">Internship Title</th>
+                    <th class="px-6 py-3 border border-gray-300">Stipend</th>
+                    <th class="px-6 py-3 border border-gray-300">Location</th>
+                    <th class="px-6 py-3 border border-gray-300">Duration</th>
+                    <th class="px-6 py-3 border border-gray-300">Opportunities</th>
+                    <th class="px-6 py-3 border border-gray-300">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (internships.length > 0) { %>
+                    <% for (var i = 0; i < internships.length; i++) { %>
+                        <tr class="hover:bg-gray-100">
+                            <td class="px-6 py-4 border border-gray-300">
+                                <img src="<%= internships[i].logo %>" alt="Company Logo" class="h-10 w-10 rounded-full">
+                            </td>
+                            <td class="px-6 py-4 border border-gray-300"><%= internships[i].intTitle %></td>
+                            <td class="px-6 py-4 border border-gray-300"><%= internships[i].intStipend %></td>
+                            <td class="px-6 py-4 border border-gray-300"><%= internships[i].intLocation %></td>
+                            <td class="px-6 py-4 border border-gray-300"><%= internships[i].intDuration %></td>
+                            <td class="px-6 py-4 border border-gray-300"><%= internships[i].intPositions %></td>
+                            <td class="px-6 py-4 border border-gray-300">
+                                <button class="text-blue-500 hover:underline">View</button>
+                            </td>
+                        </tr>
+                    <% } %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">No companies added yet.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+            
+        </table>
+    </div>
+</section>
+
+<%- include('layout/footer') %> 
