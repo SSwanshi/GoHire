@@ -41,6 +41,11 @@ router.get('/search', async (req, res) => {
   res.render('search-results');
 });
 
+//Premium page
+router.get('/competitions', async (req, res) => {
+  res.render('competitions');
+});
+
 //Apply_for_Job page
 router.get('/applyforJobs', async (req, res) => {
   res.render('Apply_for_Jobs');
@@ -49,6 +54,10 @@ router.get('/applyforJobs', async (req, res) => {
 //Apply_for_Internship page
 router.get('/applyforInternships', async (req, res) => {
   res.render('Apply_for_Internships');
+});
+
+router.get('/Subscription', async (req, res) => {
+  res.render('Subscription');
 });
 
 router.post('/search', async (req, res) => {
