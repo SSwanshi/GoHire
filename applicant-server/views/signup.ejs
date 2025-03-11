@@ -154,6 +154,62 @@
       this.classList.add('active');
       document.getElementById('recruiter-btn').classList.remove('active');
     });
+
+    // Form validation
+    document.querySelector('.signup-form').addEventListener('submit', function (event) {
+      let firstName = document.getElementById('firstName').value.trim();
+      let email = document.getElementById('email').value.trim();
+      let phone = document.getElementById('phone').value.trim();
+      let password = document.getElementById('password').value.trim();
+      let confirmPassword = document.getElementById('confirmPassword').value.trim();
+      let genderSelected = document.querySelector('input[name="gender"]:checked');
+      let termsChecked = document.getElementById('termsAgree').checked;
+
+      let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      let phonePattern = /^[0-9]{10}$/;
+
+      if (firstName === "") {
+        alert('First Name is required.');
+        event.preventDefault();
+        return;
+      }
+
+      if (!emailPattern.test(email)) {
+        alert('Please enter a valid email address.');
+        event.preventDefault();
+        return;
+      }
+
+      if (!phonePattern.test(phone)) {
+        alert('Phone number must be exactly 10 digits.');
+        event.preventDefault();
+        return;
+      }
+
+      if (!genderSelected) {
+        alert('Please select a gender.');
+        event.preventDefault();
+        return;
+      }
+
+      if (password.length < 6) {
+        alert('Password must be at least 6 characters long.');
+        event.preventDefault();
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert('Passwords do not match.');
+        event.preventDefault();
+        return;
+      }
+
+      if (!termsChecked) {
+        alert('You must agree to the terms and conditions.');
+        event.preventDefault();
+        return;
+      }
+    });
   </script>
 </body>
 

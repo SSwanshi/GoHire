@@ -41,6 +41,25 @@
       document.getElementById('recruiter-btn').classList.remove('active');
     });
 
+    // Form validation
+  document.querySelector('.login-form').addEventListener('submit', function (event) {
+    let email = document.getElementById('email').value.trim();
+    let password = document.getElementById('password').value.trim();
+    let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!emailPattern.test(email)) {
+      alert('Please enter a valid email address.');
+      event.preventDefault();
+      return;
+    }
+
+    if (password.length < 6) {
+      alert('Password must be at least 6 characters long.');
+      event.preventDefault();
+      return;
+    }
+  });
+
   </script>
 
   </html>
