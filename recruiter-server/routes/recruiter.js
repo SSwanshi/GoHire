@@ -21,10 +21,7 @@ const internships = [
     { intTitle: "Front-end Developer", intDescription: "Design a website with good UI", intRequirements: "Nodejs, Expressjs, MongoDB, React", intStipend: 10, intLocation: "Kolkata", intDuration: 6, intExperience: 1, intPositions: 20, intCompany: "Amazon" }
 ];
 
-const users = [
-    { firstName: "Sarvjeet", lastName: "Swanshi", email: "sarvjeetswanshi@gmail.com", phone: 8102109959, gender: "male", password: "adminpass",confirmPassword: "adminpaas" },
-    { firstName: "Saurav", lastName: "Roy", email: "sauravroy@gmail.com", phone: 9854672132, gender: "male", password: "adminpass",confirmPassword: "adminpaas" }
-];
+
 
 function addCompanyLogosJobs(jobs, companies) {
     return jobs.map(job => {
@@ -118,7 +115,9 @@ router.get('/internships', (req,res) => {
 
     const updatedIntern = addCompanyLogosIntern(internships, companies);
     res.render('internships', {internships:updatedIntern , successMessage, companies});
-})
+});
+
+
 
 module.exports = router; 
 module.exports.companies = companies;
