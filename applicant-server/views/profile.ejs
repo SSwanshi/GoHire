@@ -1,614 +1,457 @@
-// profile.ejs
-<!DOCTYPE html>
-<html lang="en">
+<!-- views/profile.ejs -->
+<%- include('layout/header.ejs') %>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Profile | Job Portal</title>
-  <link rel="stylesheet" href="/css/profile.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
+  <nav class="bg-gradient-to-r from-blue-700 to-blue-500 p-5 shadow-xl fixed w-full z-10 transition-all duration-300"
+    id="navbar">
+    <div class="container mx-auto flex justify-between items-center">
+      <a href="/" class="text-black text-3xl font-bold transition-transform hover:scale-105 duration-300 ml-2">Go<span
+          class="text-yellow-400">Hire</span></a>
 
-<body>
-  <div class="container">
-    <!-- Main Profile Card -->
-    <div class="profile-card">
-      <div class="profile-header">
-        <div class="profile-info">
-          <div class="profile-avatar-container">
-            <div class="profile-completion-ring" data-percentage="<%= user.profileCompletion || 80 %>">
-              <div class="profile-avatar">
-                <img src="<%= user.avatarUrl || '/images/default-avatar.png' %>" alt="Profile Picture">
-              </div>
-            </div>
-            <div class="completion-percentage">
-              <%= user.profileCompletion || 80 %>%
-            </div>
-          </div>
-          <div class="profile-details">
-            <div class="profile-name">
-              <h2>
-                <%= user.name || 'User Name' %>
-              </h2>
-              <a href="#" class="edit-icon"><i class="fas fa-pen"></i></a>
-            </div>
-            <p class="profile-education">
-              <%= user.education.degree || 'B.Tech/B.E.' %>
-            </p>
-            <p class="profile-college">
-              <%= user.education.institution || 'College Name' %>
-            </p>
-
-            <div class="profile-contact-info">
-              <div class="location">
-                <i class="fas fa-map-marker-alt"></i>
-                <span>
-                  <%= user.location || 'City' %>
-                </span>
-              </div>
-              <div class="gender">
-                <i class="fas fa-user"></i>
-                <span>
-                  <%= user.gender || 'Gender' %>
-                </span>
-              </div>
-              <div class="dob">
-                <i class="fas fa-calendar"></i>
-                <span>
-                  <%= user.dateOfBirth || 'DD Month YYYY' %>
-                </span>
-              </div>
-              <div class="phone">
-                <i class="fas fa-phone"></i>
-                <span>
-                  <%= user.phone || 'Phone Number' %>
-                </span>
-                <% if(user.isPhoneVerified) { %><i class="fas fa-check-circle verified"></i>
-                  <% } %>
-              </div>
-              <div class="email">
-                <i class="fas fa-envelope"></i>
-                <span>
-                  <%= user.email || 'Email Address' %>
-                </span>
-                <% if(user.isEmailVerified) { %><i class="fas fa-check-circle verified"></i>
-                  <% } %>
-              </div>
-            </div>
-          </div>
+      <div class="relative w-1/3 group">
+        <form action="/search" method="POST" id="search-form"><input id="search-space" type="text"
+            placeholder="Search for Opportunities" name="parsedValue"
+            class="w-full p-3 rounded-full border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 shadow-md placeholder:text-gray-700">
+        </form>
+        <div class="absolute right-3 top-3.5 text-yellow-500">
+          <a href="/search" id="search-btn"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+              viewBox="0 0 24 24" stroke="currentColor" stroke-width="4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg></a>
         </div>
 
-        <div class="profile-completion-suggestions">
-          <div class="suggestion-item">
-            <i class="fas fa-chart-line"></i>
-            <span>Add Internship</span>
-            <span class="percentage-increase">+8%</span>
-          </div>
-          <div class="suggestion-item">
-            <i class="fas fa-tasks"></i>
-            <span>Add project</span>
-            <span class="percentage-increase">+7%</span>
-          </div>
-          <div class="suggestion-item">
-            <i class="fas fa-certificate"></i>
-            <span>Add certificates</span>
-            <span class="percentage-increase">+5%</span>
-          </div>
-          <button class="add-missing-details-btn">Add 3 missing details</button>
-        </div>
       </div>
 
-      <!-- Tab Navigation -->
-      <div class="profile-tabs">
-        <div class="tab active" data-tab="view-edit">View & Edit</div>
-        <div class="tab" data-tab="activity-insights">Activity insights</div>
-      </div>
-
-      <!-- Profile Content - Will add in next parts -->
-      <div class="profile-content">
-        // Add this to profile.ejs inside the .profile-content div
-        <div class="profile-content-container">
-          <!-- Sidebar Navigation -->
-          <div class="sidebar">
-            <h3 class="sidebar-title">Quick links</h3>
-            <ul class="sidebar-nav">
-              <li class="sidebar-item active" data-section="preference">Preference</li>
-              <li class="sidebar-item" data-section="education">Education</li>
-              <li class="sidebar-item" data-section="key-skills">Key skills</li>
-              <li class="sidebar-item" data-section="languages">Languages</li>
-              <li class="sidebar-item" data-section="internships">Internships</li>
-              <li class="sidebar-item" data-section="projects">Projects</li>
-              <li class="sidebar-item" data-section="profile-summary">Profile summary</li>
-              <li class="sidebar-item" data-section="accomplishments">Accomplishments</li>
-              <li class="sidebar-item" data-section="competitive-exams">Competitive exams</li>
-              <li class="sidebar-item" data-section="employment">Employment</li>
-              <li class="sidebar-item" data-section="academic-achievements">Academic achievements</li>
-              <li class="sidebar-item" data-section="resume">Resume</li>
-            </ul>
-          </div>
-
-          <!-- Main Content Area -->
-          <div class="main-content">
-            <!-- Career Preferences Section -->
-            <div class="content-section" id="preference">
-              <div class="section-header">
-                <h3 class="section-title">Your career preferences</h3>
-                <button class="edit-button"><i class="fas fa-pen"></i></button>
-              </div>
-
-              <div class="preference-container">
-                <div class="preference-item">
-                  <h4 class="preference-title">Preferred job type</h4>
-                  <p class="preference-value">
-                    <%= user.preferences?.jobType || 'Jobs, Internships' %>
-                  </p>
-                </div>
-
-                <div class="preference-item">
-                  <h4 class="preference-title">Availability to work</h4>
-                  <p class="preference-value">
-                    <%= user.preferences?.availability || 'More than 3 Months' %>
-                  </p>
-                </div>
-              </div>
-
-              <div class="preference-container">
-                <div class="preference-item">
-                  <h4 class="preference-title">Preferred location</h4>
-                  <p class="preference-value">
-                    <%= user.preferences?.locations?.join(', ') || ' Chandigarh, New Delhi, Hyderabad/Secunderabad,
-                      Ahmedabad, Gurgaon/Gurugram, Bangalore/Bengaluru, Mumbai, Pune, Chennai, Kolkata' %>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Education Section -->
-            <div class="content-section hidden" id="education">
-              <div class="section-header">
-                <h3 class="section-title">Education</h3>
-                <button class="add-button">Add</button>
-              </div>
-
-              <% if(user.education && user.education.length> 0) { %>
-                <% user.education.forEach(edu=> { %>
-                  <div class="education-item">
-                    <div class="education-header">
-                      <h4>
-                        <%= edu.degree %> from <%= edu.institution %>
-                      </h4>
-                      <button class="edit-button"><i class="fas fa-pen"></i></button>
-                    </div>
-                    <p class="education-details">Graduating in <%= edu.gradYear %>, <%= edu.studyType %>
-                    </p>
-
-                    <% if(edu.class) { %>
-                      <div class="education-class">
-                        <div class="class-header">
-                          <h4>Class <%= edu.class %>
-                          </h4>
-                          <button class="edit-button"><i class="fas fa-pen"></i></button>
-                        </div>
-                        <p class="class-details">
-                          <%= edu.board %>, <%= edu.medium %>
-                        </p>
-                        <p class="class-score">
-                          Scored <%= edu.percentage %>%, Passed out in <%= edu.passYear %>
-                        </p>
-                      </div>
-                      <% } %>
-                  </div>
-                  <% }) %>
-                    <% } else { %>
-                      <div class="empty-state">
-                        <p>Add your education details to improve your profile.</p>
-                      </div>
-                      <% } %>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <li><a href="#education">Education</a></li>
-      <li><a href="#key-skills">Key skills</a></li>
-      <li><a href="#languages">Languages</a></li>
-      <li><a href="#internships">Internships</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#profile-summary">Profile summary</a></li>
-      <li><a href="#accomplishments">Accomplishments</a></li>
-      <li><a href="#competitive-exams">Competitive exams</a></li>
-      <li><a href="#employment">Employment</a></li>
-      <li><a href="#academic-achievements">Academic achievements</a></li>
+      <ul class="hidden md:flex space-x-8 text-white">
+        <li><a href="/"
+            class="hover:text-yellow-300 transition-colors duration-300 font-extrabold relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-yellow-300 after:transition-all after:duration-300 hover:after:w-full">Home</a>
+        </li>
+        <li><a href="/jobs"
+            class="hover:text-yellow-300 transition-colors duration-300 font-extrabold relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-yellow-300 after:transition-all after:duration-300 hover:after:w-full">Jobs</a>
+        </li>
+        <li><a href="/internships"
+            class="hover:text-yellow-300 transition-colors duration-300 font-extrabold relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-yellow-300 after:transition-all after:duration-300 hover:after:w-full">Internship</a>
+        </li>
+        <li><a href="/contact"
+            class="hover:text-yellow-300 transition-colors duration-300 font-extrabold relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-yellow-300 after:transition-all after:duration-300 hover:after:w-full">Contact
+            Us</a></li>
+        <li><a href="/login"
+            class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg">Login</a>
+        </li>
       </ul>
-    </div>
 
-    <div class="main-content">
-      <!-- Key Skills Section -->
-      <section id="key-skills" class="resume-section">
-        <div class="section-header">
-          <h2>Key skills</h2>
-          <button class="edit-btn" data-toggle="modal" data-target="skillsModal">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2">
-              <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-            </svg>
-          </button>
+
+      <div class="md:hidden flex flex-col space-y-1 cursor-pointer" id="mobile-menu">
+        <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
+        <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
+        <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
+      </div>
+    </div>
+  </nav>
+
+  <header
+    class="pt-28 pb-24 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-500 text-white relative overflow-hidden">
+    <div class="profile-container">
+      <!-- Profile Header Section -->
+      <div class="profile-header">
+        <div class="profile-top">
+          <div class="profile-image-container">
+            <div class="profile-image">
+              <img id="profile-img" src="<%= user.profileImage || '/images/default-avatar.png' %>"
+                alt="Profile Picture">
+              <div class="image-overlay">
+                <label for="upload-profile-image" class="upload-icon">
+                  <i class="fas fa-camera"></i>
+                </label>
+                <input type="file" id="upload-profile-image" accept="image/*" style="display: none;">
+              </div>
+            </div>
+          </div>
+          <div class="profile-basic-info">
+            <div class="info-edit-container">
+              <div class="profile-degree">
+                <p>
+                  <%= user.degree %>
+                </p>
+              </div>
+              <button class="edit-btn"><i class="fas fa-pencil-alt"></i></button>
+            </div>
+            <div class="profile-college">
+              <p>
+                <%= user.college %>
+              </p>
+            </div>
+          </div>
         </div>
 
+        <div class="profile-details">
+          <div class="detail-row">
+            <div class="detail-item location">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>
+                <%= user.location %>
+              </span>
+            </div>
+            <div class="detail-item phone">
+              <i class="fas fa-phone"></i>
+              <span>
+                <%= user.phone %>
+              </span>
+              <span class="verified"><i class="fas fa-check-circle"></i></span>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-item gender">
+              <i class="fas fa-venus-mars"></i>
+              <span>
+                <%= user.gender %>
+              </span>
+            </div>
+            <div class="detail-item email">
+              <i class="fas fa-envelope"></i>
+              <span>
+                <%= user.email %>
+              </span>
+              <span class="verified"><i class="fas fa-check-circle"></i></span>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-item birthdate">
+              <i class="fas fa-calendar"></i>
+              <span>
+                <%= user.birthdate %>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Education Section -->
+      <div class="profile-section">
+        <div class="section-header">
+          <h3>Education</h3>
+          <button class="add-btn">Add</button>
+        </div>
+        <div class="education-item">
+          <div class="education-details">
+            <div class="education-info">
+              <h4>
+                <%= user.degree %> from <%= user.college %>
+              </h4>
+              <p class="education-duration">Graduating in <%= user.graduationYear %>, Full Time</p>
+            </div>
+            <button class="edit-btn small"><i class="fas fa-pencil-alt"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Skills Section -->
+      <div class="profile-section">
+        <div class="section-header">
+          <h3>Key skills</h3>
+          <button class="edit-btn small"><i class="fas fa-pencil-alt"></i></button>
+        </div>
         <div class="skills-container">
-          <% resumeData.keySkills.forEach(skill=> { %>
-            <div class="skill-tag">
-              <%= skill %>
-            </div>
-            <% }); %>
-        </div>
-      </section>
-
-      <!-- Languages Section -->
-      <section id="languages" class="resume-section">
-        <div class="section-header">
-          <h2>Languages</h2>
-          <div class="header-actions">
-            <button class="add-btn" data-toggle="modal" data-target="languageModal">Add</button>
-          </div>
-        </div>
-
-        <% resumeData.languages.forEach(language=> { %>
-          <div class="language-item">
-            <div class="language-header">
-              <h3>
-                <%= language.name %>
-              </h3>
-              <button class="edit-btn" data-id="<%= language.name %>">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2">
-                  <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                </svg>
-              </button>
-            </div>
-            <p>
-              <%= language.level %>
-            </p>
-          </div>
-          <% }); %>
-      </section>
-
-      <!-- Internships Section -->
-      <section id="internships" class="resume-section">
-        <div class="section-header">
-          <h2>Internships</h2>
-          <div class="header-actions">
-            <button class="add-btn" data-toggle="modal" data-target="internshipModal">Add</button>
-          </div>
-        </div>
-
-        <% if (resumeData.internships.length===0) { %>
-          <p class="instruction-text">Talk about the company you interned at, what projects you undertook and what
-            special skills you learned</p>
-          <% } else { %>
-            <% resumeData.internships.forEach(internship=> { %>
-              <div class="internship-item">
-                <h3>
-                  <%= internship.company %>
-                </h3>
-                <p>
-                  <%= internship.description %>
-                </p>
-              </div>
-              <% }); %>
-                <% } %>
-      </section>
-
-      <!-- Projects Section -->
-      <section id="projects" class="resume-section">
-        <div class="section-header">
-          <h2>Projects</h2>
-          <div class="header-actions">
-            <button class="add-btn" data-toggle="modal" data-target="projectModal">Add</button>
-          </div>
-        </div>
-
-        <% if (resumeData.projects.length===0) { %>
-          <p class="instruction-text">Talk about your projects that made you proud and contributed to your learnings</p>
-          <% } else { %>
-            <% resumeData.projects.forEach(project=> { %>
-              <div class="project-item">
-                <h3>
-                  <%= project.title %>
-                </h3>
-                <p>
-                  <%= project.description %>
-                </p>
-              </div>
-              <% }); %>
-                <% } %>
-      </section>
-    </div>
-  </div>
-
-  <!-- Modals -->
-  <!-- Skills Modal -->
-  <div id="skillsModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Edit Skills</h2>
-      <form id="addSkillForm" action="/api/skills/add" method="POST">
-        <div class="form-group">
-          <label for="skill">Add New Skill:</label>
-          <input type="text" id="skill" name="skill" required>
-        </div>
-        <button type="submit" class="submit-btn">Add Skill</button>
-      </form>
-
-      <div class="current-skills">
-        <h3>Current Skills</h3>
-        <% resumeData.keySkills.forEach(skill=> { %>
-          <div class="skill-item">
-            <span>
+          <% user.skills.forEach(skill=> { %>
+            <span class="skill-tag">
               <%= skill %>
             </span>
-            <form action="/api/skills/remove" method="POST" class="inline-form">
-              <input type="hidden" name="skill" value="<%= skill %>">
-              <button type="submit" class="remove-btn">Remove</button>
-            </form>
-          </div>
-          <% }); %>
+            <% }); %>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Language Modal -->
-  <div id="languageModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Add Language</h2>
-      <form action="/api/languages/add" method="POST">
-        <div class="form-group">
-          <label for="name">Language Name:</label>
-          <input type="text" id="name" name="name" required>
+    <!-- Image Upload Modal -->
+    <div id="image-upload-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Upload Profile Picture</h2>
+        <div class="image-preview-container">
+          <img id="image-preview" src="/images/default-avatar.png" alt="Preview">
         </div>
-        <div class="form-group">
-          <label for="level">Proficiency Level:</label>
-          <select id="level" name="level" required>
-            <option value="Can speak, read and write">Can speak, read and write</option>
-            <option value="Can speak and read">Can speak and read</option>
-            <option value="Can read and write">Can read and write</option>
-            <option value="Basic knowledge">Basic knowledge</option>
-          </select>
+        <div class="upload-controls">
+          <input type="file" id="image-file" accept="image/*">
+          <div class="button-group">
+            <button id="cancel-upload" class="btn cancel-btn">Cancel</button>
+            <button id="save-image" class="btn save-btn">Save</button>
+          </div>
         </div>
-        <button type="submit" class="submit-btn">Add Language</button>
-      </form>
-    </div>
-  </div>
+      </div>
 
-  <!-- Internship Modal -->
-  <div id="internshipModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Add Internship</h2>
-      <form action="/api/internships/add" method="POST">
-        <div class="form-group">
-          <label for="company">Company Name:</label>
-          <input type="text" id="company" name="company" required>
-        </div>
-        <div class="form-group">
-          <label for="description">Description:</label>
-          <textarea id="description" name="description" rows="4" required
-            placeholder="Talk about the company you interned at, what projects you undertook and what special skills you learned"></textarea>
-        </div>
-        <button type="submit" class="submit-btn">Add Internship</button>
-      </form>
-    </div>
-  </div>
 
-  <!-- Project Modal -->
-  <div id="projectModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Add Project</h2>
-      <form action="/api/projects/add" method="POST">
-        <div class="form-group">
-          <label for="title">Project Title:</label>
-          <input type="text" id="title" name="title" required>
-        </div>
-        <div class="form-group">
-          <label for="description">Description:</label>
-          <textarea id="description" name="description" rows="4" required
-            placeholder="Talk about your projects that made you proud and contributed to your learnings"></textarea>
-        </div>
-        <button type="submit" class="submit-btn">Add Project</button>
-      </form>
     </div>
-  </div>
-  </div>
-  </div>
+    <!-- Languages Section (Image 3) -->
+    <div class="profile-section">
+      <div class="section-header">
+        <h3>Languages</h3>
+        <button class="add-btn">Add</button>
+      </div>
+      <% user.languages.forEach(language=> { %>
+        <div class="language-item">
+          <div class="language-name">
+            <h4>
+              <%= language.name %>
+            </h4>
+            <button class="edit-btn small"><i class="fas fa-pencil-alt"></i></button>
+          </div>
+          <p class="language-proficiency">
+            <%= language.proficiency %>
+          </p>
+        </div>
+        <% }); %>
+    </div>
+
+    <!-- Academic Achievements Section (Image 4) -->
+    <div class="profile-section">
+      <div class="section-header">
+        <h3>Academic achievements</h3>
+        <button class="add-btn">Add</button>
+      </div>
+      <div class="achievement-item">
+        <div class="achievement-header">
+          <h4>During <%= user.achievementTime %>
+          </h4>
+          <button class="edit-btn small"><i class="fas fa-pencil-alt"></i></button>
+        </div>
+        <p class="achievement-description">
+          <%= user.achievements %>
+        </p>
+      </div>
+    </div>
+
+    <!-- Resume Section (Image 4) -->
+    <div class="profile-section">
+      <h3>Resume</h3>
+      <p class="resume-description">Your resume is the first impression you make on potential employers. Craft it
+        carefully to secure your desired job or internship.</p>
+      <div class="resume-upload-container">
+        <button class="upload-btn">Upload resume</button>
+        <p class="upload-formats">Supported formats: doc, docx, rtf, pdf, up to 2MB</p>
+      </div>
+    </div>
+    </div>
+
+  </header>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      // Set the profile completion ring percentage
-      const completionRing = document.querySelector('.profile-completion-ring');
-      if (completionRing) {
-        const percentage = completionRing.getAttribute('data-percentage');
-        completionRing.style.setProperty('--completion', percentage + '%');
-      }
-
-      // Tab switching functionality
-      const tabs = document.querySelectorAll('.tab');
-      tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-          tabs.forEach(t => t.classList.remove('active'));
-          tab.classList.add('active');
-
-          // Here you would load the content for that tab
-          // This will be implemented in the next parts
-        });
-      });
-
-      // Edit profile button functionality
-      const editButtons = document.querySelectorAll('.edit-icon');
+      // Edit buttons functionality
+      const editButtons = document.querySelectorAll('.edit-btn');
       editButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-          e.preventDefault();
-          // Toggle edit mode or open edit modal
-          // Will be implemented in next parts
-        });
-      });
-    });
-
-    // Add to profile.js
-    document.addEventListener('DOMContentLoaded', function () {
-      // Previous code...
-
-      // Sidebar navigation functionality
-      const sidebarItems = document.querySelectorAll('.sidebar-item');
-      const contentSections = document.querySelectorAll('.content-section');
-
-      sidebarItems.forEach(item => {
-        item.addEventListener('click', () => {
-          // Update active sidebar item
-          sidebarItems.forEach(i => i.classList.remove('active'));
-          item.classList.add('active');
-
-          // Show corresponding content section
-          const sectionId = item.getAttribute('data-section');
-          contentSections.forEach(section => {
-            section.classList.add('hidden');
-          });
-          document.getElementById(sectionId).classList.remove('hidden');
+        button.addEventListener('click', function (e) {
+          const section = e.target.closest('.profile-section, .profile-name, .education-details, .language-name, .achievement-header');
+          if (section) {
+            console.log('Edit button clicked for:', section.querySelector('h2, h3, h4').textContent);
+            // Here you would implement edit functionality, like showing a modal or inline editing
+          }
         });
       });
 
-      // Edit button functionality
-      const editButtons = document.querySelectorAll('.edit-button');
-      editButtons.forEach(button => {
-        button.addEventListener('click', function () {
-          const section = this.closest('.content-section');
-          const sectionId = section.id;
-
-          // Here you would show an edit modal specific to this section
-          showEditModal(sectionId);
-        });
-      });
-
-      // Add button functionality
-      const addButtons = document.querySelectorAll('.add-button');
+      // Add buttons functionality
+      const addButtons = document.querySelectorAll('.add-btn');
       addButtons.forEach(button => {
-        button.addEventListener('click', function () {
-          const section = this.closest('.content-section');
-          const sectionId = section.id;
-
-          // Here you would show an add modal specific to this section
-          showAddModal(sectionId);
+        button.addEventListener('click', function (e) {
+          const section = e.target.closest('.profile-section');
+          if (section) {
+            const sectionTitle = section.querySelector('h3').textContent;
+            console.log('Add button clicked for section:', sectionTitle);
+            // Here you would implement add functionality, like showing a modal
+          }
         });
       });
 
-      // Placeholder functions for modals
-      function showEditModal(sectionId) {
-        console.log(`Edit modal for ${sectionId}`);
-        // Implementation will come in a later part
-      }
+      // Resume upload button
+      const uploadButton = document.querySelector('.upload-btn');
+      if (uploadButton) {
+        uploadButton.addEventListener('click', function () {
+          // Create a hidden file input element
+          const fileInput = document.createElement('input');
+          fileInput.type = 'file';
+          fileInput.accept = '.doc,.docx,.rtf,.pdf';
 
-      function showAddModal(sectionId) {
-        console.log(`Add modal for ${sectionId}`);
-        // Implementation will come in a later part
+          // Trigger click on the file input
+          fileInput.click();
+
+          // Handle file selection
+          fileInput.addEventListener('change', function () {
+            if (fileInput.files.length > 0) {
+              const file = fileInput.files[0];
+
+              // Check file size (2MB max)
+              if (file.size > 2 * 1024 * 1024) {
+                alert('File size exceeds 2MB limit');
+                return;
+              }
+
+              // Here you would handle the file upload to the server
+              console.log('File selected for upload:', file.name);
+
+              // You would typically use FormData and fetch to upload the file
+              // Example:
+              // const formData = new FormData();
+              // formData.append('resume', file);
+              // fetch('/api/upload-resume', {
+              //     method: 'POST',
+              //     body: formData
+              // })
+              // .then(response => response.json())
+              // .then(data => console.log('Upload successful', data))
+              // .catch(error => console.error('Upload failed', error));
+            }
+          });
+        });
       }
     });
 
     document.addEventListener('DOMContentLoaded', function () {
-      // Modal functionality
-      const modals = document.querySelectorAll('.modal');
-      const modalTriggers = document.querySelectorAll('[data-toggle="modal"]');
-      const closeButtons = document.querySelectorAll('.close');
+      // Image upload functionality
+      const profileImg = document.getElementById('profile-img');
+      const uploadProfileImage = document.getElementById('upload-profile-image');
+      const imageUploadModal = document.getElementById('image-upload-modal');
+      const closeModalBtn = document.querySelector('.close-modal');
+      const imagePreview = document.getElementById('image-preview');
+      const imageFileInput = document.getElementById('image-file');
+      const saveImageBtn = document.getElementById('save-image');
+      const cancelUploadBtn = document.getElementById('cancel-upload');
 
-      // Open modal when trigger is clicked
-      modalTriggers.forEach(trigger => {
-        trigger.addEventListener('click', function () {
-          const targetModal = document.getElementById(this.getAttribute('data-target'));
-          if (targetModal) {
-            targetModal.style.display = 'block';
+      let selectedFile = null;
+
+      // Open modal when clicking on profile image
+      uploadProfileImage.addEventListener('change', function (e) {
+        if (this.files && this.files[0]) {
+          selectedFile = this.files[0];
+
+          // Check file type
+          const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+          if (!validTypes.includes(selectedFile.type)) {
+            alert('Please select a valid image file (JPEG, PNG, or GIF)');
+            return;
           }
-        });
+
+          // Check file size (2MB max)
+          if (selectedFile.size > 2 * 1024 * 1024) {
+            alert('File size exceeds 2MB limit');
+            return;
+          }
+
+          // Show image preview
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            imagePreview.src = e.target.result;
+          };
+          reader.readAsDataURL(selectedFile);
+
+          // Show modal
+          imageUploadModal.style.display = 'flex';
+        }
       });
 
-      // Close modal when X is clicked
-      closeButtons.forEach(button => {
-        button.addEventListener('click', function () {
-          const modal = this.closest('.modal');
-          if (modal) {
-            modal.style.display = 'none';
-          }
-        });
+      // Alternative way to open modal by clicking directly on the profile image
+      profileImg.addEventListener('click', function () {
+        uploadProfileImage.click();
       });
 
-      // Close modal when clicking outside the modal content
-      window.addEventListener('click', function (event) {
-        modals.forEach(modal => {
-          if (event.target === modal) {
-            modal.style.display = 'none';
-          }
-        });
+      // Close modal
+      closeModalBtn.addEventListener('click', function () {
+        imageUploadModal.style.display = 'none';
       });
 
-      // Smooth scrolling for quick links
-      document.querySelectorAll('.quick-links a').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-          e.preventDefault();
-
-          const targetId = this.getAttribute('href');
-          const targetElement = document.querySelector(targetId);
-
-          if (targetElement) {
-            window.scrollTo({
-              top: targetElement.offsetTop - 20,
-              behavior: 'smooth'
-            });
-          }
-        });
+      cancelUploadBtn.addEventListener('click', function () {
+        imageUploadModal.style.display = 'none';
       });
 
-      // Form submission with AJAX (optional enhancement)
-      const ajaxifyForms = false; // Set to true to enable AJAX form submission
+      // Handle file selection in modal
+      imageFileInput.addEventListener('change', function (e) {
+        if (this.files && this.files[0]) {
+          selectedFile = this.files[0];
 
-      if (ajaxifyForms) {
-        const forms = document.querySelectorAll('form');
+          // Check file type and size as above
+          const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+          if (!validTypes.includes(selectedFile.type)) {
+            alert('Please select a valid image file (JPEG, PNG, or GIF)');
+            return;
+          }
 
-        forms.forEach(form => {
-          form.addEventListener('submit', function (e) {
-            e.preventDefault();
+          if (selectedFile.size > 2 * 1024 * 1024) {
+            alert('File size exceeds 2MB limit');
+            return;
+          }
 
-            const formData = new FormData(this);
-            const formObject = {};
-            formData.forEach((value, key) => {
-              formObject[key] = value;
-            });
+          // Show image preview
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            imagePreview.src = e.target.result;
+          };
+          reader.readAsDataURL(selectedFile);
+        }
+      });
 
-            fetch(this.action, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(formObject)
+      // Save profile image
+      saveImageBtn.addEventListener('click', function () {
+        if (selectedFile) {
+          const formData = new FormData();
+          formData.append('profileImage', selectedFile);
+
+          // Send the image to the server
+          fetch('/api/upload-profile-image', {
+            method: 'POST',
+            body: formData
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                // Update the profile image on success
+                profileImg.src = data.imageUrl;
+
+                // Close the modal
+                imageUploadModal.style.display = 'none';
+
+                // Show success message
+                alert('Profile image updated successfully');
+              } else {
+                alert('Failed to upload image: ' + data.message);
+              }
             })
-              .then(response => response.json())
-              .then(data => {
-                // Close modal after successful submission
-                const modal = this.closest('.modal');
-                if (modal) {
-                  modal.style.display = 'none';
-                }
+            .catch(error => {
+              console.error('Error uploading image:', error);
+              alert('An error occurred while uploading the image');
+            });
+        }
+      });
 
-                // Reload page to show updated data
-                window.location.reload();
-              })
-              .catch(error => {
-                console.error('Error:', error);
-              });
-          });
+      // Close modal when clicking outside of it
+      window.addEventListener('click', function (e) {
+        if (e.target === imageUploadModal) {
+          imageUploadModal.style.display = 'none';
+        }
+      });
+
+      // Edit buttons functionality
+      const editButtons = document.querySelectorAll('.edit-btn');
+      editButtons.forEach(button => {
+        button.addEventListener('click', function (e) {
+          const section = e.target.closest('.profile-section, .info-edit-container, .education-details');
+          if (section) {
+            const headingElement = section.querySelector('h3, h4, p.profile-degree');
+            if (headingElement) {
+              console.log('Edit button clicked for:', headingElement.textContent);
+            }
+            // Here you would implement edit functionality
+          }
         });
-      }
+      });
+
+      // Add buttons functionality
+      const addButtons = document.querySelectorAll('.add-btn');
+      addButtons.forEach(button => {
+        button.addEventListener('click', function (e) {
+          const section = e.target.closest('.profile-section');
+          if (section) {
+            const sectionTitle = section.querySelector('h3').textContent;
+            console.log('Add button clicked for section:', sectionTitle);
+            // Here you would implement add functionality
+          }
+        });
+      });
     });
   </script>
-</body>
-
-</html>
+  <%- include('layout/footer.ejs') %>
