@@ -3,7 +3,7 @@
     <div class="container mx-auto px-4">
       <div class="flex flex-col md:flex-row items-center gap-12">
         <div class="md:w-1/2">
-          <h1 class="text-4xl font-bold mb-6">Welcome <span class="text-blue-900">Sarvjeet Swanshi</span></h1>
+          <h1 class="text-4xl font-bold mb-6">Welcome <span class="text-blue-900"><%= user.firstName %> <%= user.lastName %></span></h1> 
           <p class="text-lg mb-8">Streamline your hiring process with our powerful recruiter tools. Effortlessly manage job postings, track applicants, and maintain company profiles—all in one place.</p>
         </div>
         <div class="md:w-1/4 rounded-2xl md:ml-16">
@@ -20,7 +20,7 @@
   <section class="py-16 bg-white">
     <div class="container mx-auto px-4">
       <h2 class="text-3xl font-bold text-center text-blue-800 mb-12">Quick Actions</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <a href="/recruiter/add-job" class="flex flex-col items-center p-6 blue-bg rounded-xl hover:bg-yellow-300 transition-colors duration-300 hover-grow">
           <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -46,15 +46,6 @@
           <span class="font-medium font-bold">Add New Internship</span>
         </a>
         
-        
-        <a href="/recruiter/reports" class="flex flex-col items-center p-6 blue-bg rounded-xl hover:bg-yellow-300 transition-colors duration-300 hover-grow">
-          <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-          </div>
-          <span class="font-medium font-bold">View Reports</span>
-        </a>
       </div>
     </div>
   </section>

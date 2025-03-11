@@ -2,8 +2,24 @@ const express = require('express');
 const router = express.Router();
 
 const users = [
-  { firstName: "Sarvjeet", lastName: "Swanshi", email: "sarvjeetswanshi@gmail.com", phone: "8102109959", gender: "male", password: "adminpass" },
-  { firstName: "Saurav", lastName: "Roy", email: "sauravroy@gmail.com", phone: "9854672132", gender: "male", password: "adminpass" }
+  { 
+    firstName: "Sarvjeet", 
+    lastName: "Swanshi", 
+    email: "sarvjeetswanshi@gmail.com", 
+    phone: "8102109959", 
+    gender: "male", 
+    password: "adminpass", 
+    profileImage: "/uploads/profiles/default-image.jpg" 
+  },
+  { 
+    firstName: "Saurav", 
+    lastName: "Roy", 
+    email: "sauravroy@gmail.com", 
+    phone: "9854672132", 
+    gender: "male", 
+    password: "adminpass", 
+    profileImage: "/uploads/profiles/default-image.jpg" 
+  }
 ];
 
 router.post('/signup', (req, res) => {
@@ -50,4 +66,17 @@ router.post('/login', (req, res) => {
   res.redirect('/recruiter/home'); 
 });
 
+router.get('/user/:email', (req, res) => {
+  const { email } = req.params;
+
+  const user = users.find(user => user.email === email);
+
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+
+  res.json(user);
+});
+
 module.exports = router;
+module.exports.users = users;

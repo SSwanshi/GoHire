@@ -54,7 +54,12 @@
           <li><a href="/recruiter/companies" class="hover:text-blue-900 font-medium transition-colors duration-300">Companies</a></li>
           <li><a href="/recruiter/jobs" class="hover:text-blue-900 font-medium transition-colors duration-300">Jobs</a></li>
           <li><a href="/recruiter/internships" class="hover:text-blue-900 font-medium transition-colors duration-300">Internships</a></li>
-          <li><a href="/recruiter/profile" class="hover:text-blue-900 font-medium transition-colors duration-300">Profile</a></li>
+          <li class="flex items-center space-x-2">
+            <a href="/recruiter/profile" class="hover:text-blue-900 font-medium transition-colors duration-300">
+              <img src="<%= user.profileImage || '/uploads/profiles/deafault-image.jpg' %>" alt="Profile" 
+     class="w-8 h-8 rounded-full bg-gray-200 profile-image" />
+            </a>
+          </li>
         </ul>
       </nav>
     </div>
