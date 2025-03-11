@@ -1,0 +1,43 @@
+<%- include('layout/header') %>
+
+<section class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 mx-auto">
+  <div class="max-w-4xl w-full space-y-8">
+    <div class="text-center">
+      <h2 class="text-3xl font-extrabold text-gray-900">Dashboard</h2>
+      <p class="mt-2 text-sm text-gray-600">Manage your listings and applications efficiently.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <div class="transform transition-all duration-300 hover:scale-105">
+        <a href="/companylist" class="block p-8 bg-blue-500 rounded-lg shadow-lg text-center hover:bg-blue-600">
+          <span class="text-white text-xl font-semibold">Company Listed</span>
+        </a>
+      </div>
+      <div class="transform transition-all duration-300 hover:scale-105">
+        <a href="/joblist" class="block p-8 bg-green-500 rounded-lg shadow-lg text-center hover:bg-green-600">
+          <span class="text-white text-xl font-semibold">Jobs Listed</span>
+        </a>
+      </div>
+      <div class="transform transition-all duration-300 hover:scale-105">
+        <a href="/internshiplist" class="block p-8 bg-purple-500 rounded-lg shadow-lg text-center hover:bg-purple-600">
+          <span class="text-white text-xl font-semibold">Internship Listed</span>
+        </a>
+      </div>
+    </div>
+    
+    <div class="flex justify-center gap-6">
+      <div class="transform transition-all duration-300 hover:scale-105">
+        <a href="/applicantlist" class="block p-8 bg-yellow-500 rounded-lg shadow-lg text-center hover:bg-yellow-600">
+          <span class="text-white text-xl font-semibold">Applicant Listed</span>
+        </a>
+      </div>
+      <div class="transform transition-all duration-300 hover:scale-105">
+        <a href="/recruiterlist" class="block p-8 bg-red-500 rounded-lg shadow-lg text-center hover:bg-red-600">
+          <span class="text-white text-xl font-semibold">Recruiters Listed</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('layout/footer') %>

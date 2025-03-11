@@ -1,0 +1,71 @@
+const express = require('express');
+const path = require('path');
+
+const app = express();
+const PORT = 9000;
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+const validUsers = [
+    { email: 'sarvjeet.s23@iiits.in', password: '1234' },
+    { email: 'sauravkumar.r23@iiits.in', password: '1234' },
+    { email: 'kartik.r23@iiits.in', password: '1234' },
+    { email: 'anuj.r23@iiits.in', password: '1234' },
+    { email: 'likhita.b23@iiits.in', password: '1234' }
+];
+
+app.get('/', (req, res) => {
+    res.render('login');
+});
+
+app.post('/login', (req, res) => {
+    const { email, password } = req.body;
+
+    const user = validUsers.find(user => user.email === email);
+
+    if (user) {
+        if (user.password === password) {
+            return res.redirect('/home');
+        } else {
+            return res.send('Incorrect password');
+        }
+    } else {
+        return res.send('Incorrect email');
+    }
+});
+
+app.get('/home', (req, res) => {
+    res.render('home');
+});
+
+app.get('/applicantlist', (req, res) => {
+    res.render('applicantlist');
+});
+
+app.get('/companylist', (req, res) => {
+    res.render('companylist');
+});
+
+app.get('/internshiplist', (req, res) => {
+    res.render('internshiplist');
+});
+
+app.get('/joblist', (req, res) => {
+    res.render('joblist');
+});
+
+app.get('/premiumuser', (req, res) => {
+    res.render('premiumuser');
+});
+
+app.get('/recruiterlist', (req, res) => {
+    res.render('recruiterlist');
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
