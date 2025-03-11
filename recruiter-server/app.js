@@ -27,40 +27,36 @@ app.use('/auth', authRoutes);
 const recruiterRoutes = require('./routes/recruiter');
 app.use('/recruiter', recruiterRoutes);
 
-
 app.get('/', (req, res) => {
-  res.redirect('/auth/login',);
+  res.redirect('/auth/login');
 });
 
-app.get('/signup', (req, res) => {
+app.get('/auth/signup', (req, res) => {
   res.render('signup');
 });
 
-
 app.get('/recruiter/home', (req, res) => {
-  res.render('home');
+  res.render('home', { title: "Home" });
 });
-
 
 app.get('/recruiter/add-company', (req, res) => {
-  res.render('add-company');
+  res.render('add-company', { title: "Add Company" });
 });
 
-
 app.get('/recruiter/add-job', (req, res) => {
-  res.render('add-job', { companies });
+  res.render('add-job', { title: "Add Job", companies });
 });
 
 app.get('/recruiter/add-internship', (req, res) => {
-  res.render('add-internship', { companies });
+  res.render('add-internship', { title: "Add Internship", companies });
 });
 
-app.get('/recruiter/reports', (req,res)=> {
-  res.render('reports');
+app.get('/recruiter/reports', (req,res) => {
+  res.render('reports', { title: "Reports" });
 });
 
 app.get('/recruiter/profile', (req, res) => {
-  res.render('profile');
+  res.render('profile', { title: "Profile" });
 });
 
 const PORT = 5000;
