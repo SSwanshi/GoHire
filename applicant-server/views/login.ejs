@@ -10,8 +10,8 @@
       <div class="login-right">
         <h2 class="login-title">Log in</h2>
         <div class="toggle-buttons">
-          <button class="toggle-btn">As Recruiter</button>
-          <button class="toggle-btn active">As Candidate</button>
+          <button class="toggle-btn" id="recruiter-btn">As Recruiter</button>
+          <button class="toggle-btn active" id="candidate-btn">As Candidate</button>
         </div>
         <div class="social-login">
           <button class="google-login">Continue with Google</button>
@@ -24,7 +24,23 @@
           <a href="#" class="forgot-password">Forgot password?</a>
           <button type="submit" class="login-button">Login</button>
         </form>
-        <p class="signup-text">Don't have an account? <a href="#">Sign up</a></p>
+        <p class="signup-text">Don't have an account? <a href="/signup">Sign up</a></p>
       </div>
     </div>
   </div>
+
+  </body>
+  <script>
+    document.getElementById('recruiter-btn').addEventListener('click', function () {
+      this.classList.add('active');
+      document.getElementById('candidate-btn').classList.remove('active');
+    });
+
+    document.getElementById('candidate-btn').addEventListener('click', function () {
+      this.classList.add('active');
+      document.getElementById('recruiter-btn').classList.remove('active');
+    });
+
+  </script>
+
+  </html>
