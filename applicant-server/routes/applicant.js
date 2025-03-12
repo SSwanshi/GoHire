@@ -58,6 +58,9 @@ router.get('/Subscription', async (req, res) => {
 });
 
 router.post('/search', async (req, res) => {
+  console.log("Received Request Type:", req.method);
+    console.log("Received Headers:", req.headers);
+    console.log("Received Body:", req.body); 
   const enteredValue = req.body.parsedValue;
   const options1 = {
     keys: ["jobCompany","jobTitle"],

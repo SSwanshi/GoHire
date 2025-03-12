@@ -4,7 +4,6 @@ const passport = require('passport');
 const session = require('express-session');
 const path = require('path');
 const bodyParser = require("body-parser");
-
 const authRoutes = require('./routes/auth');
 const applicantRoutes = require('./routes/applicant');
 
@@ -17,7 +16,7 @@ app.set('views', path.join(__dirname, 'views'));
 // Middleware
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
