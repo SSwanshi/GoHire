@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-// const User = require('../models/user');
 
 router.get('/signup', (req, res) => {
   res.render('signup', { title: 'Sign Up' });
@@ -14,8 +13,8 @@ router.get('/logout', (req, res) => {
 });
 
 const appUsers = [
-  { firstName: "Sarvjeet", lastName: "Swanshi", email: "sarvjeetswanshi@gmail.com", phone: "8102109959", gender: "male", password: "adminpass" },
-  { firstName: "Saurav", lastName: "Roy", email: "sauravroy@gmail.com", phone: "9854672132", gender: "male", password: "adminpass" }
+  { firstName: "Sarvjeet", lastName: "Swanshi", email: "sarvjeetswanshi@gmail.com", phone: "8102109959", gender: "male", password: "adminpass" ,profileImage:"/uploads/profiles/default-image.jpg"},
+  { firstName: "Saurav", lastName: "Roy", email: "sauravroy@gmail.com", phone: "9854672132", gender: "male", password: "adminpass", profileImage:"/uploads/profiles/default-image.jpg" }
 ];
 
 router.post('/signup', (req, res) => {
@@ -51,13 +50,13 @@ router.get('/login', (req, res) => {
 router.post('/login', (req, res) => {
   const { email, password } = req.body;
 
-  const user = appUsers.find(user => user.email === email && user.password === password);
+  const user_app = appUsers.find(user => user.email === email && user.password === password);
 
   if (!user) {
     return res.status(400).json({ error: 'Invalid email or password' });
   }
 
-  req.session.user = user;
+  req.session.user_app = user_app;
 
   res.redirect('/');
 });
