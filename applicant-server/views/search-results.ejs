@@ -7,13 +7,13 @@
   <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body class="bg-blue-50">
+<body class="bg-blue-50 bg-gradient-to-r from-blue-100 to-yellow-100">
   <nav class="bg-gradient-to-r from-blue-700 to-blue-500 p-5 shadow-xl fixed w-full z-10 transition-all duration-300" id="navbar">
     <div class="container mx-auto flex justify-between items-center">
         <a href="/" class="text-black text-3xl font-bold transition-transform hover:scale-105 duration-300 ml-2">Go<span class="text-yellow-400">Hire</span></a>
         
         <div class="relative w-1/3 group">
-            <form action="/search" method="POST" id="search-form"></form><input id="search-space" name="parsedValue" type="text" placeholder="Search for Opportunities" class="w-full p-3 rounded-full border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 shadow-md placeholder:text-gray-700">
+            <form action="/search" method="POST" id="search-form" autocomplete="off"><input id="search-space" type="text" placeholder="Search for Opportunities" name="parsedValue" class="w-full p-3 rounded-full border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 shadow-md placeholder:text-gray-700" required></form>
             <div class="absolute right-3 top-3.5 text-yellow-500">
                 <a href="/search" id="search-btn"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -40,12 +40,12 @@
 </nav>
 <section class="pt-28 ml-2">
     <% if(sentResult1.length>0 && sentResult2.length>0){ %>
-    <h1 class="text-[23px] ml-2 flex justify-center">Search Results for "<%= enteredValue%>":</h1>
-    <h1 class="text-[23px] ml-2 mt-4 mb-2">Job Results:</h1>
+    <h1 class="text-[23px] ml-2 flex justify-center font-bold">Search Results for "<%= enteredValue%>":</h1>
+    <h1 class="text-[23px] ml-2 mt-4 mb-2 font-bold">Job Results:</h1>
     <div class="job-listings grid grid-cols-3 gap-4">
 
         <% sentResult1.forEach(job => { %>
-        <div class="job-card  rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div style="background-color: rgb(251, 251, 251);" class="job-card rounded-lg shadow-sm border border-gray-200 overflow-hidden transform scale-100 hover:scale-[1.04] transition-transform duration-300 ease-in-out">
           <div class="job-header flex justify-between items-center p-4">
             <div
               class="company-logo w-10 h-10 rounded flex items-center justify-center text-black font-bold"><%= job.logoColor %><%= job.jobCompany %>
@@ -75,10 +75,10 @@
         </div>
         <% }); %>
       </div>
-      <h1 class="text-[23px] ml-2 mt-4 mb-2">Internship Results:</h1>
+      <h1 class="text-[23px] ml-2 mt-4 mb-2 font-bold">Internship Results:</h1>
       <div class="internships-listings grid grid-cols-3 gap-4">
         <% sentResult2.forEach(internships => { %>
-        <div class="internships-card  rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div style="background-color: rgb(251, 251, 251);" class="internships-card rounded-lg shadow-sm border border-gray-200 overflow-hidden transform scale-100 hover:scale-[1.04] transition-transform duration-300 ease-in-out">
           <div class="internships-header flex justify-between items-center p-4">
             <div
               class="company-logo w-10 h-10 rounded flex items-center justify-center text-black font-bold"      
@@ -111,12 +111,12 @@
         <% }); %>
       </div>
       <% }else if(sentResult1.length>0 && sentResult2.length==0){ %>
-        <h1 class="text-[23px] ml-2 flex justify-center">Search Results for "<%= enteredValue%>":</h1>
-        <h1 class="text-[23px] ml-2 mt-4 mb-2">Job Results:</h1>
+        <h1 class="text-[23px] ml-2 flex justify-center font-bold">Search Results for "<%= enteredValue%>":</h1>
+        <h1 class="text-[23px] ml-2 mt-4 mb-2 font-bold">Job Results:</h1>
         <div class="job-listings grid grid-cols-3 gap-4">
     
             <% sentResult1.forEach(job => { %>
-            <div class="job-card  rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div style="background-color: rgb(251, 251, 251);" class="job-card  rounded-lg shadow-sm border border-gray-200 overflow-hidden transform scale-100 hover:scale-[1.04] transition-transform duration-300 ease-in-out">
               <div class="job-header flex justify-between items-center p-4">
                 <div
                   class="company-logo w-10 h-10 rounded flex items-center justify-center text-black font-bold"><%= job.logoColor %><%= job.jobCompany %>
@@ -147,11 +147,11 @@
             <% }); %>
           </div>
           <% }else if(sentResult1.length==0 && sentResult2.length>0){ %>
-            <h1 class="text-[23px] ml-2 flex justify-center">Search Results for "<%= enteredValue%>":</h1>
-            <h1 class="text-[23px] ml-2 mt-4 mb-2">Internship Results:</h1>
+            <h1 class="text-[23px] ml-2 flex justify-center font-bold">Search Results for "<%= enteredValue%>":</h1>
+            <h1 class="text-[23px] ml-2 mt-4 mb-2 font-bold">Internship Results:</h1>
       <div class="internships-listings grid grid-cols-3 gap-4">
         <% sentResult2.forEach(internships => { %>
-        <div class="internships-card  rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div style="background-color: rgb(251, 251, 251);" class="internships-card  rounded-lg shadow-sm border border-gray-200 overflow-hidden transform scale-100 hover:scale-[1.04] transition-transform duration-300 ease-in-out">
           <div class="internships-header flex justify-between items-center p-4">
             <div
               class="company-logo w-10 h-10 rounded flex items-center justify-center text-black font-bold"      
@@ -190,7 +190,7 @@
           </div>
         <% } %>
 </section>
-<div class="mt-4"></div>
+<div class="bg-gradient-to-r from-blue-100 to-yellow-100 h-4"></div>
 <script>
     document.getElementById("search-btn").addEventListener("click", function() {
         event.preventDefault(); 
@@ -203,11 +203,20 @@
             document.getElementById("search-form").submit();
         }
     });
+
+    document.getElementById('searchForm').addEventListener('submit', function(event) {
+    event.preventDefault();  // Prevent default form submission
+
+    const inputValue = document.getElementById('searchInput').value.trim();
+    if (!inputValue) {
+        alert("Please enter a search term.");
+        return;
+    }})
 </script>
 </body>
 <footer class="mt-44">
     <div class="footerbox">
-      <p>&copy; 2025 Go Hire. All rights reserved.</p>
+      <p>&copy; 2025 GoHire. All rights reserved.</p>
     </div>
   </footer>
 </html>

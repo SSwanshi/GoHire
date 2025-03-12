@@ -4,15 +4,7 @@ const passport = require('passport');
 const session = require('express-session');
 const path = require('path');
 const bodyParser = require("body-parser");
-const multer = require('multer');
-const fs = require('fs');
 
-const uploadDir = 'public/uploads/profiles';
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// Middleware for sessions (Place it before accessing req.session)
 const authRoutes = require('./routes/auth');
 const applicantRoutes = require('./routes/applicant');
 
@@ -25,7 +17,7 @@ app.set('views', path.join(__dirname, 'views'));
 // Middleware
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use(session({
   secret: 'your-secret-key', 

@@ -9,7 +9,7 @@ const users = [
     phone: "8102109959", 
     gender: "male", 
     password: "adminpass", 
-    profileImage: "/uploads/profiles/default-image.jpg" 
+    profileImage: "" 
   },
   { 
     firstName: "Saurav", 
@@ -18,7 +18,7 @@ const users = [
     phone: "9854672132", 
     gender: "male", 
     password: "adminpass", 
-    profileImage: "/uploads/profiles/default-image.jpg" 
+    profileImage: "" 
   }
 ];
 

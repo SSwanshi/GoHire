@@ -24,6 +24,7 @@
                     <th class="px-6 py-3 border border-gray-300">Location</th>
                     <th class="px-6 py-3 border border-gray-300">Positions</th>
                     <th class="px-6 py-3 border border-gray-300">Action</th>
+                    <th class="px-6 py-3 border border-gray-300">Applications</th>
                 </tr>
             </thead>
             <tbody>
@@ -38,7 +39,19 @@
                             <td class="px-6 py-4 border border-gray-300"><%= jobs[i].jobLocation %></td>
                             <td class="px-6 py-4 border border-gray-300"><%= jobs[i].noofpositions %></td>
                             <td class="px-6 py-4 border border-gray-300">
-                                <button class="text-blue-500 hover:underline">View</button>
+                                <form action="/recruiter/delete-job/<%= jobs[i].jobTitle %>" method="POST">
+                                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                                        Delete
+                                      </button>
+                                      
+                                </form>
+                            </td>
+                            <td class="px-6 py-4 border border-gray-300">
+                                <form action="/recruiter/applicant-job/<%= jobs[i].jobTitle %>" method="POST">
+                                    <button type="submit" class="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                        View Applications
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     <% } %>

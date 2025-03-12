@@ -22,6 +22,15 @@ const internships = [
 ];
 
 
+const applications = [
+    { name: 'Sarvjeet Swanshi', email: 'sarvjeetswanshi@gmail.com', resume: '/resumes/john_doe.pdf' },
+    { name: 'Saurav Kumar Roy', email: 'sauravkumar@gmail.com', resume: '/resumes/jane_smith.pdf' }
+];
+
+const intapplication = [
+    { name: 'Sarvjeet Swanshi', email: 'sarvjeetswanshi@gmail.com', resume: '/resumes/john_doe.pdf' },
+    { name: 'Saurav Kumar Roy', email: 'sauravkumar@gmail.com', resume: '/resumes/jane_smith.pdf' }
+];
 
 function addCompanyLogosJobs(jobs, companies) {
     return jobs.map(job => {
@@ -33,7 +42,7 @@ function addCompanyLogosJobs(jobs, companies) {
 function addCompanyLogosIntern(internships, companies) {
     return internships.map(intern => {
         const company = companies.find(comp => comp.companyName === intern.intCompany);
-        return { ...intern, logo: company ? company.logo : null };  //Tip lelo: ...job: This spreads all properties of the job object into the new object.
+        return { ...intern, logo: company ? company.logo : null };  
     });
 }
 
@@ -117,9 +126,79 @@ router.get('/internships', (req,res) => {
     res.render('internships', {internships:updatedIntern , successMessage, companies});
 });
 
+router.post('/delete-company/:companyName', (req, res) => {
+    const companyName = req.params.companyName;
 
+    const companyIndex = companies.findIndex(comp => comp.companyName === companyName);
+
+    if (companyIndex === -1) {
+        return res.status(404).json({ error: 'Company not found' });
+    }
+
+    companies.splice(companyIndex, 1);
+
+    req.session.successMessage = 'Company deleted successfully';
+    res.redirect('/recruiter/companies');
+});
+
+router.post('/delete-job/:jobTitle', (req, res) => {
+    const jobTitle = req.params.jobTitle;
+
+    const jobIndex = jobs.findIndex(jo => jo.jobTitle === jobTitle);
+
+    if (jobIndex === -1) {
+        return res.status(404).json({ error: 'Job not found' });
+    }
+
+    jobs.splice(jobIndex, 1);
+
+    req.session.successMessage = 'Job deleted successfully';
+    res.redirect('/recruiter/jobs');
+});
+
+router.post('/delete-intern/:intTitle', (req, res) => {
+    const intTitle = req.params.intTitle;
+
+    const intIndex = internships.findIndex(inte => inte.intTitle === intTitle);
+
+    if (intIndex === -1) {
+        return res.status(404).json({ error: 'Internship not found' });
+    }
+
+    internships.splice(intIndex, 1);
+
+    req.session.successMessage = 'Internship deleted successfully';
+    res.redirect('/recruiter/internships');
+});
+
+router.post('/applicant-job/:jobTitle', (req, res) => {
+    const jobTitle = req.params.jobTitle;
+
+    const selectedJob = jobs.find(job => job.jobTitle === jobTitle);
+
+    if (!selectedJob) {
+        return res.status(404).json({ error: 'Job not found' });
+    }
+
+
+    res.render('applications', { job: selectedJob, applications });
+});
+
+router.post('/applicant-intern/:intTitle', (req, res) => {
+    const intTitle = req.params.intTitle;
+
+    const selectedInt = internships.find(inte => inte.intTitle === intTitle);
+
+    if (!selectedInt) {
+        return res.status(404).json({ error: 'Internship not found' });
+    }
+
+    res.render('intapplication', { intern: selectedInt, intapplication });
+});
 
 module.exports = router; 
 module.exports.companies = companies;
 module.exports.jobs = jobs;
 module.exports.internships = internships;
+module.exports.applications = applications;
+module.exports.intapplication =intapplication;

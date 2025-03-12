@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require("body-parser");
 const router = express.Router();
 const { ensureAuthenticated } = require('../../shared/middleware/auth');
 const { jobs } = require('../../recruiter-server/routes/recruiter');
@@ -8,7 +7,7 @@ const { companies } = require('../../recruiter-server/routes/recruiter');
 const { appUsers } = require('./auth');
 const Fuse = require('fuse.js');
 
-router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.urlencoded({extended:true}));
 
 // Home
 router.get('/', (req, res) => {
@@ -60,6 +59,9 @@ router.get('/Subscription', async (req, res) => {
 });
 
 router.post('/search', async (req, res) => {
+  console.log("Received Request Type:", req.method);
+    console.log("Received Headers:", req.headers);
+    console.log("Received Body:", req.body); 
   const enteredValue = req.body.parsedValue;
   const options1 = {
     keys: ["jobCompany", "jobTitle"],
@@ -67,13 +69,13 @@ router.post('/search', async (req, res) => {
     includeScore: true
   };
 
-  const fuse1 = new Fuse(jobs, options1);
-  function searchJobs(enteredValue) {
-    if (!enteredValue) return;
-    const results1 = fuse1.search(enteredValue);
-    return results1.map(result => result.item);
-  }
-  const resultValue1 = searchJobs(enteredValue);
+const fuse1 = new Fuse(jobs, options1);
+function searchJobs(enteredValue) {
+  if (!enteredValue) return;
+  const results1 = fuse1.search(enteredValue);
+  return results1.map(result => result.item);
+}
+const resultValue1 = searchJobs(enteredValue);
 
   const options2 = {
     keys: ["intCompany", "intTitle"],
@@ -89,7 +91,7 @@ router.post('/search', async (req, res) => {
     return results2.map(result => result.item);
   }
 
-  const resultValue2 = searchIntern(enteredValue);
+const resultValue2 = searchIntern(enteredValue);
 
   res.render('search-results', { enteredValue: enteredValue, sentResult2: resultValue2, sentResult1: resultValue1 });
 });
