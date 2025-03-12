@@ -1,13 +1,10 @@
 const express = require('express');
-const bodyParser = require("body-parser");
 const router = express.Router();
 const { ensureAuthenticated } = require('../../shared/middleware/auth');
 const {jobs} = require('../../recruiter-server/routes/recruiter');
 const {internships} = require('../../recruiter-server/routes/recruiter');
 const {companies} = require('../../recruiter-server/routes/recruiter');
 const Fuse = require('fuse.js');
-
-router.use(bodyParser.urlencoded({extended:true}));
 
 // Home
 router.get('/', (req, res) => {
@@ -74,7 +71,7 @@ function searchJobs(enteredValue) {
   const results1 = fuse1.search(enteredValue);
   return results1.map(result => result.item);
 }
-const resultValue1 = searchJobs(enteredValue);
+const resultValue1 = searchJobs(enteredValue) || [];
 
 const options2 = {
   keys: ["intCompany","intTitle"],
@@ -90,7 +87,11 @@ const results2 = fuse2.search(enteredValue);
 return results2.map(result => result.item);
 }
 
-const resultValue2 = searchIntern(enteredValue);
+const resultValue2 = searchIntern(enteredValue) || [];
+
+console.log("Entered Value:", enteredValue);
+    console.log("Job Search Results:", resultValue1);
+    console.log("Intern Search Results:", resultValue2);
 
 res.render('search-results',{enteredValue:enteredValue,sentResult2:resultValue2,sentResult1:resultValue1}); 
 }); 
