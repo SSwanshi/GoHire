@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
 const path = require('path');
-const bodyParser = require("body-parser");
+const multer = require('multer');
 
 const authRoutes = require('./routes/auth');
 const applicantRoutes = require('./routes/applicant');
@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(session({
-  secret: 'your-secret-key', 
+  secret: 'your-secret-key',
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
@@ -35,19 +35,19 @@ app.use(passport.initialize());
 app.use(passport.session()); // If using Passport for authentication
 
 const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
+  destination: function (req, file, cb) {
     cb(null, 'public/uploads/profiles/');
   },
-  filename: function(req, file, cb) {
+  filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, uniqueSuffix + path.extname(file.originalname));
   }
 });
 
-const upload = multer({ 
+const upload = multer({
   storage: storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-  fileFilter: function(req, file, cb) {
+  fileFilter: function (req, file, cb) {
     if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
       return cb(new Error('Only image files are allowed!'), false);
     }
@@ -61,44 +61,43 @@ app.use('/', applicantRoutes);
 
 // Login Page
 app.get('/login', (req, res) => {
-    res.render('login');
+  res.render('login');
 });
 
 // Signup Page
 app.get('/signup', (req, res) => {
-    res.render('signup');
+  res.render('signup');
 });
 
 app.post('/user/upload-profile-image', upload.single('profileImage'), (req, res) => {
-    try {
-      if (!req.session.user) {
-        return res.status(401).json({ success: false, message: 'Not logged in' });
-      }
-      
-      const userEmail = req.session.user.email;
-      const userIndex = users.findIndex(u => u.email === userEmail);
-      
-      if (userIndex === -1) {
-        return res.status(404).json({ success: false, message: 'User not found' });
-      }
-      
-      const imagePath = '/uploads/profiles/' + req.file.filename;
-      users[userIndex].profileImage = imagePath;
-      req.session.user = users[userIndex]; // Update session user
-      
-      res.json({ success: true, imageUrl: imagePath });
-    } catch (error) {
-      console.error('Error saving profile image:', error);
-      res.status(500).json({ success: false, message: 'Failed to upload image: ' + error.message });
+  try {
+    if (!req.session.user) {
+      return res.status(401).json({ success: false, message: 'Not logged in' });
     }
-  });
-  
-  // Serve uploaded files
-  app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+    const userEmail = req.session.user.email;
+    const userIndex = users.findIndex(u => u.email === userEmail);
+
+    if (userIndex === -1) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    const imagePath = '/uploads/profiles/' + req.file.filename;
+    users[userIndex].profileImage = imagePath;
+    req.session.user = users[userIndex]; // Update session user
+
+    res.json({ success: true, imageUrl: imagePath });
+  } catch (error) {
+    console.error('Error saving profile image:', error);
+    res.status(500).json({ success: false, message: 'Failed to upload image: ' + error.message });
+  }
+});
+
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/profile', (req, res) => {
-    res.render('profile');
+  res.render('profile');
 });
 
 const PORT = 3000;
