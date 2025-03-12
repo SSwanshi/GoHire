@@ -2,12 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
     <title>GoHire-Job List</title>
     <!-- Include Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
+  <body class="bg-gray-100">
     <!-- Main content -->
     <header class="flex items-center justify-between py-10 border-b border-gray-200">
       
@@ -190,7 +190,7 @@
                 </div>
               </div>
               <div class="apply-button">
-                <button class="w-full py-2 bg-blue-50 text-blue-500 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">Apply Now</button>
+                <a href="/applyforJobs"><button class="w-full py-2 bg-blue-50 text-blue-500 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">Apply Now</button></a>
               </div>
             </div>
           </div>
@@ -206,10 +206,10 @@
         const navbar = document.getElementById('navbar');
         if (window.scrollY > 10) {
             navbar.classList.add('py-3', 'bg-blue-700', 'shadow-2xl');
-            navbar.classList.remove('p-5', 'bg-gradient-to-r', 'from-blue-700', 'to-blue-500');
+            navbar.classList.remove('p-5');
         } else {
             navbar.classList.remove('py-3', 'bg-blue-700', 'shadow-2xl');
-            navbar.classList.add('p-5', 'bg-gradient-to-r', 'from-blue-700', 'to-blue-500');
+            navbar.classList.add('p-5');
         }
     });
 
