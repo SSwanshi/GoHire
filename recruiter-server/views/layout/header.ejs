@@ -41,24 +41,28 @@
     }
 
     @media (max-width: 767px) {
-    nav ul {
-      display: none;
-      flex-direction: column;
-      width: 100%;
-      background-color: #1d4ed8;
-      position: absolute;
-      top: 60px;
-      left: 0;
-      padding: 1rem;
-    }
-    nav ul li {
-      margin: 0.5rem 0;
-    }
-    .nav-toggle {
-      display: block;
-      cursor: pointer;
-    }
+  nav ul {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background-color: #1d4ed8;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    padding: 1rem;
+    text-align: left;
+    margin: 0;
+    list-style: none;
   }
+  nav ul li {
+    margin: 0.5rem 0;
+    padding: 0;
+  }
+  .nav-toggle {
+    display: block;
+    cursor: pointer;
+  }
+}
 
   </style>
 </head>
@@ -69,7 +73,7 @@
         <div>
           <h2 class="text-2xl font-bold text-white"><span style="color: #dfcc24;">Go</span>Hire</h2>
         </div>
-        <ul class="flex space-x-8">
+        <ul class="flex space-8 md:space-x-8">
           <li><a href="/recruiter/home" class="hover:text-blue-900 font-medium transition-colors duration-300">Home</a></li>
           <li><a href="/recruiter/companies" class="hover:text-blue-900 font-medium transition-colors duration-300">Companies</a></li>
           <li><a href="/recruiter/jobs" class="hover:text-blue-900 font-medium transition-colors duration-300">Jobs</a></li>
@@ -79,6 +83,9 @@
               <img src="<%= user && user.profileImage ? user.profileImage : '/uploads/profiles/deafault-image.jpg' %>" 
                    alt="Profile" class="w-8 h-8 rounded-full bg-gray-200 profile-image" />
             </a>
+            <div class="md:hidden">
+              <a href="/recruiter/profile" class="hover:text-blue-900 font-medium transition-colors duration-300">Profile</a>
+            </div>
           </li>
           
         </ul>
