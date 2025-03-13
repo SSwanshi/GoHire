@@ -146,14 +146,15 @@
 
         <div class="space-y-6">
           <!-- Current Resume Display -->
-          <div id="currentResumeSection" class=" p-4 bg-blue-50 rounded-lg">
+          <div id="currentResumeSection" class="<%= resumeData ? 'block' : 'hidden' %> p-4 bg-blue-50 rounded-lg">
             <div class="flex items-center justify-between">
               <div>
                 <p class="text-lg font-semibold text-gray-800">Current Resume</p>
                 <p class="text-sm text-gray-600" id="resumeFileName">
-                  Anuj Rathore Resume.pdf
+                  <%= resumeData ? resumeData.fileName : '' %>
                 </p>
-                <p class="text-xs text-gray-500" id="resumeUploadDate">Uploaded: 2025-03-25 12:00:00
+                <p class="text-xs text-gray-500" id="resumeUploadDate">Uploaded: <%= resumeData ? resumeData.uploadDate
+                    : '' %>
                 </p>
               </div>
               <div class="flex space-x-2">
@@ -172,7 +173,7 @@
           </div>
 
           <!-- Resume Upload Form -->
-          <div id="resumeUploadSection" class="hidden">
+          <div id="resumeUploadSection" class="<%= resumeData ? 'hidden' : 'block' %>">
             <form id="resumeUploadForm" enctype="multipart/form-data" class="space-y-4">
               <div
                 class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-blue-500 transition"
@@ -209,7 +210,7 @@
           </div>
 
           <!-- Upload Button (shown when a resume exists) -->
-          <div id="uploadNewSection" class="block text-center">
+          <div id="uploadNewSection" class="<%= resumeData ? 'block' : 'hidden' %> text-center">
             <button onclick="showUploadForm()"
               class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
               Upload New Resume
@@ -217,6 +218,7 @@
           </div>
         </div>
       </div>
+
 
       <div class="mt-8 flex justify-end space-x-4">
         <button onclick="window.location.href = ' /'"
@@ -462,4 +464,4 @@
     }
   </script>
 
-  <%-include('layout/footer')%>
+  <%- include('layout/footer.ejs') %>

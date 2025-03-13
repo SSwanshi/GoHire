@@ -7,6 +7,7 @@ const multer = require('multer');
 
 const authRoutes = require('./routes/auth');
 const applicantRoutes = require('./routes/applicant');
+const profileRoutes = require('./routes/profile');
 
 const app = express();
 
@@ -34,9 +35,13 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 app.use(passport.session()); // If using Passport for authentication
 
+app.use('/profile', profileRoutes);
+
+// Multer storage configuration
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/uploads/profiles/');
+    const uploadDir = 'public/uploads/profiles/';
+    cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -55,6 +60,9 @@ const upload = multer({
   }
 });
 
+// Temporary users array (Replace with database query)
+const users = [];
+
 // Routes
 app.use('/auth', authRoutes);
 app.use('/', applicantRoutes);
@@ -69,9 +77,10 @@ app.get('/signup', (req, res) => {
   res.render('signup');
 });
 
+// Profile Image Upload
 app.post('/user/upload-profile-image', upload.single('profileImage'), (req, res) => {
   try {
-    if (!req.session.user) {
+    if (!req.session.user || !req.session.user.email) {
       return res.status(401).json({ success: false, message: 'Not logged in' });
     }
 
@@ -82,9 +91,13 @@ app.post('/user/upload-profile-image', upload.single('profileImage'), (req, res)
       return res.status(404).json({ success: false, message: 'User not found' });
     }
 
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'No file uploaded' });
+    }
+
     const imagePath = '/uploads/profiles/' + req.file.filename;
     users[userIndex].profileImage = imagePath;
-    req.session.user = users[userIndex]; // Update session user
+    req.session.user = users[userIndex]; // Update session user data
 
     res.json({ success: true, imageUrl: imagePath });
   } catch (error) {
@@ -93,11 +106,19 @@ app.post('/user/upload-profile-image', upload.single('profileImage'), (req, res)
   }
 });
 
-// Serve uploaded files
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Serve uploaded profile images
+app.use('/uploads/profiles', express.static(path.join(__dirname, 'public/uploads/profiles')));
 
+// Profile Page
 app.get('/profile', (req, res) => {
-  res.render('profile');
+  const userData = req.session.user || {};
+  const resumeData = {}; // Fetch resume data from DB
+
+  res.render('profile', {
+    userData,
+    resumeData,
+    title: 'User Profile - GoHire'
+  });
 });
 
 const PORT = 3000;

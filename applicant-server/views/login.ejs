@@ -21,7 +21,6 @@
           <input type="email" id="email" name="email" class="input-field" placeholder="Email Id" required>
           <input type="password" id="password" name="password" class="input-field" placeholder="Enter Your Password"
             required>
-          <a href="#" class="forgot-password">Forgot password?</a>
           <button type="submit" class="login-button">Login</button>
         </form>
         <p class="signup-text">Don't have an account? <a href="/signup">Sign up</a></p>
@@ -42,23 +41,23 @@
     });
 
     // Form validation
-  document.querySelector('.login-form').addEventListener('submit', function (event) {
-    let email = document.getElementById('email').value.trim();
-    let password = document.getElementById('password').value.trim();
-    let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    document.querySelector('.login-form').addEventListener('submit', function (event) {
+      let email = document.getElementById('email').value.trim();
+      let password = document.getElementById('password').value.trim();
+      let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    if (!emailPattern.test(email)) {
-      alert('Please enter a valid email address.');
-      event.preventDefault();
-      return;
-    }
+      if (!emailPattern.test(email)) {
+        alert('Please enter a valid email address.');
+        event.preventDefault();
+        return;
+      }
 
-    if (password.length < 6) {
-      alert('Password must be at least 6 characters long.');
-      event.preventDefault();
-      return;
-    }
-  });
+      if (password.length < 6) {
+        alert('Password must be at least 6 characters long.');
+        event.preventDefault();
+        return;
+      }
+    });
 
   </script>
 
