@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page - GoHire</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <!-- Logo -->
+        <div class="logo">
+            <span class="go">Go</span><span class="hire">Hire</span>
+        </div>
+        <h1>Welcome to GoHire</h1>
+        <p>"Your dream job is just a click away!"</p>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Sidebar for Subscription Plans -->
+        <div class="sidebar">
+            <h2>Subscription Plans</h2>
+            <ul>
+                <li>
+                    <h3>Premium Plan</h3>
+                    <ul id="subscriptionPlans">
+                        <li data-price="1499">
+                            <strong>Monthly:</strong> ₹1499
+                        </li>
+                        <li data-price="5999">
+                            <strong>6 Months:</strong> ₹5999
+                        </li>
+                        <li data-price="9999">
+                            <strong>Anually:</strong> ₹9999
+                        </li>
+                    </ul>
+                    <p>Features:</p>
+                    <ul>
+                        <li>Post unlimited jobs</li>
+                        <li>Advanced analytics</li>
+                        <li>Featured job listings</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Payment Form -->
+        <div class="payment-form">
+            <h2>Complete Your Payment</h2>
+            <form id="paymentForm" action="/process-payment" method="POST">
+                <!-- Hidden input for amount -->
+                <input type="hidden" id="amount" name="amount" value="">
+
+                <!-- Payment Amount Display -->
+                <div class="form-group">
+                    <label for="paymentAmount">Amount to Pay</label>
+                    <input type="text" id="paymentAmount" name="paymentAmount" readonly>
+                </div>
+
+                <!-- Payment Method Selection -->
+                <div class="form-group">
+                    <label for="paymentMethod">Select Payment Method</label>
+                    <select id="paymentMethod" name="paymentMethod" required>
+                        <option value="">--Select--</option>
+                        <option value="creditCard">Credit/Debit Card</option>
+                        <option value="netBanking">Net Banking</option>
+                        <option value="upi">UPI</option>
+                        <option value="wallet">Wallet</option>
+                    </select>
+                </div>
+
+                <!-- Credit/Debit Card Fields -->
+                <div id="creditCardFields" class="payment-fields">
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" id="cardNumber" name="cardNumber">
+                    </div>
+                    <div class="form-group">
+                        <label for="expiryDate">Expiration Date</label>
+                        <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY">
+                    </div>
+                    <div class="form-group">
+                        <label for="cvv">CVV</label>
+                        <input type="text" id="cvv" name="cvv">
+                    </div>
+                    <div class="form-group">
+                        <label for="cardholderName">Cardholder Name</label>
+                        <input type="text" id="cardholderName" name="cardholderName">
+                    </div>
+                </div>
+
+                <!-- Net Banking Fields -->
+                <div id="netBankingFields" class="payment-fields" style="display: none;">
+                    <div class="form-group">
+                        <label for="bankName">Select Bank</label>
+                        <select id="bankName" name="bankName">
+                            <option value="">--Select Bank--</option>
+                            <option value="sbi">State Bank of India</option>
+                            <option value="hdfc">HDFC Bank</option>
+                            <option value="icici">ICICI Bank</option>
+                            <option value="axis">Axis Bank</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- UPI Fields -->
+                <div id="upiFields" class="payment-fields" style="display: none;">
+                    <div class="form-group">
+                        <label for="upiId">UPI ID</label>
+                        <input type="text" id="upiId" name="upiId" placeholder="example@upi">
+                    </div>
+                </div>
+
+                <!-- Wallet Fields -->
+                <div id="walletFields" class="payment-fields" style="display: none;">
+                    <div class="form-group">
+                        <label for="walletType">Select Wallet</label>
+                        <select id="walletType" name="walletType">
+                            <option value="">--Select Wallet--</option>
+                            <option value="paytm">Paytm</option>
+                            <option value="phonepe">PhonePe</option>
+                            <option value="amazonPay">Amazon Pay</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Pay Now</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Terms and Conditions -->
+    <div class="terms">
+        <h2>Terms and Conditions</h2>
+        <p>
+            By completing this payment, you agree to our 
+            <a href="/terms">Terms of Service</a> and 
+            <a href="/privacy">Privacy Policy</a>.
+            All payments are non-refundable.
+        </p>
+    </div>
+
+    <script src="/script.js"></script>
+</body>
+</html>

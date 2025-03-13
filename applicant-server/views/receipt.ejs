@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful - GoHire</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <!-- Logo and Welcome Message -->
+    <header>
+        <div class="logo">
+            <span class="go">Go</span><span class="hire">Hire</span>
+        </div>
+        <h1>Welcome to GoHire</h1>
+        <p>"Your dream job is just a click away!"</p>
+    </header>
+
+    <!-- Receipt Content -->
+    <div class="receipt-container">
+        <!-- Payment Successful Message -->
+        <h2 class="success-message">Payment Successful!</h2>
+
+        <!-- Receipt Details -->
+        <div class="receipt-details">
+            <h3>Receipt</h3>
+            <p><strong>Payment Method:</strong> <%= paymentDetails.method %></p>
+            <% if (paymentDetails.method === 'Credit/Debit Card') { %>
+                <p><strong>Card Number:</strong> **** **** **** <%= paymentDetails.cardNumber %></p>
+                <p><strong>Cardholder Name:</strong> <%= paymentDetails.cardholderName %></p>
+            <% } else if (paymentDetails.method === 'Net Banking') { %>
+                <p><strong>Bank:</strong> <%= paymentDetails.bankName %></p>
+            <% } else if (paymentDetails.method === 'UPI') { %>
+                <p><strong>UPI ID:</strong> <%= paymentDetails.upiId %></p>
+            <% } else if (paymentDetails.method === 'Wallet') { %>
+                <p><strong>Wallet:</strong> <%= paymentDetails.walletType %></p>
+            <% } %>
+            <p><strong>Amount:</strong> ₹<%= amount %></p> <!-- Changed $ to ₹ -->
+            <p><strong>Date:</strong> <%= date %></p>
+        </div>
+
+        <!-- Thank You Message -->
+        <p class="thank-you">Thank You!</p>
+
+        <!-- Return Home Link -->
+        <a href="/" class="return-home">Return Home</a>
+    </div>
+</body>
+</html>
