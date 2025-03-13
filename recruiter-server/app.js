@@ -7,7 +7,9 @@ const fs = require('fs');
 const authRoutes = require('./routes/auth');
 const recruiterRoutes = require('./routes/recruiter');
 const { companies } = require('./routes/recruiter');
-const { users } = require('./routes/auth'); // Ensure this is properly exported in `auth.js`
+const { jobs } = require('./routes/recruiter');
+const { internships } = require('./routes/recruiter');
+const { users } = require('./routes/auth'); 
 
 const app = express();
 
@@ -108,7 +110,7 @@ app.get('/auth/signup', (req, res) => {
 // Recruiter Routes (Ensure user is logged in)
 app.get('/recruiter/home', (req, res) => {
   if (!req.session.user) return res.redirect('/auth/login'); 
-  res.render('home', { title: 'Home', user: req.session.user });
+  res.render('home', { title: 'Home', user: req.session.user, companies,jobs,internships });
 });
 
 app.get('/recruiter/add-company', (req, res) => {
