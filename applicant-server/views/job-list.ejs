@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GoHire-Job List</title>
     <!-- Include Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -10,7 +10,7 @@
   <body class="bg-gray-100">
     <!-- Main content -->
     <header class="flex items-center justify-between py-10 border-b border-gray-200">
-      
+        
       <nav class="bg-gradient-to-r from-blue-700 to-blue-500 p-5 shadow-xl fixed w-full z-10 transition-all duration-300" id="navbar">
         <div class="container mx-auto flex justify-between items-center">
             <a href="/" class="text-black text-3xl font-bold transition-transform hover:scale-105 duration-300 ml-2">Go<span class="text-yellow-400">Hire</span></a>
@@ -39,7 +39,7 @@
                 <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
             </div>
         </div>
-     </nav>
+      </nav>
 
     </header>
 
@@ -63,91 +63,87 @@
           </div>
         </div>
 
-        <div class="filter-section mb-4 border-b border-gray-200 pb-4">
-          <div class="filter-title flex justify-between items-center mb-2 cursor-pointer" onclick="toggleDropdownRangeSalary()">
-            <h4 class="font-medium">Range Salary</h4>
-            <svg id="dropdownIconSalary" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600  transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </div>
-          <div id="filterOptionsSalary" class="filter-options space-y-2 hidden">
-            <label class="flex items-center">
-              <input type="checkbox" name="salary" value="less-1000" class="mr-2 h-4 w-4 text-blue-500" />
-              <span class="text-sm">Less than $1000</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="salary" value="1000-15000" class="mr-2 h-4 w-4 text-blue-500" />
-              <span class="text-sm">$1000 - $15,000</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="salary" value="more-15000" class="mr-2 h-4 w-4 text-blue-500" />
-              <span class="text-sm">More than $15,000</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="salary" value="custom" checked class="mr-2 h-4 w-4 text-blue-500" />
-              <span class="text-sm">Custom</span>
-            </label>
-          </div>
-          <div class="slider-range mt-4">
-            <div class="relative h-1 bg-gray-200 rounded-full">
-              <div class="absolute h-1 bg-blue-500 left-0 right-0"></div>
-              <input type="range" min="1000" max="25000" value="1000" class="absolute w-full opacity-0 cursor-pointer" />
-              <input type="range" min="1000" max="25000" value="25000" class="absolute w-full opacity-0 cursor-pointer" />
+        <form action="/submit-jobs" method="POST" class="mx-auto max-w-md rounded-lg bg-white p-6 shadow-lg" id="filter-form">
+          <!-- Salary Range Section -->
+          <div class="filter-section mb-4 border-b border-gray-200 pb-4">
+            <div class="filter-title mb-2 flex cursor-pointer items-center justify-between" onclick="toggleDropdownRangeSalary()">
+              <h4 class="font-medium">Salary Range</h4>
+              <svg id="dropdownIconSalary" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
             </div>
-            <div class="flex justify-between mt-2 text-xs text-gray-600">
-              <span>$1,000</span>
-              <span>$25,000</span>
+            <div id="filterOptionsSalary" class="filter-options hidden space-y-2">
+              <label class="flex items-center">
+                <input type="checkbox" name="salary" value="less-25" class="mr-2 h-4 w-4 text-blue-500"
+                  <% if (filters.salary && filters.salary.includes('less-25')) { %> checked <% } %> />
+                <span class="text-sm">Less than 25LPA</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="salary" value="25-35" class="mr-2 h-4 w-4 text-blue-500"
+                  <% if (filters.salary && filters.salary.includes('25-35')) { %> checked <% } %> />
+                <span class="text-sm">25LPA - 35LPA</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="salary" value="35-45" class="mr-2 h-4 w-4 text-blue-500"
+                  <% if (filters.salary && filters.salary.includes('35-45')) { %> checked <% } %> />
+                <span class="text-sm">35LPA - 45LPA</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="salary" value="45-55" class="mr-2 h-4 w-4 text-blue-500"
+                  <% if (filters.salary && filters.salary.includes('45-55')) { %> checked <% } %> />
+                <span class="text-sm">45LPA - 55LPA</span>
+              </label>
             </div>
           </div>
-        </div>
-
-        <div class="filter-section">
-          <div 
-            class="filter-title flex justify-between items-center mb-2 cursor-pointer" onclick="toggleDropdownExperience()">
-            <h4 class="font-medium">Experience</h4>
-            <svg id="dropdownIconEx" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
+        
+          <!-- Experience Section -->
+          <div class="space-y-2">
+            <div class="filter-title mb-2 flex cursor-pointer items-center justify-between" onclick="toggleDropdownExperience()">
+              <h4 class="font-medium">Experience</h4>
+              <svg id="dropdownIconEx" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+            <div id="filterOptions" class="filter-options hidden space-y-2">
+              <label class="flex items-center">
+                <input type="checkbox" name="experience" value="fresher" class="mr-2 h-4 w-4 text-blue-500"
+                  <% if (filters.experience && filters.experience.includes('fresher')) { %> checked <% } %> />
+                <span class="text-sm">Fresher</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="experience" value="less-1" class="mr-2 h-4 w-4 text-blue-500"
+                  <% if (filters.experience && filters.experience.includes('less-1')) { %> checked <% } %> />
+                <span class="text-sm">Less than a year</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="experience" value="1-3" class="mr-2 h-4 w-4 text-blue-500"
+                  <% if (filters.experience && filters.experience.includes('1-3')) { %> checked <% } %> />
+                <span class="text-sm">1-3 years</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="experience" value="3-5" class="mr-2 h-4 w-4 text-blue-500"
+                  <% if (filters.experience && filters.experience.includes('3-5')) { %> checked <% } %> />
+                <span class="text-sm">3-5 years</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="experience" value="5-10" class="mr-2 h-4 w-4 text-blue-500"
+                  <% if (filters.experience && filters.experience.includes('5-10')) { %> checked <% } %> />
+                <span class="text-sm">5-10 years</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="experience" value="more-10" class="mr-2 h-4 w-4 text-blue-500"
+                  <% if (filters.experience && filters.experience.includes('more-10')) { %> checked <% } %> />
+                <span class="text-sm">More than 10 years</span>
+              </label>
+            </div>
           </div>
-          <div id="filterOptions" class="filter-options space-y-2 hidden">
-            <label class="flex items-center">
-              <input type="checkbox" name="experience" value="fresher" class="mr-2 h-4 w-4 text-blue-500" />
-              <span class="text-sm">Fresher</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="experience" value="less-1" class="mr-2 h-4 w-4 text-blue-500" />
-              <span class="text-sm">Less than a year</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="experience" value="1-3" checked class="mr-2 h-4 w-4 text-blue-500" />
-              <span class="text-sm">1-3 years</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="experience" value="3-5" class="mr-2 h-4 w-4 text-blue-500" />
-              <span class="text-sm">3-5 years</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="experience" value="5-10" class="mr-2 h-4 w-4 text-blue-500" />
-              <span class="text-sm">5-10 years</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="experience" value="more-10" class="mr-2 h-4 w-4 text-blue-500" />
-              <span class="text-sm">More than 10 years</span>
-            </label>
-          </div>
-        </div>
+        
+          <button type="submit" id="apply-filters" class="mt-4 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">Apply</button>
+        </form>
+        
       </div>
-
       <div class="content flex-1">
-        <div class="search-results-header flex justify-between items-center mb-6">
-          <div class="results-count text-sm">
-            <span class="text-gray-600">Showing </span>
-            <strong class="font-medium">150</strong>
-            <span class="text-gray-600"> Jobs </span>
-            <strong class="font-medium">UI/UX Designer</strong>
-            <span class="text-gray-600"> in </span>
-            <strong class="font-medium">Indonesia</strong>
-          </div>
+        <div class="search-results-header flex justify-end items-center mb-6">
           <div class="sort-options flex items-center space-x-4">
             <span class="text-sm text-gray-600">Sort by</span>
             <select class="text-sm py-1 px-2 rounded border border-gray-300 appearance-none  focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -168,9 +164,9 @@
           <% jobs.forEach(job => { %>
           <div class="job-card  rounded-lg shadow-sm border border-gray-200 overflow-hidden">
             <div class="job-header flex justify-between items-center p-4">
-              <div
-                class="company-logo w-10 h-10 rounded flex items-center justify-center text-black font-bold"><%= job.logoColor %><%= job.jobCompany %>
-              </div>
+              <div class="company-logo w-10 h-10 rounded flex items-center justify-center text-black font-bold">
+                <img src="/recruiter-server<%= job.logo %>" alt="<%= job.jobCompany %> Logo" class="w-full h-full object-contain rounded" />
+              </div>              
             </div>
             <div class="job-content px-4 pb-4">
               <div class="job-title font-medium text-lg mb-1"><%= job.jobTitle %></div>
@@ -190,7 +186,7 @@
                 </div>
               </div>
               <div class="apply-button">
-                <a href="/applyforJobs"><button class="w-full py-2 bg-blue-50 text-blue-500 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">Apply Now</button></a>
+                <button class="w-full py-2 bg-blue-50 text-blue-500 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">Apply Now</button>
               </div>
             </div>
           </div>
@@ -199,6 +195,13 @@
       </div>
     </main>
   </body>
+
+  <footer>
+    <div class="footerbox py-4">
+      <p>&copy; 2025 Go Hire. All rights reserved.</p>
+    </div>
+  </footer>
+
   <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
   <script>
 
@@ -247,5 +250,38 @@
           checkbox.checked = false;
       });
     }
+
+    
+    document.addEventListener("DOMContentLoaded", function () {
+      // Retrieve previously selected filters from localStorage or backend
+      const selectedFilters = JSON.parse(localStorage.getItem("selectedFilters")) || {};
+
+        // Restore checkbox state
+      document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+          if (selectedFilters[checkbox.name] && selectedFilters[checkbox.name].includes(checkbox.value)) {
+            checkbox.checked = true;
+          }
+
+          checkbox.addEventListener('change', function() {
+              // Store selected filters in localStorage
+              const name = checkbox.name;
+              if (!selectedFilters[name]) selectedFilters[name] = [];
+
+              if (checkbox.checked) {
+                selectedFilters[name].push(checkbox.value);
+              } else {
+                selectedFilters[name] = selectedFilters[name].filter(val => val !== checkbox.value);
+              }
+
+              localStorage.setItem("selectedFilters", JSON.stringify(selectedFilters));
+          });
+      });
+
+      document.getElementById("apply-filters").addEventListener("click", function () {
+          document.getElementById("filter-form").submit();
+      });
+
+    });
   </script>
+  
 </html>

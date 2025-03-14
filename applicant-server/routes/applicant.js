@@ -16,12 +16,12 @@ router.get('/', (req, res) => {
 
 // Job Listings
 router.get('/jobs', async (req, res) => {
-  res.render('job-list', { jobs: jobs });
+  res.render('job-list', { jobs: jobs , filters: {} });
 });
 
 //Internship List
 router.get('/internships', async (req, res) => {
-  res.render('internship-list', { internships: internships });
+  res.render('internship-list', { internships: internships , filters: {}});
 })
 
 // Company List
@@ -95,5 +95,51 @@ const resultValue2 = searchIntern(enteredValue);
 
   res.render('search-results', { enteredValue: enteredValue, sentResult2: resultValue2, sentResult1: resultValue1 });
 });
+
+
+router.post("/submit-jobs", (req, res) => {
+  const { salary, experience } = req.body;
+  const selectedFilters = req.body;
+  let filteredJobs = jobs;
+
+  if (salary) {
+    filteredJobs = filteredJobs.filter((job) => {
+      if (salary.includes("less-25") && job.jobSalary < 25) return true;
+      if (salary.includes("25-35") && job.jobSalary >= 25 && job.salary <= 35) return true;
+      if (salary.includes("35-45") && job.jobSalary >= 35 && job.jobSalary < 45) return true;
+      return false;
+    });
+  }
+
+  if (experience) {
+    filteredJobs = filteredJobs.filter((job) => {
+      if (experience.includes("fresher") && job.jobExperience === 0) return true;
+      if (experience.includes("less-1") && job.jobExperience < 1) return true;
+      if (experience.includes("1-3") && job.jobExperience >= 1 && job.jobExperience <= 3) return true;
+      if (experience.includes("3-5") && job.jobExperience >= 3 && job.jobExperience <= 5) return true;
+      if (experience.includes("5-10") && job.jobExperience >= 5 && job.jobExperience <= 10) return true;
+      if (experience.includes("more-10") && job.jobExperience > 10) return true;
+      return false;
+    });
+  }
+
+  res.render("job-list", { jobs: filteredJobs , filters: selectedFilters});
+});
+
+router.post('/submit-internship', (req, res) => {
+  const {duration} = req.body;
+  const selectedFilters = req.body;
+  let filteredInternships = internships;
+  if(duration){
+    filteredInternships = filteredInternships.filter((internship) => {
+      if(duration.includes('less-1') && internship.intDuration < 1) return true;
+      if(duration.includes('1-3') && internship.intDuration >= 1 && internship.intDuration <= 3) return true;
+      if(duration.includes('3-6') && internship.intDuration >= 3 && internship.intDuration <= 6) return true;
+      if(duration.includes('more-6') && internship.intDuration > 6) return true;
+      return false;
+    });
+  }
+  res.render('internship-list', {internships: filteredInternships, filters: selectedFilters});
+})
 
 module.exports = router;
