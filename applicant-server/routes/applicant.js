@@ -7,6 +7,7 @@ const { companies } = require('../../recruiter-server/routes/recruiter');
 const { appUsers } = require('./auth');
 const Fuse = require('fuse.js');
 
+
 // router.use(bodyParser.urlencoded({extended:true}));
 
 // Home

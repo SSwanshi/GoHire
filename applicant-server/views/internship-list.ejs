@@ -106,15 +106,7 @@
       </div>
 
       <div class="content flex-1">
-        <div class="search-results-header flex justify-between items-center mb-6">
-          <div class="results-count text-sm">
-            <span class="text-gray-600">Showing </span>
-            <strong class="font-medium">150</strong>
-            <span class="text-gray-600"> internshipss </span>
-            <strong class="font-medium">UI/UX Designer</strong>
-            <span class="text-gray-600"> in </span>
-            <strong class="font-medium">Indonesia</strong>
-          </div>
+        <div class="search-results-header flex justify-end items-center mb-6">
           <div class="sort-options flex items-center space-x-4">
             <span class="text-sm text-gray-600">Sort by</span>
             <select class="text-sm py-1 px-2 rounded border border-gray-300 appearance-none  focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -134,11 +126,8 @@
           <% internships.forEach(internships => { %>
           <div class="internships-card  rounded-lg shadow-sm border border-gray-200 overflow-hidden">
             <div class="internships-header flex justify-between items-center p-4">
-              <div
-                class="company-logo w-10 h-10 rounded flex items-center justify-center text-black font-bold"      
-              >
-              <%= internships.logoColor %> 
-                <%= internships.intCompany %>
+              <div class="company-logo w-10 h-10 rounded flex items-center justify-center text-black font-bold">
+                <img src="recruiter-server/<%= internships.logo %>" alt="<%= internships.intCompany %> Logo" class="w-full h-full object-contain rounded" />
               </div>
             </div>
             <div class="internships-content px-4 pb-4">
@@ -168,9 +157,7 @@
     </main>
   </body>
 
-  <footer class="bg-gray-900 text-center text-gray-400 py-4">
-    © <%= new Date().getFullYear() %> GoHire. All rights reserved.
-  </footer>
+  <%- include('layout/footer') %>
 
   <script>
     window.addEventListener('scroll', function() {
