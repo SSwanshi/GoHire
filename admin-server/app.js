@@ -3,6 +3,7 @@ const path = require('path');
 const { jobs } = require('../recruiter-server/routes/recruiter');
 const { internships } = require('../recruiter-server/routes/recruiter');
 const { companies } = require('../recruiter-server/routes/recruiter');
+const { applications } = require('../recruiter-server/routes/recruiter');
 const app = express();
 const PORT = 9000;
 
@@ -45,19 +46,19 @@ app.get('/home', (req, res) => {
 });
 
 app.get('/applicantlist', (req, res) => {
-    res.render('applicantlist');
+    res.render('applicantlist', {applications: applications});
 });
 
 app.get('/companylist', (req, res) => {
-    res.render('companylist', {companies: companies});
+    res.render('companylist', { companies: companies });
 });
 
 app.get('/internshiplist', (req, res) => {
-    res.render('internshiplist', {companies: companies, internships: internships});
+    res.render('internshiplist', { companies: companies, internships: internships });
 });
 
 app.get('/joblist', (req, res) => {
-    res.render('joblist', {companies: companies, jobs: jobs});
+    res.render('joblist', { companies: companies, jobs: jobs });
 });
 
 app.get('/premiumuser', (req, res) => {
