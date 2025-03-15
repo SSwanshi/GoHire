@@ -13,8 +13,8 @@ router.get('/logout', (req, res) => {
 });
 
 const appUsers = [
-  { firstName: "Sarvjeet", lastName: "Swanshi", email: "sarvjeetswanshi@gmail.com", phone: "8102109959", gender: "male", password: "adminpass" ,profileImage:"/uploads/profiles/default-image.jpg"},
-  { firstName: "Saurav", lastName: "Roy", email: "sauravroy@gmail.com", phone: "9854672132", gender: "male", password: "adminpass", profileImage:"/uploads/profiles/default-image.jpg" }
+  { firstName: "Sarvjeet", lastName: "Swanshi", email: "sarvjeetswanshi@gmail.com", phone: "8102109959", gender: "male", password: "adminpass", profileImage: "/uploads/profiles/default-image.jpg" },
+  { firstName: "Saurav", lastName: "Roy", email: "sauravroy@gmail.com", phone: "9854672132", gender: "male", password: "adminpass", profileImage: "/uploads/profiles/default-image.jpg" }
 ];
 
 router.post('/signup', (req, res) => {
@@ -52,7 +52,7 @@ router.post('/login', (req, res) => {
 
   const user_app = appUsers.find(user => user.email === email && user.password === password);
 
-  if (!user) {
+  if (!user_app) {
     return res.status(400).json({ error: 'Invalid email or password' });
   }
 
@@ -62,4 +62,4 @@ router.post('/login', (req, res) => {
 });
 
 module.exports = appUsers;
-module.exports = router ;
+module.exports = router;
