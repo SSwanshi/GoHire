@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
-
+const { jobs } = require('../recruiter-server/routes/recruiter');
+const { internships } = require('../recruiter-server/routes/recruiter');
+const { companies } = require('../recruiter-server/routes/recruiter');
 const app = express();
 const PORT = 9000;
 
@@ -47,7 +49,7 @@ app.get('/applicantlist', (req, res) => {
 });
 
 app.get('/companylist', (req, res) => {
-    res.render('companylist');
+    res.render('companylist', {companies: companies});
 });
 
 app.get('/internshiplist', (req, res) => {
@@ -55,7 +57,7 @@ app.get('/internshiplist', (req, res) => {
 });
 
 app.get('/joblist', (req, res) => {
-    res.render('joblist');
+    res.render('joblist', {companies: companies, jobs: jobs});
 });
 
 app.get('/premiumuser', (req, res) => {
