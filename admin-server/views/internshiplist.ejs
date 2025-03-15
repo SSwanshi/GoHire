@@ -1,3 +1,49 @@
 <%- include('layout/header') %>
 
+<div class="container mx-auto py-10">
+    <h2 class="text-3xl font-bold text-center mb-6">Company List</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <% companies.forEach(company => { %>
+            <div class="bg-white shadow-lg rounded-lg p-5 relative">
+                <img src="<%= company.logo %>" alt="<%= company.companyName %> Logo" class="h-16 mx-auto">
+                <h3 class="text-xl font-semibold text-center mt-3"><%= company.companyName %></h3>
+                <p class="text-gray-500 text-center"><%= company.location %></p>
+                <div class="text-center mt-4">
+                    <a href="<%= company.website %>" target="_blank" class="text-blue-500 hover:underline">Visit Website</a>
+                </div>
+
+                <!-- Internship Dropdown Button -->
+                <div class="mt-4">
+                    <button onclick="toggleDropdown('<%= company.companyName.replace(/\s+/g, '-') %>')"
+                        class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
+                        View Internships
+                    </button>
+
+                    <!-- Dropdown List -->
+                    <ul id="<%= company.companyName.replace(/\s+/g, '-') %>-internships" class="hidden bg-gray-100 rounded-lg mt-2 p-2">
+                        <% let companyIntern = internships.filter(internship => internship.intCompany === company.companyName); %>
+                        <% if (companyIntern.length > 0) { %>
+                            <% companyIntern.forEach(intern => { %>
+                                <li class="p-2 border-b last:border-none">
+                                    <p class="font-semibold"><%= intern.intTitle %></p>
+                                    <p class="text-sm text-gray-600"><%= intern.intLocation %></p>
+                                </li>
+                            <% }) %>
+                        <% } else { %>
+                            <li class="p-2 text-gray-500">No Internship available</li>
+                        <% } %>
+                    </ul>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</div>
+
 <%- include('layout/footer') %>
+
+<script>
+    function toggleDropdown(companyId) {
+        const internshipList = document.getElementById(companyId + "-internships");
+        internshipList.classList.toggle("hidden");
+    }
+</script>

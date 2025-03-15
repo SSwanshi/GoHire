@@ -21,7 +21,7 @@
 
                     <!-- Dropdown List -->
                     <ul id="<%= company.companyName.replace(/\s+/g, '-') %>-jobs" class="hidden bg-gray-100 rounded-lg mt-2 p-2">
-                        <% let companyJobs = jobs.filter(job => job.jobcompany === company.companyName); %>
+                        <% let companyJobs = jobs.filter(job => job.jobCompany === company.companyName); %>
                         <% if (companyJobs.length > 0) { %>
                             <% companyJobs.forEach(job => { %>
                                 <li class="p-2 border-b last:border-none">

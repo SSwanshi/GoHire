@@ -53,7 +53,7 @@ app.get('/companylist', (req, res) => {
 });
 
 app.get('/internshiplist', (req, res) => {
-    res.render('internshiplist');
+    res.render('internshiplist', {companies: companies, internships: internships});
 });
 
 app.get('/joblist', (req, res) => {
