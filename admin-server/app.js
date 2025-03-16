@@ -61,8 +61,13 @@ app.get('/joblist', (req, res) => {
     res.render('joblist', { companies: companies, jobs: jobs });
 });
 
-app.get('/premiumuser', (req, res) => {
-    res.render('premiumuser');
+app.get('/premium', isPremiumUser, (req, res) => {
+    // Filter and sort premium users
+    const premiumUsers = validUsers
+        .filter(user => user.isPremium) // Filter premium users
+        .sort((a, b) => a.email.localeCompare(b.email)); // Sort alphabetically by email
+    // Render the premiumuser.ejs view with the sorted list
+    res.render('premiumuser', { user: req.session.user, premiumUsers: premiumUsers });
 });
 
 app.get('/recruiterlist', (req, res) => {
