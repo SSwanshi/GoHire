@@ -1,3 +1,50 @@
 <%- include('layout/header') %>
+<div class="max-w-3xl mx-auto py-6">
+    <h1 class="text-2xl font-bold mb-4">Premium User Dashboard</h1>
 
+    <div class="bg-white rounded shadow overflow-hidden p-6">
+        <!-- Welcome Message -->
+        <p class="text-gray-700">Welcome, <span class="font-semibold"><%= user.email %></span>! You are a premium user.</p>
+
+        <!-- Premium Features -->
+        <div class="mt-6">
+            <h2 class="text-xl font-semibold mb-2">Premium Features</h2>
+            <ul class="list-disc list-inside text-gray-700">
+                <li>Access to exclusive content</li>
+                <li>Priority support</li>
+                <li>Advanced analytics</li>
+                <li>Customizable dashboard</li>
+            </ul>
+        </div>
+
+        <!-- Premium Users List -->
+        <div class="mt-6">
+            <h2 class="text-xl font-semibold mb-2">Premium Users</h2>
+            <% if (premiumUsers.length > 0) { %>
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <% premiumUsers.forEach(user => { %>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    <%= user.email %>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    Premium
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p class="text-gray-500">No premium users found.</p>
+            <% } %>
+        </div>
+    </div>
+</div>
 <%- include('layout/footer') %>
