@@ -8,6 +8,15 @@ const { users } = require('../recruiter-server/routes/auth');
 
 const app = express();
 const PORT = 9000;
+const session = require('express-session');
+
+// Add session middleware
+app.use(session({
+    secret: 'your-secret-key', // Change this to a secure key
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // Set to true if using HTTPS
+}));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -16,11 +25,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const validUsers = [
-    { email: 'sarvjeet.s23@iiits.in', password: '1234' },
-    { email: 'sauravkumar.r23@iiits.in', password: '1234' },
-    { email: 'kartik.r23@iiits.in', password: '1234' },
-    { email: 'anuj.r23@iiits.in', password: '1234' },
-    { email: 'likhita.b23@iiits.in', password: '1234' }
+    { email: 'sarvjeet.s23@iiits.in', password: '1234', isPremium: true },
+    { email: 'sauravkumar.r23@iiits.in', password: '1234', isPremium: false },
+    { email: 'kartik.r23@iiits.in', password: '1234', isPremium: true },
+    { email: 'anuj.r23@iiits.in', password: '1234', isPremium: true },
+    { email: 'likhita.b23@iiits.in', password: '1234', isPremium: true }
 ];
 
 app.get('/', (req, res) => {
@@ -34,6 +43,7 @@ app.post('/login', (req, res) => {
 
     if (user) {
         if (user.password === password) {
+            req.session.user = user; // Save user in session
             return res.redirect('/home');
         } else {
             return res.send('Incorrect password');
@@ -63,14 +73,23 @@ app.get('/joblist', (req, res) => {
     res.render('joblist', { companies: companies, jobs: jobs });
 });
 
-// app.get('/premium', isPremiumUser, (req, res) => {
-//     // Filter and sort premium users
-//     const premiumUsers = validUsers
-//         .filter(user => user.isPremium) // Filter premium users
-//         .sort((a, b) => a.email.localeCompare(b.email)); // Sort alphabetically by email
-//     // Render the premiumuser.ejs view with the sorted list
-//     res.render('premiumuser', { user: req.session.user, premiumUsers: premiumUsers });
-// });
+const isPremiumUser = (req, res, next) => {
+    // Check if the user is a premium user
+    if (req.session.user && req.session.user.isPremium) {
+        next(); // User is premium, proceed to the next middleware/route handler
+    } else {
+        res.status(403).json({ message: 'Access denied. You must be a premium user.' });
+    }
+};
+
+app.get('/premiumuser', isPremiumUser, (req, res) => {
+    // Filter and sort premium users
+    const premiumUsers = validUsers
+        .filter(user => user.isPremium) // Filter premium users
+        .sort((a, b) => a.email.localeCompare(b.email)); // Sort alphabetically by email
+    // Render the premiumuser.ejs view with the sorted list
+    res.render('premiumuser', { user: req.session.user, premiumUsers: premiumUsers });
+});
 
 app.get('/recruiterlist', (req, res) => {
     res.render('recruiterlist', {users: users});
