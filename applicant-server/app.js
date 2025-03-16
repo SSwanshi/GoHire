@@ -37,6 +37,30 @@ app.use(passport.session()); // If using Passport for authentication
 
 app.use('/profile', profileRoutes);
 
+// In your app.js or routes file where you render the home page
+app.get('/', (req, res) => {
+  // Render the home page and pass the user data if available
+  res.render('home', {
+    user: req.session.user || null
+  });
+});
+
+// Or add middleware to make user available to all templates
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null;
+  next();
+});
+
+app.get('/logout', (req, res) => {
+  // Clear the user session
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error destroying session:', err);
+    }
+    res.redirect('/'); // Redirect to homepage after logout
+  });
+});
+
 // Multer storage configuration
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -109,6 +133,8 @@ app.post('/user/upload-profile-image', upload.single('profileImage'), (req, res)
 // Serve uploaded profile images
 app.use('/uploads/profiles', express.static(path.join(__dirname, 'public/uploads/profiles')));
 
+
+
 // Profile Page
 app.get('/profile', (req, res) => {
   const userData = req.session.user || {};
@@ -120,6 +146,7 @@ app.get('/profile', (req, res) => {
     title: 'User Profile - GoHire'
   });
 });
+
 
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
