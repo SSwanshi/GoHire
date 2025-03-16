@@ -4,6 +4,8 @@ const { jobs } = require('../recruiter-server/routes/recruiter');
 const { internships } = require('../recruiter-server/routes/recruiter');
 const { companies } = require('../recruiter-server/routes/recruiter');
 const { applications } = require('../recruiter-server/routes/recruiter');
+const { users } = require('../recruiter-server/routes/auth');
+
 const app = express();
 const PORT = 9000;
 
@@ -61,17 +63,17 @@ app.get('/joblist', (req, res) => {
     res.render('joblist', { companies: companies, jobs: jobs });
 });
 
-app.get('/premium', isPremiumUser, (req, res) => {
-    // Filter and sort premium users
-    const premiumUsers = validUsers
-        .filter(user => user.isPremium) // Filter premium users
-        .sort((a, b) => a.email.localeCompare(b.email)); // Sort alphabetically by email
-    // Render the premiumuser.ejs view with the sorted list
-    res.render('premiumuser', { user: req.session.user, premiumUsers: premiumUsers });
-});
+// app.get('/premium', isPremiumUser, (req, res) => {
+//     // Filter and sort premium users
+//     const premiumUsers = validUsers
+//         .filter(user => user.isPremium) // Filter premium users
+//         .sort((a, b) => a.email.localeCompare(b.email)); // Sort alphabetically by email
+//     // Render the premiumuser.ejs view with the sorted list
+//     res.render('premiumuser', { user: req.session.user, premiumUsers: premiumUsers });
+// });
 
 app.get('/recruiterlist', (req, res) => {
-    res.render('recruiterlist');
+    res.render('recruiterlist', {users: users});
 });
 
 app.listen(PORT, () => {
