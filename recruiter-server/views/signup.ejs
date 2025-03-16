@@ -154,6 +154,63 @@
       this.classList.add('active');
       document.getElementById('recruiter-btn').classList.remove('active');
     });
+
+    document.querySelector('.signup-form').addEventListener('submit', function (event) {
+      let isValid = true;
+
+      // Get form values
+      let firstName = document.getElementById('firstName').value.trim();
+      let email = document.getElementById('email').value.trim();
+      let phone = document.getElementById('phone').value.trim();
+      let password = document.getElementById('password').value;
+      let confirmPassword = document.getElementById('confirmPassword').value;
+      let termsAgree = document.getElementById('termsAgree').checked;
+
+      // Email validation pattern
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      // Phone number validation (exactly 10 digits)
+      const phonePattern = /^[0-9]{10}$/;
+
+      // First name validation
+      if (firstName.length === 0) {
+        alert("First Name is required.");
+        isValid = false;
+      }
+
+      // Email validation
+      if (!emailPattern.test(email)) {
+        alert("Please enter a valid email address.");
+        isValid = false;
+      }
+
+      // Phone validation (should be exactly 10 digits)
+      if (!phonePattern.test(phone)) {
+        alert("Please enter a valid 10-digit phone number.");
+        isValid = false;
+      }
+
+      // Password validation
+      if (password.length < 4) {
+        alert("Password must be at least 4 characters long.");
+        isValid = false;
+      }
+
+      // Confirm password validation
+      if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        isValid = false;
+      }
+
+      // Terms and conditions validation
+      if (!termsAgree) {
+        alert("You must agree to the terms and conditions.");
+        isValid = false;
+      }
+
+      if (!isValid) {
+        event.preventDefault(); // Stop form submission
+      }
+    });
   </script>
 </body>
 
