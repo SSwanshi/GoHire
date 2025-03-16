@@ -134,10 +134,16 @@ app.post('/user/upload-profile-image', upload.single('profileImage'), (req, res)
 app.use('/uploads/profiles', express.static(path.join(__dirname, 'public/uploads/profiles')));
 
 
-
 // Profile Page
 app.get('/profile', (req, res) => {
-  const userData = req.session.user || {};
+  const userData = req.session.user || {
+    firstName: 'Anuj',
+    lastName: 'Rathore',
+    email: 'anuj.r23@iiits.in',
+    phone: '9340041042',
+    gender: 'Male',
+    memberSince: 'March 2025'
+  };
   const resumeData = {}; // Fetch resume data from DB
 
   res.render('profile', {
