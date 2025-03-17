@@ -3,57 +3,65 @@
 <div class="gradientyandb min-h-screen flex items-center justify-center">
   <div class="max-w-lg mx-auto p-6 bg-blue-100 rounded-lg shadow-md md:w-full max-w-[800px] mx-auto">
     <h2 class="text-2xl font-bold text-blue-800 mb-4">Post a New Internship</h2>
-    <form action="/recruiter/add-internship" method="POST" class="space-y-4">
+    <form id="internshipForm" action="/recruiter/add-internship" method="POST" class="space-y-4">
 
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label for="intTitle" class="block text-blue-700 font-medium">Title</label>
-          <input type="text" id="intTitle" name="intTitle" required
+          <input type="text" id="intTitle" name="intTitle" required 
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <p class="text-red-500 text-sm hidden" id="titleError">Title must be at least 5 characters.</p>
         </div>
         <div>
           <label for="intDescription" class="block text-blue-700 font-medium">Description</label>
-          <input type="text" id="intDescription" name="intDescription" required
+          <input type="text" id="intDescription" name="intDescription" required 
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <p class="text-red-500 text-sm hidden" id="descriptionError">Description must be at least 10 characters.</p>
         </div>
       </div>
  
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label for="intRequirements" class="block text-blue-700 font-medium">Requirements</label>
-          <input type="text" id="intRequirements" name="intRequirements" required
+          <input type="text" id="intRequirements" name="intRequirements" required 
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <p class="text-red-500 text-sm hidden" id="requirementsError">Requirements must be at least 5 characters.</p>
         </div>
         <div>
           <label for="intStipend" class="block text-blue-700 font-medium">Stipend (per month)</label>
-          <input type="number" id="intStipend" name="intStipend" required
+          <input type="number" id="intStipend" name="intStipend" required min="0"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <p class="text-red-500 text-sm hidden" id="stipendError">Stipend must be a positive number.</p>
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label for="intLocation" class="block text-blue-700 font-medium">Location</label>
-          <input type="text" id="intLocation" name="intLocation" required
+          <input type="text" id="intLocation" name="intLocation" required 
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <p class="text-red-500 text-sm hidden" id="locationError">Location must be at least 3 characters.</p>
         </div>
         <div>
           <label for="intDuration" class="block text-blue-700 font-medium">Internship Duration (in months)</label>
-          <input type="number" id="intDuration" name="intDuration" required
+          <input type="number" id="intDuration" name="intDuration" required min="1"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <p class="text-red-500 text-sm hidden" id="durationError">Duration must be at least 1 month.</p>
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label for="intExperience" class="block text-blue-700 font-medium">Experience Level (in years)</label>
-          <input type="number" id="intExperience" name="intExperience" required
+          <input type="number" id="intExperience" name="intExperience" required min="0"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <p class="text-red-500 text-sm hidden" id="experienceError">Experience must be 0 or more years.</p>
         </div>
         <div>
           <label for="intPositions" class="block text-blue-700 font-medium">No of Positions</label>
-          <input type="number" id="intPositions" name="intPositions" required
+          <input type="number" id="intPositions" name="intPositions" required min="1"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <p class="text-red-500 text-sm hidden" id="positionsError">Must be at least 1 position.</p>
         </div>
       </div>
 
@@ -66,6 +74,7 @@
                   <option value="<%= company.companyName %>"><%= company.companyName %></option>
               <% }); %>
         </select>
+        <p class="text-red-500 text-sm hidden" id="companyError">Please select a company.</p>
       </div>
 
       <button type="submit" 
@@ -76,5 +85,55 @@
     </form>
   </div>
 </div>
+
+<script>
+document.getElementById("internshipForm").addEventListener("submit", function(event) {
+    let isValid = true;
+
+    function validateField(id, minLength, errorId) {
+        const value = document.getElementById(id).value.trim();
+        const errorElement = document.getElementById(errorId);
+        if (value.length < minLength) {
+            errorElement.classList.remove("hidden");
+            isValid = false;
+        } else {
+            errorElement.classList.add("hidden");
+        }
+    }
+
+    function validateNumberField(id, minValue, errorId) {
+        const value = document.getElementById(id).value;
+        const errorElement = document.getElementById(errorId);
+        if (value === "" || value < minValue) {
+            errorElement.classList.remove("hidden");
+            isValid = false;
+        } else {
+            errorElement.classList.add("hidden");
+        }
+    }
+
+    validateField("intTitle", 5, "titleError");
+    validateField("intDescription", 10, "descriptionError");
+    validateField("intRequirements", 5, "requirementsError");
+    validateField("intLocation", 3, "locationError");
+
+    validateNumberField("intStipend", 0, "stipendError");
+    validateNumberField("intDuration", 1, "durationError");
+    validateNumberField("intExperience", 0, "experienceError");
+    validateNumberField("intPositions", 1, "positionsError");
+
+    const company = document.getElementById("intCompany").value;
+    if (company === "") {
+        document.getElementById("companyError").classList.remove("hidden");
+        isValid = false;
+    } else {
+        document.getElementById("companyError").classList.add("hidden");
+    }
+
+    if (!isValid) {
+        event.preventDefault();
+    }
+});
+</script>
 
 <%- include('layout/footer') %>
