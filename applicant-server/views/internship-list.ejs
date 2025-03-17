@@ -130,7 +130,11 @@
             <div class="internships-listings grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <% internships.forEach(internships => { %>
                 <div class="internships-card rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                    
+                    <div class="internships-header flex justify-between items-center p-4">
+                        <div class="company-logo w-10 h-10 rounded flex items-center justify-center text-black font-bold">
+                            <img src="recruiter-server/<%= internships.logo %>" alt="<%= internships.intCompany %>" class="w-full h-full object-contain rounded" />
+                        </div>
+                    </div>
                     <div class="internships-content px-4 pb-4">
                         <div class="internships-title font-medium text-lg mb-1"><%= internships.intTitle %></div>
                         <div class="company-info text-sm text-gray-600 mb-2">
