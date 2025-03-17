@@ -11,51 +11,51 @@ const Fuse = require('fuse.js');
 
 // Home
 router.get('/', (req, res) => {
-  res.render('home', { appUsers });
+  res.render('home', { user: req.session.user});
 });
 
 // Job Listings
 router.get('/jobs', async (req, res) => {
-  res.render('job-list', { jobs: jobs , filters: {} });
+  res.render('job-list', { jobs: jobs , filters: {} ,user: req.session.user});
 });
 
 //Internship List
 router.get('/internships', async (req, res) => {
-  res.render('internship-list', { internships: internships , filters: {}});
+  res.render('internship-list', { internships: internships , filters: {}, user: req.session.user});
 })
 
 // Company List
 router.get('/companies', async (req, res) => {
   // const companies = await Company.find();
-  res.render('companylist', { companies: companies });
+  res.render('companylist', { companies: companies ,user: req.session.user});
 });
 
 router.get('/contact', async (req, res) => {
-  res.render('contact');
+  res.render('contact',{user: req.session.user});
 })
 
 // Search Results
 router.get('/search', async (req, res) => {
-  res.render('search-results');
+  res.render('search-results' , {user: req.session.user});
 });
 
 //Premium page
 router.get('/competitions', async (req, res) => {
-  res.render('competitions');
+  res.render('competitions' , {user: req.session.user});
 });
 
 //Apply_for_Job page
 router.get('/applyforJobs', async (req, res) => {
-  res.render('Apply_for_Jobs');
+  res.render('Apply_for_Jobs' , {user: req.session.user});
 });
 
 //Apply_for_Internship page
 router.get('/applyforInternships', async (req, res) => {
-  res.render('Apply_for_Internships');
+  res.render('Apply_for_Internships' , {user: req.session.user});
 });
 
 router.get('/Subscription', async (req, res) => {
-  res.render('Subscription');
+  res.render('Subscription' , {user: req.session.user});
 });
 
 router.post('/search', async (req, res) => {
@@ -93,7 +93,7 @@ const resultValue1 = searchJobs(enteredValue);
 
 const resultValue2 = searchIntern(enteredValue);
 
-  res.render('search-results', { enteredValue: enteredValue, sentResult2: resultValue2, sentResult1: resultValue1 });
+  res.render('search-results', { enteredValue: enteredValue, sentResult2: resultValue2, sentResult1: resultValue1, user: req.session.user});
 });
 
 
@@ -123,7 +123,7 @@ router.post("/submit-jobs", (req, res) => {
     });
   }
 
-  res.render("job-list", { jobs: filteredJobs , filters: selectedFilters});
+  res.render("job-list", { jobs: filteredJobs , filters: selectedFilters, user: req.session.user});
 });
 
 router.post('/submit-internship', (req, res) => {
@@ -139,7 +139,7 @@ router.post('/submit-internship', (req, res) => {
       return false;
     });
   }
-  res.render('internship-list', {internships: filteredInternships, filters: selectedFilters});
+  res.render('internship-list', {internships: filteredInternships, filters: selectedFilters, user: req.session.user});
 })
 
 module.exports = router;

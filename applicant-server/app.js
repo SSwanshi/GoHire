@@ -6,20 +6,12 @@ const path = require('path');
 const multer = require('multer');
 
 const authRoutes = require('./routes/auth');
+const appUsers = require('./routes/auth');
 const applicantRoutes = require('./routes/applicant');
 const profileRoutes = require('./routes/profile');
 const paymentRoutes = require('./routes/payment');
 
 const app = express();
-
-// Set view engine
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
-// Middleware
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 
 app.use(session({
   secret: 'your-secret-key',
@@ -33,6 +25,17 @@ app.use((req, res, next) => {
   next();
 });
 
+// Middleware
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// Set view engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+
+
 app.use(passport.initialize());
 app.use(passport.session()); // If using Passport for authentication
 
@@ -40,17 +43,12 @@ app.use('/profile', profileRoutes);
 
 // In your app.js or routes file where you render the home page
 app.get('/', (req, res) => {
-  // Render the home page and pass the user data if available
   res.render('home', {
-    user: req.session.user || null
+    user: req.session.user
   });
 });
 
 // Or add middleware to make user available to all templates
-app.use((req, res, next) => {
-  res.locals.user = req.session.user || null;
-  next();
-});
 
 app.get('/logout', (req, res) => {
   // Clear the user session
@@ -145,10 +143,11 @@ app.get('/profile', (req, res) => {
     gender: 'Male',
     memberSince: 'March 2025'
   };
-  
+
   const resumeData = {}; // Fetch resume data from DB
 
   res.render('profile', {
+    appUsers,
     userData,
     resumeData,
     title: 'User Profile - GoHire'

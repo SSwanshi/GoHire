@@ -50,15 +50,26 @@ router.get('/login', (req, res) => {
 router.post('/login', (req, res) => {
   const { email, password } = req.body;
 
-  const user_app = appUsers.find(user => user.email === email && user.password === password);
+  const user = appUsers.find(user => user.email === email && user.password === password);
 
-  if (!user_app) {
-    return res.status(400).json({ error: 'Invalid email or password' });
+  if (user) {
+    req.session.user = user; // Set the user in the session
+    res.redirect('/');
+  } else {
+    res.status(401).send('Invalid credentials');
+  }
+});
+
+router.get('/user/:email', (req, res) => {
+  const { email } = req.params;
+
+  const user = appUsers.find(user => user.email === email);
+
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
   }
 
-  req.session.user_app = user_app;
-
-  res.redirect('/');
+  res.json(user);
 });
 
 module.exports = appUsers;
