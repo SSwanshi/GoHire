@@ -8,6 +8,7 @@ const multer = require('multer');
 const authRoutes = require('./routes/auth');
 const applicantRoutes = require('./routes/applicant');
 const profileRoutes = require('./routes/profile');
+const paymentRoutes = require('./routes/payment');
 
 const app = express();
 
@@ -152,6 +153,14 @@ app.get('/profile', (req, res) => {
     title: 'User Profile - GoHire'
   });
 });
+
+// Root route
+app.get('/', (req, res) => {
+  res.redirect('/payment'); // Redirect to the payment page
+});
+
+// Use payment routes
+app.use('/', paymentRoutes);
 
 
 const PORT = 3000;
