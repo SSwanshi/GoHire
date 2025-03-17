@@ -167,17 +167,6 @@
   <%- include('layout/footer') %>
 
   <script>
-    window.addEventListener('scroll', function() {
-        const navbar = document.getElementById('navbar');
-        if (window.scrollY > 10) {
-            navbar.classList.add('py-3', 'bg-blue-700', 'shadow-2xl');
-            navbar.classList.remove('p-5');
-        } else {
-            navbar.classList.remove('py-3', 'bg-blue-700', 'shadow-2xl');
-            navbar.classList.add('p-5');
-        }
-    });
-
     document.getElementById("search-btn").addEventListener("click", function() {
         event.preventDefault(); 
         document.getElementById("search-form").submit();
