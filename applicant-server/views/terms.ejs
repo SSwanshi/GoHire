@@ -1,33 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms of Service - GoHire</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
+
+<body class="bg-gray-50 font-sans leading-relaxed text-gray-800">
     <!-- Header -->
-    <header>
-        <div class="logo">
-            <span class="go">Go</span><span class="hire">Hire</span>
+    <header class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white py-8 shadow-lg">
+        <div class="container mx-auto text-center">
+            <div class="logo text-4xl font-bold mb-4">
+                <span class="text-yellow-300">Go</span><span class="text-white">Hire</span>
+            </div>
+            <h1 class="text-3xl font-semibold">Terms of Service</h1>
         </div>
-        <h1>Terms of Service</h1>
     </header>
 
     <!-- Main Content -->
-    <div class="container">
-        <h2>Terms of Service</h2>
-        <p>
+    <div class="container mx-auto px-4 py-12 max-w-3xl">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Terms of Service</h2>
+        <p class="mb-6 text-gray-700">
             By using GoHire, you agree to the following terms and conditions:
         </p>
-        <ul>
+        <ul class="list-disc list-inside space-y-3 mb-8 text-gray-700">
             <li>You must be at least 18 years old to use this service.</li>
             <li>You are responsible for maintaining the confidentiality of your account and password.</li>
             <li>You agree not to use the service for any illegal or unauthorized purpose.</li>
             <li>GoHire reserves the right to modify or terminate the service at any time.</li>
         </ul>
-        <a href="/" class="return-home">Return Home</a>
+        <a href="/"
+            class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-300">Return
+            Home</a>
     </div>
 </body>
+
 </html>

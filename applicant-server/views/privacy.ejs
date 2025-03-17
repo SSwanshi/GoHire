@@ -4,30 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - GoHire</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-gray-50 font-sans leading-relaxed text-gray-800">
     <!-- Header -->
-    <header>
-        <div class="logo">
-            <span class="go">Go</span><span class="hire">Hire</span>
+    <header class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white py-8 shadow-lg">
+        <div class="container mx-auto text-center">
+            <div class="logo text-4xl font-bold mb-4">
+                <span class="text-yellow-300">Go</span><span class="text-white">Hire</span>
+            </div>
+            <h1 class="text-3xl font-semibold">Privacy Policy</h1>
         </div>
-        <h1>Privacy Policy</h1>
     </header>
 
     <!-- Main Content -->
-    <div class="container">
-        <h2>Privacy Policy</h2>
-        <p>
+    <div class="container mx-auto px-4 py-12 max-w-3xl">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Privacy Policy</h2>
+        <p class="mb-6 text-gray-700">
             At GoHire, we value your privacy. This policy outlines how we collect, use, and protect your information:
         </p>
-        <ul>
+        <ul class="list-disc list-inside space-y-3 mb-8 text-gray-700">
             <li>We collect personal information such as your name, email, and payment details.</li>
             <li>Your information is used to provide and improve our services.</li>
             <li>We do not share your personal information with third parties without your consent.</li>
             <li>We use industry-standard security measures to protect your data.</li>
         </ul>
-        <a href="/" class="return-home">Return Home</a>
+        <a href="/" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-300">Return Home</a>
     </div>
 </body>
 </html>

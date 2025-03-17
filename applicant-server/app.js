@@ -145,6 +145,7 @@ app.get('/profile', (req, res) => {
     gender: 'Male',
     memberSince: 'March 2025'
   };
+  
   const resumeData = {}; // Fetch resume data from DB
 
   res.render('profile', {
