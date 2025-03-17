@@ -3,35 +3,40 @@
 <div class="gradientyandb min-h-screen flex items-center justify-center">
   <div class="max-w-lg mx-auto p-6 bg-blue-100 rounded-lg shadow-md md:w-full max-w-[800px] mx-auto">
     <h2 class="text-2xl font-bold text-blue-800 mb-4">Add a New Company</h2>
-    <form action="/recruiter/add-company" method="POST" enctype="multipart/form-data" class="space-y-4">
+    <form id="companyForm" action="/recruiter/add-company" method="POST" enctype="multipart/form-data" class="space-y-4">
       <div>
         <label for="companyName" class="block text-blue-700 font-medium">Company Name:</label>
         <input type="text" id="companyName" name="companyName" required 
                class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        <p class="text-red-500 text-sm hidden" id="companyNameError">Company name must be at least 3 characters.</p>
       </div>
       
       <div>
         <label for="description" class="block text-blue-700 font-medium">Company Description:</label>
         <textarea id="description" name="description" required 
                   class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+        <p class="text-red-500 text-sm hidden" id="descriptionError">Description must be at least 10 characters.</p>
       </div>
   
       <div>
         <label for="website" class="block text-blue-700 font-medium">Company Website:</label>
         <input type="url" id="website" name="website" required 
                class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        <p class="text-red-500 text-sm hidden" id="websiteError">Enter a valid website URL (https://example.com).</p>
       </div>
   
       <div>
         <label for="location" class="block text-blue-700 font-medium">Company Location:</label>
         <input type="text" id="location" name="location" required 
                class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        <p class="text-red-500 text-sm hidden" id="locationError">Location must be at least 3 characters.</p>
       </div>
   
       <div>
         <label for="logo" class="block text-blue-700 font-medium">Company Logo:</label>
         <input type="file" id="logo" name="logo" accept="image/*" required
                class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        <p class="text-red-500 text-sm hidden" id="logoError">Only image files (JPG, PNG, GIF) are allowed.</p>
       </div>
       
       <button type="submit" 
@@ -41,5 +46,64 @@
     </form>
   </div>
 </div>
+
+<script>
+document.getElementById("companyForm").addEventListener("submit", function(event) {
+    let isValid = true;
+
+    const companyName = document.getElementById("companyName").value.trim();
+    const companyNameError = document.getElementById("companyNameError");
+    if (companyName.length < 3) {
+        companyNameError.classList.remove("hidden");
+        isValid = false;
+    } else {
+        companyNameError.classList.add("hidden");
+    }
+
+    const description = document.getElementById("description").value.trim();
+    const descriptionError = document.getElementById("descriptionError");
+    if (description.length < 10) {
+        descriptionError.classList.remove("hidden");
+        isValid = false;
+    } else {
+        descriptionError.classList.add("hidden");
+    }
+
+    const website = document.getElementById("website").value.trim();
+    const websiteError = document.getElementById("websiteError");
+    const urlPattern = /^(https?:\/\/)?([\w-]+)+([\w.-]+)+([\w]*)?(:\d+)?(\/[\w-]*)*\/?$/;
+    if (!urlPattern.test(website)) {
+        websiteError.classList.remove("hidden");
+        isValid = false;
+    } else {
+        websiteError.classList.add("hidden");
+    }
+
+    const location = document.getElementById("location").value.trim();
+    const locationError = document.getElementById("locationError");
+    if (location.length < 3) {
+        locationError.classList.remove("hidden");
+        isValid = false;
+    } else {
+        locationError.classList.add("hidden");
+    }
+
+    const logo = document.getElementById("logo").files[0];
+    const logoError = document.getElementById("logoError");
+    if (logo) {
+        const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+        if (!allowedTypes.includes(logo.type)) {
+            logoError.classList.remove("hidden");
+            isValid = false;
+        } else {
+            logoError.classList.add("hidden");
+        }
+    }
+
+    if (!isValid) {
+        event.preventDefault();
+    }
+});
+</script>
 
 <%- include('layout/footer') %>
