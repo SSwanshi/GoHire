@@ -74,18 +74,15 @@ app.get('/joblist', (req, res) => {
 });
 
 const isPremiumUser = (req, res, next) => {
-    // Check if the user is a premium user
-    if (req.session.user && req.session.user.isPremium) {
-        next(); // User is premium, proceed to the next middleware/route handler
-    } else {
-        res.status(403).json({ message: 'Access denied. You must be a premium user.' });
-    }
+    
+        next(); 
+    
 };
 
 app.get('/premiumuser', isPremiumUser, (req, res) => {
     // Filter and sort premium users
     const premiumUsers = validUsers
-        .filter(user => user.isPremium) // Filter premium users
+        .filter(user => user.isPremium) 
         .sort((a, b) => a.email.localeCompare(b.email)); // Sort alphabetically by email
     // Render the premiumuser.ejs view with the sorted list
     res.render('premiumuser', { user: req.session.user, premiumUsers: premiumUsers });

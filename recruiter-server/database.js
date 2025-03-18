@@ -4,7 +4,7 @@ const path = require('path');
 // Initialize Sequelize with SQLite
 const sequelize = new Sequelize({
   dialect: 'sqlite',
-  storage: path.join(__dirname, 'database.sqlite') // Database file will be created in the same directory
+  storage: path.join(__dirname, 'database.sqlite') 
 });
 
 // Define the Application model
@@ -47,7 +47,6 @@ const InternshipApplication = sequelize.define('InternshipApplication', {
   }
 });
 
-// Sync the models with the database
 sequelize.sync()
   .then(() => {
     console.log('Database & tables created!');
@@ -56,5 +55,4 @@ sequelize.sync()
     console.error('Error syncing database:', err);
   });
 
-// Export the models
 module.exports = { Application, InternshipApplication };
