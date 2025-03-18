@@ -10,12 +10,11 @@ const app = express();
 const PORT = 9000;
 const session = require('express-session');
 
-// Add session middleware
 app.use(session({
-    secret: 'your-secret-key', // Change this to a secure key
+    secret: 'your-secret-key', 
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // Set to true if using HTTPS
+    cookie: { secure: false } 
 }));
 
 app.set('view engine', 'ejs');
@@ -43,7 +42,7 @@ app.post('/login', (req, res) => {
 
     if (user) {
         if (user.password === password) {
-            req.session.user = user; // Save user in session
+            req.session.user = user;
             return res.redirect('/home');
         } else {
             return res.send('Incorrect password');
@@ -80,11 +79,11 @@ const isPremiumUser = (req, res, next) => {
 };
 
 app.get('/premiumuser', isPremiumUser, (req, res) => {
-    // Filter and sort premium users
+
     const premiumUsers = validUsers
         .filter(user => user.isPremium) 
-        .sort((a, b) => a.email.localeCompare(b.email)); // Sort alphabetically by email
-    // Render the premiumuser.ejs view with the sorted list
+        .sort((a, b) => a.email.localeCompare(b.email)); 
+   
     res.render('premiumuser', { user: req.session.user, premiumUsers: premiumUsers });
 });
 

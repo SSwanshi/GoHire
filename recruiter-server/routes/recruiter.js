@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const { Application, InternshipApplication } = require('../database'); // Import Sequelize models
+const { Application, InternshipApplication } = require('../database'); 
 
 const router = express.Router();
 
@@ -25,7 +25,7 @@ const internships = [
 function addCompanyLogosJobs(jobs, companies) {
     return jobs.map(job => {
         const company = companies.find(comp => comp.companyName === job.jobCompany);
-        return { ...job, logo: company ? company.logo : null };  //Tip lelo: ...job: This spreads all properties of the job object into the new object.
+        return { ...job, logo: company ? company.logo : null };  
     });
 }
 
@@ -160,7 +160,6 @@ router.post('/delete-intern/:intTitle', (req, res) => {
     res.redirect('/recruiter/internships');
 });
 
-// Fetch job applications from the database
 router.post('/applicant-job/:jobTitle', async (req, res) => {
     const jobTitle = req.params.jobTitle;
 
@@ -178,7 +177,6 @@ router.post('/applicant-job/:jobTitle', async (req, res) => {
     }
 });
 
-// Fetch internship applications from the database
 router.post('/applicant-intern/:intTitle', async (req, res) => {
     const intTitle = req.params.intTitle;
 
