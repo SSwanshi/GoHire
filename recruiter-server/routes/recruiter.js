@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const { Application, InternshipApplication } = require('../database'); // Import Sequelize models
 
 const router = express.Router();
 
@@ -21,17 +22,6 @@ const internships = [
     { intTitle: "Front-end Developer", intDescription: "Design a website with good UI", intRequirements: "Nodejs, Expressjs, MongoDB, React", intStipend: 10, intLocation: "Kolkata", intDuration: 6, intExperience: 1, intPositions: 20, intCompany: "Amazon" }
 ];
 
-
-const applications = [
-    { name: 'Sarvjeet Swanshi', email: 'sarvjeetswanshi@gmail.com', resume: '/resumes/john_doe.pdf' },
-    { name: 'Saurav Kumar Roy', email: 'sauravkumar@gmail.com', resume: '/resumes/jane_smith.pdf' }
-];
-
-const intapplication = [
-    { name: 'Sarvjeet Swanshi', email: 'sarvjeetswanshi@gmail.com', resume: '/resumes/john_doe.pdf' },
-    { name: 'Saurav Kumar Roy', email: 'sauravkumar@gmail.com', resume: '/resumes/jane_smith.pdf' }
-];
-
 function addCompanyLogosJobs(jobs, companies) {
     return jobs.map(job => {
         const company = companies.find(comp => comp.companyName === job.jobCompany);
@@ -45,8 +35,6 @@ function addCompanyLogosIntern(internships, companies) {
         return { ...intern, logo: company ? company.logo : null };  
     });
 }
-
-
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -74,6 +62,7 @@ router.post('/add-company', upload.single('logo'), (req, res) => {
 
     res.redirect('/recruiter/companies');
 });
+
 router.get('/companies', (req, res) => {
     const successMessage = req.session.successMessage;
     req.session.successMessage = null; 
@@ -171,7 +160,8 @@ router.post('/delete-intern/:intTitle', (req, res) => {
     res.redirect('/recruiter/internships');
 });
 
-router.post('/applicant-job/:jobTitle', (req, res) => {
+// Fetch job applications from the database
+router.post('/applicant-job/:jobTitle', async (req, res) => {
     const jobTitle = req.params.jobTitle;
 
     const selectedJob = jobs.find(job => job.jobTitle === jobTitle);
@@ -180,11 +170,16 @@ router.post('/applicant-job/:jobTitle', (req, res) => {
         return res.status(404).json({ error: 'Job not found' });
     }
 
-
-    res.render('applications', { job: selectedJob, applications });
+    try {
+        const applications = await Application.findAll({ where: { jobTitle } });
+        res.render('applications', { job: selectedJob, applications });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch applications' });
+    }
 });
 
-router.post('/applicant-intern/:intTitle', (req, res) => {
+// Fetch internship applications from the database
+router.post('/applicant-intern/:intTitle', async (req, res) => {
     const intTitle = req.params.intTitle;
 
     const selectedInt = internships.find(inte => inte.intTitle === intTitle);
@@ -193,12 +188,15 @@ router.post('/applicant-intern/:intTitle', (req, res) => {
         return res.status(404).json({ error: 'Internship not found' });
     }
 
-    res.render('intapplication', { intern: selectedInt, intapplication });
+    try {
+        const intapplications = await InternshipApplication.findAll({ where: { intTitle } });
+        res.render('intapplication', { intern: selectedInt, intapplications });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch internship applications' });
+    }
 });
 
 module.exports = router; 
 module.exports.companies = companies;
 module.exports.jobs = jobs;
 module.exports.internships = internships;
-module.exports.applications = applications;
-module.exports.intapplication =intapplication;
