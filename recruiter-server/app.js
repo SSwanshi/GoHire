@@ -10,8 +10,10 @@ const { companies } = require('./routes/recruiter');
 const { jobs } = require('./routes/recruiter');
 const { internships } = require('./routes/recruiter');
 const { users } = require('./routes/auth'); 
+const seedDatabase = require('./seed');
 
 const app = express();
+seedDatabase();
 
 // Ensure uploads directory exists
 const uploadDir = 'public/uploads/profiles';
