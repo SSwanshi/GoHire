@@ -30,7 +30,14 @@
                     <% companies.forEach(company => { %>
                         <tr class="hover:bg-gray-100">
                             <td class="px-6 py-4 border border-gray-300">
-                                <img src="<%= company.logo %>" alt="Company Logo" class="h-10 w-10 rounded-full">
+                                <div class="company-card">
+                                    <h3><%= company.companyName %></h3>
+                                    <% if (company.logoId) { %>
+                                        <img src="/recruiter/logo/<%= company.logoId %>" alt="<%= company.companyName %> Logo" width="100">
+                                    <% } else { %>
+                                        <p>No Logo Available</p>
+                                    <% } %>
+                                </div>
                             </td>
                             <td class="px-6 py-4 border border-gray-300"><%= company.companyName %></td>
                             <td class="px-6 py-4 border border-gray-300">
@@ -38,11 +45,10 @@
                             </td>
                             <td class="px-6 py-4 border border-gray-300"><%= company.location %></td>
                             <td class="px-6 py-4 border border-gray-300">
-                                <form action="/recruiter/delete-company/<%= company.companyName %>" method="POST">
+                                <form action="/recruiter/delete-company/<%= company._id %>" method="POST">
                                     <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
                                         Delete
-                                      </button>
-                                      
+                                    </button>
                                 </form>
                             </td>
                         </tr>
@@ -52,6 +58,7 @@
                         <td colspan="5" class="px-6 py-4 text-center text-gray-500">No companies added yet.</td>
                     </tr>
                 <% } %>
+                
             </tbody>
         </table>
     </div>

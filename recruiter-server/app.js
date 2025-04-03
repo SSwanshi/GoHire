@@ -6,7 +6,7 @@ const fs = require('fs');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 
-dotenv.config();
+dotenv.config(); 
 
 const Company = require('./models/Companies');
 const Job = require('./models/Jobs');
@@ -15,6 +15,7 @@ const User = require('./models/User');
 
 const authRoutes = require('./routes/auth');
 const recruiterRoutes = require('./routes/recruiter');
+
 
 const app = express();
 connectDB(); 

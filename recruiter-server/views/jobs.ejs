@@ -4,7 +4,7 @@
     <div id="toast" class="fixed top-5 right-5 bg-green-500 text-white p-3 rounded-md shadow-md mt-20">
         <%= successMessage %>
     </div>
-    <script>
+    <script> 
         setTimeout(() => {
             document.getElementById("toast").style.display = "none";
         }, 3000);
@@ -29,37 +29,50 @@
             </thead>
             <tbody>
                 <% if (jobs.length > 0) { %>
-                    <% for (var i = 0; i < jobs.length; i++) { %>
+                    <% jobs.forEach(job => { %>
                         <tr class="hover:bg-gray-100">
                             <td class="px-6 py-4 border border-gray-300">
-                                <img src="<%= jobs[i].logo %>" alt="Company Logo" class="h-10 w-10 rounded-full">
+                                <% if (job.jobCompany && job.jobCompany.logoId) { %>
+                                    <img src="/recruiter/logo/<%= job.jobCompany.logoId %>" 
+                                         alt="<%= job.jobCompany.companyName %> Logo" 
+                                         class="h-10 w-10 rounded-full">
+                                <% } else { %>
+                                    <p class="text-gray-500">No Logo</p>
+                                <% } %>
                             </td>
-                            <td class="px-6 py-4 border border-gray-300"><%= jobs[i].jobTitle %></td>
-                            <td class="px-6 py-4 border border-gray-300"><%= jobs[i].jobSalary %></td>
-                            <td class="px-6 py-4 border border-gray-300"><%= jobs[i].jobLocation %></td>
-                            <td class="px-6 py-4 border border-gray-300"><%= jobs[i].noofpositions %></td>
+
+                            <td class="px-6 py-4 border border-gray-300"><%= job.jobTitle %></td>
+                            <td class="px-6 py-4 border border-gray-300"><%= job.jobSalary %></td>
+                            <td class="px-6 py-4 border border-gray-300"><%= job.jobLocation %></td>
+                            <td class="px-6 py-4 border border-gray-300"><%= job.noofPositions %></td>
+                
+                            <!-- Delete Job -->
                             <td class="px-6 py-4 border border-gray-300">
-                                <form action="/recruiter/delete-job/<%= jobs[i].jobTitle %>" method="POST">
+                                <form action="/recruiter/delete-job/<%= job._id %>" method="POST">
                                     <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
                                         Delete
-                                      </button>
-                                      
+                                    </button>
                                 </form>
                             </td>
+                
+                            <!-- View Applications -->
                             <td class="px-6 py-4 border border-gray-300">
-                                <form action="/recruiter/applicant-job/<%= jobs[i].jobTitle %>" method="POST">
+                                <form action="/recruiter/applicant-job/<%= job._id %>" method="POST">
                                     <button type="submit" class="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                         View Applications
                                     </button>
                                 </form>
                             </td>
                         </tr>
-                    <% } %>
+                    <% }) %>
                 <% } else { %>
                     <tr>
-                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">No companies added yet.</td>
+                        <td colspan="7" class="px-6 py-4 text-center text-gray-500">No jobs added yet.</td>
                     </tr>
                 <% } %>
+                
+                
+                
             </tbody>
             
         </table>

@@ -58,8 +58,8 @@
           <p class="text-red-500 text-sm hidden" id="experienceError">Experience must be 0 or more years.</p>
         </div>
         <div>
-          <label for="noofpositions" class="block text-blue-700 font-medium">No of Positions</label>
-          <input type="number" id="noofpositions" name="noofpositions" required min="1"
+          <label for="noofPositions" class="block text-blue-700 font-medium">No of Positions</label>
+          <input type="number" id="noofPositions" name="noofPositions" required min="1"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
           <p class="text-red-500 text-sm hidden" id="positionsError">Must be at least 1 position.</p>
         </div>
@@ -71,8 +71,8 @@
                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
                 <option value="">Select a company</option>
                 <% companies.forEach(company => { %>
-                  <option value="<%= company.companyName %>"><%= company.companyName %></option>
-              <% }); %>
+                  <option value="<%= company._id %>"><%= company.companyName %></option>
+                <% }); %>
         </select>
         <p class="text-red-500 text-sm hidden" id="companyError">Please select a company.</p>
       </div>
@@ -120,7 +120,7 @@ document.getElementById("jobForm").addEventListener("submit", function(event) {
 
     validateNumberField("jobSalary", 0, "salaryError");
     validateNumberField("jobExperience", 0, "experienceError");
-    validateNumberField("noofpositions", 1, "positionsError");
+    validateNumberField("noofPositions", 1, "positionsError");
 
     const company = document.getElementById("jobCompany").value;
     if (company === "") {

@@ -33,7 +33,13 @@
                     <% for (var i = 0; i < internships.length; i++) { %>
                         <tr class="hover:bg-gray-100">
                             <td class="px-6 py-4 border border-gray-300">
-                                <img src="<%= internships[i].logo %>" alt="Company Logo" class="h-10 w-10 rounded-full">
+                                <% if (internships[i].internCompany && internships[i].internCompany.logoId) { %>
+                                    <img src="/recruiter/logo/<%= internships[i].internCompany.logoId %>" 
+                                         alt="<%= internships[i].internCompany.companyName %> Logo" 
+                                         class="h-10 w-10 rounded-full">
+                                <% } else { %>
+                                    <p class="text-gray-500">No Logo</p>
+                                <% } %>
                             </td>
                             <td class="px-6 py-4 border border-gray-300"><%= internships[i].intTitle %></td>
                             <td class="px-6 py-4 border border-gray-300"><%= internships[i].intStipend %></td>
@@ -41,15 +47,14 @@
                             <td class="px-6 py-4 border border-gray-300"><%= internships[i].intDuration %></td>
                             <td class="px-6 py-4 border border-gray-300"><%= internships[i].intPositions %></td>
                             <td class="px-6 py-4 border border-gray-300">
-                                <form action="/recruiter/delete-intern/<%= internships[i].intTitle %>" method="POST">
+                                <form action="/recruiter/delete-intern/<%= internships[i]._id %>" method="POST">
                                     <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
                                         Delete
-                                      </button>
-                                      
+                                    </button>
                                 </form>
                             </td>
                             <td class="px-6 py-4 border border-gray-300">
-                                <form action="/recruiter/applicant-intern/<%= internships[i].intTitle %>" method="POST">
+                                <form action="/recruiter/applicant-intern/<%= internships[i]._id %>" method="POST">
                                     <button type="submit" class="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                         View Applications
                                     </button>
@@ -59,9 +64,10 @@
                     <% } %>
                 <% } else { %>
                     <tr>
-                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">No companies added yet.</td>
+                        <td colspan="8" class="px-6 py-4 text-center text-gray-500">No internships added yet.</td>
                     </tr>
                 <% } %>
+                
             </tbody>
             
         </table>
