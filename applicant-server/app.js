@@ -1,9 +1,9 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
 const path = require('path');
 const multer = require('multer');
+const connectDB = require("./config/db");
 
 const authRoutes = require('./routes/auth');
 const appUsers = require('./routes/auth');
@@ -11,6 +11,7 @@ const applicantRoutes = require('./routes/applicant');
 const profileRoutes = require('./routes/profile');
 const paymentRoutes = require('./routes/payment');
 
+require("dotenv").config();
 const app = express();
 
 app.use(session({
@@ -162,6 +163,7 @@ app.get('/', (req, res) => {
 // Use payment routes
 app.use('/', paymentRoutes);
 
+connectDB();
 
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

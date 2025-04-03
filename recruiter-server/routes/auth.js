@@ -1,28 +1,9 @@
 const express = require('express');
+const bcrypt = require('bcryptjs');
+const User = require('../models/User'); 
 const router = express.Router();
 
-const users = [
-  { 
-    firstName: "Sarvjeet", 
-    lastName: "Swanshi", 
-    email: "sarvjeetswanshi@gmail.com", 
-    phone: "8102109959", 
-    gender: "male", 
-    password: "adminpass", 
-    profileImage: "" 
-  },
-  { 
-    firstName: "Saurav", 
-    lastName: "Roy", 
-    email: "sauravroy@gmail.com", 
-    phone: "9854672132", 
-    gender: "male", 
-    password: "adminpass", 
-    profileImage: "" 
-  }
-];
-
-router.post('/signup', (req, res) => {
+router.post('/signup', async (req, res) => {
   const { firstName, lastName, email, phone, gender, password, confirmPassword } = req.body;
 
   if (!firstName || !lastName || !email || !phone || !gender || !password || !confirmPassword) {
@@ -33,50 +14,63 @@ router.post('/signup', (req, res) => {
     return res.status(400).json({ error: 'Passwords do not match' });
   }
 
-  const existingUser = users.find(user => user.email === email);
-  if (existingUser) {
-    return res.status(400).json({ error: 'Email already registered' });
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Email already registered' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ firstName, lastName, email, phone, gender, password: hashedPassword });
+    await newUser.save();
+
+    req.session.successMessage = 'Signed up successfully, now login';
+    res.redirect('/auth/login');
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-
-  const newUser = { firstName, lastName, email, phone, gender, password };
-  users.push(newUser);
-
-  req.session.successMessage = 'Signed up successfully, now login';
-  res.redirect('/auth/login');
 });
 
+// Login Route
 router.get('/login', (req, res) => {
   const successMessage = req.session.successMessage;
   req.session.successMessage = null;
-
   res.render('login', { title: 'Login', successMessage });
 });
 
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
-  const user = users.find(user => user.email === email && user.password === password);
+  try {
+    const user = await User.findOne({ email });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(400).json({ error: 'Invalid email or password' });
+    }
 
-  if (!user) {
-    return res.status(400).json({ error: 'Invalid email or password' });
+    req.session.user = user;
+    res.redirect('/recruiter/home');
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-
-  req.session.user = user;
-
-  res.redirect('/recruiter/home'); 
 });
 
-router.get('/user/:email', (req, res) => {
+// Get User by Email
+router.get('/user/:email', async (req, res) => {
   const { email } = req.params;
 
-  const user = users.find(user => user.email === email);
+  try {
+    const user = await User.findOne({ email }, '-password'); // Exclude password field
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
 
-  if (!user) {
-    return res.status(404).json({ error: 'User not found' });
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-
-  res.json(user);
 });
 
 module.exports = router;
-module.exports.users = users;

@@ -1,15 +1,15 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const internshipSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true },
-  description: { type: String, required: true },
-  location: { type: String, required: true },
-  duration: { type: String, required: true },
-  stipend: { type: String },
-  skillsRequired: [{ type: String }],
-  applicants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-  createdAt: { type: Date, default: Date.now }
-});
+const InternshipSchema = new mongoose.Schema({
+    intTitle: { type: String, required: true },
+    intDescription: { type: String, required: true },
+    intRequirements: { type: String, required: true },
+    intStipend: { type: Number, required: true },
+    intLocation: { type: String, required: true },
+    intDuration: { type: Number, required: true },
+    intExperience: { type: Number, required: true },
+    intPositions: { type: Number, required: true },
+    intCompany: { type: String, required: true }
+}, { timestamps: true });
 
-module.exports = mongoose.model('Internship', internshipSchema);
+module.exports = mongoose.model("Internship", InternshipSchema);

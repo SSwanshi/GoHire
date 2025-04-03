@@ -63,7 +63,7 @@
                         <li><a href="/login"
                                 class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg">Login</a>
                         </li>
-                                 <% } %>
+                                 <% } %>
 
             </ul>
 
@@ -109,7 +109,7 @@
                             <li><a href="/login"
                                     class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg flex justify-center">Login</a>
                             </li>
-                                     <% } %>
+                                     <% } %>
                 </ul>
             </div>
         </div>
@@ -145,7 +145,11 @@
               </div>
             </div>
             <div class="apply-button">
-              <a href="/applyforJobs"><button class="w-full py-2 bg-blue-50 text-blue-500 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">Apply Now</button></a>
+              <form action="/applyforJobs/<%= job.jobTitle %>" method="POST">
+                <button type="submit"
+                  class="w-full py-2 bg-blue-50 text-blue-500 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">Apply
+                  Now</button>
+              </form>
             </div>
           </div>
         </div>
@@ -180,8 +184,13 @@
               </div>
             </div>
             <div class="apply-button">
-                <a href="/applyforInternships"><button class="w-full py-2 bg-blue-50 text-blue-500 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">Apply Now</button></a>
-            </div>
+              <form action="/ApplyforInternships/<%=internships.intTitle%>" method="POST">
+                <button type="submit"
+                    class="w-full py-2 bg-blue-50 text-blue-500 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">
+                    Apply Now
+                </button>
+                        
+            </form>
           </div>
         </div>
         <% }); %>
@@ -216,7 +225,11 @@
                   </div>
                 </div>
                 <div class="apply-button">
-                    <a href="/applyforJobs"><button class="w-full py-2 bg-blue-50 text-blue-500 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">Apply Now</button></a>
+                  <form action="/applyforJobs/<%= job.jobTitle %>" method="POST">
+                    <button type="submit"
+                      class="w-full py-2 bg-blue-50 text-blue-500 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">Apply
+                      Now</button>
+                  </form>
                 </div>
               </div>
             </div>
@@ -253,7 +266,13 @@
               </div>
             </div>
             <div class="apply-button">
-                <a href="/applyforInternships"><button class="w-full py-2 bg-blue-50 text-blue-500 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">Apply Now</button></a>
+              <form action="/ApplyforInternships/<%=internships.intTitle%>" method="POST">
+                <button type="submit"
+                    class="w-full py-2 bg-blue-50 text-blue-500 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">
+                    Apply Now
+                </button>
+                        
+            </form>
             </div>
           </div>
         </div>
@@ -270,7 +289,7 @@
 <script>
   document.getElementById('mobile-menu').addEventListener('click', function () {
         document.getElementById('dropdown-menu').classList.toggle('hidden');
-    });
+    });
 
     document.getElementById("search-btn").addEventListener("click", function() {
         event.preventDefault(); 

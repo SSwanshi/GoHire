@@ -9,6 +9,16 @@ const Fuse = require('fuse.js');
 
 // router.use(bodyParser.urlencoded({extended:true}));
 
+const applications = [
+  { name: 'Sarvjeet Swanshi', email: 'sarvjeetswanshi@gmail.com', resume: '/resumes/john_doe.pdf' },
+  { name: 'Saurav Kumar Roy', email: 'sauravkumar@gmail.com', resume: '/resumes/jane_smith.pdf' }
+];
+
+const intapplication = [
+  { name: 'Sarvjeet Swanshi', email: 'sarvjeetswanshi@gmail.com', resume: '/resumes/john_doe.pdf' },
+  { name: 'Saurav Kumar Roy', email: 'sauravkumar@gmail.com', resume: '/resumes/jane_smith.pdf' }
+];
+
 // Home
 router.get('/', (req, res) => {
   res.render('home', { user: req.session.user});
@@ -140,6 +150,30 @@ router.post('/submit-internship', (req, res) => {
     });
   }
   res.render('internship-list', {internships: filteredInternships, filters: selectedFilters, user: req.session.user});
-})
+});
+
+router.post('/applyforJobs/:jobTitle', (req, res) => {
+  const jobTitle = req.params.jobTitle;
+
+  const selectedJob = jobs.find(job => job.jobTitle === jobTitle);
+
+  if (!selectedJob) {
+    return res.status(404).json({ error: 'Job not found' });
+  }
+
+  res.render('Apply_for_Jobs', { job: selectedJob, applications });
+});
+
+router.post('/ApplyforInternships/:intTitle', (req, res) => {
+  const intTitle = req.params.intTitle;
+
+  const selectedInt = internships.find(inte => inte.intTitle === intTitle);
+
+  if (!selectedInt) {
+      return res.status(404).json({ error: 'Internship not found' });
+  }
+
+  res.render('Apply_for_Internships', { internships: selectedInt, intapplication });
+});
 
 module.exports = router;

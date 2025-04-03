@@ -5,7 +5,9 @@ const { internships } = require('../recruiter-server/routes/recruiter');
 const { companies } = require('../recruiter-server/routes/recruiter');
 const { applications } = require('../recruiter-server/routes/recruiter');
 const { users } = require('../recruiter-server/routes/auth');
+const connectDB = require("./config/db");
 
+require("dotenv").config();
 const app = express();
 const PORT = 9000;
 const session = require('express-session');
@@ -90,6 +92,8 @@ app.get('/premiumuser', isPremiumUser, (req, res) => {
 app.get('/recruiterlist', (req, res) => {
     res.render('recruiterlist', {users: users});
 });
+
+connectDB();
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

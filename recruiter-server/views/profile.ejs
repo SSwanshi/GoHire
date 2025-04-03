@@ -83,13 +83,12 @@
   document.getElementById('imageUpload').addEventListener('change', function(event) {
   const file = event.target.files[0];
   if (file) {
-    // File size validation (optional)
+
     if (file.size > 5 * 1024 * 1024) {
       alert('File is too large. Maximum size is 5MB.');
       return;
     }
     
-    // File type validation (optional)
     if (!file.type.match('image.*')) {
       alert('Only image files are allowed.');
       return;
@@ -97,10 +96,8 @@
     
     const reader = new FileReader();
     reader.onload = function(e) {
-      // Display preview immediately
       document.getElementById('profileImage').src = e.target.result;
-      
-      // Upload the image to server
+
       const formData = new FormData();
       formData.append('profileImage', file);
       
@@ -116,7 +113,6 @@
       })
       .then(data => {
         if (data.success) {
-          // Update all profile images on the page with the new URL
           const profileImages = document.querySelectorAll('.profile-image');
           profileImages.forEach(img => {
             img.src = data.imageUrl;
@@ -131,7 +127,6 @@
       .catch(error => {
         console.error('Error uploading image:', error);
         alert('Error uploading image. Please try again.');
-        // Revert the preview to the original image
         document.getElementById('profileImage').src = "<%= user.profileImage || '/uploads/profiles/default-image.jpg' %>";
       });
     };

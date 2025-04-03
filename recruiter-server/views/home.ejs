@@ -96,32 +96,33 @@
 </section>
 
 <div class="mt-16"></div>
-  <section class="py-16 bg-blue-300">
-    <div class="container mx-auto px-4">
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-8 text-center">
-        <div>
-          <p class="text-4xl font-bold mb-2"><%= companies.length %></p>
-          <p class="text-blue-800 font-bold">Companies</p>
-        </div>
-        <div>
-          <p class="text-4xl font-bold mb-2"><%= jobs.length %></p>
-          <p class="text-blue-800 font-bold">Jobs Posted</p>
-        </div>
-        <div>
-          <p class="text-4xl font-bold mb-2"><%= internships.length %></p>
-          <p class="text-blue-800 font-bold">Internships Offered</p>
-        </div>
-        <div>
-          <p class="text-4xl font-bold mb-2">250+</p>
-          <p class="text-blue-800 font-bold">Candidates</p>
-        </div>
-        <div>
-          <p class="text-4xl font-bold mb-2">98%</p>
-          <p class="text-blue-800 font-bold">Client Satisfaction</p>
-        </div>
+<section class="py-16 bg-blue-300">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-8 text-center">
+      <div>
+        <p class="text-4xl font-bold mb-2"><%= companyCount %></p>
+        <p class="text-blue-800 font-bold">Companies</p>
+      </div>
+      <div>
+        <p class="text-4xl font-bold mb-2"><%= jobCount %></p>
+        <p class="text-blue-800 font-bold">Jobs Posted</p>
+      </div>
+      <div>
+        <p class="text-4xl font-bold mb-2"><%= internshipCount %></p>
+        <p class="text-blue-800 font-bold">Internships Offered</p>
+      </div>
+      <div>
+        <p class="text-4xl font-bold mb-2"><%= candidateCount %></p>
+        <p class="text-blue-800 font-bold">Candidates</p>
+      </div>
+      <div>
+        <p class="text-4xl font-bold mb-2"><%= clientSatisfaction %></p>
+        <p class="text-blue-800 font-bold">Client Satisfaction</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
   <div class="mt-20"></div>
 
   <%- include('layout/footer') %>
