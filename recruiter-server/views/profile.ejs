@@ -4,8 +4,9 @@
   <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
     <div class="md:col-span-1 flex flex-col items-center justify-start">
       <div class="relative group">
-        <img id="profileImage" src="<%= user.profileImage || '/uploads/profiles/default-image.jpg' %>" 
+        <img id="profileImage" src="<%= user.profileImageId ? '/user/profile-image/' + user.profileImageId : '/uploads/profiles/default-image.jpg' %>" 
      alt="Profile Photo" class="w-40 h-40 object-cover rounded-full border-4 border-yellow-400 shadow-md profile-image">
+
         <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <label for="imageUpload" class="cursor-pointer text-white text-sm font-medium">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">

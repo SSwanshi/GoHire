@@ -33,9 +33,9 @@
                     <% for (var i = 0; i < internships.length; i++) { %>
                         <tr class="hover:bg-gray-100">
                             <td class="px-6 py-4 border border-gray-300">
-                                <% if (internships[i].internCompany && internships[i].internCompany.logoId) { %>
-                                    <img src="/recruiter/logo/<%= internships[i].internCompany.logoId %>" 
-                                         alt="<%= internships[i].internCompany.companyName %> Logo" 
+                                <% if (internships[i].intCompany && internships[i].intCompany.logoId) { %>
+                                    <img src="/recruiter/logo/<%= internships[i].intCompany.logoId %>" 
+                                         alt="<%= internships[i].intCompany.companyName %> Logo" 
                                          class="h-10 w-10 rounded-full">
                                 <% } else { %>
                                     <p class="text-gray-500">No Logo</p>

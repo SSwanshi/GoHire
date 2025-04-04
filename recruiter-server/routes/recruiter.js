@@ -19,6 +19,7 @@ conn.once("open", () => {
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+
 router.post("/add-company", upload.single("logo"), async (req, res) => {
     try {
         const { companyName, website, location } = req.body;
@@ -243,5 +244,51 @@ router.post('/applicant-intern/:intId', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch internship applications' });
     }
 });
+
+router.post("/upload-profile-image", upload.single("profileImage"), async (req, res) => {
+    try {
+      const userId = req.session.userId;
+  
+      if (!userId || !req.file) {
+        return res.status(400).json({ success: false, message: "Missing file or user ID" });
+      }
+
+      const updatedUser = await RecruiterUser.findByIdAndUpdate(userId, {
+        profileImageId: req.file.id,
+      }, { new: true });
+  
+      if (!updatedUser) {
+        return res.status(404).json({ success: false, message: "User not found" });
+      }
+  
+      return res.status(200).json({
+        success: true,
+        imageUrl: `/user/profile-image/${req.file.id}`,
+      });
+    } catch (err) {
+      console.error("Upload error:", err);
+      return res.status(500).json({ success: false, message: "Upload failed" });
+    }
+  });
+  
+
+  router.get('/profile-image/:id', async (req, res) => {
+    try {
+      const fileId = new mongoose.Types.ObjectId(req.params.id);
+      const file = await conn.db.collection("uploads.files").findOne({ _id: fileId });
+  
+      if (!file) {
+        return res.status(404).send("Image not found");
+      }
+  
+      const downloadStream = bucket.openDownloadStream(fileId);
+      res.set("Content-Type", file.contentType || "image/jpeg");
+      downloadStream.pipe(res);
+    } catch (err) {
+      res.status(500).send("Failed to fetch image");
+    }
+  });
+  
+  
 
 module.exports = router;

@@ -31,11 +31,10 @@
                         <tr class="hover:bg-gray-100">
                             <td class="px-6 py-4 border border-gray-300">
                                 <div class="company-card">
-                                    <h3><%= company.companyName %></h3>
                                     <% if (company.logoId) { %>
-                                        <img src="/recruiter/logo/<%= company.logoId %>" alt="<%= company.companyName %> Logo" width="100">
+                                        <img src="/recruiter/logo/<%= company.logoId %>" alt="<%= company.companyName %> Logo" class="h-10 w-10 rounded-full">
                                     <% } else { %>
-                                        <p>No Logo Available</p>
+                                        <p><%= company.companyName %></p>
                                     <% } %>
                                 </div>
                             </td>
