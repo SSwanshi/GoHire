@@ -9,7 +9,8 @@ const InternshipSchema = new mongoose.Schema({
     intDuration: { type: Number, required: true }, 
     intExperience: { type: Number, required: true },
     intPositions: { type: Number, required: true },
-    intCompany: { type: mongoose.Schema.Types.ObjectId, ref: "Companies", required: true }
+    intCompany: { type: mongoose.Schema.Types.ObjectId, ref: "Companies", required: true },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true });
 
 module.exports = mongoose.model("Internship", InternshipSchema);

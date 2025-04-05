@@ -53,6 +53,7 @@ router.post("/add-company", upload.single("logo"), async (req, res) => {
             website: website.trim(),
             location: location.trim(),
             logoId,
+            createdBy: req.session.userId
         });
 
         await newCompany.save();
@@ -94,7 +95,8 @@ router.post("/add-job", async (req, res) => {
             jobType,
             jobExperience: parseInt(jobExperience),
             noofPositions: parseInt(noofPositions),
-            jobCompany: new mongoose.Types.ObjectId(jobCompany)
+            jobCompany: new mongoose.Types.ObjectId(jobCompany),
+            createdBy: req.session.userId
         });
 
         await newJob.save();
@@ -134,7 +136,7 @@ router.get("/logo/:id", async (req, res) => {
 
 router.get('/companies', async (req, res) => {
     try {
-        const companies = await Company.find();
+        const companies = await Company.find({ createdBy: req.session.userId });
 
         const successMessage = req.session.successMessage;
         req.session.successMessage = null; 
@@ -147,7 +149,7 @@ router.get('/companies', async (req, res) => {
 
 router.get('/jobs', async (req, res) => {
     try {
-        const jobs = await Job.find().populate("jobCompany");
+        const jobs = await Job.find({ createdBy: req.session.userId }).populate("jobCompany");
 
         const successMessage = req.session.successMessage;
         req.session.successMessage = null; 
@@ -185,7 +187,8 @@ router.post('/add-internship', async (req, res) => {
             intDuration,
             intExperience: parseInt(intExperience),
             intPositions: parseInt(intPositions),
-            intCompany: companyExists._id  
+            intCompany: companyExists._id,
+            createdBy: req.session.userId  
         });
         
         await newInternship.save();
@@ -201,7 +204,7 @@ router.post('/add-internship', async (req, res) => {
 
 router.get('/internships', async (req, res) => {
     try {
-        const internships = await Internship.find().populate("intCompany");
+        const internships = await Internship.find({ createdBy: req.session.userId }).populate("intCompany");
 
         const successMessage = req.session.successMessage;
         req.session.successMessage = null;
