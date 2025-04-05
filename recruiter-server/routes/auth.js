@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User'); 
 const router = express.Router();
 
+// Signup Route
 router.post('/signup', async (req, res) => {
   const { firstName, lastName, email, phone, gender, password, confirmPassword } = req.body;
 
@@ -24,6 +25,9 @@ router.post('/signup', async (req, res) => {
     const newUser = new User({ firstName, lastName, email, phone, gender, password: hashedPassword });
     await newUser.save();
 
+    // Optionally set session userId after signup (not required if you're logging in next)
+    // req.session.userId = newUser._id;
+
     req.session.successMessage = 'Signed up successfully, now login';
     res.redirect('/auth/login');
   } catch (error) {
@@ -32,13 +36,14 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-// Login Route
+// Login Page
 router.get('/login', (req, res) => {
   const successMessage = req.session.successMessage;
   req.session.successMessage = null;
   res.render('login', { title: 'Login', successMessage });
 });
 
+// Login Logic
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -49,6 +54,8 @@ router.post('/login', async (req, res) => {
     }
 
     req.session.user = user;
+    req.session.userId = user._id; // ✅ Required for image upload
+
     res.redirect('/recruiter/home');
   } catch (error) {
     console.error(error);

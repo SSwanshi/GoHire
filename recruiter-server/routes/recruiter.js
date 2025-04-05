@@ -3,9 +3,12 @@ const multer = require("multer");
 const mongoose = require("mongoose");
 const Company = require("../models/Companies");
 const Job = require("../models/Jobs");
+const RecruiterUser = require("../models/User");
 const Internship = require("../models/Internship");
 const { Application, InternshipApplication } = require("../../applicant-server/models/Application");
 const { GridFSBucket } = require("mongodb");
+const { GridFsStorage } = require("multer-gridfs-storage"); 
+const dotenv = require('dotenv');
 
 const router = express.Router();
 
@@ -18,6 +21,17 @@ conn.once("open", () => {
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
+
+const storage_image = new GridFsStorage({
+    url: process.env.MONGO_URI_RECRUITERS,
+    file: (req, file) => {
+        return {
+            filename: `profile_${Date.now()}_${file.originalname}`,
+            bucketName: "uploads"
+        };
+    }
+});
+const upload_profile = multer({ storage: storage_image });
 
 
 router.post("/add-company", upload.single("logo"), async (req, res) => {
@@ -245,7 +259,7 @@ router.post('/applicant-intern/:intId', async (req, res) => {
     }
 });
 
-router.post("/upload-profile-image", upload.single("profileImage"), async (req, res) => {
+router.post("/upload-profile-image", upload_profile.single("profileImage"), async (req, res) => {
     try {
       const userId = req.session.userId;
   
