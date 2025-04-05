@@ -7,7 +7,7 @@ const RecruiterUser = require("../models/User");
 const Internship = require("../models/Internship");
 const { Application, InternshipApplication } = require("../../applicant-server/models/Application");
 const { GridFSBucket } = require("mongodb");
-const { GridFsStorage } = require("multer-gridfs-storage"); 
+const { GridFsStorage } = require("multer-gridfs-storage");
 const dotenv = require('dotenv');
 
 const router = express.Router();
@@ -40,7 +40,7 @@ router.post("/add-company", upload.single("logo"), async (req, res) => {
         if (!companyName || !website || !location) {
             return res.status(400).json({ error: "All fields are required" });
         }
-        
+
         let logoId = null;
         if (req.file) {
             const uploadStream = bucket.openUploadStream(req.file.originalname);
@@ -59,7 +59,7 @@ router.post("/add-company", upload.single("logo"), async (req, res) => {
         await newCompany.save();
 
         req.session.successMessage = "Company added successfully!";
-        res.redirect("/recruiter/companies"); 
+        res.redirect("/recruiter/companies");
     } catch (error) {
         console.error("Error adding company:", error);
         if (!res.headersSent) {
@@ -69,21 +69,39 @@ router.post("/add-company", upload.single("logo"), async (req, res) => {
 });
 
 
-// route for updating company details
-
 router.post("/add-job", async (req, res) => {
     try {
-        const { jobTitle, jobDescription, jobRequirements, jobSalary, jobLocation, jobType, jobExperience, noofPositions, jobCompany } = req.body;
-        
+        const {
+            jobTitle,
+            jobDescription,
+            jobRequirements,
+            jobSalary,
+            jobLocation,
+            jobType,
+            jobExperience,
+            noofPositions,
+            jobCompany
+        } = req.body;
+
+        const userId = req.session.userId;
+
         console.log("Received Job Data:", req.body);
 
-        if (!jobTitle || !jobDescription || !jobRequirements || !jobSalary || !jobLocation || !jobType || !jobExperience || !noofPositions || !jobCompany) {
+        if (
+            !jobTitle || !jobDescription || !jobRequirements || !jobSalary ||
+            !jobLocation || !jobType || !jobExperience || !noofPositions || !jobCompany
+        ) {
             return res.status(400).json({ error: "All fields are required" });
         }
 
-        const companyExists = await Company.findById(jobCompany);
+        const companyExists = await Company.findOne({
+            _id: jobCompany,
+            createdBy: userId
+        });
+
+
         if (!companyExists) {
-            return res.status(400).json({ error: "Invalid Company ID" });
+            return res.status(400).json({ error: "Invalid Company ID or access denied" });
         }
 
         const newJob = new Job({
@@ -96,34 +114,32 @@ router.post("/add-job", async (req, res) => {
             jobExperience: parseInt(jobExperience),
             noofPositions: parseInt(noofPositions),
             jobCompany: new mongoose.Types.ObjectId(jobCompany),
-            createdBy: req.session.userId
+            createdBy: userId 
         });
 
         await newJob.save();
-        console.log("Job Saved Successfully:", newJob);
+        console.log("✅ Job Saved Successfully:", newJob);
 
         req.session.successMessage = "Job added successfully!";
-        
         res.redirect("/recruiter/jobs");
+
     } catch (error) {
-        console.error("Error adding job:", error);
+        console.error("❌ Error adding job:", error);
         res.status(500).json({ error: "Failed to add job" });
     }
 });
 
-// Serve logo images from GridFS
+
 router.get("/logo/:id", async (req, res) => {
     try {
         const logoId = new mongoose.Types.ObjectId(req.params.id);
-        
-        // Check if the file exists
+
         const fileExists = await conn.db.collection("uploads.files").findOne({ _id: logoId });
         if (!fileExists) {
             console.log("⚠️ File Not Found:", logoId);
             return res.status(404).json({ error: "Image not found" });
         }
 
-        // Stream the file
         const downloadStream = bucket.openDownloadStream(logoId);
         res.set("Content-Type", fileExists.contentType || "image/png");
         downloadStream.pipe(res);
@@ -139,7 +155,7 @@ router.get('/companies', async (req, res) => {
         const companies = await Company.find({ createdBy: req.session.userId });
 
         const successMessage = req.session.successMessage;
-        req.session.successMessage = null; 
+        req.session.successMessage = null;
 
         res.render('companies', { companies, successMessage });
     } catch (error) {
@@ -152,7 +168,7 @@ router.get('/jobs', async (req, res) => {
         const jobs = await Job.find({ createdBy: req.session.userId }).populate("jobCompany");
 
         const successMessage = req.session.successMessage;
-        req.session.successMessage = null; 
+        req.session.successMessage = null;
 
         res.render('jobs', { jobs, successMessage });
     } catch (error) {
@@ -163,12 +179,12 @@ router.get('/jobs', async (req, res) => {
 
 router.post('/add-internship', async (req, res) => {
     try {
-        const { intTitle, intDescription, intRequirements, intStipend, intLocation, 
-                intDuration, intExperience, intPositions, intCompany } = req.body;
-        
+        const { intTitle, intDescription, intRequirements, intStipend, intLocation,
+            intDuration, intExperience, intPositions, intCompany } = req.body;
+
         console.log("Received Internship Data:", req.body);
 
-        if (!intTitle || !intDescription || !intRequirements || !intStipend || 
+        if (!intTitle || !intDescription || !intRequirements || !intStipend ||
             !intLocation || !intDuration || !intExperience || !intPositions || !intCompany) {
             return res.status(400).json({ error: 'All fields are required' });
         }
@@ -177,7 +193,7 @@ router.post('/add-internship', async (req, res) => {
         if (!companyExists) {
             return res.status(400).json({ error: "Company not found" });
         }
-        
+
         const newInternship = new Internship({
             intTitle,
             intDescription,
@@ -188,9 +204,9 @@ router.post('/add-internship', async (req, res) => {
             intExperience: parseInt(intExperience),
             intPositions: parseInt(intPositions),
             intCompany: companyExists._id,
-            createdBy: req.session.userId  
+            createdBy: req.session.userId
         });
-        
+
         await newInternship.save();
         console.log("Internship Saved Successfully:", newInternship);
 
@@ -264,48 +280,48 @@ router.post('/applicant-intern/:intId', async (req, res) => {
 
 router.post("/upload-profile-image", upload_profile.single("profileImage"), async (req, res) => {
     try {
-      const userId = req.session.userId;
-  
-      if (!userId || !req.file) {
-        return res.status(400).json({ success: false, message: "Missing file or user ID" });
-      }
+        const userId = req.session.userId;
 
-      const updatedUser = await RecruiterUser.findByIdAndUpdate(userId, {
-        profileImageId: req.file.id,
-      }, { new: true });
-  
-      if (!updatedUser) {
-        return res.status(404).json({ success: false, message: "User not found" });
-      }
-  
-      return res.status(200).json({
-        success: true,
-        imageUrl: `/user/profile-image/${req.file.id}`,
-      });
+        if (!userId || !req.file) {
+            return res.status(400).json({ success: false, message: "Missing file or user ID" });
+        }
+
+        const updatedUser = await RecruiterUser.findByIdAndUpdate(userId, {
+            profileImageId: req.file.id,
+        }, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        return res.status(200).json({
+            success: true,
+            imageUrl: `/user/profile-image/${req.file.id}`,
+        });
     } catch (err) {
-      console.error("Upload error:", err);
-      return res.status(500).json({ success: false, message: "Upload failed" });
+        console.error("Upload error:", err);
+        return res.status(500).json({ success: false, message: "Upload failed" });
     }
-  });
-  
+});
 
-  router.get('/profile-image/:id', async (req, res) => {
+
+router.get('/profile-image/:id', async (req, res) => {
     try {
-      const fileId = new mongoose.Types.ObjectId(req.params.id);
-      const file = await conn.db.collection("uploads.files").findOne({ _id: fileId });
-  
-      if (!file) {
-        return res.status(404).send("Image not found");
-      }
-  
-      const downloadStream = bucket.openDownloadStream(fileId);
-      res.set("Content-Type", file.contentType || "image/jpeg");
-      downloadStream.pipe(res);
+        const fileId = new mongoose.Types.ObjectId(req.params.id);
+        const file = await conn.db.collection("uploads.files").findOne({ _id: fileId });
+
+        if (!file) {
+            return res.status(404).send("Image not found");
+        }
+
+        const downloadStream = bucket.openDownloadStream(fileId);
+        res.set("Content-Type", file.contentType || "image/jpeg");
+        downloadStream.pipe(res);
     } catch (err) {
-      res.status(500).send("Failed to fetch image");
+        res.status(500).send("Failed to fetch image");
     }
-  });
-  
-  
+});
+
+
 
 module.exports = router;

@@ -106,12 +106,17 @@ app.get('/auth/signup', (req, res) => {
   res.render('signup');
 });
 
+app.get('/logout', (req, res)=> {
+  res.redirect('/auth/login');
+})
+
 
 app.get('/recruiter/home', async (req, res) => {
   if (!req.session.user) return res.redirect('/auth/login');
   
   try {
     const companyCount = await Company.countDocuments();
+    
     const jobCount = await Job.countDocuments();
     const internshipCount = await Internship.countDocuments();
 
@@ -136,12 +141,12 @@ app.get('/recruiter/add-company', (req, res) => {
 });
 
 app.get('/recruiter/add-job', async (req, res) => {
-  const companies = await Company.find();
+  const companies = await Company.find({createdBy: req.session.userId});
   res.render('add-job', { title: 'Add Job', companies });
 });
 
 app.get('/recruiter/add-internship', async (req, res) => {
-  const companies = await Company.find();
+  const companies = await Company.find({createdBy: req.session.userId});
   res.render('add-internship', { title: 'Add Internship', companies });
 });
 
