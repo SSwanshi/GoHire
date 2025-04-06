@@ -71,29 +71,6 @@ const upload = multer({
   }
 });
 
-app.post('/user/upload-profile-image', upload.single('profileImage'), async (req, res) => {
-  try {
-    if (!req.session.user) {
-      return res.status(401).json({ success: false, message: 'Not logged in' });
-    }
-    
-    const user = await User.findById(req.session.user._id);
-    if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' });
-    }
-    
-    user.profileImage = '/uploads/profiles/' + req.file.filename;
-    await user.save();
-    req.session.user = user; 
-    
-    res.json({ success: true, imageUrl: user.profileImage });
-  } catch (error) {
-    console.error('Error saving profile image:', error);
-    res.status(500).json({ success: false, message: 'Failed to upload image: ' + error.message });
-  }
-});
-
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/auth', authRoutes);
 app.use('/recruiter', recruiterRoutes);

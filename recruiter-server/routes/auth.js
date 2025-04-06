@@ -2,7 +2,6 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User'); 
 const router = express.Router();
-const upload = require('../utils/storage');
 const mongoose = require('mongoose');
 const { GridFSBucket } = require('mongodb');
 const RecruiterUser = require('../models/User');
@@ -84,54 +83,6 @@ router.get('/user/:email', async (req, res) => {
   }
 });
 
-
-router.post('/upload-profile', upload.single('profileImage'), async (req, res) => {
-  try {
-    console.log("Uploaded file:", req.file);
-
-    const userId = req.user?._id || req.session?.user?._id;
-    if (!userId) {
-      return res.status(401).json({ success: false, message: 'User not authenticated' });
-    }
-
-    const updatedUser = await RecruiterUser.findByIdAndUpdate(
-      userId,
-      { profileImage: req.file.id },
-      { new: true }
-    );
-
-    console.log("Updated user:", updatedUser);
-
-    if (!updatedUser) {
-      return res.status(404).json({ success: false, message: 'User not found' });
-    }
-
-    res.status(200).json({
-      success: true,
-      message: 'Profile image uploaded',
-      imageUrl: `/auth/profile-image/${req.file.id}`
-    });
-  } catch (err) {
-    console.error("Error uploading profile image:", err);
-    res.status(500).json({ success: false, message: 'Internal server error' });
-  }
-});
-
-
-router.get('/profile-image/:id', async (req, res) => {
-  try {
-    const conn = mongoose.connection;
-    const bucket = new mongoose.mongo.GridFSBucket(conn.db, {
-      bucketName: 'profileImages',
-    });
-
-    const fileId = new mongoose.Types.ObjectId(req.params.id);
-    bucket.openDownloadStream(fileId).pipe(res);
-  } catch (error) {
-    console.error("Image Fetch Error:", error);
-    res.status(404).send("Image not found");
-  }
-});
 
 
 module.exports = router;

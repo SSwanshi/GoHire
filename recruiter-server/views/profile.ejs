@@ -6,7 +6,7 @@
       <div class="relative group">
         <img 
           id="profileImage"
-          src="<%= user.profileImage ? '/auth/profile-image/' + user.profileImage : '/uploads/profiles/default-image.jpg' %>" 
+          src="/images/default.png" 
           alt="Profile Photo"
           class="w-40 h-40 object-cover rounded-full border-4 border-yellow-400 shadow-md profile-image"
         >
@@ -75,51 +75,5 @@
     </div>
   </div>
 </div>
-
-<script>
-  document.getElementById('imageUpload').addEventListener('change', function (event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    if (file.size > 5 * 1024 * 1024) {
-      alert('File is too large. Maximum size is 5MB.');
-      return;
-    }
-
-    if (!file.type.startsWith('image/')) {
-      alert('Only image files are allowed.');
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      document.getElementById('profileImage').src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-
-    const formData = new FormData();
-    formData.append('profileImage', file);
-
-    fetch('/auth/upload-profile', {
-      method: 'POST',
-      body: formData
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success && data.imageUrl) {
-          document.querySelectorAll('.profile-image').forEach(img => {
-            img.src = data.imageUrl + '?t=' + new Date().getTime(); // bust cache
-          });
-        } else {
-          throw new Error(data.message || 'Upload failed');
-        }
-      })
-      .catch(err => {
-        console.error('Upload error:', err);
-        alert('Error uploading image. Please try again.');
-        document.getElementById('profileImage').src = "<%= user.profileImage ? '/auth/profile-image/' + user.profileImage : '/uploads/profiles/default-image.jpg' %>";
-      });
-  });
-</script>
 
 <%- include('layout/footer') %>
