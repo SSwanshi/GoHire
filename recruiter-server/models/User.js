@@ -7,7 +7,10 @@ const UserSchema = new mongoose.Schema({
     phone: { type: String, required: true },
     gender: { type: String, required: true, enum: ["male", "female", "other"] },
     password: { type: String, required: true },
-    profileImage: { type: mongoose.Schema.Types.ObjectId, ref: 'profileImages.files' }
+    profileImage: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        default: null 
+    }
 }, { timestamps: true }); 
 
-module.exports = mongoose.model("RecruiterUser", UserSchema);
+module.exports = mongoose.model("RecruiterUser ", UserSchema);

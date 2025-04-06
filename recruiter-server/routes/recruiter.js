@@ -31,7 +31,6 @@ const storage_image = new GridFsStorage({
         };
     }
 });
-const upload_profile = multer({ storage: storage_image });
 
 
 router.post("/add-company", upload.single("logo"), async (req, res) => {
