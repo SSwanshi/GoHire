@@ -2,8 +2,6 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User'); 
 const router = express.Router();
-const upload = require('./uploadMiddleware');
-const gfs = require('./gridfs');
 const uploading = require('../middleware/multer');
 
 router.post('/signup', async (req, res) => {
