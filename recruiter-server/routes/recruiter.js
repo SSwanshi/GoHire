@@ -23,15 +23,15 @@ conn.once("open", () => {
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-const storage_image = new GridFsStorage({
-    url: process.env.MONGO_URI_RECRUITERS,
-    file: (req, file) => {
-        return {
-            filename: `profile_${Date.now()}_${file.originalname}`,
-            bucketName: "uploads"
-        };
-    }
-});
+// const storage_image = new GridFsStorage({
+//     url: process.env.MONGO_URI_RECRUITERS,
+//     file: (req, file) => {
+//         return {
+//             filename: `profile_${Date.now()}_${file.originalname}`,
+//             bucketName: "uploads"
+//         };
+//     }
+// });
 
 
 router.post("/add-company", upload.single("logo"), async (req, res) => {
