@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,11 +11,13 @@
     .hover-grow {
       transition: transform 0.2s;
     }
+
     .hover-grow:hover {
       transform: scale(1.03);
     }
+
     .gradient-blue {
-      background: linear-gradient(to right, #1d4ed8, #ffe819); 
+      background: linear-gradient(to right, #1d4ed8, #ffe819);
     }
 
     .gradient-yellow {
@@ -24,48 +27,55 @@
     .yellow-accent {
       background-color: #fbbf24;
     }
+
     .yellow-text {
-      color: #fbbf24; 
+      color: #fbbf24;
     }
+
     .blue-bg-light {
-      background-color: #eff6ff; 
+      background-color: #eff6ff;
     }
+
     .blue-bg {
-      background-color: #dbeafe; 
+      background-color: #dbeafe;
     }
+
     .forgradient {
       background: linear-gradient(to right, #a1c9fa, #0044ff);
     }
+
     .gradientyandb {
-      background: linear-gradient(to right, #e8f484,#a1c9fa );
+      background: linear-gradient(to right, #e8f484, #a1c9fa);
     }
 
     @media (max-width: 767px) {
-  nav ul {
-    display: none;
-    flex-direction: column;
-    width: 100%;
-    background-color: #1d4ed8;
-    position: absolute;
-    top: 60px;
-    left: 0;
-    padding: 1rem;
-    text-align: left;
-    margin: 0;
-    list-style: none;
-  }
-  nav ul li {
-    margin: 0.5rem 0;
-    padding: 0;
-  }
-  .nav-toggle {
-    display: block;
-    cursor: pointer;
-  }
-}
+      nav ul {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: #1d4ed8;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        padding: 1rem;
+        text-align: left;
+        margin: 0;
+        list-style: none;
+      }
 
+      nav ul li {
+        margin: 0.5rem 0;
+        padding: 0;
+      }
+
+      .nav-toggle {
+        display: block;
+        cursor: pointer;
+      }
+    }
   </style>
 </head>
+
 <body class="blue-bg-light font-sans">
   <header class="gradient-blue shadow-md sticky top-0 z-50">
     <div class="container mx-auto px-4">
@@ -74,24 +84,33 @@
           <h2 class="text-2xl font-bold text-white"><span style="color: #dfcc24;">Go</span>Hire</h2>
         </div>
         <ul class="flex space-8 md:space-x-8">
-          <li><a href="/recruiter/home" class="hover:text-blue-900 font-medium transition-colors duration-300">Home</a></li>
-          <li><a href="/recruiter/companies" class="hover:text-blue-900 font-medium transition-colors duration-300">Companies</a></li>
-          <li><a href="/recruiter/jobs" class="hover:text-blue-900 font-medium transition-colors duration-300">Jobs</a></li>
-          <li><a href="/recruiter/internships" class="hover:text-blue-900 font-medium transition-colors duration-300">Internships</a></li>
-          <li class="flex items-center space-x-2">
-            <a href="/recruiter/profile" class="hover:text-blue-900 font-medium transition-colors duration-300">
-              <img 
-  src="/auth/profile-image/<%= user._id %>" 
-  alt="Profile Photo" 
-  class="w-8 h-8 rounded-full bg-gray-200 profile-image"
-/>
+          <li><a href="/recruiter/home" class="hover:text-blue-900 font-medium transition-colors duration-300">Home</a>
+          </li>
+          <li><a href="/recruiter/companies"
+              class="hover:text-blue-900 font-medium transition-colors duration-300">Companies</a></li>
+          <li><a href="/recruiter/jobs" class="hover:text-blue-900 font-medium transition-colors duration-300">Jobs</a>
+          </li>
+          <li><a href="/recruiter/internships"
+              class="hover:text-blue-900 font-medium transition-colors duration-300">Internships</a></li>
 
-            </a>
-            <div class="md:hidden">
-              <a href="/recruiter/profile" class="hover:text-blue-900 font-medium transition-colors duration-300">Profile</a>
-            </div>
-          </li> 
-          
+          <% if (user) { %>
+            <li class="flex items-center space-x-2">
+              <a href="/recruiter/profile" class="hover:text-blue-900 font-medium transition-colors duration-300">
+                <img src="/auth/profile-image/<%= user._id %>" alt="Profile Photo"
+                  class="w-8 h-8 rounded-full bg-gray-200 profile-image"
+                  onerror="this.onerror=null; this.src='/images/default.png';" />
+
+              </a>
+              <div class="md:hidden">
+                <a href="/recruiter/profile"
+                  class="hover:text-blue-900 font-medium transition-colors duration-300">Profile</a>
+              </div>
+            </li>
+            <% } else { %>
+              <li>
+                <a href="/auth/login" class="hover:text-blue-900 font-medium transition-colors duration-300">Login</a>
+              </li>
+              <% } %>
         </ul>
       </nav>
     </div>
