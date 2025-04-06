@@ -3,8 +3,8 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User'); 
 const router = express.Router();
 const upload = require('./uploadMiddleware');
-const RecruiterUser = require('../models/User');
 const gfs = require('./gridfs');
+const uploading = require('../middleware/multer');
 
 router.post('/signup', async (req, res) => {
   const { firstName, lastName, email, phone, gender, password, confirmPassword } = req.body;
@@ -75,40 +75,50 @@ router.get('/user/:email', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
-
-router.post('/:userId/profile-image', upload.single('image'), async (req, res) => {
+router.post('/:id/profile-image', uploading.single('image'), async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
-    }
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).send("User not found");
 
-    const user = await RecruiterUser.findByIdAndUpdate(
-      req.params.userId,
-      { profileImage: req.file.id },
-      { new: true }
-    );
+    user.profileImage = {
+      data: req.file.buffer,
+      contentType: req.file.mimetype
+    };
 
-    res.redirect('/profile'); // Redirect back to profile page
-  } catch (error) {
-    console.error('Upload error:', error);
-    res.status(500).json({ error: error.message });
+    await user.save();
+    res.redirect('/auth/profile');
+  } catch (err) {
+    console.error("Upload Error:", err);
+    res.status(500).send("Server Error");
   }
 });
 
-// Get profile image
-router.get('/profile-image/:fileId', async (req, res) => {
+router.get('/profile-image/:id', async (req, res) => {
   try {
-    const fileId = new mongoose.Types.ObjectId(req.params.fileId);
-    const file = await gfs.find({ _id: fileId }).toArray();
-    
-    if (!file || file.length === 0) {
-      return res.status(404).send('File not found');
+    const user = await User.findById(req.params.id);
+    if (user && user.profileImage && user.profileImage.data) {
+      res.set('Content-Type', user.profileImage.contentType);
+      return res.send(user.profileImage.data);
     }
-
-    gfs.openDownloadStream(fileId).pipe(res);
-  } catch (error) {
-    res.status(500).send(error.message);
+    res.status(404).send("No profile image found");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error loading image");
   }
 });
+
+router.get('/profile', async (req, res) => {
+  try {
+    const userId = req.session.user?._id;
+    if (!userId) return res.redirect('/auth/login');
+
+    const user = await User.findById(userId);
+    res.render('profile', { user }); 
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
+  }
+});
+
 
 module.exports = router;
