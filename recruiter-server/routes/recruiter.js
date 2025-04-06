@@ -3,12 +3,13 @@ const multer = require("multer");
 const mongoose = require("mongoose");
 const Company = require("../models/Companies");
 const Job = require("../models/Jobs");
-const RecruiterUser = require("../models/User");
+const User = require("../models/User");
 const Internship = require("../models/Internship");
 const { Application, InternshipApplication } = require("../../applicant-server/models/Application");
 const { GridFSBucket } = require("mongodb");
 const { GridFsStorage } = require("multer-gridfs-storage");
 const dotenv = require('dotenv');
+const bcrypt = require('bcrypt');
 
 const router = express.Router();
 
@@ -276,5 +277,217 @@ router.post('/applicant-intern/:intId', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch internship applications' });
     }
 });
+
+router.get("/edit-company/:id", async (req, res) => {
+    const company = await Company.findById(req.params.id);
+    res.render("add-company", { company, isEdit: true, user: req.session.user });
+  });
+  
+
+router.post("/edit-company/:id", upload.single("logo"), async (req, res) => {
+    const { companyName, website, location } = req.body;
+    const updateData = { companyName, website, location };
+
+    if (req.file) {
+      const uploadStream = bucket.openUploadStream(req.file.originalname);
+      uploadStream.end(req.file.buffer);
+      updateData.logoId = uploadStream.id;
+    }
+  
+    await Company.findByIdAndUpdate(req.params.id, updateData);
+    req.session.successMessage = "Company updated successfully!";
+    res.redirect("/recruiter/companies");
+  });
+  
+
+  router.get("/edit-job/:id", async (req, res) => {
+    try {
+        const job = await Job.findById(req.params.id).populate("jobCompany");
+        const companies = await Company.find({ createdBy: req.session.userId });
+
+        if (!job) {
+            req.session.errorMessage = "Job not found.";
+            return res.redirect("/recruiter/jobs");
+        }
+
+        res.render("add-job", {
+            job,
+            companies,
+            isEdit: true,
+            user: req.session.user
+        });
+    } catch (err) {
+        console.error("Error loading edit job page:", err);
+        req.session.errorMessage = "Something went wrong.";
+        res.redirect("/recruiter/jobs");
+    }
+});
+
+
+router.post("/edit-job/:id", async (req, res) => {
+    try {
+        const {
+            jobTitle,
+            jobDescription,
+            jobRequirements,
+            jobSalary,
+            jobLocation,
+            jobType,
+            jobExperience,
+            noofPositions,
+            jobCompany
+        } = req.body;
+
+        const updateData = {
+            jobTitle,
+            jobDescription,
+            jobRequirements,
+            jobSalary: parseFloat(jobSalary),
+            jobLocation,
+            jobType,
+            jobExperience: parseInt(jobExperience),
+            noofPositions: parseInt(noofPositions),
+            jobCompany
+        };
+
+        await Job.findByIdAndUpdate(req.params.id, updateData);
+
+        req.session.successMessage = "Job updated successfully!";
+        res.redirect("/recruiter/jobs");
+    } catch (err) {
+        console.error("Error updating job:", err);
+        req.session.errorMessage = "Failed to update job.";
+        res.redirect("/recruiter/jobs");
+    }
+});
+
+router.get('/edit-internship/:id', async (req, res) => {
+    const internshipId = req.params.id;
+  
+    try {
+      const internship = await Internship.findById(internshipId).populate('intCompany');
+      const companies = await Company.find({ createdBy: req.session.userId });
+  
+      if (!internship) {
+        req.session.errorMessage = "Job not found";
+        return res.redirect('/recruiter/internships');
+      }
+  
+      res.render('add-internship', {
+        internship,
+        companies,
+        isEdit: true,
+        user: req.session.user
+      });
+    } catch (err) {
+      console.error('Error loading internship edit page:', err);
+      req.session.errorMessage = "Failed to update internship.";
+      res.redirect('/recruiter/internships');
+    }
+  });
+
+  router.post('/edit-internship/:id', async (req, res) => {
+    const internshipId = req.params.id;
+  
+    const {
+        intTitle,
+        intDescription,
+        intRequirements,
+        intStipend,
+        intLocation,
+        intDuration,
+        intExperience,
+        intPositions,
+        intCompany
+    } = req.body;
+  
+    try {
+      const updatedInternship = await Internship.findByIdAndUpdate(
+        internshipId,
+        {
+            intTitle,
+            intDescription,
+            intRequirements,
+            intStipend,
+            intLocation,
+            intDuration,
+            intExperience,
+            intPositions,
+            intCompany
+        },
+        { new: true }
+      );
+  
+      if (!updatedInternship) {
+        req.session.errorMessage = "Failed to update internship.";
+        return res.redirect('/recruiter/internships');
+      }
+  
+      req.session.successMessage = "Internship updated successfully!";
+      res.redirect('/recruiter/internships');
+    } catch (err) {
+      console.error('Error updating internship:', err);
+      req.session.errorMessage = "Failed to update internship.";
+      res.redirect('/recruiter/internships');
+    }
+  });
+
+  router.get('/edit-profile', async (req, res) => {
+    try {
+      const user = await User.findById(req.session.userId);
+      if (!user) {
+        req.session.errorMessage = 'User not found';
+        return res.redirect('/recruiter/home');
+      }
+  
+      res.render('edit-profile', { user });
+    } catch (err) {
+      console.error('Error loading edit profile page:', err);
+      req.session.errorMessage = 'Failed to load profile.';
+      res.redirect('/recruiter/home');
+    }
+  });
+  
+  
+  router.post('/edit-profile', async (req, res) => {
+    const { firstName, lastName, phone, gender, newPassword, confirmPassword } = req.body;
+  
+    try {
+      const user = await User.findById(req.session.userId);
+      if (!user) {
+        req.session.errorMessage = 'User not found';
+        return res.redirect('/recruiter/edit-profile');
+      }
+  
+      // Check for password update
+      if (newPassword || confirmPassword) {
+        if (newPassword !== confirmPassword) {
+          req.session.errorMessage = 'Passwords do not match.';
+          return res.redirect('/recruiter/edit-profile');
+        }
+  
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+      }
+  
+      // Update profile fields
+      user.firstName = firstName;
+      user.lastName = lastName;
+      user.phone = phone;
+      user.gender = gender;
+  
+      await user.save();
+  
+      req.session.successMessage = 'Profile updated successfully!';
+      req.session.user = user; 
+      res.redirect('/auth/profile');
+    } catch (err) {
+      console.error('Error updating profile:', err);
+      req.session.errorMessage = 'Something went wrong while updating profile.';
+      res.redirect('/recruiter/edit-profile');
+    }
+  });
+  
+  
 
 module.exports = router;

@@ -3,86 +3,92 @@
 <div class="gradientyandb min-h-screen flex items-center justify-center">
   <div class="max-w-lg mx-auto p-6 bg-blue-100 rounded-lg shadow-md md:w-full max-w-[800px] mx-auto">
     <h2 class="text-2xl font-bold text-blue-800 mb-4">Post a New Job</h2>
-    <form id="jobForm" action="/recruiter/add-job" method="POST" class="space-y-4">
+    <form id="jobForm" action="<%= isEdit ? '/recruiter/edit-job/' + job._id : '/recruiter/add-job' %>" method="POST" class="space-y-4">
 
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label for="jobTitle" class="block text-blue-700 font-medium">Title</label>
-          <input type="text" id="jobTitle" name="jobTitle" required 
+          <input type="text" id="jobTitle" name="jobTitle" required
+                 value="<%= isEdit ? job.jobTitle : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="titleError">Title must be at least 5 characters.</p>
         </div>
+    
         <div>
           <label for="jobDescription" class="block text-blue-700 font-medium">Description</label>
-          <input type="text" id="jobDescription" name="jobDescription" required 
+          <input type="text" id="jobDescription" name="jobDescription" required
+                 value="<%= isEdit ? job.jobDescription : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="descriptionError">Description must be at least 10 characters.</p>
         </div>
       </div>
-
+    
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label for="jobRequirements" class="block text-blue-700 font-medium">Requirements</label>
-          <input type="text" id="jobRequirements" name="jobRequirements" required 
+          <input type="text" id="jobRequirements" name="jobRequirements" required
+                 value="<%= isEdit ? job.jobRequirements : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="requirementsError">Requirements must be at least 5 characters.</p>
         </div>
+    
         <div>
           <label for="jobSalary" class="block text-blue-700 font-medium">Salary (in LPA)</label>
           <input type="number" id="jobSalary" name="jobSalary" required min="0"
+                 value="<%= isEdit ? job.jobSalary : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="salaryError">Salary must be a positive number.</p>
         </div>
       </div>
-
+    
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label for="jobLocation" class="block text-blue-700 font-medium">Location</label>
-          <input type="text" id="jobLocation" name="jobLocation" required 
+          <input type="text" id="jobLocation" name="jobLocation" required
+                 value="<%= isEdit ? job.jobLocation : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="locationError">Location must be at least 3 characters.</p>
         </div>
+    
         <div>
           <label for="jobType" class="block text-blue-700 font-medium">Job Type</label>
-          <input type="text" id="jobType" name="jobType" required 
+          <input type="text" id="jobType" name="jobType" required
+                 value="<%= isEdit ? job.jobType : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="jobTypeError">Job type cannot be empty.</p>
         </div>
       </div>
-
+    
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label for="jobExperience" class="block text-blue-700 font-medium">Experience Level (in years)</label>
           <input type="number" id="jobExperience" name="jobExperience" required min="0"
+                 value="<%= isEdit ? job.jobExperience : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="experienceError">Experience must be 0 or more years.</p>
         </div>
+    
         <div>
           <label for="noofPositions" class="block text-blue-700 font-medium">No of Positions</label>
           <input type="number" id="noofPositions" name="noofPositions" required min="1"
+                 value="<%= isEdit ? job.noofPositions : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="positionsError">Must be at least 1 position.</p>
         </div>
       </div>
-
+    
       <div>
         <label for="jobCompany" class="block text-blue-700 font-medium">Company</label>
         <select id="jobCompany" name="jobCompany" required
                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                <option value="">Select a company</option>
-                <% companies.forEach(company => { %>
-                  <option value="<%= company._id %>"><%= company.companyName %></option>
-                <% }); %>
+          <option value="">Select a company</option>
+          <% companies.forEach(company => { %>
+            <option value="<%= company._id %>" <%= isEdit && job.jobCompany && company._id.equals(job.jobCompany._id) ? 'selected' : '' %> >
+              <%= company.companyName %>
+            </option>
+          <% }); %>
         </select>
-        <p class="text-red-500 text-sm hidden" id="companyError">Please select a company.</p>
       </div>
-
-      <button type="submit" 
+    
+      <button type="submit"
               class="w-full bg-blue-700 text-yellow-400 font-semibold py-2 rounded-md hover:bg-blue-800 hover:text-yellow-300 transition-all">
-        Post New Job
+        <%= isEdit ? 'Update Job' : 'Post New Job' %>
       </button>
-
+    
     </form>
+    
   </div>
 </div>
 

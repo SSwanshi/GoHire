@@ -3,86 +3,98 @@
 <div class="gradientyandb min-h-screen flex items-center justify-center">
   <div class="max-w-lg mx-auto p-6 bg-blue-100 rounded-lg shadow-md md:w-full max-w-[800px] mx-auto">
     <h2 class="text-2xl font-bold text-blue-800 mb-4">Post a New Internship</h2>
-    <form id="internshipForm" action="/recruiter/add-internship" method="POST" class="space-y-4">
+    <form id="internshipForm" action="<%= isEdit ? '/recruiter/edit-internship/' + internship._id : '/recruiter/add-internship' %>" method="POST" class="space-y-4">
 
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label for="intTitle" class="block text-blue-700 font-medium">Title</label>
-          <input type="text" id="intTitle" name="intTitle" required 
+          <input type="text" id="intTitle" name="intTitle" required
+                 value="<%= isEdit && internship ? internship.intTitle : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
           <p class="text-red-500 text-sm hidden" id="titleError">Title must be at least 5 characters.</p>
         </div>
         <div>
           <label for="intDescription" class="block text-blue-700 font-medium">Description</label>
-          <input type="text" id="intDescription" name="intDescription" required 
+          <input type="text" id="intDescription" name="intDescription" required
+                 value="<%= isEdit && internship ? internship.intDescription : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
           <p class="text-red-500 text-sm hidden" id="descriptionError">Description must be at least 10 characters.</p>
         </div>
       </div>
- 
+    
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label for="intRequirements" class="block text-blue-700 font-medium">Requirements</label>
-          <input type="text" id="intRequirements" name="intRequirements" required 
+          <input type="text" id="intRequirements" name="intRequirements" required
+                 value="<%= isEdit && internship ? internship.intRequirements : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
           <p class="text-red-500 text-sm hidden" id="requirementsError">Requirements must be at least 5 characters.</p>
         </div>
         <div>
           <label for="intStipend" class="block text-blue-700 font-medium">Stipend (per month)</label>
           <input type="number" id="intStipend" name="intStipend" required min="0"
+                 value="<%= isEdit && internship ? internship.intStipend : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
           <p class="text-red-500 text-sm hidden" id="stipendError">Stipend must be a positive number.</p>
         </div>
       </div>
-
+    
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label for="intLocation" class="block text-blue-700 font-medium">Location</label>
-          <input type="text" id="intLocation" name="intLocation" required 
+          <input type="text" id="intLocation" name="intLocation" required
+                 value="<%= isEdit && internship ? internship.intLocation : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
           <p class="text-red-500 text-sm hidden" id="locationError">Location must be at least 3 characters.</p>
         </div>
         <div>
           <label for="intDuration" class="block text-blue-700 font-medium">Internship Duration (in months)</label>
           <input type="number" id="intDuration" name="intDuration" required min="1"
+                 value="<%= isEdit && internship ? internship.intDuration : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
           <p class="text-red-500 text-sm hidden" id="durationError">Duration must be at least 1 month.</p>
         </div>
       </div>
-
+    
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label for="intExperience" class="block text-blue-700 font-medium">Experience Level (in years)</label>
           <input type="number" id="intExperience" name="intExperience" required min="0"
+                 value="<%= isEdit && internship ? internship.intExperience : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
           <p class="text-red-500 text-sm hidden" id="experienceError">Experience must be 0 or more years.</p>
         </div>
         <div>
           <label for="intPositions" class="block text-blue-700 font-medium">No of Positions</label>
           <input type="number" id="intPositions" name="intPositions" required min="1"
+                 value="<%= isEdit && internship ? internship.intPositions : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
           <p class="text-red-500 text-sm hidden" id="positionsError">Must be at least 1 position.</p>
         </div>
       </div>
-
+    
       <div>
         <label for="intCompany" class="block text-blue-700 font-medium">Company</label>
         <select id="intCompany" name="intCompany" required
                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                <option value="">Select a company</option>
-                <% companies.forEach(company => { %>
-                  <option value="<%= company.companyName %>"><%= company.companyName %></option>
-              <% }); %>
+          <option value="">Select a company</option>
+          <% companies.forEach(company => { %>
+            <option value="<%= company._id %>"
+              <%= isEdit && internship && internship.intCompany && internship.intCompany._id.toString() === company._id.toString() ? 'selected' : '' %>>
+              <%= company.companyName %>
+            </option>
+          <% }); %>
         </select>
         <p class="text-red-500 text-sm hidden" id="companyError">Please select a company.</p>
       </div>
-
-      <button type="submit" 
+    
+      <button type="submit"
               class="w-full bg-blue-700 text-yellow-400 font-semibold py-2 rounded-md hover:bg-blue-800 hover:text-yellow-300 transition-all">
-        Post New Internship
+        <%= isEdit ? 'Update Internship' : 'Post New Internship' %>
       </button>
-
+    
     </form>
+    
   </div>
 </div>
 

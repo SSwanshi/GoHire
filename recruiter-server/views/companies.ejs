@@ -49,11 +49,11 @@
                                         Delete
                                     </button>
                                 </form>
-                                <form action="/recruiter/delete-company/<%= company._id %>" method="POST">
-                                    <button type="submit" class="bg-green-500 hover:bg-green-800 text-white font-bold py-2 px-4 rounded">
-                                        Edit
-                                    </button>
-                                </form>
+                                <a href="/recruiter/edit-company/<%= company._id %>" 
+                                    class="bg-green-500 hover:bg-green-800 text-white font-bold py-2 px-4 rounded inline-block text-center">
+                                    Edit
+                                 </a>
+                                 
                             </td>
                         </tr>
                     <% }) %>
