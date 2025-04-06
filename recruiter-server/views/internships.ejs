@@ -24,7 +24,7 @@
                     <th class="px-6 py-3 border border-gray-300">Location</th>
                     <th class="px-6 py-3 border border-gray-300">Duration</th>
                     <th class="px-6 py-3 border border-gray-300">Opportunities</th>
-                    <th class="px-6 py-3 border border-gray-300">Action</th>
+                    <th class="px-6 py-3 border border-gray-300 text-center">Action</th>
                     <th class="px-6 py-3 border border-gray-300">Applications</th>
                 </tr>
             </thead>
@@ -46,10 +46,15 @@
                             <td class="px-6 py-4 border border-gray-300"><%= internships[i].intLocation %></td>
                             <td class="px-6 py-4 border border-gray-300"><%= internships[i].intDuration %></td>
                             <td class="px-6 py-4 border border-gray-300"><%= internships[i].intPositions %></td>
-                            <td class="px-6 py-4 border border-gray-300">
+                            <td class="px-6 py-4 border border-gray-300 flex items-center justify-center gap-4 mt-3">
                                 <form action="/recruiter/delete-intern/<%= internships[i]._id %>" method="POST">
-                                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                                    <button type="submit" class="bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 rounded">
                                         Delete
+                                    </button>
+                                </form>
+                                <form action="/recruiter/delete-intern/<%= internships[i]._id %>" method="POST">
+                                    <button type="submit" class="bg-green-500 hover:bg-green-800 text-white font-bold py-2 px-4 rounded">
+                                        Edit
                                     </button>
                                 </form>
                             </td>

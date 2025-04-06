@@ -22,7 +22,7 @@
                     <th class="px-6 py-3 border border-gray-300">Name</th>
                     <th class="px-6 py-3 border border-gray-300">Website</th>
                     <th class="px-6 py-3 border border-gray-300">Location</th>
-                    <th class="px-6 py-3 border border-gray-300">Action</th>
+                    <th class="px-6 py-3 border border-gray-300 text-center">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,10 +43,15 @@
                                 <a href="<%= company.website %>" class="text-blue-500 hover:underline" target="_blank">Visit</a>
                             </td>
                             <td class="px-6 py-4 border border-gray-300"><%= company.location %></td>
-                            <td class="px-6 py-4 border border-gray-300">
+                            <td class="px-6 py-4 border border-gray-300 flex items-center gap-4 justify-center">
                                 <form action="/recruiter/delete-company/<%= company._id %>" method="POST">
-                                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                                    <button type="submit" class="bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 rounded">
                                         Delete
+                                    </button>
+                                </form>
+                                <form action="/recruiter/delete-company/<%= company._id %>" method="POST">
+                                    <button type="submit" class="bg-green-500 hover:bg-green-800 text-white font-bold py-2 px-4 rounded">
+                                        Edit
                                     </button>
                                 </form>
                             </td>
