@@ -156,7 +156,7 @@ router.get('/companies', async (req, res) => {
         const successMessage = req.session.successMessage;
         req.session.successMessage = null;
 
-        res.render('companies', { companies, successMessage });
+        res.render('companies', { companies, successMessage, user:req.session.user });
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch Companies' });
     }
@@ -169,7 +169,7 @@ router.get('/jobs', async (req, res) => {
         const successMessage = req.session.successMessage;
         req.session.successMessage = null;
 
-        res.render('jobs', { jobs, successMessage });
+        res.render('jobs', { jobs, successMessage, user:req.session.user });
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch jobs' });
     }
@@ -224,7 +224,7 @@ router.get('/internships', async (req, res) => {
         const successMessage = req.session.successMessage;
         req.session.successMessage = null;
 
-        res.render('internships', { internships, successMessage });
+        res.render('internships', { internships, successMessage, user:req.session.user });
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch internships' });
     }
