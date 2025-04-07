@@ -2,25 +2,15 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
+const mongoose = require('mongoose');
+const Grid = require('gridfs-stream');
+const { ObjectId } = mongoose.Types;
+const User = require('../models/user'); // Import your User model
 
-// In-memory storage for user resumes (Replace with database)
-const userResumes = {};
+const { connectDB, getGfs } = require('../config/db');
 
-// Multer storage setup
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const dir = './uploads';
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-        }
-        cb(null, dir);
-    },
-    filename: function (req, file, cb) {
-        const userId = req.session.user?.id || 'guest';
-        cb(null, `${userId}_${Date.now()}${path.extname(file.originalname)}`);
-    }
-});
+// Multer storage setup for GridFS
+const storage = multer.memoryStorage(); // Store file in memory before uploading to GridFS
 
 // File upload filter
 const fileFilter = (req, file, cb) => {
@@ -41,58 +31,128 @@ const upload = multer({
 });
 
 // Render Profile Page
-router.get('/profile', (req, res) => {
-    const userId = req.session.user?.id || 'guest';
+router.get('/profile', async (req, res) => {
+    try {
+        // Connect to DB and get GridFS instance
+        await connectDB();
+        const gfs = getGfs();
+        const userId = req.session.user?.id || 'guest';
 
-    const userData = {
-        firstName: 'Anuj',
-        lastName: 'Rathore',
-        email: 'anujrathore385@gmail.com',
-        phone: '9340041042',
-        gender: 'Male',
-        memberSince: 'March 2025'
-    };
+        // Find or create user in MongoDB
+        let user = await User.findOne({ userId });
 
-    const resumeData = userResumes[userId];
+        if (!user) {
+            // Create a new user with default data
+            user = new User({
+                userId,
+                firstName: 'Anuj',
+                lastName: 'Rathore',
+                email: 'anujrathore385@gmail.com',
+                phone: '9340041042',
+                gender: 'Male',
+                memberSince: 'March 2025'
+            });
+            await user.save();
+        }
 
-    res.render('profile', {
-        userData,
-        resumeData,
-        title: 'User Profile - GoHire'
-    });
+        // Extract user data
+        const userData = {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            phone: user.phone,
+            gender: user.gender,
+            memberSince: user.memberSince
+        };
+
+        // Get resume data if exists
+        let resumeData = null;
+        if (user.resumeId) {
+            const file = await gfs.files.findOne({ _id: user.resumeId });
+            if (file) {
+                resumeData = {
+                    fileName: file.filename,
+                    uploadDate: file.uploadDate,
+                    fileSize: file.length,
+                    mimeType: file.contentType,
+                    title: file.metadata?.title || file.filename
+                };
+            }
+        }
+
+        res.render('profile', {
+            userData,
+            resumeData,
+            title: 'User Profile - GoHire'
+        });
+    } catch (error) {
+        console.error('Error fetching profile:', error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 // Resume Upload Route
-router.post('/resume', upload.single('resume'), (req, res) => {
+router.post('/resume', upload.single('resume'), async (req, res) => {
     try {
+        // Connect to DB and get GridFS instance
+        await connectDB();
+        const gfs = getGfs();
         if (!req.file) {
             return res.status(400).json({ success: false, message: 'No file uploaded' });
         }
 
         const userId = req.session.user?.id || 'guest';
 
-        if (userResumes[userId] && userResumes[userId].filePath) {
+        // Find user in MongoDB
+        let user = await User.findOne({ userId });
+
+        if (!user) {
+            user = new User({ userId });
+        }
+
+        // If user already has a resume, delete the old one
+        if (user.resumeId) {
             try {
-                fs.unlinkSync(userResumes[userId].filePath);
+                await gfs.remove({ _id: user.resumeId, root: 'uploads' });
             } catch (err) {
                 console.error('Error deleting old resume:', err);
             }
         }
 
-        userResumes[userId] = {
-            fileName: req.file.originalname,
-            filePath: req.file.path,
-            fileSize: req.file.size,
-            mimeType: req.file.mimetype,
-            uploadDate: new Date().toISOString(),
-            title: req.body.resumeTitle || req.file.originalname
-        };
-
-        res.status(200).json({
-            success: true,
-            message: 'Resume uploaded successfully',
-            resumeData: userResumes[userId]
+        // Create write stream for GridFS
+        const writeStream = gfs.createWriteStream({
+            filename: req.file.originalname,
+            contentType: req.file.mimetype,
+            metadata: {
+                userId: userId,
+                title: req.body.resumeTitle || req.file.originalname
+            }
         });
+
+        writeStream.on('error', (error) => {
+            throw error;
+        });
+
+        writeStream.on('finish', async (file) => {
+            // Update user with new resume ID
+            user.resumeId = file._id;
+            await user.save();
+
+            res.status(200).json({
+                success: true,
+                message: 'Resume uploaded successfully',
+                resumeData: {
+                    fileName: file.filename,
+                    uploadDate: file.uploadDate,
+                    fileSize: file.length,
+                    mimeType: file.contentType,
+                    title: file.metadata?.title || file.filename
+                }
+            });
+        });
+
+        // Write file to GridFS
+        writeStream.end(req.file.buffer);
 
     } catch (error) {
         console.error('Error uploading resume:', error);
@@ -101,21 +161,28 @@ router.post('/resume', upload.single('resume'), (req, res) => {
 });
 
 // Resume Deletion Route
-router.delete('/resume', (req, res) => {
+router.delete('/resume', async (req, res) => {
     try {
+        // Connect to DB and get GridFS instance
+        await connectDB();
+        const gfs = getGfs();
         const userId = req.session.user?.id || 'guest';
 
-        if (!userResumes[userId]) {
+        const user = await User.findOne({ userId });
+        if (!user || !user.resumeId) {
             return res.status(404).json({ success: false, message: 'No resume found' });
         }
 
+        // Delete the file from GridFS
         try {
-            fs.unlinkSync(userResumes[userId].filePath);
+            await gfs.remove({ _id: user.resumeId, root: 'uploads' });
         } catch (err) {
             console.error('Error deleting resume file:', err);
         }
 
-        delete userResumes[userId];
+        // Remove the resume reference from user
+        user.resumeId = null;
+        await user.save();
 
         res.status(200).json({ success: true, message: 'Resume deleted successfully' });
 
@@ -126,19 +193,35 @@ router.delete('/resume', (req, res) => {
 });
 
 // Resume Download Route
-router.get('/resume/:userId', (req, res) => {
+router.get('/resume/:userId', async (req, res) => {
     try {
+        // Connect to DB and get GridFS instance
+        await connectDB();
+        const gfs = getGfs();
         const userId = req.params.userId;
 
         if (req.session.user?.id !== userId) {
             return res.status(403).send('Unauthorized access');
         }
 
-        const resumeData = userResumes[userId];
+        const user = await User.findOne({ userId });
+        if (!user || !user.resumeId) {
+            return res.status(404).send('No resume found');
+        }
 
-        res.setHeader('Content-Type', resumeData.mimeType);
-        res.setHeader('Content-Disposition', `inline; filename="${resumeData.fileName}"`);
-        res.sendFile(path.resolve(resumeData.filePath));
+        const file = await gfs.files.findOne({ _id: user.resumeId });
+        if (!file) {
+            return res.status(404).send('File not found');
+        }
+
+        // Set appropriate headers
+        res.set('Content-Type', file.contentType);
+        res.set('Content-Disposition', `inline; filename="${file.filename}"`);
+
+        // Create read stream and pipe to response
+        const readStream = gfs.createReadStream({ _id: file._id });
+        readStream.on('error', () => res.status(404).send('File not found'));
+        readStream.pipe(res);
 
     } catch (error) {
         console.error('Error serving resume:', error);

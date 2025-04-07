@@ -3,13 +3,13 @@ const passport = require('passport');
 const session = require('express-session');
 const path = require('path');
 const multer = require('multer');
-const connectDB = require("./config/db");
 
 const authRoutes = require('./routes/auth');
 const appUsers = require('./routes/auth');
 const applicantRoutes = require('./routes/applicant');
 const profileRoutes = require('./routes/profile');
 const paymentRoutes = require('./routes/payment');
+const { connectDB, getGfs } = require('./config/db');
 
 require("dotenv").config();
 const app = express();

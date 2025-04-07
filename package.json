@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "gridfs-stream": "^1.1.1",
+    "mongoose": "^8.13.2",
     "passport": "^0.7.0",
     "simple-update-notifier": "^2.0.0"
   },

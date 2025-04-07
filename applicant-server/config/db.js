@@ -1,21 +1,33 @@
-const mongoose = require("mongoose");
-const Grid = require("gridfs-stream");
+const mongoose = require('mongoose');
+const Grid = require('gridfs-stream');
+require('dotenv').config();
+
+let gfs; // This will hold our GridFS stream
 
 const connectDB = async () => {
     try {
-        const conn = await mongoose.connect(process.env.MONGO_URI_APPLICANTS, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        // Connect to MongoDB (without deprecated options)
+        const conn = await mongoose.connect(process.env.MONGO_URI_APPLICANTS);
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
 
-        const gfs = Grid(conn.connection.db, mongoose.mongo);
-        gfs.collection("uploads");
+        // Initialize GridFS only after successful connection
+        const db = mongoose.connection.db;
+        gfs = Grid(db, mongoose.mongo);
+        gfs.collection('uploads'); // 'uploads' is your collection name
 
-        console.log("✅ MongoDB Connected with GridFS for File Storage");
+        return { conn, gfs };
     } catch (error) {
-        console.error("❌ MongoDB Connection Failed", error);
+        console.error('❌ MongoDB Connection Failed', error);
         process.exit(1);
     }
 };
 
-module.exports = connectDB;
+// Create a function to get the initialized gfs
+const getGfs = () => {
+    if (!gfs) {
+        throw new Error('GridFS not initialized. Connect to DB first.');
+    }
+    return gfs;
+};
+
+module.exports = { connectDB, getGfs };
