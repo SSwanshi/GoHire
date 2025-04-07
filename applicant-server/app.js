@@ -36,7 +36,6 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 
-
 app.use(passport.initialize());
 app.use(passport.session()); // If using Passport for authentication
 
@@ -136,7 +135,7 @@ app.use('/uploads/profiles', express.static(path.join(__dirname, 'public/uploads
 
 // Profile Page
 app.get('/profile', (req, res) => {
-  const userData = req.session.user || {
+  const user = req.session.user || {
     firstName: 'Anuj',
     lastName: 'Rathore',
     email: 'anuj.r23@iiits.in',
@@ -149,7 +148,7 @@ app.get('/profile', (req, res) => {
 
   res.render('profile', {
     appUsers,
-    userData,
+    user,
     resumeData,
     title: 'User Profile - GoHire'
   });

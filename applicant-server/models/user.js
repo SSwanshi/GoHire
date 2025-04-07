@@ -11,5 +11,11 @@ const userSchema = new mongoose.Schema({
     resumeId: { type: mongoose.Schema.Types.ObjectId, ref: 'uploads.files' } // Reference to GridFS file
 });
 
+// Add this to your User model
+userSchema.statics.findOneOrCreate = async function findOneOrCreate(condition, doc) {
+    const result = await this.findOne(condition);
+    return result || this.create(doc);
+};
+
 module.exports = mongoose.model('User', userSchema);
 
