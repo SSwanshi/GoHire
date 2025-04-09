@@ -487,6 +487,10 @@ router.get('/edit-internship/:id', async (req, res) => {
       res.redirect('/recruiter/edit-profile');
     }
   });
+
+
+  
+  
   
   
 
