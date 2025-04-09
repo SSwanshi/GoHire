@@ -7,7 +7,7 @@ let gfs; // This will hold our GridFS stream
 const connectDB = async () => {
     try {
         // Connect to MongoDB (without deprecated options)
-        const conn = await mongoose.connect(process.env.MONGO_URI_APPLICANTS);
+        const conn = await mongoose.connect('mongodb+srv://gohire:gohire12345678@gohire.kzwudx0.mongodb.net/goHire_applicants?retryWrites=true&w=majority&appName=GoHire');
         console.log(`MongoDB Connected: ${conn.connection.host}`);
 
         // Initialize GridFS only after successful connection

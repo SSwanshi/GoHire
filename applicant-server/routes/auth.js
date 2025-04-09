@@ -12,10 +12,6 @@ router.get('/logout', (req, res) => {
   res.redirect('/');
 });
 
-const appUsers = [
-  { firstName: "Sarvjeet", lastName: "Swanshi", email: "sarvjeetswanshi@gmail.com", phone: "8102109959", gender: "male", password: "adminpass", profileImage: "/uploads/profiles/default-image.jpg" },
-  { firstName: "Saurav", lastName: "Roy", email: "sauravroy@gmail.com", phone: "9854672132", gender: "male", password: "adminpass", profileImage: "/uploads/profiles/default-image.jpg" }
-];
 
 router.post('/signup', (req, res) => {
   const { firstName, lastName, email, phone, gender, password, confirmPassword } = req.body;
@@ -72,5 +68,4 @@ router.get('/user/:email', (req, res) => {
   res.json(user);
 });
 
-module.exports = appUsers;
 module.exports = router;

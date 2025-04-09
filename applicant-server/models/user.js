@@ -8,10 +8,9 @@ const userSchema = new mongoose.Schema({
     phone: String,
     gender: String,
     memberSince: String,
-    resumeId: { type: mongoose.Schema.Types.ObjectId, ref: 'uploads.files' } // Reference to GridFS file
+    resumeId: { type: mongoose.Schema.Types.ObjectId, ref: 'uploads.files' } 
 });
 
-// Add this to your User model
 userSchema.statics.findOneOrCreate = async function findOneOrCreate(condition, doc) {
     const result = await this.findOne(condition);
     return result || this.create(doc);

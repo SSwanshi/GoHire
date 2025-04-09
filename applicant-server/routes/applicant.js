@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated } = require('../../shared/middleware/auth');
-const { jobs } = require('../../recruiter-server/routes/recruiter');
+const Job = require('../../recruiter-server/models/Jobs');
 const { internships } = require('../../recruiter-server/routes/recruiter');
 const { companies } = require('../../recruiter-server/routes/recruiter');
 const { appUsers } = require('./auth');
 const Fuse = require('fuse.js');
+const connectRecruiterDB = require('../config/recruiterDB');
+const createJobModel = require('../models/recruiter/Job');
 
 // router.use(bodyParser.urlencoded({extended:true}));
 
@@ -25,9 +27,21 @@ router.get('/', (req, res) => {
 });
 
 // Job Listings
+// Example route in applicant.js or similar
 router.get('/jobs', async (req, res) => {
-  res.render('job-list', { jobs: jobs , filters: {} ,user: req.session.user});
+  try {
+      const recruiterConn = await connectRecruiterDB();
+      const Job = createJobModel(recruiterConn);
+
+      const jobs = await Job.find({});
+      res.render('job-list', { jobs }); // pass jobs to EJS
+  } catch (err) {
+      console.error('Error fetching jobs from recruiter DB:', err);
+      res.status(500).send('Internal Server Error');
+  }
 });
+
+
 
 //Internship List
 router.get('/internships', async (req, res) => {

@@ -125,83 +125,7 @@
         <button class="text-blue-500 text-sm" onclick="clearAll()">Clear All</button>
       </div>
 
-      <form action="/submit-jobs" method="POST" class="mx-auto max-w-md rounded-lg bg-gray-100 p-6 shadow-lg" id="filter-form">
-        <!-- Salary Range Section -->
-        <div class="filter-section mb-4 border-b border-gray-200 pb-4">
-          <div class="filter-title mb-2 flex cursor-pointer items-center justify-between" onclick="toggleDropdownRangeSalary()">
-            <h4 class="font-medium">Salary Range</h4>
-            <svg id="dropdownIconSalary" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </div>
-          <div id="filterOptionsSalary" class="filter-options hidden space-y-2">
-            <label class="flex items-center">
-              <input type="checkbox" name="salary" value="less-25" class="mr-2 h-4 w-4 text-blue-500"
-                <% if (filters.salary && filters.salary.includes('less-25')) { %> checked <% } %> />
-              <span class="text-sm">Less than 25LPA</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="salary" value="25-35" class="mr-2 h-4 w-4 text-blue-500"
-                <% if (filters.salary && filters.salary.includes('25-35')) { %> checked <% } %> />
-              <span class="text-sm">25LPA - 35LPA</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="salary" value="35-45" class="mr-2 h-4 w-4 text-blue-500"
-                <% if (filters.salary && filters.salary.includes('35-45')) { %> checked <% } %> />
-              <span class="text-sm">35LPA - 45LPA</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="salary" value="45-55" class="mr-2 h-4 w-4 text-blue-500"
-                <% if (filters.salary && filters.salary.includes('45-55')) { %> checked <% } %> />
-              <span class="text-sm">45LPA - 55LPA</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Experience Section -->
-        <div class="space-y-2">
-          <div class="filter-title mb-2 flex cursor-pointer items-center justify-between" onclick="toggleDropdownExperience()">
-            <h4 class="font-medium">Experience</h4>
-            <svg id="dropdownIconEx" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </div>
-          <div id="filterOptions" class="filter-options hidden space-y-2">
-            <label class="flex items-center">
-              <input type="checkbox" name="experience" value="fresher" class="mr-2 h-4 w-4 text-blue-500"
-                <% if (filters.experience && filters.experience.includes('fresher')) { %> checked <% } %> />
-              <span class="text-sm">Fresher</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="experience" value="less-1" class="mr-2 h-4 w-4 text-blue-500"
-                <% if (filters.experience && filters.experience.includes('less-1')) { %> checked <% } %> />
-              <span class="text-sm">Less than a year</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="experience" value="1-3" class="mr-2 h-4 w-4 text-blue-500"
-                <% if (filters.experience && filters.experience.includes('1-3')) { %> checked <% } %> />
-              <span class="text-sm">1-3 years</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="experience" value="3-5" class="mr-2 h-4 w-4 text-blue-500"
-                <% if (filters.experience && filters.experience.includes('3-5')) { %> checked <% } %> />
-              <span class="text-sm">3-5 years</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="experience" value="5-10" class="mr-2 h-4 w-4 text-blue-500"
-                <% if (filters.experience && filters.experience.includes('5-10')) { %> checked <% } %> />
-              <span class="text-sm">5-10 years</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" name="experience" value="more-10" class="mr-2 h-4 w-4 text-blue-500"
-                <% if (filters.experience && filters.experience.includes('more-10')) { %> checked <% } %> />
-              <span class="text-sm">More than 10 years</span>
-            </label>
-          </div>
-        </div>
-
-        <button type="submit" id="apply-filters" class="mt-4 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">Apply</button>
-      </form>
+      
     </div>
 
     <div class="content flex-1">
@@ -298,34 +222,6 @@
     });
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
-    // Retrieve previously selected filters from localStorage or backend
-    const selectedFilters = JSON.parse(localStorage.getItem("selectedFilters")) || {};
-
-    // Restore checkbox state
-    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        if (selectedFilters[checkbox.name] && selectedFilters[checkbox.name].includes(checkbox.value)) {
-          checkbox.checked = true;
-        }
-
-        checkbox.addEventListener('change', function() {
-            // Store selected filters in localStorage
-            const name = checkbox.name;
-            if (!selectedFilters[name]) selectedFilters[name] = [];
-
-            if (checkbox.checked) {
-              selectedFilters[name].push(checkbox.value);
-            } else {
-              selectedFilters[name] = selectedFilters[name].filter(val => val !== checkbox.value);
-            }
-
-            localStorage.setItem("selectedFilters", JSON.stringify(selectedFilters));
-        });
-    });
-
-    document.getElementById("apply-filters").addEventListener("click", function () {
-        document.getElementById("filter-form").submit();
-    });
-  });
+  
 </script>
 </html>
