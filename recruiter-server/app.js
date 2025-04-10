@@ -114,18 +114,32 @@ app.get('/recruiter/home', async (req, res) => {
 
 
 app.get('/recruiter/add-company', (req, res) => {
-  res.render('add-company', { title: 'Add Company' });
+  res.render('add-company', { isEdit: false, company: {}, user: req.session.user });
 });
 
 app.get('/recruiter/add-job', async (req, res) => {
-  const companies = await Company.find({createdBy: req.session.userId});
-  res.render('add-job', { title: 'Add Job', companies });
+  const companies = await Company.find({ createdBy: req.session.userId });
+  res.render('add-job', {
+    title: 'Add Job',
+    companies,
+    isEdit: false,
+    job: {},
+    user: req.session.user
+  });
 });
 
+
 app.get('/recruiter/add-internship', async (req, res) => {
-  const companies = await Company.find({createdBy: req.session.userId});
-  res.render('add-internship', { title: 'Add Internship', companies });
+  const companies = await Company.find({ createdBy: req.session.userId });
+  res.render('add-internship', {
+    title: 'Add Internship',
+    companies,
+    isEdit: false,
+    internship: {},
+    user: req.session.user
+  });
 });
+
 
 app.get('/recruiter/profile', async (req, res) => {
   if (!req.session.user) return res.redirect('/auth/login');
