@@ -7,7 +7,10 @@ const { companies } = require('../../recruiter-server/routes/recruiter');
 const { appUsers } = require('./auth');
 const Fuse = require('fuse.js');
 const connectRecruiterDB = require('../config/recruiterDB');
+const { connectDB }= require('../config/db');
 const createJobModel = require('../models/recruiter/Job');
+const createInternshipModel = require('../models/recruiter/Internships');
+const createCompanyModel = require('../models/recruiter/Company');
 
 // router.use(bodyParser.urlencoded({extended:true}));
 
@@ -40,8 +43,6 @@ router.get('/jobs', async (req, res) => {
       res.status(500).send('Internal Server Error');
   }
 });
-
-
 
 //Internship List
 router.get('/internships', async (req, res) => {
@@ -83,17 +84,24 @@ router.get('/Subscription', async (req, res) => {
 });
 
 router.post('/search', async (req, res) => {
-  console.log("Received Request Type:", req.method);
-    console.log("Received Headers:", req.headers);
     console.log("Received Body:", req.body); 
   const enteredValue = req.body.parsedValue;
+
+  const recruiterConn = await connectRecruiterDB();
+  const JobFindConn = createJobModel(recruiterConn);
+  const InternshipFindConn = createInternshipModel(recruiterConn);
+  const CompanyModel = createCompanyModel(recruiterConn);
+
   const options1 = {
-    keys: ["jobCompany", "jobTitle"],
+    keys: ["jobCompany.companyName", "jobTitle"],
     threshold: 0.3,
     includeScore: true
   };
 
-const fuse1 = new Fuse(jobs, options1);
+  const JobFind = await JobFindConn.find({}).populate({path: 'jobCompany',
+    strictPopulate: false});
+  
+const fuse1 = new Fuse(JobFind, options1);
 function searchJobs(enteredValue) {
   if (!enteredValue) return;
   const results1 = fuse1.search(enteredValue);
@@ -102,12 +110,20 @@ function searchJobs(enteredValue) {
 const resultValue1 = searchJobs(enteredValue);
 
   const options2 = {
-    keys: ["intCompany", "intTitle"],
+    keys: ["intCompany.companyName", "intTitle"],
     threshold: 0.3,
     includeScore: true
   };
 
-  const fuse2 = new Fuse(internships, options2);
+  const InternshipFind = await InternshipFindConn.find({}).populate({path: 'intCompany',
+    strictPopulate: false});
+
+    InternshipFind.forEach(intern => {
+      console.log("Internship Title:", intern.intTitle);
+      console.log("Company Name:", intern.intCompany.companyName);
+    });
+    
+  const fuse2 = new Fuse(InternshipFind, options2);
 
   function searchIntern(enteredValue) {
     if (!enteredValue) return;
@@ -119,7 +135,6 @@ const resultValue2 = searchIntern(enteredValue);
 
   res.render('search-results', { enteredValue: enteredValue, sentResult2: resultValue2, sentResult1: resultValue1, user: req.session.user});
 });
-
 
 router.post("/submit-jobs", (req, res) => {
   const { salary, experience } = req.body;

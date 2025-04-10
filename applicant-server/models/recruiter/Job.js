@@ -10,8 +10,8 @@ const jobSchema = new mongoose.Schema({
     jobType: String,
     jobExperience: Number,
     noofPositions: Number,
-    jobCompany: String,
+    jobCompany: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' },
     createdBy: mongoose.Schema.Types.ObjectId
 }, { timestamps: true });
 
-module.exports = (connection) => connection.model('Job', jobSchema);
+module.exports = (connection) => {return connection.model('Job', jobSchema,"jobs")};

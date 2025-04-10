@@ -9,6 +9,7 @@ const connectRecruiterDB = async () => {
         recruiterConn = await mongoose.createConnection(process.env.MONGO_URI_RECRUITERS, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
+            serverSelectionTimeoutMS: 20000,
         });
         console.log("✅ Connected to recruiter DB from applicants server");
     }

@@ -124,13 +124,13 @@
         <div style="background-color: rgb(251, 251, 251);" class="job-card rounded-lg shadow-sm border border-gray-200 overflow-hidden transform scale-100 hover:scale-[1.04] transition-transform duration-300 ease-in-out">
           <div class="job-header flex justify-between items-center p-4">
             <div
-              class="company-logo w-10 h-10 rounded flex items-center justify-center text-black font-bold"><%= job.logoColor %><%= job.jobCompany %>
+              class="company-logo w-10 h-10 rounded flex items-center justify-center text-black font-bold"><%= job.logoColor %><%= job.jobCompany.ComanyName %>
             </div>
           </div>
           <div class="job-content px-4 pb-4">
             <div class="job-title font-medium text-lg mb-1"><%= job.jobTitle %></div>
             <div class="company-info text-sm text-gray-600 mb-2">
-              <%= job.jobCompany %> • <%= job.jobLocation %>
+              <%= job.jobCompany.CompanyName %> • <%= job.jobLocation %>
             </div>
             <div class="job-details flex gap-2 mb-4">
               <span class="work-mode text-xs bg-gray-100 py-1 px-2 rounded"><%= job.jobType %></span>
@@ -164,13 +164,13 @@
               class="company-logo w-10 h-10 rounded flex items-center justify-center text-black font-bold"      
             >
             <%= internships.logoColor %> 
-              <%= internships.intCompany %>
+              <%= internships.intCompany.companyName %>
             </div>
           </div>
           <div class="internships-content px-4 pb-4">
             <div class="internships-title font-medium text-lg mb-1"><%= internships.intTitle %></div>
             <div class="company-info text-sm text-gray-600 mb-2">
-              <%= internships.intCompany %> • <%= internships.intLocation %>
+              <%= internships.intCompany.companyName %> • <%= internships.intLocation %>
             </div>
             <div class="internships-details flex gap-2 mb-4">
               <span class="experience text-xs bg-gray-100 py-1 px-2 rounded"><%= internships.intDuration %> months</span>
@@ -204,13 +204,13 @@
             <div style="background-color: rgb(251, 251, 251);" class="job-card  rounded-lg shadow-sm border border-gray-200 overflow-hidden transform scale-100 hover:scale-[1.04] transition-transform duration-300 ease-in-out">
               <div class="job-header flex justify-between items-center p-4">
                 <div
-                  class="company-logo w-10 h-10 rounded flex items-center justify-center text-black font-bold"><%= job.logoColor %><%= job.jobCompany %>
+                  class="company-logo w-10 h-10 rounded flex items-center justify-center text-black font-bold"><%= job.logoColor %><%= job.jobCompany.companyName %>
                 </div>
               </div>
               <div class="job-content px-4 pb-4">
                 <div class="job-title font-medium text-lg mb-1"><%= job.jobTitle %></div>
                 <div class="company-info text-sm text-gray-600 mb-2">
-                  <%= job.jobCompany %> • <%= job.jobLocation %>
+                  <%= job.jobCompany.companyName %> • <%= job.jobLocation %>
                 </div>
                 <div class="job-details flex gap-2 mb-4">
                   <span class="work-mode text-xs bg-gray-100 py-1 px-2 rounded"><%= job.jobType %></span>
@@ -246,13 +246,13 @@
               class="company-logo w-10 h-10 rounded flex items-center justify-center text-black font-bold"      
             >
             <%= internships.logoColor %> 
-              <%= internships.intCompany %>
+              <%= internships.intCompany.companyName %>
             </div>
           </div>
           <div class="internships-content px-4 pb-4">
             <div class="internships-title font-medium text-lg mb-1"><%= internships.intTitle %></div>
             <div class="company-info text-sm text-gray-600 mb-2">
-              <%= internships.intCompany %> • <%= internships.intLocation %>
+              <%= internships.intCompany.companyName %> • <%= internships.intLocation %>
             </div>
             <div class="internships-details flex gap-2 mb-4">
               <span class="experience text-xs bg-gray-100 py-1 px-2 rounded"><%= internships.intDuration %> months</span>
