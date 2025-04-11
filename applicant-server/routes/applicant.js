@@ -100,6 +100,11 @@ router.post('/search', async (req, res) => {
 
   const JobFind = await JobFindConn.find({}).populate({path: 'jobCompany',
     strictPopulate: false});
+
+    JobFind.forEach(job => {
+      console.log("Job Title:", job.jobTitle);
+      console.log("Company Name:", job.jobCompany.companyName);
+    });
   
 const fuse1 = new Fuse(JobFind, options1);
 function searchJobs(enteredValue) {
@@ -132,6 +137,7 @@ const resultValue1 = searchJobs(enteredValue);
   }
 
 const resultValue2 = searchIntern(enteredValue);
+console.log("jobs",resultValue1);
 
   res.render('search-results', { enteredValue: enteredValue, sentResult2: resultValue2, sentResult1: resultValue1, user: req.session.user});
 });
