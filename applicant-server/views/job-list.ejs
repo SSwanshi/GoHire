@@ -260,10 +260,16 @@
                 <div>
                   <h3 class="text-lg font-semibold text-gray-900"><%= job.jobTitle %></h3>
                   <div class="flex items-center gap-1 text-sm text-gray-600">
-                    <span><%= job.jobCompany.companyName %></span>
+                    <span class="font-semibold"><%= job.jobCompany.companyName %></span>
                     <span>•</span>
                     <span class="inline-block px-3 py-1 text-sm font-medium text-orange-500 bg-orange-100 rounded-full">
                       <%= job.jobType %>
+                    </span>
+                    <span class="inline-block px-3 py-1 text-sm font-medium text-purple-500 bg-purple-100 rounded-full">
+                      Experience: <%= job.jobExperience %> years
+                    </span>
+                    <span class="inline-block px-3 py-1 text-sm font-medium text-green-500 bg-green-100 rounded-full">
+                      Positions: <%= job.noofPositions %>
                     </span>
                   </div>
                 </div>
@@ -282,6 +288,15 @@
               </div>
             </div>
             
+            <!-- Job Requirements Points -->
+            <ul class="text-sm text-gray-600 list-disc list-inside mb-4 space-y-1.5 pl-1">
+              <% job.jobRequirements.split('\n').forEach(point => { %>
+                <% if (point.trim()) { %>
+                  <li class="leading-snug"><%= point.trim() %></li>
+                <% } %>
+              <% }); %>
+            </ul>
+
             <!-- Job Description Points -->
             <ul class="text-sm text-gray-600 list-disc list-inside mb-4 space-y-1.5 pl-1">
               <% job.jobDescription.split('\n').forEach(point => { %>
