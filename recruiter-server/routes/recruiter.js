@@ -146,7 +146,7 @@ router.get("/logo/:id", async (req, res) => {
     } catch (error) {
         console.error("Error fetching image:", error);
         res.status(500).json({ error: "Failed to retrieve image" });
-    }
+    } 
 });
 
 

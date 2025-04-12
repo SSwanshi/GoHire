@@ -1,3 +1,24 @@
+<% function formatTimeAgo(date) { 
+  const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+  
+  let interval = Math.floor(seconds / 31536000);
+  if (interval >= 1) return interval + " year" + (interval === 1 ? "" : "s") + " ago";
+  
+  interval = Math.floor(seconds / 2592000);
+  if (interval >= 1) return interval + " month" + (interval === 1 ? "" : "s") + " ago";
+  
+  interval = Math.floor(seconds / 86400);
+  if (interval >= 1) return interval + " day" + (interval === 1 ? "" : "s") + " ago";
+  
+  interval = Math.floor(seconds / 3600);
+  if (interval >= 1) return interval + " hour" + (interval === 1 ? "" : "s") + " ago";
+  
+  interval = Math.floor(seconds / 60);
+  if (interval >= 1) return interval + " min" + (interval === 1 ? "" : "s") + " ago";
+  
+  return "just now";
+} %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -119,17 +140,94 @@
   </header>
 
   <main class="flex p-6 gap-6 flex-col md:flex-row">
-    <div class="filter-sidebar w-full md:w-64 rounded-lg shadow-sm border border-gray-200 p-4 h-fit">
+    <div class="filter-sidebar w-full md:w-64 bg-white rounded-lg shadow-sm border border-gray-200 p-4 h-fit">
       <div class="filter-header flex justify-between items-center mb-4">
         <h3 class="font-medium">Filter</h3>
         <button class="text-blue-500 text-sm" onclick="clearAll()">Clear All</button>
       </div>
-
-      
+    
+      <!-- Salary Range Dropdown -->
+      <div class="mb-6 border-b border-gray-100 pb-4">
+        <details class="group" open>
+          <summary class="flex justify-between items-center cursor-pointer list-none">
+            <h4 class="font-medium">Salary Range</h4>
+            <svg class="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </summary>
+          <div class="mt-3 space-y-2">
+            <div class="flex items-center">
+              <input type="checkbox" id="salary1" class="mr-2">
+              <label for="salary1" class="text-gray-700">Less than $1000</label>
+            </div>
+            <div class="flex items-center">
+              <input type="checkbox" id="salary2" class="mr-2">
+              <label for="salary2" class="text-gray-700">$1000 - $15,000</label>
+            </div>
+            <div class="flex items-center">
+              <input type="checkbox" id="salary3" class="mr-2">
+              <label for="salary3" class="text-gray-700">More than $15,000</label>
+            </div>
+            <div class="flex items-center">
+              <input type="checkbox" id="salary4" checked class="mr-2">
+              <label for="salary4" class="text-gray-700">Custom</label>
+            </div>
+            <div class="flex items-center space-x-2 mt-2">
+              <input type="text" value="$1,000" class="w-full p-2 border rounded text-sm">
+              <span class="text-gray-500">to</span>
+              <input type="text" value="$25,000" class="w-full p-2 border rounded text-sm">
+            </div>
+          </div>
+        </details>
+      </div>
+    
+      <!-- Experience Dropdown -->
+      <div class="mb-4">
+        <details class="group" open>
+          <summary class="flex justify-between items-center cursor-pointer list-none">
+            <h4 class="font-medium">Experience</h4>
+            <svg class="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </summary>
+          <div class="mt-3 space-y-2">
+            <div class="flex items-center">
+              <input type="checkbox" id="exp1" class="mr-2">
+              <label for="exp1" class="text-gray-700">fresher</label>
+            </div>
+            <div class="flex items-center">
+              <input type="checkbox" id="exp2" class="mr-2">
+              <label for="exp2" class="text-gray-700">Less than a year</label>
+            </div>
+            <div class="flex items-center">
+              <input type="checkbox" id="exp3" checked class="mr-2">
+              <label for="exp3" class="text-gray-700">1-3 years</label>
+            </div>
+            <div class="flex items-center">
+              <input type="checkbox" id="exp4" class="mr-2">
+              <label for="exp4" class="text-gray-700">3-5 years</label>
+            </div>
+            <div class="flex items-center">
+              <input type="checkbox" id="exp5" class="mr-2">
+              <label for="exp5" class="text-gray-700">5-10 years</label>
+            </div>
+            <div class="flex items-center">
+              <input type="checkbox" id="exp6" class="mr-2">
+              <label for="exp6" class="text-gray-700">More than 10 years</label>
+            </div>
+          </div>
+        </details>
+      </div>
+    
+      <!-- Remote Work Option -->
+      <div class="flex items-center">
+        <input type="checkbox" id="remote" class="mr-2">
+        <label for="remote" class="text-gray-700">Open to remote</label>
+      </div>
     </div>
 
     <div class="content flex-1">
-      <div class="search-results-header flex justify-end items-center mb-6">
+      <!-- <div class="search-results-header flex justify-end items-center mb-6">
         <div class="sort-options flex items-center space-x-4">
           <span class="text-sm text-gray-600">Sort by</span>
           <select class="text-sm py-1 px-2 rounded border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -143,44 +241,80 @@
             </button>
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <div class="job-listings grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <% jobs.forEach(job => { %>
-        <div class="job-card rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-         
-          <div class="job-content px-4 pb-4">
-            <div class="job-title font-medium text-lg mb-1"><%= job.jobTitle %></div>
-            <div class="company-info text-sm text-gray-600 mb-2">
-              <%= job.jobCompany %> • <%= job.jobLocation %>
-            </div>
-            <div class="job-details flex gap-2 mb-4">
-              <span class="work-mode text-xs bg-gray-100 py-1 px-2 rounded"><%= job.jobType %></span>
-              <span class="experience text-xs bg-gray-100 py-1 px-2 rounded"><%= job.jobExperience%> years</span>
-            </div>
-            <div class="job-meta flex justify-between items-center text-xs text-gray-500 mb-4">
-              <div class="posting-info font-bold">
-                <%= job.jobDescription %> • <%= job.noofpositions %> Positions
+      <div class="job-listings flex flex-col gap-6">
+        <% JobFind.forEach(job => { %>
+          <div class="job-card bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow">
+            <!-- Job Title Row -->
+            <div class="flex justify-between items-start mb-2">
+              <div class="flex items-center gap-3">
+                <!-- Company Logo -->
+                <div class="bg-gray-100 p-1.5 rounded-lg">
+                  <img src="/applicant/logo/<%= job.jobCompany.logoId %>" 
+                       alt="<%= job.jobCompany.companyName %> Logo" 
+                       class="h-12 w-12 object-contain rounded-md">
+                </div>
+                
+                <!-- Job Title and Company Info -->
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900"><%= job.jobTitle %></h3>
+                  <div class="flex items-center gap-1 text-sm text-gray-600">
+                    <span><%= job.jobCompany.companyName %></span>
+                    <span>•</span>
+                    <span class="inline-block px-3 py-1 text-sm font-medium text-orange-500 bg-orange-100 rounded-full">
+                      <%= job.jobType %>
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div class="salary-info font-medium text-blue-500">
-                $<%= job.jobSalary %>/m
+              
+              <!-- Location and Time -->
+              <div class="flex flex-col items-end">
+                <div class="flex items-center gap-1 text-sm text-gray-600">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  <span class="text-lg font-semibold text-gray-900"><%= job.jobLocation %></span>
+                </div>
+                <span>Posted <%= formatTimeAgo(job.createdAt) %></span>
               </div>
             </div>
-            <div class="apply-button">
-              <form action="/applyforJobs/<%= job.jobTitle %>" method="POST">
+            
+            <!-- Job Description Points -->
+            <ul class="text-sm text-gray-600 list-disc list-inside mb-4 space-y-1.5 pl-1">
+              <% job.jobDescription.split('\n').forEach(point => { %>
+                <% if (point.trim()) { %>
+                  <li class="leading-snug"><%= point.trim() %></li>
+                <% } %>
+              <% }); %>
+            </ul>
+            
+            <!-- Salary and Apply Button -->
+            <div class="flex items-center justify-between border-t pt-4">
+              <% if (job.jobSalary) { %>
+                <div class="text-sm font-medium text-gray-800">
+                  <%= job.jobSalary %> LPA
+                </div>
+              <% } %>
+              
+              <form action="/applyforJobs/<%= job._id %>" method="POST">
                 <button type="submit"
-                  class="w-full py-2 bg-blue-50 text-blue-500 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">Apply
-                  Now</button>
+                  class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-semibold transition-colors">
+                  Apply Now
+                </button>
               </form>
             </div>
           </div>
-        </div>
         <% }); %>
       </div>
     </div>
   </main>
   <%- include('layout/footer') %>
 </body>
+
+
 
 <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 <script>
@@ -221,7 +355,6 @@
         checkbox.checked = false;
     });
   }
-
   
 </script>
 </html>

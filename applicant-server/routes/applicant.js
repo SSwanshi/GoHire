@@ -11,8 +11,22 @@ const { connectDB }= require('../config/db');
 const createJobModel = require('../models/recruiter/Job');
 const createInternshipModel = require('../models/recruiter/Internships');
 const createCompanyModel = require('../models/recruiter/Company');
+const { GridFsStorage } = require("multer-gridfs-storage");
+const { GridFSBucket } = require("mongodb");
+const mongoose = require("mongoose");
+const multer = require("multer");
 
 // router.use(bodyParser.urlencoded({extended:true}));
+
+const conn = mongoose.connection;
+let bucket;
+conn.once("open", () => {
+    bucket = new GridFSBucket(conn.db, { bucketName: "uploads" });
+    console.log("✅ GridFS Bucket Initialized");
+});
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 const applications = [
   { name: 'Sarvjeet Swanshi', email: 'sarvjeetswanshi@gmail.com', resume: '/resumes/john_doe.pdf' },
@@ -34,15 +48,55 @@ router.get('/', (req, res) => {
 router.get('/jobs', async (req, res) => {
   try {
       const recruiterConn = await connectRecruiterDB();
-      const Job = createJobModel(recruiterConn);
+      const JobFindConn = createJobModel(recruiterConn);
+      const CompanyModel = createCompanyModel(recruiterConn);
 
-      const jobs = await Job.find({});
-      res.render('job-list', { jobs }); // pass jobs to EJS
+      const JobFind = await JobFindConn.find({}).populate({path: 'jobCompany',
+        strictPopulate: false});
+
+        JobFind.forEach(job => {
+          console.log("Job Title:", job.jobTitle);
+          console.log("Company Name:", job.jobCompany.companyName);
+        });
+
+      res.render('job-list', { JobFind }); // pass jobs to EJS
   } catch (err) {
       console.error('Error fetching jobs from recruiter DB:', err);
       res.status(500).send('Internal Server Error');
   }
 });
+
+
+router.get("/logo/:id", async (req, res) => {
+  console.log("🔍 Incoming request to /logo/:id");
+
+  try {
+      const logoId = req.params.id;
+      console.log("🆔 Logo ID from request:", logoId);
+
+      const objectId = new mongoose.Types.ObjectId(logoId);
+      console.log("✅ Converted to ObjectId:", objectId);
+
+      const fileExists = await conn.db.collection("uploads.files").findOne({ _id: objectId });
+
+      if (!fileExists) {
+          console.log("⚠️ File not found in uploads.files for ID:", objectId);
+          return res.status(404).json({ error: "Image not found" });
+      }
+
+      console.log("📂 File found. Starting download stream...");
+      const downloadStream = bucket.openDownloadStream(objectId);
+      res.set("Content-Type", fileExists.contentType || "image/png");
+      downloadStream.pipe(res);
+      downloadStream.on("end", () => {
+          console.log("✅ Image stream ended for:", objectId);
+      });
+  } catch (error) {
+      console.error("❌ Error in /logo/:id route:", error);
+      res.status(500).json({ error: "Failed to retrieve image" });
+  }
+});
+
 
 //Internship List
 router.get('/internships', async (req, res) => {
