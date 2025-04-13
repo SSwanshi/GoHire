@@ -1,3 +1,25 @@
+<% function formatTimeAgo(date) { 
+    const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+    
+    let interval = Math.floor(seconds / 31536000);
+    if (interval >= 1) return interval + " year" + (interval === 1 ? "" : "s") + " ago";
+    
+    interval = Math.floor(seconds / 2592000);
+    if (interval >= 1) return interval + " month" + (interval === 1 ? "" : "s") + " ago";
+    
+    interval = Math.floor(seconds / 86400);
+    if (interval >= 1) return interval + " day" + (interval === 1 ? "" : "s") + " ago";
+    
+    interval = Math.floor(seconds / 3600);
+    if (interval >= 1) return interval + " hour" + (interval === 1 ? "" : "s") + " ago";
+    
+    interval = Math.floor(seconds / 60);
+    if (interval >= 1) return interval + " min" + (interval === 1 ? "" : "s") + " ago";
+    
+    return "just now";
+} %>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,13 +140,13 @@
 
     <main class="flex flex-col md:flex-row p-6 gap-6">
         <!-- Filter Sidebar -->
-        <div class="filter-sidebar w-full md:w-64 rounded-lg shadow-sm border border-gray-200 p-4 h-fit">
+        <div class="filter-sidebar w-full md:w-64 bg-white rounded-lg shadow-sm border border-gray-200 p-4 h-fit">
             <div class="filter-header flex justify-between items-center mb-4">
                 <h3 class="font-medium">Filter</h3>
                 <button class="text-blue-500 text-sm" onclick="clearAll()">Clear All</button>
             </div>
 
-            <form action="/submit-internship" method="POST" class="mx-auto max-w-md rounded-lg bg-gray-100 p-6 shadow-lg" id="filter-form">
+            <form action="/submit-internship" method="POST" class="mx-auto max-w-md rounded-lg bg-white-100 p-6 shadow-lg" id="filter-form">
                 <div class="filter-section mb-4 border-b border-gray-200 pb-4">
                     <div class="filter-title flex justify-between items-center mb-2 cursor-pointer" onclick="toggleDropdownDuration()">
                         <h4 class="font-medium">Duration</h4>
@@ -136,27 +158,19 @@
                     <!-- Duration Filter Options -->
                     <div id="filterOptions" class="filter-options space-y-2 hidden">
                         <label class="flex items-center">
-                            <input type="checkbox" name="duration" value="less-1" class="mr-2 h-4 w-4 text-blue-500"
-                                <% if (filters.duration && filters.duration.includes('less-1')) { %> checked <% } %> 
-                            />
+                            <input type="checkbox" name="dur1" value="less-1" <%= filters.dur1 ? 'checked' : '' %> class="mr-2 h-4 w-4 text-blue-500"/>
                             <span class="text-sm">Less than 1 month</span>
                         </label>
                         <label class="flex items-center">
-                            <input type="checkbox" name="duration" value="1-3" class="mr-2 h-4 w-4 text-blue-500"
-                                <% if (filters.duration && filters.duration.includes('1-3')) { %> checked <% } %> 
-                            />
+                            <input type="checkbox" name="dur2" value="1-3" <%= filters.dur2 ? 'checked' : '' %> class="mr-2 h-4 w-4 text-blue-500"/>
                             <span class="text-sm">1-3 months</span>
                         </label>
                         <label class="flex items-center">
-                            <input type="checkbox" name="duration" value="3-6" class="mr-2 h-4 w-4 text-blue-500"
-                                <% if (filters.duration && filters.duration.includes('3-6')) { %> checked <% } %> 
-                            />
+                            <input type="checkbox" name="dur3" value="3-6" <%= filters.dur3 ? 'checked' : '' %> class="mr-2 h-4 w-4 text-blue-500"/>
                             <span class="text-sm">3-6 months</span>
                         </label>
                         <label class="flex items-center">
-                            <input type="checkbox" name="duration" value="more-6" class="mr-2 h-4 w-4 text-blue-500"
-                                <% if (filters.duration && filters.duration.includes('more-6')) { %> checked <% } %> 
-                            />
+                            <input type="checkbox" name="dur4" value="more-6" <%= filters.dur4 ? 'checked' : '' %> class="mr-2 h-4 w-4 text-blue-500"/>
                             <span class="text-sm">More than 6 months</span>
                         </label>
                     </div>
@@ -183,39 +197,87 @@
                 </div>
             </div>
 
-            <div class="internships-listings grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <% internships.forEach(internships => { %>
-                <div class="internships-card rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div class="job-listings flex flex-col gap-6">
+                <% InternshipFind.forEach(int => { %>
+                    <div class="job-card bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow">
+                        <!-- Job Title Row -->
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex items-center gap-3">
+                                <!-- Company Logo -->
+                                <div class="bg-gray-100 p-1.5 rounded-lg">
+                                    <img src="/applicant/logo/<%= int.intCompany.logoId %>" 
+                                        alt="<%= int.intCompany.companyName %> Logo" 
+                                        class="h-12 w-12 object-contain rounded-md">
+                                </div>
+                                
+                                <!-- Internship Title and Company Info -->
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900"><%= int.intTitle %></h3>
+                                    <div class="flex items-center gap-1 text-sm text-gray-600">
+                                        <span class="font-semibold"><%= int.intCompany.companyName %></span>
+                                        <span>•</span>
+                                        <span class="inline-block px-3 py-1 text-sm font-medium text-orange-500 bg-orange-100 rounded-full">
+                                        <%= int.intDuration %> months
+                                        </span>
+                                        <span class="inline-block px-3 py-1 text-sm font-medium text-purple-500 bg-purple-100 rounded-full">
+                                        Experience: <%= int.intExperience %> years
+                                        </span>
+                                        <span class="inline-block px-3 py-1 text-sm font-medium text-green-500 bg-green-100 rounded-full">
+                                        Positions: <%= int.intPositions %>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <!-- Location and Time -->
+                            <div class="flex flex-col items-end">
+                                <div class="flex items-center gap-1 text-sm text-gray-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                <span class="text-lg font-semibold text-gray-900"><%= int.intLocation %></span>
+                                </div>
+                                <span>Posted <%= formatTimeAgo(int.createdAt) %></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Internship Requirements Points -->
+                        <ul class="text-sm text-gray-600 list-disc list-inside mb-4 space-y-1.5 pl-1">
+                        <% int.intRequirements.split('\n').forEach(point => { %>
+                            <% if (point.trim()) { %>
+                            <li class="leading-snug"><%= point.trim() %></li>
+                            <% } %>
+                        <% }); %>
+                        </ul>
+            
+                        <!-- Internship Description Points -->
+                        <ul class="text-sm text-gray-600 list-disc list-inside mb-4 space-y-1.5 pl-1">
+                        <% int.intDescription.split('\n').forEach(point => { %>
+                            <% if (point.trim()) { %>
+                            <li class="leading-snug"><%= point.trim() %></li>
+                            <% } %>
+                        <% }); %>
+                        </ul>
                     
-                    <div class="internships-content px-4 pb-4">
-                        <div class="internships-title font-medium text-lg mb-1"><%= internships.intTitle %></div>
-                        <div class="company-info text-sm text-gray-600 mb-2">
-                            <%= internships.intCompany %> • <%= internships.intLocation %>
+                        <!-- Salary and Apply Button -->
+                        <div class="flex items-center justify-between border-t pt-4">
+                            <% if (int.intStipned) { %>
+                                <div class="text-sm font-medium text-gray-800">
+                                <%= int.intStipned %> LPA
+                                </div>
+                            <% } %>
+                        
+                            <form action="/applyforJobs/<%= int._id %>" method="POST">
+                                <button type="submit"
+                                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-semibold transition-colors">
+                                Apply Now
+                                </button>
+                            </form>
                         </div>
-                        <div class="internships-details flex gap-2 mb-4">
-                            <span class="experience text-xs bg-gray-100 py-1 px-2 rounded"><%= internships.intDuration %> months</span>
-                        </div>
-                        <div class="internships-meta flex justify-between items-center text-xs text-gray-500 mb-4">
-                            <div class="posting-info font-bold">
-                                <%= internships.intPositions %> Applicants
-                            </div>
-                            <div class="salary-info font-medium text-blue-500">
-                                $<%= internships.intStipned %>/m
-                            </div>
-                        </div>
-                        <div class="apply-button">
-                                <form action="/ApplyforInternships/<%=internships.intTitle%>" method="POST">
-                                    <button type="submit"
-                                        class="w-full py-2 bg-blue-50 text-blue-500 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">
-                                        Apply Now
-                                    </button>
-                                            
-                                </form>
-                            </div>
                     </div>
-                </div>
                 <% }); %>
-            </div>
+              </div>
         </div>
     </main>
 

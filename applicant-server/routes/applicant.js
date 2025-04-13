@@ -15,6 +15,7 @@ const { GridFsStorage } = require("multer-gridfs-storage");
 const { GridFSBucket } = require("mongodb");
 const mongoose = require("mongoose");
 const multer = require("multer");
+const Internship = require('../../recruiter-server/models/Internship');
 
 // router.use(bodyParser.urlencoded({extended:true}));
 
@@ -100,7 +101,23 @@ router.get("/logo/:id", async (req, res) => {
 
 //Internship List
 router.get('/internships', async (req, res) => {
-  res.render('internship-list', { internships: internships , filters: {}, user: req.session.user});
+  try {
+    const recruiterConn = await connectRecruiterDB();
+    const InternshipFindConn = createInternshipModel(recruiterConn);
+    const CompanyModel = createCompanyModel(recruiterConn);
+
+    const InternshipFind = await InternshipFindConn.find({}).populate({path: 'intCompany', strictPopulate: false});
+
+    InternshipFind.forEach(intern => {
+      console.log("Internship Title:", intern.intTitle);
+      console.log("Company Name:", intern.intCompany.companyName);
+    });
+
+    res.render('internship-list', { InternshipFind });
+  } catch (err) {
+    console.error('Error fetching jobs from recruiter DB:', err);
+    res.status(500).send('Internal Server Error');
+  }
 })
 
 // Company List
@@ -196,49 +213,111 @@ console.log("jobs",resultValue1);
   res.render('search-results', { enteredValue: enteredValue, sentResult2: resultValue2, sentResult1: resultValue1, user: req.session.user});
 });
 
-router.post("/submit-jobs", (req, res) => {
-  const { salary, experience } = req.body;
-  const selectedFilters = req.body;
-  let filteredJobs = jobs;
+router.post('/submit-jobs', async (req, res) => {
+  try {
+    const {
+      salary1,
+      salary2,
+      salary3,
+      salary4,
+      exp1,
+      exp2,
+      exp3,
+      exp4,
+      exp5,
+      exp6,
+    } = req.body;
+    const recruiterConn = await connectRecruiterDB();
+    const JobFindConn = createJobModel(recruiterConn)
+    const CompanyModel = createCompanyModel(recruiterConn);
+  
+    // Construct query object
+    const query = {};
 
-  if (salary) {
-    filteredJobs = filteredJobs.filter((job) => {
-      if (salary.includes("less-25") && job.jobSalary < 25) return true;
-      if (salary.includes("25-35") && job.jobSalary >= 25 && job.salary <= 35) return true;
-      if (salary.includes("35-45") && job.jobSalary >= 35 && job.jobSalary < 45) return true;
-      return false;
-    });
+    // Salary Range Filters
+    let salaryConditions = [];
+    if (salary1) salaryConditions.push({ jobSalary: { $lt: 10 } });
+    if (salary2) salaryConditions.push({ jobSalary: { $gte: 10, $lte: 20 } });
+    if (salary3) salaryConditions.push({ jobSalary: { $gte: 20, $lte: 30 } });
+    if(salary4) salaryConditions.push({ jobSalary: { $gte: 30}});
+
+    // // Custom salary
+    // if (salary4 && req.body.customMin && req.body.customMax) {
+    //   const min = parseInt(req.body.customMin.replace(/[^0-9]/g, ""));
+    //   const max = parseInt(req.body.customMax.replace(/[^0-9]/g, ""));
+    //   if (!isNaN(min) && !isNaN(max)) {
+    //     salaryConditions.push({ jobSalary: { $gte: min, $lte: max } });
+    //   }
+    // }
+
+    if (salaryConditions.length > 0) {
+      query.$or = salaryConditions;
+    }
+
+    // Experience Filter
+    let expConditions = [];
+    if (exp1) expConditions.push({ jobExperience: 0 });
+    if (exp2) expConditions.push({ jobExperience: { $lt: 1 } });
+    if (exp3) expConditions.push({ jobExperience: { $gte: 1, $lte: 3 } });
+    if (exp4) expConditions.push({ jobExperience: { $gte: 3, $lte: 5 } });
+    if (exp5) expConditions.push({ jobExperience: { $gte: 5, $lte: 10 } });
+    if (exp6) expConditions.push({ jobExperience: { $gt: 10 } });
+
+    if (expConditions.length > 0) {
+      query.$and = query.$and || [];
+      query.$and.push({ $or: expConditions });
+    }
+
+    // final query
+    const JobFind = await JobFindConn.find(query).populate({path: 'jobCompany',
+      strictPopulate: false});
+    // Final query
+    // const jobs = await Job.find(query).populate('jobCompany');
+
+    res.render('job-list', { JobFind, filters: req.body }); // or send JSON: res.json(jobs);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
   }
-
-  if (experience) {
-    filteredJobs = filteredJobs.filter((job) => {
-      if (experience.includes("fresher") && job.jobExperience === 0) return true;
-      if (experience.includes("less-1") && job.jobExperience < 1) return true;
-      if (experience.includes("1-3") && job.jobExperience >= 1 && job.jobExperience <= 3) return true;
-      if (experience.includes("3-5") && job.jobExperience >= 3 && job.jobExperience <= 5) return true;
-      if (experience.includes("5-10") && job.jobExperience >= 5 && job.jobExperience <= 10) return true;
-      if (experience.includes("more-10") && job.jobExperience > 10) return true;
-      return false;
-    });
-  }
-
-  res.render("job-list", { jobs: filteredJobs , filters: selectedFilters, user: req.session.user});
 });
 
-router.post('/submit-internship', (req, res) => {
-  const {duration} = req.body;
-  const selectedFilters = req.body;
-  let filteredInternships = internships;
-  if(duration){
-    filteredInternships = filteredInternships.filter((internship) => {
-      if(duration.includes('less-1') && internship.intDuration < 1) return true;
-      if(duration.includes('1-3') && internship.intDuration >= 1 && internship.intDuration <= 3) return true;
-      if(duration.includes('3-6') && internship.intDuration >= 3 && internship.intDuration <= 6) return true;
-      if(duration.includes('more-6') && internship.intDuration > 6) return true;
-      return false;
-    });
+router.post('/submit-internship', async (req, res) => {
+  try {
+    const {
+      dur1,
+      dur2, 
+      dur3,
+      dur4,
+    } = req.body;
+
+    const recruiterConn = await connectRecruiterDB();
+    const InternshipFindConn = createInternshipModel(recruiterConn);
+    const CompanyModel = createCompanyModel(recruiterConn);
+
+    const query = {};
+
+    // duration filter
+    let durConditions = [];
+    if(dur1) durConditions.push({intDuration: {$lte: 1}});
+    if(dur2) durConditions.push({intDuration: {$gt: 1, $lte: 3}});
+    if(dur3) durConditions.push({intDuration: {$gt: 3, $lte: 6}});
+    if(dur4) durConditions.push({intDuration: {$gt: 6}});
+
+
+    if(durConditions.length > 0){
+      query.$or = durConditions;
+    }
+
+    // final query
+
+    const InternshipFind = await InternshipFindConn.find(query).populate({path: 'intCompany', strictPopulate: false});
+    res.render('internship-list', { InternshipFind, filters: req.body });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
   }
-  res.render('internship-list', {internships: filteredInternships, filters: selectedFilters, user: req.session.user});
+
 });
 
 router.post('/applyforJobs/:jobTitle', (req, res) => {

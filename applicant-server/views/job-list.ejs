@@ -147,83 +147,75 @@
       </div>
     
       <!-- Salary Range Dropdown -->
-      <div class="mb-6 border-b border-gray-100 pb-4">
-        <details class="group" open>
-          <summary class="flex justify-between items-center cursor-pointer list-none">
-            <h4 class="font-medium">Salary Range</h4>
-            <svg class="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </summary>
-          <div class="mt-3 space-y-2">
-            <div class="flex items-center">
-              <input type="checkbox" id="salary1" class="mr-2">
-              <label for="salary1" class="text-gray-700">Less than $1000</label>
+      <form action="/submit-jobs" method="POST" class="mx-auto max-w-md rounded-lg bg-white p-6 shadow-lg" id="filter-form">
+        <div class="mb-6 border-b border-gray-100 pb-4">
+          <details class="group" open>
+            <summary class="flex justify-between items-center cursor-pointer list-none">
+              <h4 class="font-medium">Salary Range</h4>
+              <svg class="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </summary>
+            <div class="mt-3 space-y-2">
+              <div class="flex items-center">
+                <input type="checkbox" name="salary1" id="salary1" <%= filters.salary1 ? 'checked' : '' %> class="mr-2">
+                <label for="salary1" class="text-gray-700">Less than 10LPA</label>
+              </div>
+              <div class="flex items-center">
+                <input type="checkbox" name="salary2" id="salary2" <%= filters.salary2 ? 'checked' : '' %> class="mr-2">
+                <label for="salary2" class="text-gray-700">10LPA - 20LPA</label>
+              </div>
+              <div class="flex items-center">
+                <input type="checkbox" name="salary3" id="salary3" <%= filters.salary3 ? 'checked' : '' %> class="mr-2">
+                <label for="salary3" class="text-gray-700">20LPA - 30LPA</label>
+              </div>
+              <div class="flex items-center">
+                <input type="checkbox" name="salary4" id="salary4" <%= filters.salary4 ? 'checked' : '' %> class="mr-2">
+                <label for="salary4" class="text-gray-700">more than 30LPA</label>
+              </div>
             </div>
-            <div class="flex items-center">
-              <input type="checkbox" id="salary2" class="mr-2">
-              <label for="salary2" class="text-gray-700">$1000 - $15,000</label>
+          </details>
+        </div>
+      
+        <!-- Experience Dropdown -->
+        <div class="mb-4">
+          <details class="group" open>
+            <summary class="flex justify-between items-center cursor-pointer list-none">
+              <h4 class="font-medium">Experience</h4>
+              <svg class="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </summary>
+            <div class="mt-3 space-y-2">
+              <div class="flex items-center">
+                <input type="checkbox" name="exp1" id="exp1" <%= filters.exp1 ? 'checked' : '' %> class="mr-2">
+                <label for="exp1" class="text-gray-700">fresher</label>
+              </div>
+              <div class="flex items-center">
+                <input type="checkbox" name="exp2" id="exp2" <%= filters.exp2? 'checked' : '' %> class="mr-2">
+                <label for="exp2" class="text-gray-700">Less than a year</label>
+              </div>
+              <div class="flex items-center">
+                <input type="checkbox" name="exp3" id="exp3" <%= filters.exp3 ? 'checked' : '' %> class="mr-2">
+                <label for="exp3" class="text-gray-700">1-3 years</label>
+              </div>
+              <div class="flex items-center">
+                <input type="checkbox" name="exp4" id="exp4" <%= filters.exp4 ? 'checked' : '' %> class="mr-2">
+                <label for="exp4" class="text-gray-700">3-5 years</label>
+              </div>
+              <div class="flex items-center">
+                <input type="checkbox" name="exp5" id="exp5" <%= filters.exp5 ? 'checked' : '' %> class="mr-2">
+                <label for="exp5" class="text-gray-700">5-10 years</label>
+              </div>
+              <div class="flex items-center">
+                <input type="checkbox" name="exp6" id="exp6" <%= filters.exp6 ? 'checked' : '' %> class="mr-2">
+                <label for="exp6" class="text-gray-700">More than 10 years</label>
+              </div>
             </div>
-            <div class="flex items-center">
-              <input type="checkbox" id="salary3" class="mr-2">
-              <label for="salary3" class="text-gray-700">More than $15,000</label>
-            </div>
-            <div class="flex items-center">
-              <input type="checkbox" id="salary4" checked class="mr-2">
-              <label for="salary4" class="text-gray-700">Custom</label>
-            </div>
-            <div class="flex items-center space-x-2 mt-2">
-              <input type="text" value="$1,000" class="w-full p-2 border rounded text-sm">
-              <span class="text-gray-500">to</span>
-              <input type="text" value="$25,000" class="w-full p-2 border rounded text-sm">
-            </div>
-          </div>
-        </details>
-      </div>
-    
-      <!-- Experience Dropdown -->
-      <div class="mb-4">
-        <details class="group" open>
-          <summary class="flex justify-between items-center cursor-pointer list-none">
-            <h4 class="font-medium">Experience</h4>
-            <svg class="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </summary>
-          <div class="mt-3 space-y-2">
-            <div class="flex items-center">
-              <input type="checkbox" id="exp1" class="mr-2">
-              <label for="exp1" class="text-gray-700">fresher</label>
-            </div>
-            <div class="flex items-center">
-              <input type="checkbox" id="exp2" class="mr-2">
-              <label for="exp2" class="text-gray-700">Less than a year</label>
-            </div>
-            <div class="flex items-center">
-              <input type="checkbox" id="exp3" checked class="mr-2">
-              <label for="exp3" class="text-gray-700">1-3 years</label>
-            </div>
-            <div class="flex items-center">
-              <input type="checkbox" id="exp4" class="mr-2">
-              <label for="exp4" class="text-gray-700">3-5 years</label>
-            </div>
-            <div class="flex items-center">
-              <input type="checkbox" id="exp5" class="mr-2">
-              <label for="exp5" class="text-gray-700">5-10 years</label>
-            </div>
-            <div class="flex items-center">
-              <input type="checkbox" id="exp6" class="mr-2">
-              <label for="exp6" class="text-gray-700">More than 10 years</label>
-            </div>
-          </div>
-        </details>
-      </div>
-    
-      <!-- Remote Work Option -->
-      <div class="flex items-center">
-        <input type="checkbox" id="remote" class="mr-2">
-        <label for="remote" class="text-gray-700">Open to remote</label>
-      </div>
+          </details>
+        </div>
+        <button type="submit" id="apply-filters" class="mt-4 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">Apply</button>
+      </form>
     </div>
 
     <div class="content flex-1">
