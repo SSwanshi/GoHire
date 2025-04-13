@@ -60,7 +60,7 @@ router.get('/jobs', async (req, res) => {
           console.log("Company Name:", job.jobCompany.companyName);
         });
 
-      res.render('job-list', { JobFind }); // pass jobs to EJS
+      res.render('job-list', { JobFind, filters: {} }); // pass jobs to EJS
   } catch (err) {
       console.error('Error fetching jobs from recruiter DB:', err);
       res.status(500).send('Internal Server Error');
@@ -113,7 +113,7 @@ router.get('/internships', async (req, res) => {
       console.log("Company Name:", intern.intCompany.companyName);
     });
 
-    res.render('internship-list', { InternshipFind });
+    res.render('internship-list', { InternshipFind, filters: {} });
   } catch (err) {
     console.error('Error fetching jobs from recruiter DB:', err);
     res.status(500).send('Internal Server Error');

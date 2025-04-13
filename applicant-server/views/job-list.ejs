@@ -192,7 +192,7 @@
                 <label for="exp1" class="text-gray-700">fresher</label>
               </div>
               <div class="flex items-center">
-                <input type="checkbox" name="exp2" id="exp2" <%= filters.exp2? 'checked' : '' %> class="mr-2">
+                <input type="checkbox" name="exp2" id="exp2" <%= (filters && filters.exp2)? 'checked' : '' %> class="mr-2">
                 <label for="exp2" class="text-gray-700">Less than a year</label>
               </div>
               <div class="flex items-center">
