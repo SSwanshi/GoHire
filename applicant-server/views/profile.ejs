@@ -1,143 +1,106 @@
 <%- include('layout/header') %>
-<nav class="bg-blue-500 p-5 shadow-xl fixed w-full z-10 transition-all duration-300"
-id="navbar">
-<div class="container mx-auto flex justify-between items-center">
-    <a href="/"
-        class="text-black text-3xl font-bold transition-transform hover:scale-105 duration-300 ml-2">Go<span
-            class="text-yellow-400">Hire</span></a>
+  <nav class="bg-blue-500 p-5 shadow-xl fixed w-full z-10 transition-all duration-300" id="navbar">
+    <div class="container mx-auto flex justify-between items-center">
+      <a href="/" class="text-black text-3xl font-bold transition-transform hover:scale-105 duration-300 ml-2">Go<span
+          class="text-yellow-400">Hire</span></a>
 
-    <div class="relative w-1/3 group">
+      <div class="relative w-1/3 group">
         <form action="/search" method="POST" id="search-form">
-            <input id="search-space" type="text" placeholder="Search for Opportunities" name="parsedValue"
-                class="w-full p-3 rounded-full border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 shadow-md placeholder:text-gray-700">
+          <input id="search-space" type="text" placeholder="Search for Opportunities" name="parsedValue"
+            class="w-full p-3 rounded-full border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 shadow-md placeholder:text-gray-700">
         </form>
         <div class="absolute right-3 top-3.5 text-yellow-500">
-            <a href="/search" id="search-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor" stroke-width="4">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-            </a>
+          <a href="/search" id="search-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" stroke-width="4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </a>
         </div>
-    </div>
+      </div>
 
-    <ul class="hidden md:flex space-x-8 text-white">
-        <li><a href="/" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Home</a>
-        </li>
-        <li><a href="/jobs" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Jobs</a>
-        </li>
+      <ul class="hidden md:flex space-x-8 text-white">
+        <li><a href="/" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Home</a></li>
+        <li><a href="/jobs" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Jobs</a></li>
         <li><a href="/internships"
-                class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Internship</a></li>
-        <li><a href="/contact"
-                class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Contact Us</a></li>
+            class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Internship</a></li>
+        <li><a href="/contact" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Contact
+            Us</a></li>
         <% if (user) { %>
-            <li class="relative group">
-                <button
-                    class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg flex items-center">
-                    <%= user.firstName || 'Profile' %>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 9l-7 7-7-7" />
-                        </svg>
-                </button>
-                <div
-                    class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform -translate-y-2 group-hover:translate-y-0">
-                    <a href="/profile" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-t-lg">My
-                        Profile</a>
-                    <a href="/logout"
-                        class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-b-lg">Logout</a>
-                </div>
+          <li class="relative group">
+            <button
+              class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg flex items-center">
+              <%= user.firstName || 'Profile' %>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div
+              class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform -translate-y-2 group-hover:translate-y-0">
+              <a href="/profile" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-t-lg">My Profile</a>
+              <a href="/logout" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-b-lg">Logout</a>
+            </div>
+          </li>
+          <% } else { %>
+            <li><a href="/login"
+                class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg">Login</a>
             </li>
-            <% } else { %>
-                <li><a href="/login"
-                        class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg">Login</a>
-                </li>
-                         <% } %>
+            <% } %>
+      </ul>
 
-    </ul>
-
-    <div class="md:hidden relative" id="mobile-menu-container">
+      <div class="md:hidden relative" id="mobile-menu-container">
         <div class="flex flex-col space-y-1 cursor-pointer" id="mobile-menu">
-            <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
-            <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
-            <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
+          <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
+          <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
+          <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
         </div>
         <ul id="dropdown-menu"
-            class="absolute right-0 mt-10 w-140 bg-yellow-500 text-blue-500 rounded-lg shadow-lg hidden text-blue-800 flex justify-center flex-col">
-            <li><a href="/" class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Home</a>
-            </li>
-            <li><a href="/jobs"
-                    class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Jobs</a></li>
-            <li><a href="/internships"
-                    class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Internships</a>
-            </li>
-            <li><a href="/contact"
-                    class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Contact Us</a>
-            </li>
+          class="absolute right-0 mt-10 w-140 bg-yellow-500 text-blue-500 rounded-lg shadow-lg hidden text-blue-800 flex justify-center flex-col">
+          <li><a href="/" class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Home</a></li>
+          <li><a href="/jobs" class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Jobs</a></li>
+          <li><a href="/internships"
+              class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Internships</a></li>
+          <li><a href="/contact" class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Contact
+              Us</a></li>
 
-            <% if (user) { %>
-                <li class="relative group flex justify-center">
-                    <button
-                        class="bg-yellow-400 hover:bg-blue-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg">
-                        <%= user.firstName || 'Profile' %>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7" />
-                            </svg>
-                    </button>
-                    <div
-                        class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform -translate-y-2 group-hover:translate-y-0 flex justify-center flex-col">
-                        <a href="/profile"
-                            class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-t-lg">My Profile</a>
-                        <a href="/logout"
-                            class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-b-lg">Logout</a>
-                    </div>
-                </li>
-                <% } else { %>
-                    <li><a href="/login"
-                            class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg flex justify-center">Login</a>
-                    </li>
-                             <% } %>
+          <% if (user) { %>
+            <li class="relative group flex justify-center">
+              <button
+                class="bg-yellow-400 hover:bg-blue-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg">
+                <%= user.firstName || 'Profile' %>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+              </button>
+              <div
+                class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform -translate-y-2 group-hover:translate-y-0 flex justify-center flex-col">
+                <a href="/profile" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-t-lg">My Profile</a>
+                <a href="/logout" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-b-lg">Logout</a>
+              </div>
+            </li>
+            <% } else { %>
+              <li><a href="/login"
+                  class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg flex justify-center">Login</a>
+              </li>
+              <% } %>
         </ul>
+      </div>
     </div>
-</div>
-</nav>
+  </nav>
 
-  <header class="pt-32 pb-24  text-white relative overflow-hidden ">
+  <header class="pt-32 pb-24 text-white relative overflow-hidden">
     <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-4">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Profile Initial Avatar -->
         <div class="md:col-span-1 flex flex-col items-center justify-start">
-          <div class="relative group">
-            <img id="profileImage" src="" alt="Profile Photo"
-              class="w-40 h-40 object-cover rounded-full border-4 border-yellow-400 shadow-md profile-image">
-            <div
-              class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <label for="imageUpload" class="cursor-pointer text-white text-sm font-medium">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto mb-1" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                Change Photo
-              </label>
+          <div class="relative">
+            <div id="profileInitial"
+              class="w-40 h-40 flex items-center justify-center rounded-full border-4 border-yellow-400 shadow-md bg-blue-50 text-blue-900 text-6xl font-bold">
+              <%= user.firstName.charAt(0).toUpperCase() %>
             </div>
           </div>
-          <input type="file" id="imageUpload" class="hidden" accept="image/*">
-
-          <button
-            class="mt-6 bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg shadow transition duration-300 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-            </svg>
-            Change Photo
-          </button>
         </div>
 
         <div class="md:col-span-2">
@@ -192,7 +155,7 @@ id="navbar">
             <div class="bg-blue-50 p-4 rounded-lg">
               <label class="block text-sm font-medium text-blue-700">Member Since</label>
               <p class="text-lg text-blue-900 font-semibold">
-                 25 March 2025
+                25 March 2025
               </p>
             </div>
           </div>
@@ -279,76 +242,17 @@ id="navbar">
         </div>
       </div>
 
-
       <div class="mt-8 flex justify-end space-x-4">
         <button onclick="window.location.href = '/'"
           class="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-lg transition duration-300">Log
           Out</button>
       </div>
+    </div>
   </header>
 
   <script>
-
-document.getElementById('mobile-menu').addEventListener('click', function () {
-        document.getElementById('dropdown-menu').classList.toggle('hidden');
-    });
-
-    document.getElementById('imageUpload').addEventListener('change', function (event) {
-      const file = event.target.files[0];
-      if (file) {
-        if (file.size > 5 * 1024 * 1024) {
-          alert('File is too large. Maximum size is 5MB.');
-          return;
-        }
-
-        // File type validation (optional)
-        if (!file.type.match('image.*')) {
-          alert('Only image files are allowed.');
-          return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          // Display preview immediately
-          document.getElementById('profileImage').src = e.target.result;
-
-          // Upload the image to server
-          const formData = new FormData();
-          formData.append('profileImage', file);
-
-          fetch('/user/upload-profile-image', {
-            method: 'POST',
-            body: formData
-          })
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Network response was not ok');
-              }
-              return response.json();
-            })
-            .then(data => {
-              if (data.success) {
-                // Update all profile images on the page with the new URL
-                const profileImages = document.querySelectorAll('.profile-image');
-                profileImages.forEach(img => {
-                  img.src = data.imageUrl;
-                });
-
-                console.log('Profile image updated successfully!');
-              } else {
-                console.error('Upload failed:', data.message);
-                alert('Upload failed: ' + data.message);
-              }
-            })
-            .catch(error => {
-              console.error('Error uploading image:', error);
-              alert('Error uploading image. Please try again.');
-              // Revert the preview to the original image
-              document.getElementById('profileImage').src = " '/uploads/profiles/default-image.jpg' %>";
-            });
-        };
-        reader.readAsDataURL(file);
-      }
+    document.getElementById('mobile-menu').addEventListener('click', function () {
+      document.getElementById('dropdown-menu').classList.toggle('hidden');
     });
 
     // Client-side JavaScript for resume upload functionality
@@ -455,8 +359,6 @@ document.getElementById('mobile-menu').addEventListener('click', function () {
         formData.append('resume', resumeFile.files[0]);
         formData.append('resumeTitle', document.getElementById('resumeTitle').value);
 
-        // In a real application, you would send this to your server
-        // For this example, we'll simulate a successful upload
         uploadResume(formData);
       });
     });
@@ -470,15 +372,12 @@ document.getElementById('mobile-menu').addEventListener('click', function () {
 
     // Function to view the resume
     function viewResume() {
-      // In a real application, this would open the resume file
-      alert('Opening resume...');
+      window.location.href = '/resume/<%= user.userId %>';
     }
 
     // Function to delete the resume
     function deleteResume() {
       if (confirm('Are you sure you want to delete your resume?')) {
-        // In a real application, send a request to delete the file
-        // For this example, we'll simulate a successful deletion
         fetch('/api/resume', {
           method: 'DELETE',
         })
@@ -495,7 +394,7 @@ document.getElementById('mobile-menu').addEventListener('click', function () {
       }
     }
 
-    // Function to upload resume (simulation for this example)
+    // Function to upload resume
     function uploadResume(formData) {
       // Show loading state
       const submitBtn = document.querySelector('#resumeUploadForm button[type="submit"]');
@@ -503,29 +402,37 @@ document.getElementById('mobile-menu').addEventListener('click', function () {
       submitBtn.textContent = 'Uploading...';
       submitBtn.disabled = true;
 
-      // In a real application, you would use fetch to send the form data to your server
-      // For this example, we'll simulate a successful upload after a short delay
-      setTimeout(() => {
-        // Update UI to show the uploaded resume
-        const fileName = document.getElementById('resumeFile').files[0].name;
-        const now = new Date();
-        const formattedDate = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+      fetch('/api/resume', {
+        method: 'POST',
+        body: formData
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Update UI to show the uploaded resume
+            document.getElementById('resumeFileName').textContent = data.resumeData.fileName;
+            document.getElementById('resumeUploadDate').textContent = 'Uploaded: ' + new Date(data.resumeData.uploadDate).toLocaleString();
 
-        document.getElementById('resumeFileName').textContent = fileName;
-        document.getElementById('resumeUploadDate').textContent = 'Uploaded: ' + formattedDate;
+            document.getElementById('resumeUploadSection').classList.add('hidden');
+            document.getElementById('currentResumeSection').classList.remove('hidden');
+            document.getElementById('uploadNewSection').classList.remove('hidden');
 
-        document.getElementById('resumeUploadSection').classList.add('hidden');
-        document.getElementById('currentResumeSection').classList.remove('hidden');
-        document.getElementById('uploadNewSection').classList.remove('hidden');
-
-        // Reset form
-        document.getElementById('resumeUploadForm').reset();
-        document.getElementById('selectedFileName').classList.add('hidden');
-
-        // Reset button
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-      }, 1500);
+            // Reset form
+            document.getElementById('resumeUploadForm').reset();
+            document.getElementById('selectedFileName').classList.add('hidden');
+          } else {
+            alert('Upload failed: ' + data.message);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Error uploading resume. Please try again.');
+        })
+        .finally(() => {
+          // Reset button
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+        });
     }
   </script>
 

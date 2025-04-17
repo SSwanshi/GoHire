@@ -6,7 +6,7 @@ const { ObjectId } = require('mongoose').Types;
 const User = require('../models/user');
 const { connectDB, getGfs } = require('../config/db');
 
-// Configure multer for memory storage
+// Configure multer for memory storage (only for resume now)
 const upload = multer({
     storage: multer.memoryStorage(),
     fileFilter: (req, file, cb) => {

@@ -47,4 +47,3 @@ const userSchema = new mongoose.Schema({
 
 // Password hashing middleware
 module.exports = mongoose.model('User', userSchema);
-
