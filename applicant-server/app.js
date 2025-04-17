@@ -39,6 +39,16 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(passport.initialize());
 app.use(passport.session()); // If using Passport for authentication
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Server error:', err.stack);
+  res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+      error: process.env.NODE_ENV === 'development' ? err.stack : undefined
+  });
+});
+
 app.use('/profile', profileRoutes);
 
 // In your app.js or routes file where you render the home page
