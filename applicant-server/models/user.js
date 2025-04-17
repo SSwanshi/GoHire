@@ -33,8 +33,7 @@ const userSchema = new mongoose.Schema({
     },
     password: {  // NEW: Added password field for authentication
         type: String,
-        required: true,
-        select: false // Won't be returned in queries unless explicitly asked for
+        required: true
     },
     memberSince: {
         type: Date,
@@ -47,30 +46,5 @@ const userSchema = new mongoose.Schema({
 });
 
 // Password hashing middleware
-userSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) return next();
-
-    try {
-        const salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password, salt);
-        next();
-    } catch (err) {
-        next(err);
-    }
-});
-
-userSchema.methods.comparePassword = function (candidatePassword) {
-    if (!candidatePassword || !this.password) {
-        return false;
-    }
-    return candidatePassword === this.password;
-};
-
-// Keep your existing static method
-userSchema.statics.findOneOrCreate = async function findOneOrCreate(condition, doc) {
-    const result = await this.findOne(condition);
-    return result || this.create(doc);
-};
-
 module.exports = mongoose.model('User', userSchema);
 
