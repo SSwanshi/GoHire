@@ -312,28 +312,39 @@ router.post('/submit-internship', async (req, res) => {
 
 });
 
-router.post('/applyforJobs/:jobTitle', (req, res) => { 
-  const jobTitle = req.params.jobTitle;
+router.post('/applyforJobs/:jobID', async(req, res) => { 
+  const jobid = req.params.jobID;
 
-  const selectedJob = jobs.find(job => job.jobTitle === jobTitle);
+  const recruiterConn = await connectRecruiterDB();
+  const JobFindConn = createJobModel(recruiterConn);
+  const CompanyModel = createCompanyModel(recruiterConn);
 
-  if (!selectedJob) {
+  const JobFind = await JobFindConn.findById(jobid).populate({path: 'jobCompany',
+    strictPopulate: false});
+    console.log(JobFind);
+
+  if (!JobFind) {
     return res.status(404).json({ error: 'Job not found' });
   }
 
-  res.render('Apply_for_Jobs', { job: selectedJob, applications });
+  res.render('Apply_for_Jobs', { job: JobFind, applications ,user: req.session.user});
 });
 
-router.post('/ApplyforInternships/:intTitle', (req, res) => {
-  const intTitle = req.params.intTitle;
+router.post('/ApplyforInternships/:intID', async(req, res) => {
+  const intid = req.params.intID;
 
-  const selectedInt = internships.find(inte => inte.intTitle === intTitle);
+  const recruiterConn = await connectRecruiterDB();
+  const InternshipFindConn = createInternshipModel(recruiterConn);
+  const CompanyModel = createCompanyModel(recruiterConn);
 
-  if (!selectedInt) {
+  const InternshipFind = await InternshipFindConn.findById(intid).populate({path: 'intCompany',
+    strictPopulate: false});
+
+  if (!InternshipFind) {
       return res.status(404).json({ error: 'Internship not found' });
   }
 
-  res.render('Apply_for_Internships', { internships: selectedInt, intapplication });
+  res.render('Apply_for_Internships', { internship: InternshipFind, intapplication ,user: req.session.user});
 });
 
 module.exports = router;
