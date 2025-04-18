@@ -16,6 +16,7 @@ const { GridFSBucket } = require("mongodb");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const Internship = require('../../recruiter-server/models/Internship');
+const axios = require('axios');
 
 // router.use(bodyParser.urlencoded({extended:true}));
 
@@ -58,9 +59,10 @@ router.get('/jobs', async (req, res) => {
         JobFind.forEach(job => {
           console.log("Job Title:", job.jobTitle);
           console.log("Company Name:", job.jobCompany.companyName);
+          console.log("Company Logo ID:", job.jobCompany.logoId);
         });
 
-      res.render('job-list', { JobFind, filters: {} }); // pass jobs to EJS
+      res.render('job-list', { JobFind, filters: {} }); 
   } catch (err) {
       console.error('Error fetching jobs from recruiter DB:', err);
       res.status(500).send('Internal Server Error');
@@ -68,35 +70,29 @@ router.get('/jobs', async (req, res) => {
 });
 
 
-router.get("/logo/:id", async (req, res) => {
-  console.log("🔍 Incoming request to /logo/:id");
-
+router.get('/logo/:logoId', async (req, res) => {
   try {
-      const logoId = req.params.id;
-      console.log("🆔 Logo ID from request:", logoId);
+      const logoId = req.params.logoId;
 
-      const objectId = new mongoose.Types.ObjectId(logoId);
-      console.log("✅ Converted to ObjectId:", objectId);
-
-      const fileExists = await conn.db.collection("uploads.files").findOne({ _id: objectId });
-
-      if (!fileExists) {
-          console.log("⚠️ File not found in uploads.files for ID:", objectId);
-          return res.status(404).json({ error: "Image not found" });
-      }
-
-      console.log("📂 File found. Starting download stream...");
-      const downloadStream = bucket.openDownloadStream(objectId);
-      res.set("Content-Type", fileExists.contentType || "image/png");
-      downloadStream.pipe(res);
-      downloadStream.on("end", () => {
-          console.log("✅ Image stream ended for:", objectId);
+      // Fetch the logo from recruiter server
+      const response = await axios({
+          method: 'get',
+          url: `http://localhost:5000/recruiter/logo/${logoId}`,
+          responseType: 'stream'
       });
+
+      // Set the same content type
+      res.setHeader('Content-Type', response.headers['content-type']);
+
+      // Pipe the data (image) to the response
+      response.data.pipe(res);
+
   } catch (error) {
-      console.error("❌ Error in /logo/:id route:", error);
-      res.status(500).json({ error: "Failed to retrieve image" });
+      console.error('Error proxying logo:', error.message);
+      res.status(500).json({ error: 'Failed to fetch logo' });
   }
 });
+
 
 
 //Internship List
@@ -267,12 +263,8 @@ router.post('/submit-jobs', async (req, res) => {
       query.$and = query.$and || [];
       query.$and.push({ $or: expConditions });
     }
-
-    // final query
     const JobFind = await JobFindConn.find(query).populate({path: 'jobCompany',
       strictPopulate: false});
-    // Final query
-    // const jobs = await Job.find(query).populate('jobCompany');
 
     res.render('job-list', { JobFind, filters: req.body }); // or send JSON: res.json(jobs);
   } catch (err) {
@@ -320,7 +312,7 @@ router.post('/submit-internship', async (req, res) => {
 
 });
 
-router.post('/applyforJobs/:jobTitle', (req, res) => {
+router.post('/applyforJobs/:jobTitle', (req, res) => { 
   const jobTitle = req.params.jobTitle;
 
   const selectedJob = jobs.find(job => job.jobTitle === jobTitle);
