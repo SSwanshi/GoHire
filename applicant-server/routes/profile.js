@@ -1,16 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const path = require('path');
-const { ObjectId } = require('mongoose').Types;
 const User = require('../models/user');
 const { connectDB, getGfs } = require('../config/db');
 
-// Configure multer for memory storage (PDF only)
+// Add authentication middleware
+const requireAuth = (req, res, next) => {
+    if (!req.session.user?.authenticated) {
+        return res.redirect('/login');
+    }
+    next();
+};
+
+
+// Simple multer memory storage for PDFs only
 const upload = multer({
     storage: multer.memoryStorage(),
     fileFilter: (req, file, cb) => {
-        if (path.extname(file.originalname).toLowerCase() === '.pdf') {
+        if (file.mimetype === 'application/pdf') {
             cb(null, true);
         } else {
             cb(new Error('Only PDF files are allowed'));
@@ -19,162 +26,121 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
 });
 
-// Middleware to handle GridFS connection
-const withGridFS = async (req, res, next) => {
+// Get profile page
+// Update profile route
+router.get('/', requireAuth, async (req, res) => {
     try {
-        await connectDB();
-        req.gfs = getGfs();
-        next();
-    } catch (error) {
-        console.error('Database connection error:', error);
-        res.status(500).json({ success: false, message: 'Database connection failed' });
-    }
-};
+        // Use userId consistently (matches what we set in login)
+        const user = await User.findOne({ userId: req.session.user.id });
 
-router.get('/profile', withGridFS, async (req, res) => {
-    try {
-        const userId = req.session.user?.id;
-        if (!userId) {
+        if (!user) {
+            req.session.destroy();
             return res.redirect('/login');
         }
 
-        const user = await User.findOne({ userId });
-        if (!user) {
-            return res.status(404).render('error', { message: 'User not found' });
-        }
-
-        // Check if resume exists
-        let hasResume = false;
+        let resumeName = null;
         if (user.resumeId) {
-            const file = await req.gfs.files.findOne({ _id: user.resumeId });
-            hasResume = !!file; // Will be true if file exists
+            const gfs = getGfs();
+            const file = await gfs.files.findOne({ _id: user.resumeId });
+            if (file) resumeName = file.filename;
         }
 
         res.render('profile', {
-            userData: user.toObject(),
-            hasResume: hasResume, // Make sure this is passed
-            title: 'User Profile - GoHire'
+            user,
+            resumeName,
+            title: 'User Profile'
         });
 
     } catch (error) {
         console.error('Profile error:', error);
-        res.status(500).render('error', { message: 'Failed to load profile' });
+        req.session.destroy();
+        res.redirect('/login');
     }
 });
 
-router.post('/resume', withGridFS, upload.single('resume'), async (req, res) => {
+// Upload resume
+router.post('/resume', upload.single('resume'), async (req, res) => {
     try {
-        if (!req.file) {
-            return res.status(400).json({
-                success: false,
-                message: 'No file uploaded or invalid file type'
-            });
-        }
+        if (!req.file) return res.status(400).send('No file uploaded');
+        if (!req.session.user?.id) return res.status(401).send('Not logged in');
 
-        const userId = req.session.user?.id;
-        if (!userId) {
-            return res.status(401).json({
-                success: false,
-                message: 'Not authenticated'
-            });
-        }
+        const user = await User.findOne({ userId: req.session.user.id });
+        if (!user) return res.status(404).send('User not found');
 
-        const user = await User.findOne({ userId });
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: 'User not found'
-            });
-        }
+        const gfs = getGfs();
 
-        // Delete existing resume if present
+        // Delete old resume if exists
         if (user.resumeId) {
-            await req.gfs.remove({ _id: user.resumeId, root: 'uploads' });
+            await gfs.remove({ _id: user.resumeId, root: 'uploads' });
         }
 
-        // Create write stream for GridFS
-        const writeStream = req.gfs.createWriteStream({
+        // Store new resume
+        const writeStream = gfs.createWriteStream({
             filename: req.file.originalname,
-            contentType: req.file.mimetype,
-            metadata: { userId }
+            contentType: 'application/pdf'
         });
 
-        writeStream.on('error', (error) => {
-            console.error('GridFS write error:', error);
-            throw error;
+        writeStream.end(req.file.buffer);
+
+        writeStream.on('finish', async (file) => {
+            user.resumeId = file._id;
+            await user.save();
+            res.redirect('/profile');
         });
 
-        const file = await new Promise((resolve, reject) => {
-            writeStream.on('finish', resolve);
-            writeStream.on('error', reject);
-            writeStream.end(req.file.buffer);
-        });
-
-        user.resumeId = file._id;
-        await user.save();
-
-        res.json({
-            success: true,
-            message: 'Resume uploaded successfully',
-            fileName: file.filename
+        writeStream.on('error', (err) => {
+            throw err;
         });
 
     } catch (error) {
         console.error('Upload error:', error);
-        res.status(500).json({
-            success: false,
-            message: error.message || 'Failed to upload resume',
-            error: process.env.NODE_ENV === 'development' ? error.stack : undefined
-        });
-    }
-});
-// Delete resume
-router.delete('/resume', withGridFS, async (req, res) => {
-    try {
-        const userId = req.session.user?.id;
-        const user = await User.findOne({ userId });
-
-        if (!user?.resumeId) {
-            return res.status(404).json({ success: false, message: 'No resume found' });
-        }
-
-        await req.gfs.remove({ _id: user.resumeId, root: 'uploads' });
-        user.resumeId = null;
-        await user.save();
-
-        res.json({ success: true, message: 'Resume deleted successfully' });
-    } catch (error) {
-        console.error('Delete error:', error);
-        res.status(500).json({ success: false, message: 'Failed to delete resume' });
+        res.status(500).send('Upload failed');
     }
 });
 
-// Download resume
-router.get('/resume', withGridFS, async (req, res) => {
+// View resume
+router.get('/resume', async (req, res) => {
     try {
         const userId = req.session.user?.id;
+        if (!userId) return res.status(401).send('Not logged in');
+
         const user = await User.findOne({ userId });
+        if (!user?.resumeId) return res.status(404).send('No resume found');
 
-        if (!user?.resumeId) {
-            return res.status(404).send('No resume found');
-        }
+        const gfs = getGfs();
+        const file = await gfs.files.findOne({ _id: user.resumeId });
+        if (!file) return res.status(404).send('File not found');
 
-        const file = await req.gfs.files.findOne({ _id: user.resumeId });
-        if (!file) {
-            return res.status(404).send('File not found in storage');
-        }
+        res.set('Content-Type', 'application/pdf');
+        res.set('Content-Disposition', `inline; filename="${file.filename}"`);
 
-        res.set({
-            'Content-Type': 'application/pdf',
-            'Content-Disposition': `inline; filename="${encodeURIComponent(file.filename)}"`
-        });
-
-        const readStream = req.gfs.createReadStream({ _id: file._id });
-        readStream.on('error', () => res.status(404).send('File stream error'));
+        const readStream = gfs.createReadStream({ _id: file._id });
         readStream.pipe(res);
     } catch (error) {
         console.error('Download error:', error);
-        res.status(500).send('Failed to retrieve resume');
+        res.status(500).send('Error downloading resume');
+    }
+});
+
+// Delete resume
+router.post('/resume/delete', async (req, res) => {
+    try {
+        const userId = req.session.user?.id;
+        if (!userId) return res.status(401).send('Not logged in');
+
+        const user = await User.findOne({ userId });
+        if (!user?.resumeId) return res.status(404).send('No resume found');
+
+        const gfs = getGfs();
+        await gfs.remove({ _id: user.resumeId, root: 'uploads' });
+
+        user.resumeId = null;
+        await user.save();
+
+        res.redirect('/profile');
+    } catch (error) {
+        console.error('Delete error:', error);
+        res.status(500).send('Error deleting resume');
     }
 });
 

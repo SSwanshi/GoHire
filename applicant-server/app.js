@@ -11,14 +11,24 @@ const profileRoutes = require('./routes/profile');
 const paymentRoutes = require('./routes/payment');
 const { connectDB, getGfs } = require('./config/db');
 
+const MongoStore = require('connect-mongo');
+
 require("dotenv").config();
 const app = express();
 
 app.use(session({
-  secret: 'your-secret-key',
+  secret: process.env.SESSION_SECRET || 'your-strong-secret',
   resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false }
+  saveUninitialized: false,  // Changed from true to false
+  cookie: {
+    secure: false, // Set to true in production with HTTPS
+    maxAge: 24 * 60 * 60 * 1000,
+    httpOnly: true
+  },
+  store: MongoStore.create({  // Add this if you want persistent sessions
+    mongoUrl: 'mongodb+srv://gohire:gohire12345678@gohire.kzwudx0.mongodb.net/goHire_applicants?retryWrites=true&w=majority',
+    ttl: 14 * 24 * 60 * 60 // 14 days
+  })
 }));
 
 app.use((req, res, next) => {
@@ -43,9 +53,9 @@ app.use(passport.session()); // If using Passport for authentication
 app.use((err, req, res, next) => {
   console.error('Server error:', err.stack);
   res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-      error: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    success: false,
+    message: 'Internal server error',
+    error: process.env.NODE_ENV === 'development' ? err.stack : undefined
   });
 });
 
@@ -144,30 +154,30 @@ app.use('/uploads/profiles', express.static(path.join(__dirname, 'public/uploads
 
 
 // Profile Page
-app.get('/profile', (req, res) => {
-  const user = req.session.user || {
-    firstName: 'Anuj',
-    lastName: 'Rathore',
-    email: 'anuj.r23@iiits.in',
-    phone: '9340041042',
-    gender: 'Male',
-    memberSince: 'March 2025'
-  };
+// app.get('/profile', (req, res) => {
+//   const user = req.session.user || {
+//     firstName: 'Anuj',
+//     lastName: 'Rathore',
+//     email: 'anuj.r23@iiits.in',
+//     phone: '9340041042',
+//     gender: 'Male',
+//     memberSince: 'March 2025'
+//   };
 
-  const resumeData = {}; // Fetch resume data from DB
+//   const resumeData = {}; // Fetch resume data from DB
 
-  res.render('profile', {
-    appUsers,
-    user,
-    resumeData,
-    title: 'User Profile - GoHire'
-  });
-});
+//   res.render('profile', {
+//     appUsers,
+//     user,
+//     resumeData,
+//     title: 'User Profile - GoHire'
+//   });
+// });
 
-// Root route
-app.get('/', (req, res) => {
-  res.redirect('/payment'); // Redirect to the payment page
-});
+// // Root route
+// app.get('/', (req, res) => {
+//   res.redirect('/payment'); // Redirect to the payment page
+// });
 
 // Use payment routes
 app.use('/', paymentRoutes);

@@ -71,30 +71,59 @@ router.get('/login', (req, res) => {
   res.render('login', { title: 'Login', successMessage });
 });
 
+// router.post('/login', async (req, res) => {
+//   const { email, password } = req.body;
+
+//   try {
+//     const user = await User.findOne({ email });
+//     console.log('Fetched User:', user);
+//     console.log('Entered password:', password);
+
+//     console.log('User password:', user.password);
+
+
+//     if (!user || !(await bcrypt.compare(password, user.password))) {
+//           return res.status(400).json({ error: 'Invalid email or password' });
+//     }
+
+//     req.session.user = {
+//       _id: user._id,
+//       email: user.email,
+//       firstName: user.firstName,
+//       lastName: user.lastName
+//     };
+
+//     console.log(`User ${email} logged in successfully`);
+//     res.redirect('/');
+
+//   } catch (err) {
+//     console.error('Login error:', err);
+//     res.status(500).json({ error: 'Server error' });
+//   }
+// });
+
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const user = await User.findOne({ email });
-    console.log('Fetched User:', user);
-    console.log('Entered password:', password);
-
-    console.log('User password:', user.password);
-    
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-          return res.status(400).json({ error: 'Invalid email or password' });
+      return res.status(400).json({ error: 'Invalid email or password' });
     }
 
+    // Set session consistently - use userId instead of _id
     req.session.user = {
-      _id: user._id,
+      id: user.userId,  // Changed from _id to userId to match schema
       email: user.email,
       firstName: user.firstName,
-      lastName: user.lastName
+      lastName: user.lastName,
+      authenticated: true  // Add authentication flag
     };
 
+    await req.session.save();  // Explicitly save session
     console.log(`User ${email} logged in successfully`);
-    res.redirect('/');
+    res.redirect('/profile');  // Redirect to profile after login
 
   } catch (err) {
     console.error('Login error:', err);
