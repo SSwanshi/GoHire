@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const User = require('../models/user');
-const { connectDB, getGfs } = require('../config/db');
+const { connectDB, getBucket } = require('../config/db');
+const { ObjectId } = require('mongodb');
 
 // Add authentication middleware
 const requireAuth = (req, res, next) => {
@@ -11,7 +12,6 @@ const requireAuth = (req, res, next) => {
     }
     next();
 };
-
 
 // Simple multer memory storage for PDFs only
 const upload = multer({
@@ -27,10 +27,8 @@ const upload = multer({
 });
 
 // Get profile page
-// Update profile route
 router.get('/', requireAuth, async (req, res) => {
     try {
-        // Use userId consistently (matches what we set in login)
         const user = await User.findOne({ userId: req.session.user.id });
 
         if (!user) {
@@ -40,9 +38,9 @@ router.get('/', requireAuth, async (req, res) => {
 
         let resumeName = null;
         if (user.resumeId) {
-            const gfs = getGfs();
-            const file = await gfs.files.findOne({ _id: user.resumeId });
-            if (file) resumeName = file.filename;
+            const bucket = getBucket();
+            const files = await bucket.find({ _id: new ObjectId(user.resumeId) }).toArray();
+            if (files.length > 0) resumeName = files[0].filename;
         }
 
         res.render('profile', {
@@ -67,28 +65,27 @@ router.post('/resume', upload.single('resume'), async (req, res) => {
         const user = await User.findOne({ userId: req.session.user.id });
         if (!user) return res.status(404).send('User not found');
 
-        const gfs = getGfs();
+        const bucket = getBucket();
 
         // Delete old resume if exists
         if (user.resumeId) {
-            await gfs.remove({ _id: user.resumeId, root: 'uploads' });
+            await bucket.delete(new ObjectId(user.resumeId));
         }
 
         // Store new resume
-        const writeStream = gfs.createWriteStream({
-            filename: req.file.originalname,
+        const uploadStream = bucket.openUploadStream(req.file.originalname, {
             contentType: 'application/pdf'
         });
 
-        writeStream.end(req.file.buffer);
+        uploadStream.end(req.file.buffer);
 
-        writeStream.on('finish', async (file) => {
-            user.resumeId = file._id;
+        uploadStream.on('finish', async () => {
+            user.resumeId = uploadStream.id;
             await user.save();
             res.redirect('/profile');
         });
 
-        writeStream.on('error', (err) => {
+        uploadStream.on('error', (err) => {
             throw err;
         });
 
@@ -107,15 +104,15 @@ router.get('/resume', async (req, res) => {
         const user = await User.findOne({ userId });
         if (!user?.resumeId) return res.status(404).send('No resume found');
 
-        const gfs = getGfs();
-        const file = await gfs.files.findOne({ _id: user.resumeId });
-        if (!file) return res.status(404).send('File not found');
+        const bucket = getBucket();
+        const files = await bucket.find({ _id: new ObjectId(user.resumeId) }).toArray();
+        if (files.length === 0) return res.status(404).send('File not found');
 
         res.set('Content-Type', 'application/pdf');
-        res.set('Content-Disposition', `inline; filename="${file.filename}"`);
+        res.set('Content-Disposition', `inline; filename="${files[0].filename}"`);
 
-        const readStream = gfs.createReadStream({ _id: file._id });
-        readStream.pipe(res);
+        const downloadStream = bucket.openDownloadStream(new ObjectId(user.resumeId));
+        downloadStream.pipe(res);
     } catch (error) {
         console.error('Download error:', error);
         res.status(500).send('Error downloading resume');
@@ -131,8 +128,8 @@ router.post('/resume/delete', async (req, res) => {
         const user = await User.findOne({ userId });
         if (!user?.resumeId) return res.status(404).send('No resume found');
 
-        const gfs = getGfs();
-        await gfs.remove({ _id: user.resumeId, root: 'uploads' });
+        const bucket = getBucket();
+        await bucket.delete(new ObjectId(user.resumeId));
 
         user.resumeId = null;
         await user.save();

@@ -19,7 +19,6 @@
     "express-session": "^1.18.1",
     "fs": "^0.0.1-security",
     "fuse.js": "^7.1.0",
-    "gridfs-stream": "^1.1.1",
     "middleware": "^1.0.0",
     "mongodb": "^6.15.0",
     "mongoose": "^8.13.1",
