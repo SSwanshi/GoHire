@@ -141,4 +141,59 @@ router.post('/resume/delete', async (req, res) => {
     }
 });
 
+// Add this route to handle the edit profile page
+router.get('/edit', requireAuth, async (req, res) => {
+    try {
+        const user = await User.findOne({ userId: req.session.user.id });
+
+        if (!user) {
+            req.session.destroy();
+            return res.redirect('/login');
+        }
+
+        res.render('edit-profile', {
+            user,
+            title: 'Edit Profile'
+        });
+
+    } catch (error) {
+        console.error('Edit profile error:', error);
+        res.redirect('/profile');
+    }
+});
+
+// Add this route to handle profile updates
+router.post('/update', requireAuth, async (req, res) => {
+    try {
+        const { firstName, lastName, email, phone, gender } = req.body;
+        const userId = req.session.user.id;
+
+        const updatedUser = await User.findOneAndUpdate(
+            { userId },
+            {
+                firstName,
+                lastName,
+                email,
+                phone,
+                gender
+            },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).send('User not found');
+        }
+
+        // Update session if email changed
+        if (email && email !== req.session.user.email) {
+            req.session.user.email = email;
+        }
+
+        res.redirect('/profile');
+    } catch (error) {
+        console.error('Update profile error:', error);
+        res.redirect('/profile/edit');
+    }
+});
+
 module.exports = router;
