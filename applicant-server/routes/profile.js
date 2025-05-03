@@ -184,12 +184,24 @@ router.post('/update', requireAuth, async (req, res) => {
             return res.status(404).send('User not found');
         }
 
-        // Update session if email changed
-        if (email && email !== req.session.user.email) {
-            req.session.user.email = email;
-        }
+        // Update the entire user object in session
+        req.session.user = {
+            ...req.session.user, // Keep existing session data
+            firstName: updatedUser.firstName,
+            lastName: updatedUser.lastName,
+            email: updatedUser.email,
+            phone: updatedUser.phone,
+            gender: updatedUser.gender
+        };
 
-        res.redirect('/profile');
+        // Save the session explicitly
+        req.session.save(err => {
+            if (err) {
+                console.error('Session save error:', err);
+            }
+            res.redirect('/profile');
+        });
+
     } catch (error) {
         console.error('Update profile error:', error);
         res.redirect('/profile/edit');
