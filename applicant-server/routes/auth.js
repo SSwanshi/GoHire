@@ -123,7 +123,7 @@ router.post('/login', async (req, res) => {
 
     await req.session.save();  // Explicitly save session
     console.log(`User ${email} logged in successfully`);
-    res.redirect('/profile');  // Redirect to profile after login
+    res.redirect('/');  // Redirect to profile after login
 
   } catch (err) {
     console.error('Login error:', err);
