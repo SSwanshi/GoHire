@@ -103,9 +103,6 @@ const upload = multer({
   }
 });
 
-// Temporary users array (Replace with database query)
-const users = [];
-
 // Routes
 app.use('/auth', authRoutes);
 app.use('/', applicantRoutes);
@@ -120,64 +117,10 @@ app.get('/signup', (req, res) => {
   res.render('signup');
 });
 
-// Profile Image Upload
-app.post('/user/upload-profile-image', upload.single('profileImage'), (req, res) => {
-  try {
-    if (!req.session.user || !req.session.user.email) {
-      return res.status(401).json({ success: false, message: 'Not logged in' });
-    }
-
-    const userEmail = req.session.user.email;
-    const userIndex = users.findIndex(u => u.email === userEmail);
-
-    if (userIndex === -1) {
-      return res.status(404).json({ success: false, message: 'User not found' });
-    }
-
-    if (!req.file) {
-      return res.status(400).json({ success: false, message: 'No file uploaded' });
-    }
-
-    const imagePath = '/uploads/profiles/' + req.file.filename;
-    users[userIndex].profileImage = imagePath;
-    req.session.user = users[userIndex]; // Update session user data
-
-    res.json({ success: true, imageUrl: imagePath });
-  } catch (error) {
-    console.error('Error saving profile image:', error);
-    res.status(500).json({ success: false, message: 'Failed to upload image: ' + error.message });
-  }
+// Root route
+app.get('/', (req, res) => {
+  res.redirect('/payment'); // Redirect to the payment page
 });
-
-// Serve uploaded profile images
-app.use('/uploads/profiles', express.static(path.join(__dirname, 'public/uploads/profiles')));
-
-
-// Profile Page
-// app.get('/profile', (req, res) => {
-//   const user = req.session.user || {
-//     firstName: 'Anuj',
-//     lastName: 'Rathore',
-//     email: 'anuj.r23@iiits.in',
-//     phone: '9340041042',
-//     gender: 'Male',
-//     memberSince: 'March 2025'
-//   };
-
-//   const resumeData = {}; // Fetch resume data from DB
-
-//   res.render('profile', {
-//     appUsers,
-//     user,
-//     resumeData,
-//     title: 'User Profile - GoHire'
-//   });
-// });
-
-// // Root route
-// app.get('/', (req, res) => {
-//   res.redirect('/payment'); // Redirect to the payment page
-// });
 
 // Use payment routes
 app.use('/', paymentRoutes);
