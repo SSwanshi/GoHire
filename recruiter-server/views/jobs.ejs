@@ -23,6 +23,7 @@
                     <th class="px-4 py-3 border border-gray-300">Salary (In LPA)</th>
                     <th class="px-6 py-3 border border-gray-300">Location</th>
                     <th class="px-6 py-3 border border-gray-300">Positions</th>
+                    <th class="px-6 py-3 border border-gray-300">Deadline</th>
                     <th class="px-6 py-3 border border-gray-300 text-center">Action</th>
                     <th class="px-6 py-3 border border-gray-300">Applications</th>
                 </tr>
@@ -45,6 +46,10 @@
                             <td class="px-6 py-4 border border-gray-300"><%= job.jobSalary %></td>
                             <td class="px-6 py-4 border border-gray-300"><%= job.jobLocation %></td>
                             <td class="px-6 py-4 border border-gray-300"><%= job.noofPositions %></td>
+                            <td class="px-6 py-4 border border-gray-300">
+                                <%= new Date(job.jobExpiry).toLocaleDateString('en-GB') %>
+                              </td>
+                              
                 
                             <!-- Delete Job -->
                             <td class="px-6 py-4 border border-gray-300 flex items-center justify-center gap-4 mt-3">

@@ -15,7 +15,9 @@ const User = require('./models/User');
 
 const authRoutes = require('./routes/auth');
 const recruiterRoutes = require('./routes/recruiter');
-
+const cron = require('node-cron');
+const deleteExpiredJobs = require('./routes/jobCleanup');
+const deleteExpiredInternship = require('./routes/intCleanup');
 
 const app = express();
 connectDB(); 
@@ -34,7 +36,7 @@ app.use(session({
 
 app.use(async (req, res, next) => {
   if (req.session.user) {
-    res.locals.user = await User.findById(req.session.user._id); // Fetch updated user info
+    res.locals.user = await User.findById(req.session.user._id); 
   } else {
     res.locals.user = null;
   }
@@ -146,6 +148,15 @@ app.get('/recruiter/profile', async (req, res) => {
   
   const user = await User.findById(req.session.user._id);
   res.render('profile', { title: 'User Profile', user });
+});
+
+cron.schedule('0 0 * * *', () => {
+  console.log('Running expired jobs cleanup...');
+  deleteExpiredJobs();
+});
+cron.schedule('0 0 * * *', () => {
+  console.log('Running expired internships cleanup...');
+  deleteExpiredInternship();
 });
 
 const PORT = process.env.PORT || 5000;

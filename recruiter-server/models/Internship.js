@@ -11,6 +11,11 @@ const InternshipSchema = new mongoose.Schema({
     intPositions: { type: Number, required: true },
     intCompany: { type: mongoose.Schema.Types.ObjectId, ref: "Companies", required: true },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    intExpiry: { 
+        type: Date, 
+        required: true,
+        default: () => new Date(Date.now() + 30*24*60*60*1000) 
+    },
 }, { timestamps: true });
 
 module.exports = mongoose.model("Internship", InternshipSchema);

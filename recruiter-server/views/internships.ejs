@@ -14,7 +14,7 @@
 <h2 class="font-bold mt-10 flex justify-center font-sans text-xl">Here is your list of recently added Internships</h2>
 
 <section class="my-10 flex justify-center">
-    <div class="w-full max-w-4xl">
+    <div class="w-full max-w-6xl">
         <table class="w-full text-left border-collapse border border-gray-300">
             <thead>
                 <tr class="text-gray-700 bg-gray-200">
@@ -24,6 +24,7 @@
                     <th class="px-6 py-3 border border-gray-300">Location</th>
                     <th class="px-6 py-3 border border-gray-300">Duration</th>
                     <th class="px-6 py-3 border border-gray-300">Opportunities</th>
+                    <th class="px-6 py-3 border border-gray-300">Deadline</th>
                     <th class="px-6 py-3 border border-gray-300 text-center">Action</th>
                     <th class="px-6 py-3 border border-gray-300">Applications</th>
                 </tr>
@@ -46,6 +47,10 @@
                             <td class="px-6 py-4 border border-gray-300"><%= internships[i].intLocation %></td>
                             <td class="px-6 py-4 border border-gray-300"><%= internships[i].intDuration %></td>
                             <td class="px-6 py-4 border border-gray-300"><%= internships[i].intPositions %></td>
+                            <td class="px-6 py-4 border border-gray-300">
+                                <%= new Date(internships[i].intExpiry).toLocaleDateString('en-GB') %>
+                              </td>
+                              
                             <td class="px-6 py-4 border border-gray-300 flex items-center justify-center gap-4 mt-3">
                                 <form action="/recruiter/delete-intern/<%= internships[i]._id %>" method="POST">
                                     <button type="submit" class="bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 rounded">

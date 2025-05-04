@@ -11,6 +11,11 @@ const JobSchema = new mongoose.Schema({
     noofPositions: { type: Number, required: true },
     jobCompany: { type: mongoose.Schema.Types.ObjectId, ref: "Companies", required: true },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    jobExpiry: { 
+        type: Date, 
+        required: true,
+        default: () => new Date(Date.now() + 30*24*60*60*1000) 
+    },
 }, { timestamps: true });
 
 module.exports = mongoose.model("Jobs", JobSchema);

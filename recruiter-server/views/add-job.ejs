@@ -70,6 +70,16 @@
       </div>
     
       <div>
+
+        <div>
+          <label for="jobExpiry" class="block text-blue-700 font-medium">Application Deadline</label>
+          <input type="date" id="jobExpiry" name="jobExpiry" required
+                 value="<%= isEdit ? job.jobExpiry.toISOString().substring(0, 10) : '' %>"
+                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        </div>
+        
+        
+        <div>
         <label for="jobCompany" class="block text-blue-700 font-medium">Company</label>
         <select id="jobCompany" name="jobCompany" required
                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
@@ -80,6 +90,7 @@
             </option>
           <% }); %>
         </select>
+      </div>
       </div>
     
       <button type="submit"
