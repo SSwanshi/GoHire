@@ -118,6 +118,75 @@ app.get("/applicantlist", async (req, res) => {
   }
 });
 
+// function createRecruiterModel(connection) {
+//   if (connection.models.Recruiter) {
+//     return connection.model("Recruiter");
+//   }
+//   const recruiterSchema = new mongoose.Schema({
+//     firstName: {
+//       type: String,
+//       required: true
+//     },
+//     lastName: {
+//       type: String,
+//       required: true
+//     },
+//     email: {
+//       type: String,
+//       required: true,
+//       unique: true
+//     },
+//     company: String,
+
+//   }, { timestamps: true });
+
+//   return connection.model("Recruiter", recruiterSchema);
+// }
+
+
+// app.get("/recruiterlist", async (req, res) => {
+//   try {
+//     const recruiterConn = await connectRecruiterDB(); // Ensure this is awaited
+//     const RecruiterModel = createRecruiterModel(recruiterConn);
+//     const recruiters = await RecruiterModel.find({});
+
+//     res.render("recruiterlist", {
+//       // recruiters: recruiters.map(r => ({
+//       //   fullName: `${r.firstName} ${r.lastName}`,
+//       //   email: r.email,
+//       //   company: r.company
+//       // }))
+//       recruiters
+//     });
+//   } catch (error) {
+//     console.error("Error fetching recruiters:", error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// });
+
+app.get("/recruiterlist", async (req, res) => {
+  try {
+    const recruiterConn = await connectRecruiterDB();
+    const Recruiter = recruiterConn.model('Recruiter');
+    
+    const recruiters = await Recruiter.find({})
+      .select('firstName lastName email company')
+      .lean();
+
+    res.render("recruiterlist", {
+      recruiters: recruiters.map(r => ({
+        fullName: `${r.firstName} ${r.lastName}`,
+        email: r.email,
+        company: r.company
+      }))
+    });
+  } catch (error) {
+    console.error("Error fetching recruiters:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
 app.get("/companylist", async (req, res) => {
   try {
     const recruiterConn = await connectRecruiterDB();
@@ -248,10 +317,6 @@ app.get("/premiumuser", isPremiumUser, (req, res) => {
     user: req.session.user,
     premiumUsers: premiumUsers,
   });
-});
-
-app.get("/recruiterlist", (req, res) => {
-  res.render("recruiterlist", { users: users });
 });
 
 connectDB();
