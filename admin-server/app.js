@@ -9,12 +9,15 @@ const createJobModel = require("../admin-server/models/Job");
 const createInternshipModel = require("../admin-server/models/Internship");
 const createCompanyModel = require("../admin-server/models/Company");
 const connectRecruiterDB = require("../admin-server/config/recruiterDB");
+const connectApplicantDB = require("../admin-server/config/applicantDB");
+
+const mongoose = require("mongoose");
+// const Applicant = require('../admin-server/models/applicant'); // Adjust path as needed
 
 require("dotenv").config();
 const app = express();
 const PORT = 9000;
 const session = require("express-session");
-
 app.use(
   session({
     secret: "your-secret-key",
@@ -63,21 +66,69 @@ app.get("/home", (req, res) => {
   res.render("home");
 });
 
-app.get("/applicantlist", (req, res) => {
-  res.render("applicantlist", { applications: applications });
+function createUserModel(connection) {
+  const applicantSchema = new mongoose.Schema({
+    firstName: {
+      type: String,
+      required: true
+    },
+    lastName: {
+      type: String,
+      required: true
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    companyName: {
+      type: String,
+      required: true
+    },
+    // You might want to keep resume data even if not displaying it
+    resumeId: {
+      type: mongoose.Schema.Types.ObjectId
+    },
+    appliedAt: {
+      type: Date,
+      default: Date.now
+    }
+  });
+
+  return connection.model("User", applicantSchema);
+}
+
+app.get("/applicantlist", async (req, res) => {
+  try {
+    // Connect to applicant database
+    const applicantConn = await connectApplicantDB();
+
+    // Get User model (assuming your applicants are stored in User collection)
+    const UserModel = createUserModel(applicantConn);
+
+    // Fetch applicants (you might want to add filters if needed)
+    const applicants = await UserModel.find({}); // Filter by role if exists
+
+    // console.log("Fetched applicants:", applicants); // Debug log
+
+    res.render("applicantlist", { applicants });
+  } catch (error) {
+    console.error("Error fetching applicants:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 app.get("/companylist", async (req, res) => {
-    try {
-      const recruiterConn = await connectRecruiterDB();
-      const CompanyModel = createCompanyModel(recruiterConn);
-      const companies = await CompanyModel.find({});  // Fixed: using CompanyModel instead of createCompanyModel
-      res.render("companylist", { companies });
-    } catch (error) {
-      console.error("Error fetching companies:", error);  // Fixed: using error instead of err
-      res.status(500).send("Internal Server Error");
-    } 
-  });
+  try {
+    const recruiterConn = await connectRecruiterDB();
+    const CompanyModel = createCompanyModel(recruiterConn);
+    const companies = await CompanyModel.find({});  // Fixed: using CompanyModel instead of createCompanyModel
+    res.render("companylist", { companies });
+  } catch (error) {
+    console.error("Error fetching companies:", error);  // Fixed: using error instead of err
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 // internship list
 app.get("/internshiplist", async (req, res) => {
