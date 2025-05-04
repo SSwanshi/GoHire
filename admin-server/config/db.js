@@ -10,8 +10,8 @@ const connectDB = async () => {
 
         const gfs = Grid(conn.connection.db, mongoose.mongo);
         gfs.collection("uploads");
-
         console.log("✅ MongoDB Connected with GridFS for File Storage");
+        return conn;
     } catch (error) {
         console.error("❌ MongoDB Connection Failed", error);
         process.exit(1);

@@ -15,24 +15,74 @@
                 <!-- Job Dropdown Button -->
                 <div class="mt-4">
                     <button onclick="toggleDropdown('<%= company.companyName.replace(/\s+/g, '-') %>')"
-                        class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
-                        View Jobs
+                    class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
+                    View Jobs
                     </button>
 
                     <!-- Dropdown List -->
-                    <ul id="<%= company.companyName.replace(/\s+/g, '-') %>-jobs" class="hidden bg-gray-100 rounded-lg mt-2 p-2">
-                        <% let companyJobs = jobs.filter(job => job.jobCompany === company.companyName); %>
-                        <% if (companyJobs.length > 0) { %>
-                            <% companyJobs.forEach(job => { %>
-                                <li class="p-2 border-b last:border-none">
-                                    <p class="font-semibold"><%= job.jobTitle %></p>
-                                    <p class="text-sm text-gray-600"><%= job.jobLocation %></p>
-                                </li>
-                            <% }) %>
-                        <% } else { %>
-                            <li class="p-2 text-gray-500">No jobs available</li>
-                        <% } %>
-                    </ul>
+                    <div id="<%= company.companyName.replace(/\s+/g, '-') %>-jobs" class="hidden mt-4 space-y-4">
+                    <% if (company.jobs.length > 0) { %>
+                        <% company.jobs.forEach(job => { %>
+                        <div class="job-card bg-white rounded-lg shadow-md p-4 border border-gray-200 hover:shadow-lg transition-shadow">
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="flex items-center gap-3">
+                                    <div class="bg-gray-100 p-1.5 rounded-lg">
+                                        <img src="/logo/<%= company.logoId %>" alt="<%= company.companyName %> Logo" class="h-10 w-10 object-contain rounded-md">
+                                    </div>
+                                    <div>
+                                        <h3 class="text-md font-semibold text-gray-900"><%= job.jobTitle %></h3>
+                                        <div class="flex flex-wrap items-center gap-1 text-xs text-gray-600">
+                                            <span class="font-semibold"><%= company.companyName %></span>
+                                            <span>•</span>
+                                            <span class="inline-block px-2 py-0.5 text-xs font-medium text-orange-500 bg-orange-100 rounded-full">
+                                            <%= job.jobType %>
+                                            </span>
+                                            <span class="inline-block px-2 py-0.5 text-xs font-medium text-purple-500 bg-purple-100 rounded-full">
+                                            Experience: <%= job.jobExperience %> yrs
+                                            </span>
+                                            <span class="inline-block px-2 py-0.5 text-xs font-medium text-green-500 bg-green-100 rounded-full">
+                                            Positions: <%= job.noofPositions %>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm font-semibold text-gray-800"><%= job.jobLocation %></div>
+                                    <div class="text-xs text-gray-500">Posted <%= formatTimeAgo(job.createdAt) %></div>
+                                </div>
+                            </div>
+
+                            <ul class="text-xs text-gray-600 list-disc list-inside mb-2 space-y-1 pl-1">
+                                <% job.jobRequirements.split(',').forEach(point => { if (point.trim()) { %>
+                                    <li><%= point.trim() %></li>
+                                <% } }); %>
+                            </ul>
+
+                            <ul class="text-xs text-gray-600 list-disc list-inside mb-2 space-y-1 pl-1">
+                                <% job.jobDescription.split('\n').forEach(point => { if (point.trim()) { %>
+                                    <li><%= point.trim() %></li>
+                                <% } }); %>
+                            </ul>
+
+                            <div class="flex items-center justify-between border-t pt-2 mt-2">
+                                <% if (job.jobSalary) { %>
+                                    <div class="text-xs font-medium text-gray-800">
+                                    <%= job.jobSalary %> LPA
+                                    </div>
+                                <% } %>
+                                <form action="/applyforJobs/<%= job._id %>" method="POST">
+                                    <button type="submit"
+                                    class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs font-semibold transition">
+                                    Apply Now
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <% }); %>
+                    <% } else { %>
+                        <div class="text-gray-500 text-sm p-2">No jobs available</div>
+                    <% } %>
+                    </div>
                 </div>
             </div>
         <% }) %>

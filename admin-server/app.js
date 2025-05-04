@@ -1,11 +1,15 @@
 const express = require('express');
 const path = require('path');
-const { jobs } = require('../recruiter-server/routes/recruiter');
-const { internships } = require('../recruiter-server/routes/recruiter');
+const Job = require('../recruiter-server/models/Jobs');
+const Internship = require('../recruiter-server/models/Internship');
 const { companies } = require('../recruiter-server/routes/recruiter');
 const { applications } = require('../recruiter-server/routes/recruiter');
 const { users } = require('../recruiter-server/routes/auth');
 const connectDB = require("./config/db");
+const createJobModel = require('../applicant-server/models/recruiter/Job');
+const createCompanyModel = require('../applicant-server/models/recruiter/Job');
+
+
 
 require("dotenv").config();
 const app = express();
@@ -70,9 +74,51 @@ app.get('/internshiplist', (req, res) => {
     res.render('internshiplist', { companies: companies, internships: internships });
 });
 
-app.get('/joblist', (req, res) => {
-    res.render('joblist', { companies: companies, jobs: jobs });
+app.get('/joblist', async (req, res) => {
+    try {
+      const recruiterConn = await connectDB();
+      const JobModel = createJobModel(recruiterConn);
+      const CompanyModel = createCompanyModel(recruiterConn);
+  
+      // Get all companies
+      const companies = await CompanyModel.find({}).lean();
+  
+      // Get all jobs and populate the company reference
+      const jobs = await JobModel.find({})
+        .populate({ path: 'jobCompany', strictPopulate: false })
+        .lean();
+  
+      // Group jobs under their respective companies
+      const companyMap = {};
+  
+      // Initialize company map
+      companies.forEach(company => {
+        company.jobs = [];
+        companyMap[company._id.toString()] = company;
+      });
+  
+      // Distribute jobs into the matching company
+      jobs.forEach(job => {
+        const companyId = job.jobCompany?._id?.toString();
+        if (companyId && companyMap[companyId]) {
+          companyMap[companyId].jobs.push(job);
+        }
+      });
+      
+      console.log(JSON.stringify(companies, null, 2));
+
+      // Send structured companies (with jobs attached) to EJS
+      res.render('joblist', {
+        companies: Object.values(companyMap),
+        filters: {}
+      });
+  
+    } catch (err) {
+      console.error('Error fetching jobs from recruiter DB:', err);
+      res.status(500).send('Internal Server Error');
+    }
 });
+  
 
 const isPremiumUser = (req, res, next) => {
     

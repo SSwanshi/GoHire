@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated } = require('../../shared/middleware/auth');
 const Job = require('../../recruiter-server/models/Jobs');
-const { internships } = require('../../recruiter-server/routes/recruiter');
 const { companies } = require('../../recruiter-server/routes/recruiter');
 const { appUsers } = require('./auth');
 const Fuse = require('fuse.js');
