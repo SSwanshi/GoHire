@@ -2,19 +2,23 @@
 
 <div class="container mx-auto py-10">
     <h2 class="text-3xl font-bold text-center mb-6">Company List</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div class="max-w-3xl mx-auto space-y-6">
         <% companies.forEach(company => { %>
-            <div class="bg-white shadow-lg rounded-lg p-5">
-                <img src="../../recruiter-server<%= company.logo %>" alt="<%= company.companyName %> Logo" class="h-16 mx-auto">
-                <h3 class="text-xl font-semibold text-center mt-3"><%= company.companyName %></h3>
-                <p class="text-gray-500 text-center"><%= company.location %></p>
-                <div class="text-center mt-4">
+            <div class="bg-white shadow-lg rounded-lg p-6 flex items-center">
+                <div class="flex-shrink-0 mr-6">
+                    <img src="../../recruiter-server<%= company.logo %>" alt="<%= company.companyName %> Logo" class="h-16 w-16 object-contain">
+                </div>
+                <div class="flex-grow">
+                    <h3 class="text-xl font-semibold"><%= company.companyName %></h3>
+                    <p class="text-gray-500"><%= company.location %></p>
+                </div>
+                <div class="flex-shrink-0">
                     <a href="<%= company.website %>" target="_blank" class="text-blue-500 hover:underline">Visit Website</a>
                 </div>
             </div>
         <% }) %>
     </div>
-    <div class="mt-48"></div>
+    <div class="mt-12"></div>
 </div>
 
 <%- include('layout/footer') %>

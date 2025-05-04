@@ -1,100 +1,97 @@
 <%- include('layout/header') %>
 
 <div class="container mx-auto py-10">
-    <h2 class="text-3xl font-bold text-center mb-6">Company List</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <h2 class="text-3xl font-bold text-center mb-10">Company List</h2>
+    
+    <!-- Vertical Company List -->
+    <div class="max-w-4xl mx-auto space-y-6">
         <% companies.forEach(company => { %>
-            <div class="bg-white shadow-lg rounded-lg p-5 relative">
-                <img src="<%= company.logo %>" alt="<%= company.companyName %> Logo" class="h-16 mx-auto">
-                <h3 class="text-xl font-semibold text-center mt-3"><%= company.companyName %></h3>
-                <p class="text-gray-500 text-center"><%= company.location %></p>
-                <div class="text-center mt-4">
-                    <a href="<%= company.website %>" target="_blank" class="text-blue-500 hover:underline">Visit Website</a>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-200 hover:shadow-xl">
+                <!-- Company Header (always visible) -->
+                <div class="flex items-center justify-between p-6 cursor-pointer" 
+                     onclick="toggleDropdown('<%= company._id %>')">
+                    <div class="flex items-center space-x-4">
+                        <img src="<%= company.logoId || '/default-logo.png' %>" 
+                             alt="<%= company.companyName %> Logo" 
+                             class="h-12 w-12 object-contain rounded-full border border-gray-200">
+                        <div>
+                            <h3 class="text-xl font-semibold"><%= company.companyName %></h3>
+                            <p class="text-gray-500"><%= company.location %></p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <a href="<%= company.website %>" target="_blank" 
+                           class="text-blue-500 hover:underline">Visit Website</a>
+                        <svg id="icon-<%= company._id %>" class="w-5 h-5 text-gray-500 transition-transform" 
+                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
                 </div>
-
-                <!-- Job Dropdown Button -->
-                <div class="mt-4">
-                    <button onclick="toggleDropdown('<%= company.companyName.replace(/\s+/g, '-') %>')"
-                    class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
-                    View Jobs
-                    </button>
-
-                    <!-- Dropdown List -->
-                    <div id="<%= company.companyName.replace(/\s+/g, '-') %>-jobs" class="hidden mt-4 space-y-4">
-                    <% if (company.jobs.length > 0) { %>
-                        <% company.jobs.forEach(job => { %>
-                        <div class="job-card bg-white rounded-lg shadow-md p-4 border border-gray-200 hover:shadow-lg transition-shadow">
-                            <div class="flex justify-between items-start mb-2">
-                                <div class="flex items-center gap-3">
-                                    <div class="bg-gray-100 p-1.5 rounded-lg">
-                                        <img src="/logo/<%= company.logoId %>" alt="<%= company.companyName %> Logo" class="h-10 w-10 object-contain rounded-md">
-                                    </div>
-                                    <div>
-                                        <h3 class="text-md font-semibold text-gray-900"><%= job.jobTitle %></h3>
-                                        <div class="flex flex-wrap items-center gap-1 text-xs text-gray-600">
-                                            <span class="font-semibold"><%= company.companyName %></span>
-                                            <span>•</span>
-                                            <span class="inline-block px-2 py-0.5 text-xs font-medium text-orange-500 bg-orange-100 rounded-full">
-                                            <%= job.jobType %>
-                                            </span>
-                                            <span class="inline-block px-2 py-0.5 text-xs font-medium text-purple-500 bg-purple-100 rounded-full">
-                                            Experience: <%= job.jobExperience %> yrs
-                                            </span>
-                                            <span class="inline-block px-2 py-0.5 text-xs font-medium text-green-500 bg-green-100 rounded-full">
-                                            Positions: <%= job.noofPositions %>
+                
+                <!-- Jobs Dropdown (hidden by default) -->
+                <div id="dropdown-<%= company._id %>" class="hidden border-t border-gray-200">
+                    <div class="p-6 pt-4">
+                        <h4 class="font-medium text-lg mb-4">Available Jobs (<%= company.jobs.length %>)</h4>
+                        
+                        <% if (company.jobs.length > 0) { %>
+                            <div class="space-y-4">
+                                <% company.jobs.forEach(job => { %>
+                                    <div class="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors">
+                                        <div class="flex justify-between items-start">
+                                            <div>
+                                                <h5 class="font-semibold text-blue-600"><%= job.jobTitle %></h5>
+                                            </div>
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                <%= job.noofPositions %> positions
                                             </span>
                                         </div>
+                                        
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                                            <div>
+                                                <p class="text-sm text-gray-500">Location</p>
+                                                <p class="font-medium"><%= job.jobLocation %></p>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm text-gray-500">Salary</p>
+                                                <p class="font-medium">₹<%= job.jobSalary %> LPA</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm text-gray-500">Experience</p>
+                                                <p class="font-medium"><%= job.jobExperience %> years</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mt-4 flex justify-between items-center">
+                                            <div>
+                                                <p class="text-sm text-gray-500">Posted on</p>
+                                                <p class="text-sm"><%= new Date(job.createdAt).toLocaleDateString() %></p>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-sm font-semibold text-gray-800"><%= job.jobLocation %></div>
-                                    <div class="text-xs text-gray-500">Posted <%= formatTimeAgo(job.createdAt) %></div>
-                                </div>
+                                <% }) %>
                             </div>
-
-                            <ul class="text-xs text-gray-600 list-disc list-inside mb-2 space-y-1 pl-1">
-                                <% job.jobRequirements.split(',').forEach(point => { if (point.trim()) { %>
-                                    <li><%= point.trim() %></li>
-                                <% } }); %>
-                            </ul>
-
-                            <ul class="text-xs text-gray-600 list-disc list-inside mb-2 space-y-1 pl-1">
-                                <% job.jobDescription.split('\n').forEach(point => { if (point.trim()) { %>
-                                    <li><%= point.trim() %></li>
-                                <% } }); %>
-                            </ul>
-
-                            <div class="flex items-center justify-between border-t pt-2 mt-2">
-                                <% if (job.jobSalary) { %>
-                                    <div class="text-xs font-medium text-gray-800">
-                                    <%= job.jobSalary %> LPA
-                                    </div>
-                                <% } %>
-                                <form action="/applyforJobs/<%= job._id %>" method="POST">
-                                    <button type="submit"
-                                    class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs font-semibold transition">
-                                    Apply Now
-                                    </button>
-                                </form>
+                        <% } else { %>
+                            <div class="text-center py-6">
+                                <p class="text-gray-500">No jobs currently available</p>
+                                <button class="mt-2 text-blue-500 hover:underline">Notify me when jobs open</button>
                             </div>
-                        </div>
-                        <% }); %>
-                    <% } else { %>
-                        <div class="text-gray-500 text-sm p-2">No jobs available</div>
-                    <% } %>
+                        <% } %>
                     </div>
                 </div>
             </div>
         <% }) %>
     </div>
-    <div class="mt-48"></div>
 </div>
 
 <%- include('layout/footer') %>
 
 <script>
     function toggleDropdown(companyId) {
-        const jobList = document.getElementById(companyId + "-jobs");
-        jobList.classList.toggle("hidden");
+        const dropdown = document.getElementById(`dropdown-${companyId}`);
+        const icon = document.getElementById(`icon-${companyId}`);
+        
+        dropdown.classList.toggle('hidden');
+        icon.classList.toggle('rotate-180');
     }
 </script>
