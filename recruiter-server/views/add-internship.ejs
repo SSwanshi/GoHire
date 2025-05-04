@@ -74,6 +74,14 @@
       </div>
     
       <div>
+        <div>
+          <label for="intExpiry" class="block text-blue-700 font-medium">Application Deadline</label>
+          <input type="date" id="intExpiry" name="intExpiry" required
+                 value="<%= isEdit && internship ? internship.intExpiry.toISOString().substring(0, 10) : '' %>"
+                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        </div>
+        
+        <div>
         <label for="intCompany" class="block text-blue-700 font-medium">Company</label>
         <select id="intCompany" name="intCompany" required
                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
@@ -86,6 +94,7 @@
           <% }); %>
         </select>
         <p class="text-red-500 text-sm hidden" id="companyError">Please select a company.</p>
+      </div>
       </div>
     
       <button type="submit"

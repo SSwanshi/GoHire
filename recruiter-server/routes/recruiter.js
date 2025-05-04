@@ -80,7 +80,8 @@ router.post("/add-job", async (req, res) => {
             jobType,
             jobExperience,
             noofPositions,
-            jobCompany
+            jobCompany,
+            jobExpiry
         } = req.body;
 
         const userId = req.session.userId;
@@ -89,7 +90,7 @@ router.post("/add-job", async (req, res) => {
 
         if (
             !jobTitle || !jobDescription || !jobRequirements || !jobSalary ||
-            !jobLocation || !jobType || !jobExperience || !noofPositions || !jobCompany
+            !jobLocation || !jobType || !jobExperience || !noofPositions || !jobCompany || !jobExpiry
         ) {
             return res.status(400).json({ error: "All fields are required" });
         }
@@ -114,7 +115,8 @@ router.post("/add-job", async (req, res) => {
             jobExperience: parseInt(jobExperience),
             noofPositions: parseInt(noofPositions),
             jobCompany: new mongoose.Types.ObjectId(jobCompany),
-            createdBy: userId 
+            createdBy: userId,
+            jobExpiry 
         });
 
         await newJob.save();
@@ -180,16 +182,17 @@ router.get('/jobs', async (req, res) => {
 router.post('/add-internship', async (req, res) => {
     try {
         const { intTitle, intDescription, intRequirements, intStipend, intLocation,
-            intDuration, intExperience, intPositions, intCompany } = req.body;
+            intDuration, intExperience, intPositions, intCompany, intExpiry } = req.body;
 
         console.log("Received Internship Data:", req.body);
 
         if (!intTitle || !intDescription || !intRequirements || !intStipend ||
-            !intLocation || !intDuration || !intExperience || !intPositions || !intCompany) {
+            !intLocation || !intDuration || !intExperience || !intPositions || !intCompany || !intExpiry) {
             return res.status(400).json({ error: 'All fields are required' });
         }
 
-        const companyExists = await Company.findOne({ companyName: intCompany });
+        const companyExists = await Company.findOne({ _id: intCompany, createdBy: req.session.userId });
+
         if (!companyExists) {
             return res.status(400).json({ error: "Company not found" });
         }
@@ -204,7 +207,8 @@ router.post('/add-internship', async (req, res) => {
             intExperience: parseInt(intExperience),
             intPositions: parseInt(intPositions),
             intCompany: companyExists._id,
-            createdBy: req.session.userId
+            createdBy: req.session.userId,
+            intExpiry
         });
 
         await newInternship.save();
@@ -335,7 +339,8 @@ router.post("/edit-job/:id", async (req, res) => {
             jobType,
             jobExperience,
             noofPositions,
-            jobCompany
+            jobCompany,
+            jobExpiry
         } = req.body;
 
         const updateData = {
@@ -347,7 +352,8 @@ router.post("/edit-job/:id", async (req, res) => {
             jobType,
             jobExperience: parseInt(jobExperience),
             noofPositions: parseInt(noofPositions),
-            jobCompany
+            jobCompany,
+            jobExpiry
         };
 
         await Job.findByIdAndUpdate(req.params.id, updateData);
@@ -398,7 +404,8 @@ router.get('/edit-internship/:id', async (req, res) => {
         intDuration,
         intExperience,
         intPositions,
-        intCompany
+        intCompany,
+        intExpiry
     } = req.body;
   
     try {
@@ -413,7 +420,8 @@ router.get('/edit-internship/:id', async (req, res) => {
             intDuration,
             intExperience,
             intPositions,
-            intCompany
+            intCompany,
+            intExpiry
         },
         { new: true }
       );

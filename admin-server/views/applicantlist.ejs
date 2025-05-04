@@ -7,37 +7,35 @@
             <table class="min-w-full">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Resume</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email
+                        </th>
+                       
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">Sarvjeet Swanshi</td>
-                        <td class="px-6 py-4 whitespace-nowrap">sarvjeetswanshi@gmail.com</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-blue-500">
-                            Download
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">Anuj Rathore</td>
-                        <td class="px-6 py-4 whitespace-nowrap">anuj@gmail.com</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-blue-500">
-                            Download
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">Saurav Roy</td>
-                        <td class="px-6 py-4 whitespace-nowrap">sauravroy@gmail.com</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-blue-500">
-                            Download
-                        </td>
-                    </tr>
+                    <% if (applicants && applicants.length> 0) { %>
+                        <% applicants.forEach(applicant=> { %>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <%= applicant.firstName %>
+                                    <%= applicant.lastName %>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <%= applicant.email %>
+                                </td>
+                            </tr>
+                            <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="3" class="text-center py-4">No applicants found</td>
+                                    </tr>
+                                    <% } %>
                 </tbody>
             </table>
         </div>
         <div class="mt-48"></div>
     </div>
 
-<%- include('layout/footer') %>
+    <%- include('layout/footer') %>

@@ -1,50 +1,83 @@
 <%- include('layout/header') %>
 
 <div class="container mx-auto py-10">
-    <h2 class="text-3xl font-bold text-center mb-6">Company List</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <h2 class="text-3xl font-bold text-center mb-10">Company List</h2>
+    
+    <!-- Vertical Company List -->
+    <div class="max-w-4xl mx-auto space-y-6">
         <% companies.forEach(company => { %>
-            <div class="bg-white shadow-lg rounded-lg p-5 relative">
-                <img src="<%= company.logo %>" alt="<%= company.companyName %> Logo" class="h-16 mx-auto">
-                <h3 class="text-xl font-semibold text-center mt-3"><%= company.companyName %></h3>
-                <p class="text-gray-500 text-center"><%= company.location %></p>
-                <div class="text-center mt-4">
-                    <a href="<%= company.website %>" target="_blank" class="text-blue-500 hover:underline">Visit Website</a>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                <!-- Company Header (always visible) -->
+                <div class="flex items-center justify-between p-6 cursor-pointer" 
+                     onclick="toggleDropdown('<%= company._id %>')">
+                    <div class="flex items-center space-x-4">
+                        <img src="<%= company.logoId || '/default-logo.png' %>" 
+                             alt="<%= company.companyName %> Logo" 
+                             class="h-12 w-12 object-contain">
+                        <div>
+                            <h3 class="text-xl font-semibold"><%= company.companyName %></h3>
+                            <p class="text-gray-500"><%= company.location %></p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <a href="<%= company.website %>" target="_blank" 
+                           class="text-blue-500 hover:underline">Visit Website</a>
+                        <svg id="icon-<%= company._id %>" class="w-5 h-5 text-gray-500 transition-transform" 
+                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
                 </div>
-
-                <!-- Internship Dropdown Button -->
-                <div class="mt-4">
-                    <button onclick="toggleDropdown('<%= company.companyName.replace(/\s+/g, '-') %>')"
-                        class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
-                        View Internships
-                    </button>
-
-                    <!-- Dropdown List -->
-                    <ul id="<%= company.companyName.replace(/\s+/g, '-') %>-internships" class="hidden bg-gray-100 rounded-lg mt-2 p-2">
-                        <% let companyIntern = internships.filter(internship => internship.intCompany === company.companyName); %>
-                        <% if (companyIntern.length > 0) { %>
-                            <% companyIntern.forEach(intern => { %>
-                                <li class="p-2 border-b last:border-none">
-                                    <p class="font-semibold"><%= intern.intTitle %></p>
-                                    <p class="text-sm text-gray-600"><%= intern.intLocation %></p>
-                                </li>
-                            <% }) %>
+                
+                <!-- Internships Dropdown (hidden by default) -->
+                <div id="dropdown-<%= company._id %>" class="hidden border-t border-gray-200">
+                    <div class="p-6 pt-4">
+                        <h4 class="font-medium text-lg mb-4">Available Internships (<%= company.internships.length %>)</h4>
+                        
+                        <% if (company.internships.length > 0) { %>
+                            <div class="space-y-4">
+                                <% company.internships.forEach(intern => { %>
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h5 class="font-semibold text-blue-600"><%= intern.intTitle %></h5>
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+                                            <div>
+                                                <p class="text-sm text-gray-500">Location</p>
+                                                <p><%= intern.intLocation %></p>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm text-gray-500">Stipend</p>
+                                                <p>₹<%= intern.intStipend %>k/month</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm text-gray-500">Duration</p>
+                                                <p><%= intern.intDuration %> months</p>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <p class="text-sm text-gray-500">Requirements</p>
+                                            <p><%= intern.intRequirements %></p>
+                                        </div>
+                                    </div>
+                                <% }) %>
+                            </div>
                         <% } else { %>
-                            <li class="p-2 text-gray-500">No Internship available</li>
+                            <p class="text-gray-500 py-4">No internships currently available</p>
                         <% } %>
-                    </ul>
+                    </div>
                 </div>
             </div>
         <% }) %>
     </div>
-    <div class="mt-48"></div>
 </div>
 
 <%- include('layout/footer') %>
 
 <script>
     function toggleDropdown(companyId) {
-        const internshipList = document.getElementById(companyId + "-internships");
-        internshipList.classList.toggle("hidden");
+        const dropdown = document.getElementById(`dropdown-${companyId}`);
+        const icon = document.getElementById(`icon-${companyId}`);
+        
+        dropdown.classList.toggle('hidden');
+        icon.classList.toggle('rotate-180');
     }
 </script>
