@@ -111,39 +111,39 @@ id="navbar">
             <!-- Company Header Section -->
             <div class="bg-blue-50 p-6 flex items-center space-x-4 border-b border-gray-200">
                 <div class="flex-shrink-0">
-                    <img src="/logo/<%= job.jobCompany.logoId %>" 
-                         alt="<%= job.jobCompany.companyName %>" 
+                    <img src="/logo/<%= internship.intCompany.logoId %>" 
+                         alt="<%= internship.intCompany.companyName %>" 
                          class="h-16 w-16 rounded-lg object-contain border border-gray-200">
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-800"><%= job.jobTitle %></h1>
+                    <h1 class="text-2xl font-bold text-gray-800"><%= internship.intTitle %></h1>
                     <div class="flex items-center mt-1">
-                        <span class="text-lg font-medium text-blue-600"><%= job.jobCompany.companyName %></span>
+                        <span class="text-lg font-medium text-blue-600"><%= internship.intCompany.companyName %></span>
                         <span class="mx-2 text-gray-400">•</span>
                         <span class="flex items-center text-gray-600">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
-                            <%= job.jobLocation %>
+                            <%= internship.intLocation %>
                         </span>
                     </div>
                 </div>
             </div>
 
-            <!-- Job Details Section -->
+            <!-- Internship Details Section -->
             <div class="p-6 md:p-8">
                 <div class="grid md:grid-cols-3 gap-8">
                     <!-- Main Content -->
                     <div class="md:col-span-2">
-                        <h2 class="text-xl font-semibold text-gray-800 mb-4">Job Description</h2>
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4">Internship Description</h2>
                         <div class="prose max-w-none text-gray-700 mb-6">
-                            <%= job.jobDescription %>
+                            <%= internship.intDescription %>
                         </div>
 
                         <h2 class="text-xl font-semibold text-gray-800 mb-4">Requirements</h2>
                         <ul class="list-disc pl-5 space-y-2 text-gray-700 mb-6">
-                            <% job.jobRequirements.split('\n').forEach(req => { %>
+                            <% internship.intRequirements.split('\n').forEach(req => { %>
                                 <% if (req.trim()) { %>
                                     <li><%= req.trim() %></li>
                                 <% } %>
@@ -154,15 +154,15 @@ id="navbar">
                     <!-- Sidebar with Key Info -->
                     <div class="space-y-6">
                         <div class="bg-gray-50 rounded-lg p-5">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Job Details</h3>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Internship Details</h3>
                             <div class="space-y-3">
                                 <div class="flex items-start">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mt-0.5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
                                     <div>
-                                        <p class="text-sm text-gray-500">Job Type</p>
-                                        <p class="font-medium"><%= job.jobType %></p>
+                                        <p class="text-sm text-gray-500">Duration</p>
+                                        <p class="font-medium"><%= internship.intDuration %> months</p>
                                     </div>
                                 </div>
                                 
@@ -171,8 +171,8 @@ id="navbar">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                     <div>
-                                        <p class="text-sm text-gray-500">Salary</p>
-                                        <p class="font-medium">₹<%= job.jobSalary %>k per month</p>
+                                        <p class="text-sm text-gray-500">Stipend</p>
+                                        <p class="font-medium">₹<%= internship.intStipned %>k per month</p>
                                     </div>
                                 </div>
                                 
@@ -181,8 +181,8 @@ id="navbar">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                                     </svg>
                                     <div>
-                                        <p class="text-sm text-gray-500">Experience</p>
-                                        <p class="font-medium"><%= job.jobExperience %> years</p>
+                                        <p class="text-sm text-gray-500">Experience Required</p>
+                                        <p class="font-medium"><%= internship.intExperience %> years</p>
                                     </div>
                                 </div>
                                 
@@ -192,26 +192,24 @@ id="navbar">
                                     </svg>
                                     <div>
                                         <p class="text-sm text-gray-500">Open Positions</p>
-                                        <p class="font-medium"><%= job.noofPositions %></p>
+                                        <p class="font-medium"><%= internship.intPositions %></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        
-                        <form action="/appliedforJobs/<%= job._id %>" method="POST">
+                        <form action="/appliedforInternships/<%= internship._id %>" method="POST">
                             <!-- Hidden input for the jobId -->
-                            <input type="hidden" name="jobId" value="<%= job._id %>">
+                            <input type="hidden" name="jobId" value="<%= internship._id %>">
                           
                             <button type="submit"
-                              class="w-full bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-bold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg flex items-center justify-center">
-                              Apply Now
+                              class="w-full bg-green-400 hover:bg-green-500 text-green-800 font-bold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg flex items-center justify-center" disabled>
+                              Applied Successfully!!
                               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                               </svg>
                             </button>
                           </form>
-                          
                     </div>
                 </div>
             </div>
@@ -242,19 +240,42 @@ id="navbar">
     e.preventDefault();
     
     const isAuthenticated = applyButton.dataset.isAuthenticated === 'true';
-    const jobId = applyButton.dataset.jobId;
+    const intId = applyButton.dataset.intId;
     
     if (!isAuthenticated) {
       alert("Please login first to apply!");
       window.location.href = `/login?returnUrl=${encodeURIComponent(window.location.pathname)}`;
       return;
     }
+    
+    // User is authenticated - proceed with application
+    try {
+      const response = await fetch(`/ApplyforInternships/${intId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+      });
+      
+      if (response.ok) {
+        // Show success toast
+        toast.classList.remove('opacity-0', 'translate-y-8', 'pointer-events-none');
+        toast.classList.add('opacity-100', 'translate-y-0');
+        
+        setTimeout(function() {
+          toast.classList.remove('opacity-100', 'translate-y-0');
+          toast.classList.add('opacity-0', 'translate-y-8', 'pointer-events-none');
+        }, 3000);
+      } else {
+        throw new Error('Application failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to submit application');
+    }
   });
 });
+        
     </script>
-    <% if (typeof error !== 'undefined' && error) { %>
-        <script>
-          alert("<%= error %>");
-        </script>
-      <% } %>
 </body>

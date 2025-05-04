@@ -198,20 +198,10 @@ id="navbar">
                             </div>
                         </div>
 
-                        
-                        <form action="/appliedforJobs/<%= job._id %>" method="POST">
-                            <!-- Hidden input for the jobId -->
-                            <input type="hidden" name="jobId" value="<%= job._id %>">
-                          
                             <button type="submit"
-                              class="w-full bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-bold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg flex items-center justify-center">
-                              Apply Now
-                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                              </svg>
-                            </button>
-                          </form>
-                          
+                              class="w-full bg-green-400 hover:bg-green-500 text-green-800 font-bold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg flex items-center justify-center" disabled>
+                              Successfully Applied !!
+                            </button> 
                     </div>
                 </div>
             </div>
@@ -249,12 +239,34 @@ id="navbar">
       window.location.href = `/login?returnUrl=${encodeURIComponent(window.location.pathname)}`;
       return;
     }
+    
+    // User is authenticated - proceed with application
+    try {
+      const response = await fetch(`/ApplyforJobs/${jobId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+      });
+      
+      if (response.ok) {
+        // Show success toast
+        toast.classList.remove('opacity-0', 'translate-y-8', 'pointer-events-none');
+        toast.classList.add('opacity-100', 'translate-y-0');
+        
+        setTimeout(function() {
+          toast.classList.remove('opacity-100', 'translate-y-0');
+          toast.classList.add('opacity-0', 'translate-y-8', 'pointer-events-none');
+        }, 3000);
+      } else {
+        throw new Error('Application failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to submit application');
+    }
   });
 });
     </script>
-    <% if (typeof error !== 'undefined' && error) { %>
-        <script>
-          alert("<%= error %>");
-        </script>
-      <% } %>
 </body>

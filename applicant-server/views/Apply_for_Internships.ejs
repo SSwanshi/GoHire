@@ -198,14 +198,18 @@ id="navbar">
                             </div>
                         </div>
 
-                        <button id="applyButton"
-                            class="w-full bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-bold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg flex items-center justify-center" data-is-authenticated="<%= !!user %>"
-                            data-int-id="<%= internship._id %>">
-                            Apply Now
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <form action="/appliedforInternships/<%= internship._id %>" method="POST">
+                            <!-- Hidden input for the jobId -->
+                            <input type="hidden" name="jobId" value="<%= internship._id %>">
+                          
+                            <button type="submit"
+                              class="w-full bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-bold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg flex items-center justify-center">
+                              Apply Now
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                        </button>
+                              </svg>
+                            </button>
+                          </form>
                     </div>
                 </div>
             </div>
@@ -274,4 +278,9 @@ id="navbar">
 });
         
     </script>
+    <% if (typeof error !== 'undefined' && error) { %>
+        <script>
+          alert("<%= error %>");
+        </script>
+      <% } %>
 </body>

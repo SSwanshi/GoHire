@@ -16,6 +16,10 @@ const mongoose = require("mongoose");
 const multer = require("multer");
 const Internship = require('../../recruiter-server/models/Internship');
 const axios = require('axios');
+const User = require('../models/user');
+const Applied_for_Jobs = require('../models/Applied_for_Jobs');
+const Applied_for_Internships = require('../models/Applied_for_Internships'); // Adjust the path according to your project structure
+
 
 // router.use(bodyParser.urlencoded({extended:true}));
 
@@ -138,6 +142,14 @@ router.get('/competitions', async (req, res) => {
 //Apply_for_Job page
 router.get('/applyforJobs', async (req, res) => {
   res.render('Apply_for_Jobs' , {user: req.session.user});
+});
+
+router.get('/AppliedforJobs', async (req, res) => {
+  res.render('Applied_for_Jobs' , {user: req.session.user});
+});
+
+router.get('/AppliedforInternships', async (req, res) => {
+  res.render('Applied_for_Internships' , {user: req.session.user});
 });
 
 //Apply_for_Internship page
@@ -312,13 +324,14 @@ router.post('/submit-internship', async (req, res) => {
 });
 
 router.post('/applyforJobs/:jobID', async(req, res) => { 
-  const jobid = req.params.jobID;
+  const jobId = req.params.jobID;
+  const userId = req.session.user?.id;  // If you're using Passport.js or some other session-based auth
 
   const recruiterConn = await connectRecruiterDB();
   const JobFindConn = createJobModel(recruiterConn);
   const CompanyModel = createCompanyModel(recruiterConn);
 
-  const JobFind = await JobFindConn.findById(jobid).populate({path: 'jobCompany',
+  const JobFind = await JobFindConn.findById(jobId).populate({path: 'jobCompany',
     strictPopulate: false});
     console.log(JobFind);
 
@@ -326,24 +339,158 @@ router.post('/applyforJobs/:jobID', async(req, res) => {
     return res.status(404).json({ error: 'Job not found' });
   }
 
-  res.render('Apply_for_Jobs', { job: JobFind, applications ,user: req.session.user});
+  const alreadyApplied = await Applied_for_Jobs.findOne({userId, jobId });
+    if (alreadyApplied) {
+      return res.render('Applied_for_Jobs', { job: JobFind, applications ,user: req.session.user});
+    }
+    else{
+      return res.render('Apply_for_Jobs', { job: JobFind, applications ,user: req.session.user});}
+});
+
+router.post('/appliedforJobs/:jobID', async(req, res) => { 
+  try {
+    // Get user data from session (assuming user is authenticated and data is in req.user)
+    const userId = req.session.user?.id;  // If you're using Passport.js or some other session-based auth
+    const jobId = req.params.jobID; // Get job ID from the route parameter
+
+    // Fetch the job from the database (Optional, you can check if the job exists)
+    const recruiterConn = await connectRecruiterDB();
+    const JobModel = createJobModel(recruiterConn);
+    const JobFindConn = createJobModel(recruiterConn);
+    const JobFind = await JobFindConn.findById(jobId).populate({path: 'jobCompany',
+      strictPopulate: false});
+    const job = await JobModel.findById(jobId);
+    if (!job) return res.status(404).send("Job not found");
+
+      if (!userId) {
+        return res.render('Apply_for_Jobs', {
+          job: JobFind, 
+          applications ,
+          user: req.session.user,
+          error: 'Please login to apply for this job.'
+        });
+      }
+
+    // Fetch the user from the database using the userId (this is optional if you have user data in the session)
+    const user = await User.findOne({ userId });
+    if (!user) return res.status(404).send("User not found");
+
+    // Check if the user has already applied for the job
+    const alreadyApplied = await Applied_for_Jobs.findOne({userId, jobId });
+    console.log(alreadyApplied);
+    if (alreadyApplied) {
+      return res.status(400).send("You have already applied for this job.");
+    }
+
+    // Create a new application based on the user data
+    const application = new Applied_for_Jobs({
+      userId,  // Automatically comes from session
+      jobId,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phone: user.phone,
+      gender: user.gender,
+      password: user.password,
+      resumeId: user.resumeId,  // Assuming the user has a resume stored
+      memberSince: user.memberSince,
+      // AppliedAt will automatically be set to current date and time
+    });
+
+    // Save the application to the database
+    await application.save();
+
+    // Send a success message or redirect the user to another page
+    res.render('Applied_for_Jobs', { job: JobFind, applications ,user: req.session.user});  // Redirect to the applications list or a confirmation page
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
 });
 
 router.post('/ApplyforInternships/:intID', async(req, res) => {
-  const intid = req.params.intID;
+  const internshipId = req.params.intID;
+  const userId = req.session.user?.id;
 
   const recruiterConn = await connectRecruiterDB();
   const InternshipFindConn = createInternshipModel(recruiterConn);
   const CompanyModel = createCompanyModel(recruiterConn);
 
-  const InternshipFind = await InternshipFindConn.findById(intid).populate({path: 'intCompany',
+  const InternshipFind = await InternshipFindConn.findById(internshipId).populate({path: 'intCompany',
     strictPopulate: false});
 
   if (!InternshipFind) {
       return res.status(404).json({ error: 'Internship not found' });
   }
 
-  res.render('Apply_for_Internships', { internship: InternshipFind, intapplication ,user: req.session.user});
+  const alreadyApplied = await Applied_for_Internships.findOne({userId, internshipId });
+    if (alreadyApplied) {
+      return res.render('Applied_for_Internships', { internship: InternshipFind, applications ,user: req.session.user});
+    }
+    else{
+      return res.render('Apply_for_Internships', { internship: InternshipFind, applications ,user: req.session.user});}
 });
+
+router.post('/appliedforInternships/:internshipID', async (req, res) => {
+  try {
+    const userId = req.session.user?.id;
+    const internshipId = req.params.internshipID;
+    console.log("internshipId =", internshipId);
+
+    const recruiterConn = await connectRecruiterDB();
+    const InternshipModel = createInternshipModel(recruiterConn);
+
+    const InternshipFind = await InternshipModel.findById(internshipId).populate({
+      path: 'internshipCompany',
+      strictPopulate: false
+    });
+
+    if (!InternshipFind) {
+      return res.status(404).send("Internship not found");
+    }
+
+    if (!userId) {
+      return res.render('Apply_for_Internships', {
+        internship: InternshipFind,
+        applications,
+        user: req.session.user,
+        error: 'Please login to apply for this internship.'
+      });
+    }
+
+    const user = await User.findOne({ userId });
+    if (!user) return res.status(404).send("User not found");
+
+    const alreadyApplied = await Applied_for_Internships.findOne({ userId, internshipId });
+    if (alreadyApplied) {
+      return res.status(400).send("You have already applied for this internship.");
+    }
+
+    const application = new Applied_for_Internships({
+      userId,
+      internshipId,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phone: user.phone,
+      gender: user.gender,
+      password: user.password,
+      resumeId: user.resumeId,
+      memberSince: user.memberSince,
+    });
+
+    await application.save();
+
+    res.render('Applied_for_Internships', {
+      internship: InternshipFind,
+      applications,
+      user: req.session.user
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
+});
+
 
 module.exports = router;
