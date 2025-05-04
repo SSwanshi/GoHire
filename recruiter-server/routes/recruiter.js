@@ -262,25 +262,7 @@ router.post('/delete-intern/:intId', async (req, res) => {
     }
 });
 
-router.post('/applicant-job/:jobId', async (req, res) => {
-    try {
-        const job = await Job.findById(req.params.jobId);
-        const applications = await Application.find({ jobTitle: job.jobTitle });
-        res.render('applications', { job, applications });
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch applications' });
-    }
-});
 
-router.post('/applicant-intern/:intId', async (req, res) => {
-    try {
-        const intern = await Internship.findById(req.params.intId);
-        const intapplications = await InternshipApplication.find({ intTitle: intern.intTitle });
-        res.render('intapplication', { intern, intapplications });
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch internship applications' });
-    }
-});
 
 router.get("/edit-company/:id", async (req, res) => {
     const company = await Company.findById(req.params.id);

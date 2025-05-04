@@ -64,15 +64,14 @@
                                  </a>
                                  
                             </td>
-                
-                            <!-- View Applications -->
+
                             <td class="px-6 py-4 border border-gray-300">
-                                <form action="/recruiter/applicant-job/<%= job._id %>" method="POST">
-                                    <button type="submit" class="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                        View Applications
-                                    </button>
-                                </form>
+                                <a href="/applications/<%= job._id %>" 
+                                   class="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block text-center">
+                                    View Applications
+                                </a>
                             </td>
+                            
                         </tr>
                     <% }) %>
                 <% } else { %>

@@ -55,7 +55,7 @@
                                 <form action="/recruiter/delete-intern/<%= internships[i]._id %>" method="POST">
                                     <button type="submit" class="bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 rounded">
                                         Delete
-                                    </button>
+                                    </button> 
                                 </form>
                                 <a href="/recruiter/edit-internship/<%= internships[i]._id %>" 
                                     class="bg-green-500 hover:bg-green-800 text-white font-bold py-2 px-4 rounded inline-block text-center">
@@ -64,11 +64,10 @@
                                  
                             </td>
                             <td class="px-6 py-4 border border-gray-300">
-                                <form action="/recruiter/applicant-intern/<%= internships[i]._id %>" method="POST">
-                                    <button type="submit" class="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                        View Applications
-                                    </button>
-                                </form>
+                                <a href="/internapplicants/<%= internships[i]._id %>" 
+                                   class="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block text-center">
+                                    View Applications
+                                </a>
                             </td>
                         </tr>
                     <% } %>

@@ -18,6 +18,9 @@ const recruiterRoutes = require('./routes/recruiter');
 const cron = require('node-cron');
 const deleteExpiredJobs = require('./routes/jobCleanup');
 const deleteExpiredInternship = require('./routes/intCleanup');
+const applicationRoutes = require('./routes/applications');
+const intapplicationRoutes = require('./routes/internapplicants');
+
 
 const app = express();
 connectDB(); 
@@ -76,6 +79,8 @@ const upload = multer({
 
 app.use('/auth', authRoutes);
 app.use('/recruiter', recruiterRoutes);
+app.use('/applications', applicationRoutes);
+app.use('/internapplicants', intapplicationRoutes);
 
 app.get('/', (req, res) => {
   res.redirect('/auth/login');
@@ -105,7 +110,7 @@ app.get('/recruiter/home', async (req, res) => {
       companyCount,
       jobCount,
       internshipCount,
-      candidateCount: 250, 
+      candidateCount: 50, 
       clientSatisfaction: '98%'
     });
   } catch (error) {
