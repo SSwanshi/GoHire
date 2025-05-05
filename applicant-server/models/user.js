@@ -42,7 +42,8 @@ const userSchema = new mongoose.Schema({
     resumeId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'uploads.files'
-    }
+    },
+    profileImageId: { type: String }
 }, { timestamps: true });
 
 // Password hashing middleware

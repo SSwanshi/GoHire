@@ -351,4 +351,103 @@ router.post('/update', requireAuth, async (req, res) => {
     }
 });
 
+// Profile image upload
+const profileImageUpload = multer({
+    storage: multer.memoryStorage(),
+    fileFilter: (req, file, cb) => {
+      if (file.mimetype.startsWith('image/')) {
+        cb(null, true);
+      } else {
+        cb(new Error('Only image files are allowed'));
+      }
+    },
+    limits: { fileSize: 2 * 1024 * 1024 } // 2MB limit
+  });
+
+  // Upload profile image
+router.post('/image', profileImageUpload.single('profileImage'), async (req, res) => {
+    try {
+      if (!req.file) return res.status(400).send('No file uploaded');
+      if (!req.session.user?.id) return res.status(401).send('Not logged in');
+  
+      const user = await User.findOne({ userId: req.session.user.id });
+      if (!user) return res.status(404).send('User not found');
+  
+      const bucket = getBucket();
+  
+      // Delete old image if exists
+      if (user.profileImageId) {
+        await bucket.delete(new ObjectId(user.profileImageId));
+      }
+  
+      // Store new image
+      const uploadStream = bucket.openUploadStream(`profile-${Date.now()}`, {
+        contentType: req.file.mimetype
+      });
+  
+      uploadStream.end(req.file.buffer);
+  
+      uploadStream.on('finish', async () => {
+        user.profileImageId = uploadStream.id;
+        await user.save();
+        res.redirect('/profile');
+      });
+  
+      uploadStream.on('error', (err) => {
+        throw err;
+      });
+  
+    } catch (error) {
+      console.error('Upload error:', error);
+      res.status(500).send('Upload failed');
+    }
+  });
+  
+  // View profile image
+  router.get('/image', async (req, res) => {
+    try {
+      const userId = req.session.user?.id;
+      if (!userId) return res.status(401).send('Not logged in');
+  
+      const user = await User.findOne({ userId });
+      if (!user?.profileImageId) return res.status(404).send('No profile image found');
+  
+      const bucket = getBucket();
+      const downloadStream = bucket.openDownloadStream(new ObjectId(user.profileImageId));
+      
+      // Set appropriate content type
+      const files = await bucket.find({ _id: new ObjectId(user.profileImageId) }).toArray();
+      if (files.length > 0) {
+        res.set('Content-Type', files[0].contentType || 'image/jpeg');
+      }
+      
+      downloadStream.pipe(res);
+    } catch (error) {
+      console.error('Download error:', error);
+      res.status(500).send('Error downloading profile image');
+    }
+  });
+  
+  // Delete profile image
+  router.delete('/image', async (req, res) => {
+    try {
+      const userId = req.session.user?.id;
+      if (!userId) return res.status(401).send('Not logged in');
+  
+      const user = await User.findOne({ userId });
+      if (!user?.profileImageId) return res.status(404).send('No profile image found');
+  
+      const bucket = getBucket();
+      await bucket.delete(new ObjectId(user.profileImageId));
+  
+      user.profileImageId = null;
+      await user.save();
+  
+      res.sendStatus(200);
+    } catch (error) {
+      console.error('Delete error:', error);
+      res.status(500).send('Error deleting profile image');
+    }
+  });
+
 module.exports = router;

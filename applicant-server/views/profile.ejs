@@ -26,6 +26,8 @@
             class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Internship</a></li>
         <li><a href="/contact" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Contact
             Us</a></li>
+
+
         <% if (user) { %>
           <li class="relative group">
             <button
@@ -93,18 +95,46 @@
   <header class="pt-32 pb-24 text-white relative overflow-hidden">
     <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-4">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- Profile Initial Avatar -->
+        <!-- Profile Initial Avatar or Uploaded Image -->
         <div class="md:col-span-1 flex flex-col items-center justify-start">
           <div class="relative">
-            <div id="profileInitial"
-              class="w-40 h-40 flex items-center justify-center rounded-full border-4 border-yellow-400 shadow-md bg-blue-50 text-blue-900 text-6xl font-bold">
-              <%= user.firstName.charAt(0).toUpperCase() %>
-            </div>
+            <% if (user.profileImageId) { %>
+              <img src="/profile/image?<%= Date.now() %>"
+                class="w-40 h-40 rounded-full border-4 border-yellow-400 shadow-md object-cover" alt="Profile Image">
+              <% } else { %>
+                <div id="profileInitial"
+                  class="w-40 h-40 flex items-center justify-center rounded-full border-4 border-yellow-400 shadow-md bg-blue-50 text-blue-900 text-6xl font-bold">
+                  <%= user.firstName.charAt(0).toUpperCase() %>
+                </div>
+                <% } %>
+                  <!-- Image Upload Form -->
+                  <form action="/profile/image" method="POST" enctype="multipart/form-data" class="mt-4">
+                    <label class="block">
+                      <span class="sr-only">Choose profile image</span>
+                      <input type="file" name="profileImage" accept="image/*" class="block w-full text-sm text-gray-500
+                      file:mr-4 file:py-2 file:px-4
+                      file:rounded file:border-0
+                      file:text-sm file:font-semibold
+                      file:bg-blue-50 file:text-blue-700
+                      hover:file:bg-blue-100">
+                    </label>
+                    <button type="submit"
+                      class="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+                      Upload Image
+                    </button>
+                    <% if (user.profileImage) { %>
+                      <button type="button" onclick="deleteProfileImage()"
+                        class="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
+                        Delete Image
+                      </button>
+                      <% } %>
+                  </form>
           </div>
         </div>
 
         <div class="md:col-span-2">
-          <h2 class="text-2xl font-bold text-blue-900 mb-6 pb-2 border-b-2 border-yellow-400">Profile Information</h2>
+          <h2 class="text-2xl font-bold text-blue-900 mb-6 pb-2 border-b-2 border-yellow-400">Profile
+            Information</h2>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="bg-blue-50 p-4 rounded-lg">
@@ -341,6 +371,24 @@
         }
       }
     });
+
+    async function deleteProfileImage() {
+      try {
+        const response = await fetch('/profile/image', {
+          method: 'DELETE'
+        });
+
+        if (response.ok) {
+          location.reload();
+        } else {
+          alert('Failed to delete image');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred');
+      }
+    }
+
   </script>
 
   <%- include('layout/footer.ejs') %>
