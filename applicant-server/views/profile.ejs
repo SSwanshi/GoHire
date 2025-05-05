@@ -389,6 +389,61 @@
       }
     }
 
+    function showToast(message, isSuccess = true) {
+      const toastContainer = document.getElementById('toast-container');
+
+      // Create toast element
+      const toast = document.createElement('div');
+      toast.className = `flex items-center p-4 mb-2 rounded-lg shadow-lg transform transition-all duration-300 ${isSuccess ? 'bg-green-400' : 'bg-red-400'} text-black`;
+
+      // Add icon based on success/error
+      const icon = document.createElement('div');
+      icon.className = 'mr-3';
+      icon.innerHTML = isSuccess ?
+        '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>' :
+        '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
+
+      // Add message
+      const messageEl = document.createElement('div');
+      messageEl.className = 'font-semibold';
+      messageEl.textContent = message;
+
+      // Add close button
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'ml-auto text-gray-800 hover:text-black';
+      closeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>';
+      closeBtn.onclick = () => {
+        toast.classList.add('opacity-0');
+        setTimeout(() => toast.remove(), 300);
+      };
+
+      // Assemble toast
+      toast.appendChild(icon);
+      toast.appendChild(messageEl);
+      toast.appendChild(closeBtn);
+
+      // Add to container
+      toastContainer.appendChild(toast);
+
+      // Animate in
+      setTimeout(() => {
+        toast.classList.add('opacity-0');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // For form submission
+    document.querySelector('form')?.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Here you would normally submit the form via fetch or let it submit normally
+      // For demo, we'll just show the toast
+      showToast('Profile updated successfully!', true);
+
+      // If you want to actually submit the form after showing toast:
+      setTimeout(() => this.submit(), 1000);
+    });
+
   </script>
 
   <%- include('layout/footer.ejs') %>
