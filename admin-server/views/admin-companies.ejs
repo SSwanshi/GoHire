@@ -1,0 +1,52 @@
+<%- include('layout/header') %>
+
+<h2 class="text-2xl font-bold text-center mt-10 mb-6">Companies Awaiting Verification</h2>
+
+<section class="flex justify-center">
+    <div class="w-full max-w-5xl">
+        <table class="w-full text-left border border-gray-300 border-collapse">
+            <thead>
+                <tr class="bg-gray-200 text-gray-700">
+                    <th class="px-4 py-2 border">Company Name</th>
+                    <th class="px-4 py-2 border">Website</th>
+                    <th class="px-4 py-2 border">Location</th>
+                    <th class="px-4 py-2 border">Proof Document</th>
+                    <th class="px-4 py-2 border text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (companies.length > 0) { %>
+                    <% companies.forEach(company => { %>
+                        <tr class="hover:bg-gray-100">
+                            <td class="px-4 py-3 border"><%= company.companyName %></td>
+                            <td class="px-4 py-3 border">
+                                <a href="<%= company.website %>" class="text-blue-500 hover:underline" target="_blank">Visit</a>
+                            </td>
+                            <td class="px-4 py-3 border"><%= company.location %></td>
+                            <td class="px-4 py-3 border">
+                                <% if (company.proofDocumentId) { %>
+                                    <a href="/company/proof/<%= company.proofDocumentId %>" class="text-green-600 hover:underline" target="_blank">View Proof</a>
+                                <% } else { %>
+                                    <span class="text-gray-500">Not provided</span>
+                                <% } %>
+                            </td>
+                            <td class="px-4 py-3 border text-center">
+                                <form action="/admin/verify-company/<%= company._id %>" method="POST">
+                                    <button type="submit" class="bg-blue-600 hover:bg-blue-800 text-white px-4 py-2 rounded">
+                                        Verify
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="5" class="text-center px-4 py-4 text-gray-500">No companies awaiting verification.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<%- include('layout/footer') %>

@@ -51,6 +51,18 @@
     <% } %>
   </div>
 
+  <div>
+    <label for="proofDocument" class="block text-blue-700 font-medium">Verification Document:</label>
+    <input type="file" id="proofDocument" name="proofDocument" accept=".pdf,image/*"
+           <%= isEdit ? '' : 'required' %>
+           class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+    <p class="text-red-500 text-sm hidden" id="proofError">Upload a valid image or PDF document.</p>
+    <% if (isEdit && company.proofDocumentId) { %>
+      <p class="text-sm text-gray-500 mt-1">Leave blank to keep existing document.</p>
+    <% } %>
+  </div>
+  
+
   <button type="submit"
           class="w-full bg-blue-700 text-yellow-400 font-semibold py-2 rounded-md hover:bg-blue-800 hover:text-yellow-300 transition-all">
     <%= isEdit ? 'Update Company' : 'Add Company' %>

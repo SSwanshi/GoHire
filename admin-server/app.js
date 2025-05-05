@@ -12,7 +12,7 @@ const createCompanyModel = require("../admin-server/models/Company");
 const connectRecruiterDB = require("../admin-server/config/recruiterDB");
 const connectApplicantDB = require("../admin-server/config/applicantDB");
 const createRecruiterModel = require("../admin-server/models/Recruiter");
-
+const adminRoutes = require('./routes/admin');
 
 
 const mongoose = require("mongoose");
@@ -37,6 +37,7 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname,'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/', adminRoutes);
 
 const validUsers = [
   { email: "sarvjeet.s23@iiits.in", password: "1234", isPremium: true },

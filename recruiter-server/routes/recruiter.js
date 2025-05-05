@@ -34,18 +34,27 @@ const upload = multer({ storage });
 // });
 
 
-router.post("/add-company", upload.single("logo"), async (req, res) => {
+router.post("/add-company", upload.fields([{ name: "logo" }, { name: "proofDocument" }]), async (req, res) => {
     try {
         const { companyName, website, location } = req.body;
+
+        // Check if required fields are filled
         if (!companyName || !website || !location) {
             return res.status(400).json({ error: "All fields are required" });
         }
 
         let logoId = null;
-        if (req.file) {
-            const uploadStream = bucket.openUploadStream(req.file.originalname);
-            uploadStream.end(req.file.buffer);
+        if (req.files && req.files.logo) {
+            const uploadStream = bucket.openUploadStream(req.files.logo[0].originalname);
+            uploadStream.end(req.files.logo[0].buffer);
             logoId = uploadStream.id;
+        }
+
+        let proofDocumentId = null;
+        if (req.files && req.files.proofDocument) {
+            const uploadStream = bucket.openUploadStream(req.files.proofDocument[0].originalname);
+            uploadStream.end(req.files.proofDocument[0].buffer);
+            proofDocumentId = uploadStream.id;
         }
 
         const newCompany = new Company({
@@ -53,12 +62,14 @@ router.post("/add-company", upload.single("logo"), async (req, res) => {
             website: website.trim(),
             location: location.trim(),
             logoId,
-            createdBy: req.session.userId
+            proofDocumentId,   // Store the proof document ID here
+            createdBy: req.session.userId,
+            verified: false      // Set to false by default, admin will verify later
         });
 
         await newCompany.save();
 
-        req.session.successMessage = "Company added successfully!";
+        req.session.successMessage = "Company added successfully, awaiting verification!";
         res.redirect("/recruiter/companies");
     } catch (error) {
         console.error("Error adding company:", error);
@@ -97,12 +108,12 @@ router.post("/add-job", async (req, res) => {
 
         const companyExists = await Company.findOne({
             _id: jobCompany,
-            createdBy: userId
+            createdBy: userId,
+            verified: true  // ✅ Only allow verified companies
         });
 
-
         if (!companyExists) {
-            return res.status(400).json({ error: "Invalid Company ID or access denied" });
+            return res.status(400).json({ error: "Company must be verified to post a job." });
         }
 
         const newJob = new Job({
@@ -181,8 +192,18 @@ router.get('/jobs', async (req, res) => {
 
 router.post('/add-internship', async (req, res) => {
     try {
-        const { intTitle, intDescription, intRequirements, intStipend, intLocation,
-            intDuration, intExperience, intPositions, intCompany, intExpiry } = req.body;
+        const {
+            intTitle,
+            intDescription,
+            intRequirements,
+            intStipend,
+            intLocation,
+            intDuration,
+            intExperience,
+            intPositions,
+            intCompany,
+            intExpiry
+        } = req.body;
 
         console.log("Received Internship Data:", req.body);
 
@@ -191,10 +212,14 @@ router.post('/add-internship', async (req, res) => {
             return res.status(400).json({ error: 'All fields are required' });
         }
 
-        const companyExists = await Company.findOne({ _id: intCompany, createdBy: req.session.userId });
+        const companyExists = await Company.findOne({
+            _id: intCompany,
+            createdBy: req.session.userId,
+            verified: true // ✅ Only allow verified companies
+        });
 
         if (!companyExists) {
-            return res.status(400).json({ error: "Company not found" });
+            return res.status(400).json({ error: "Company must be verified to post an internship." });
         }
 
         const newInternship = new Internship({
@@ -212,15 +237,16 @@ router.post('/add-internship', async (req, res) => {
         });
 
         await newInternship.save();
-        console.log("Internship Saved Successfully:", newInternship);
+        console.log("✅ Internship Saved Successfully:", newInternship);
 
         req.session.successMessage = "Internship added successfully!";
         res.redirect('/recruiter/internships');
     } catch (error) {
-        console.error(error);
+        console.error("❌ Error adding internship:", error);
         res.status(500).json({ error: 'Failed to add internship' });
     }
 });
+
 
 router.get('/internships', async (req, res) => {
     try {
@@ -270,20 +296,31 @@ router.get("/edit-company/:id", async (req, res) => {
   });
   
 
-router.post("/edit-company/:id", upload.single("logo"), async (req, res) => {
+  router.post("/edit-company/:id", upload.single("logo"), async (req, res) => {
     const { companyName, website, location } = req.body;
-    const updateData = { companyName, website, location };
+    
+    const updateData = {
+        companyName: companyName.trim(),  // optional: can remove if you want it fixed
+        website: website.trim(),
+        location: location.trim()
+    };
 
+    // Only update logo if a new one is uploaded
     if (req.file) {
-      const uploadStream = bucket.openUploadStream(req.file.originalname);
-      uploadStream.end(req.file.buffer);
-      updateData.logoId = uploadStream.id;
+        const uploadStream = bucket.openUploadStream(req.file.originalname);
+        uploadStream.end(req.file.buffer);
+        updateData.logoId = uploadStream.id;
     }
-  
+
+    // Prevent proofDocumentId from being changed
+    delete req.body.proofDocumentId;
+
     await Company.findByIdAndUpdate(req.params.id, updateData);
     req.session.successMessage = "Company updated successfully!";
     res.redirect("/recruiter/companies");
-  });
+});
+
+
   
 
   router.get("/edit-job/:id", async (req, res) => {
@@ -478,8 +515,73 @@ router.get('/edit-internship/:id', async (req, res) => {
     }
   });
 
+  router.post("/recruiter/upload-verification/:id", upload.single("proofDocument"), async (req, res) => {
+    try {
+        const company = await Company.findById(req.params.id);
+        if (!company) {
+            return res.status(404).json({ error: "Company not found" });
+        }
 
-  
+        // Upload proof document for verification
+        if (req.file) {
+            const uploadStream = bucket.openUploadStream(req.file.originalname);
+            uploadStream.end(req.file.buffer);
+            company.proofDocumentId = uploadStream.id;
+        }
+
+        await company.save();
+        req.session.successMessage = "Proof document uploaded for verification!";
+        res.redirect("/recruiter/companies");
+    } catch (error) {
+        console.error("Error uploading proof document:", error);
+        res.status(500).json({ error: "Failed to upload proof document" });
+    }
+});
+
+
+
+router.post("/verify-company/:id", async (req, res) => {
+    try {
+        const companyId = req.params.id;
+        const company = await Company.findById(companyId);
+
+        if (!company) {
+            return res.status(404).json({ error: "Company not found" });
+        }
+
+        // Check if the company already has a proof document before verifying
+        if (!company.proofDocumentId) {
+            return res.status(400).json({ error: "No proof document uploaded" });
+        }
+
+        // Verify the company by updating the verified status
+        company.verified = true;
+        await company.save();
+
+        res.redirect("/admin/companies");  // Redirect to admin companies list or show success message
+    } catch (error) {
+        console.error("Error verifying company:", error);
+        res.status(500).json({ error: "Failed to verify company" });
+    }
+});
+
+router.get("/recruiter/company/:id", async (req, res) => {
+    try {
+        const company = await Company.findById(req.params.id)
+            .populate('proofDocumentId', 'filename')  // Populate proof document info
+            .populate('logoId', 'filename');         // Populate logo info
+
+        if (!company) {
+            return res.status(404).json({ error: "Company not found" });
+        }
+
+        res.render('company-detail', { company });
+    } catch (error) {
+        console.error("Error fetching company details:", error);
+        res.status(500).json({ error: "Failed to fetch company details" });
+    }
+});
+
   
   
   
