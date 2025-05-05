@@ -187,10 +187,10 @@ app.get("/companylist", async (req, res) => {
   try {
     const recruiterConn = await connectRecruiterDB();
     const CompanyModel = createCompanyModel(recruiterConn);
-    const companies = await CompanyModel.find({});  // Fixed: using CompanyModel instead of createCompanyModel
+    const companies = await CompanyModel.find({});
     res.render("companylist", { companies });
   } catch (error) {
-    console.error("Error fetching companies:", error);  // Fixed: using error instead of err
+    console.error("Error fetching companies:", error);
     res.status(500).send("Internal Server Error");
   }
 });
@@ -198,34 +198,35 @@ app.get("/companylist", async (req, res) => {
 // company and job delete route
 app.delete('/:type/:id', async (req, res) => {
   try {
-      const { type, id } = req.params;
+    const { type, id } = req.params;
 
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-          return res.status(400).json({ message: 'Invalid ID format' });
-      }
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid ID format' });
+    }
 
-      const recruiterConn = await connectRecruiterDB();
+    const recruiterConn = await connectRecruiterDB();
 
-      let Model;
-      if (type === 'company') {
-          Model = createCompanyModel(recruiterConn);
-      } else if (type === 'job') {
-          Model = createJobModel(recruiterConn);
-      } else {
-          return res.status(400).json({ message: 'Invalid type. Use "company" or "job".' });
-      }
+    let Model;
+    if (type === 'company') {
+      Model = createCompanyModel(recruiterConn);
+    } else if (type === 'job') {
+      Model = createJobModel(recruiterConn);
+    } else {
+      return res.status(400).json({ message: 'Invalid type. Use "company" or "job".' });
+    }
 
-      const deletedDoc = await Model.findByIdAndDelete(id);
-      if (!deletedDoc) {
-          return res.status(404).json({ message: ${type.charAt(0).toUpperCase() + type.slice(1)} not found. });
-      }
+    const deletedDoc = await Model.findByIdAndDelete(id);
+    if (!deletedDoc) {
+      return res.status(404).json({ message: `${type.charAt(0).toUpperCase() + type.slice(1)} not found.` });
+    }
 
-      res.json({ message: ${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully. });
+    res.json({ message: `${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully.` });
   } catch (err) {
-      console.error(Error deleting ${req.params.type}:, err);
-      res.status(500).json({ message: 'Internal server error.' });
+    console.error(`Error deleting ${req.params.type}:`, err);
+    res.status(500).json({ message: 'Internal server error.' });
   }
 });
+
 
 
 // internship list
@@ -320,7 +321,7 @@ app.get("/logo/:logoId", async (req, res) => {
     // Fetch the logo from recruiter server
     const response = await axios({
       method: "get",
-      url: http://localhost:5000/recruiter/logo/${logoId},
+      url: `http://localhost:5000/recruiter/logo/${logoId}`,
       responseType: "stream",
     });
 
@@ -353,5 +354,5 @@ app.get("/premiumuser", isPremiumUser, (req, res) => {
 connectDB();
 
 app.listen(PORT, () => {
-  console.log(Server is running on http://localhost:${PORT});
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
