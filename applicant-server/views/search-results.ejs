@@ -1,461 +1,512 @@
-<% function formatTimeAgo(date) { 
-  const seconds = Math.floor((new Date() - new Date(date)) / 1000);
-  
-  let interval = Math.floor(seconds / 31536000);
-  if (interval >= 1) return interval + " year" + (interval === 1 ? "" : "s") + " ago";
-  
+<% function formatTimeAgo(date) { const seconds=Math.floor((new Date() - new Date(date)) / 1000); let
+  interval=Math.floor(seconds / 31536000); if (interval>= 1) return interval + " year" + (interval === 1 ? "" : "s") + "
+  ago";
+
   interval = Math.floor(seconds / 2592000);
   if (interval >= 1) return interval + " month" + (interval === 1 ? "" : "s") + " ago";
-  
+
   interval = Math.floor(seconds / 86400);
   if (interval >= 1) return interval + " day" + (interval === 1 ? "" : "s") + " ago";
-  
+
   interval = Math.floor(seconds / 3600);
   if (interval >= 1) return interval + " hour" + (interval === 1 ? "" : "s") + " ago";
-  
+
   interval = Math.floor(seconds / 60);
   if (interval >= 1) return interval + " min" + (interval === 1 ? "" : "s") + " ago";
-  
-  return "just now";
-} %>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Search Results - GoHire</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="/css/styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    .job-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-    }
-    .pill {
-      @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
-    }
-    .fade-in {
-      animation: fadeIn 0.5s ease-in;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .highlight {
-      background-color: #fef08a;
-      padding: 0 2px;
-      border-radius: 2px;
-    }
-  </style>
-</head>
-<body class="bg-gradient-to-br from-blue-50 to-blue-100 min-h-screen">
-  <nav class="bg-gradient-to-r from-blue-700 to-blue-500 p-5 shadow-xl fixed w-full z-10 transition-all duration-300"
-id="navbar">
-<div class="container mx-auto flex justify-between items-center">
-    <a href="/"
-        class="text-black text-3xl font-bold transition-transform hover:scale-105 duration-300 ml-2">Go<span
+  return "just now";
+  } %>
+
+  <!DOCTYPE html>
+  <html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - GoHire</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      .job-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      }
+
+      .pill {
+        @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
+      }
+
+      .fade-in {
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .highlight {
+        background-color: #fef08a;
+        padding: 0 2px;
+        border-radius: 2px;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gradient-to-br from-blue-50 to-blue-100 min-h-screen">
+    <nav class="bg-gradient-to-r from-blue-700 to-blue-500 p-5 shadow-xl fixed w-full z-10 transition-all duration-300"
+      id="navbar">
+      <div class="container mx-auto flex justify-between items-center">
+        <a href="/" class="text-black text-3xl font-bold transition-transform hover:scale-105 duration-300 ml-2">Go<span
             class="text-yellow-400">Hire</span></a>
 
-    <div class="relative w-1/3 group">
-        <form action="/search" method="POST" id="search-form">
+        <div class="relative w-1/3 group">
+          <form action="/search" method="POST" id="search-form">
             <input id="search-space" type="text" placeholder="Search for Opportunities" name="parsedValue"
-                class="w-full p-3 rounded-full border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 shadow-md placeholder:text-gray-700">
-        </form>
-        <div class="absolute right-3 top-3.5 text-yellow-500">
+              class="w-full p-3 rounded-full border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 shadow-md placeholder:text-gray-700">
+          </form>
+          <div class="absolute right-3 top-3.5 text-yellow-500">
             <a href="/search" id="search-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor" stroke-width="4">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
             </a>
+          </div>
         </div>
-    </div>
 
-    <ul class="hidden md:flex space-x-8 text-white">
-        <li><a href="/" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Home</a>
-        </li>
-        <li><a href="/jobs" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Jobs</a>
-        </li>
-        <li><a href="/internships"
-                class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Internship</a></li>
-        <li><a href="/contact"
-                class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Contact Us</a></li>
-        <% if (user) { %>
+        <ul class="hidden md:flex space-x-8 text-white">
+          <li><a href="/" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Home</a>
+          </li>
+          <li><a href="/jobs" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Jobs</a>
+          </li>
+          <li><a href="/internships"
+              class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Internship</a></li>
+          <li><a href="/contact" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Contact
+              Us</a></li>
+          <% if (user) { %>
             <li class="relative group">
-                <button
-                    class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg flex items-center">
-                    <%= user.firstName || 'Profile' %>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 9l-7 7-7-7" />
+              <% if (user) { %>
+            <li class="relative group">
+              <button
+                class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-4 rounded-full transition-all duration-300 hover:shadow-lg flex items-center">
+                <% if (user.profileImageId) { %>
+                  <img src="/profile/image" class="w-8 h-8 rounded-full object-cover mr-2 border-2 border-blue-800"
+                    alt="Profile Image">
+                  <% } else { %>
+                    <div
+                      class="w-8 h-8 rounded-full bg-blue-800 text-white flex items-center justify-center mr-2 font-bold text-sm">
+                      <%= user.firstName.charAt(0).toUpperCase() %>
+                    </div>
+                    <% } %>
+                      <%= user.firstName || 'Profile' %>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24"
+                          stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
-                </button>
-                <div
-                    class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform -translate-y-2 group-hover:translate-y-0">
-                    <a href="/profile" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-t-lg">My
-                        Profile</a>
-                    <a href="/logout"
-                        class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-b-lg">Logout</a>
-                </div>
+              </button>
+              <div
+                class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform -translate-y-2 group-hover:translate-y-0">
+                <a href="/profile" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-t-lg">My
+                  Profile</a>
+                <a href="/logout" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-b-lg">Logout</a>
+              </div>
             </li>
             <% } else { %>
-                <li><a href="/login"
-                        class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg">Login</a>
-                </li>
-                         <% } %>
+              <li><a href="/login"
+                  class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg">Login</a>
+              </li>
+              <% } %>
 
-    </ul>
+        </ul>
 
-    <div class="md:hidden relative" id="mobile-menu-container">
-        <div class="flex flex-col space-y-1 cursor-pointer" id="mobile-menu">
+        <div class="md:hidden relative" id="mobile-menu-container">
+          <div class="flex flex-col space-y-1 cursor-pointer" id="mobile-menu">
             <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
             <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
             <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
-        </div>
-        <ul id="dropdown-menu"
+          </div>
+          <ul id="dropdown-menu"
             class="absolute right-0 mt-10 w-140 bg-yellow-500 text-blue-500 rounded-lg shadow-lg hidden text-blue-800 flex justify-center flex-col">
             <li><a href="/" class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Home</a>
             </li>
-            <li><a href="/jobs"
-                    class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Jobs</a></li>
-            <li><a href="/internships"
-                    class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Internships</a>
+            <li><a href="/jobs" class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Jobs</a>
             </li>
-            <li><a href="/contact"
-                    class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Contact Us</a>
+            <li><a href="/internships"
+                class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Internships</a>
+            </li>
+            <li><a href="/contact" class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Contact
+                Us</a>
             </li>
 
             <% if (user) { %>
-                <li class="relative group flex justify-center">
-                    <button
-                        class="bg-yellow-400 hover:bg-blue-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg">
-                        <%= user.firstName || 'Profile' %>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7" />
-                            </svg>
-                    </button>
-                    <div
-                        class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform -translate-y-2 group-hover:translate-y-0 flex justify-center flex-col">
-                        <a href="/profile"
-                            class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-t-lg">My Profile</a>
-                        <a href="/logout"
-                            class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-b-lg">Logout</a>
-                    </div>
+              <li class="relative group flex justify-center">
+                <button
+                  class="bg-yellow-400 hover:bg-blue-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg">
+                  <%= user.firstName || 'Profile' %>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                <div
+                  class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform -translate-y-2 group-hover:translate-y-0 flex justify-center flex-col">
+                  <a href="/profile" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-t-lg">My Profile</a>
+                  <a href="/logout" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-b-lg">Logout</a>
+                </div>
+              </li>
+              <% } else { %>
+                <li><a href="/login"
+                    class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg flex justify-center">Login</a>
                 </li>
-                <% } else { %>
-                    <li><a href="/login"
-                            class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg flex justify-center">Login</a>
-                    </li>
-                             <% } %>
-        </ul>
-    </div>
-</div>
-  </nav>
-
-<section class="pt-28 pb-16 px-4 md:px-8 max-w-7xl mx-auto">
-  <% if(sentResult1.length>0 || sentResult2.length>0) { %>
-    <div class="mb-8 text-center">
-      <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Search Results for 
-        <span class="text-blue-600">"<%= enteredValue %>"</span>
-      </h1>
-      <p class="text-gray-600">
-        Found <%= sentResult1.length %> job<% if(sentResult1.length !== 1) { %>s<% } %> 
-        <% if(sentResult1.length > 0 && sentResult2.length > 0) { %> and <% } %>
-        <%= sentResult2.length %> internship<% if(sentResult2.length !== 1) { %>s<% } %>
-      </p>
-    </div>
-
-    <!-- Tabs for Jobs/Internships -->
-    <div class="flex justify-center mb-8">
-      <div class="inline-flex rounded-md shadow-sm" role="group">
-        <button id="jobs-tab" class="px-4 py-2 text-sm font-medium rounded-l-lg bg-blue-600 text-white focus:z-10 focus:ring-2 focus:ring-blue-500">
-          Jobs (<%= sentResult1.length %>)
-        </button>
-        <button id="internships-tab" class="px-4 py-2 text-sm font-medium rounded-r-lg bg-white text-blue-600 hover:bg-gray-50 focus:z-10 focus:ring-2 focus:ring-blue-500">
-          Internships (<%= sentResult2.length %>)
-        </button>
-      </div>
-    </div>
-
-    <!-- Jobs Section -->
-    <div id="jobs-section" class="space-y-6">
-    <% if(sentResult1.length>0) { %>
-        <h2 class="text-2xl font-semibold text-gray-800 flex items-center">
-          <i class="fas fa-briefcase mr-2 text-blue-500"></i> Job Opportunities
-        </h2>
-        
-        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-1">
-          <% sentResult1.forEach(job => { %>
-            <div class="job-card bg-white rounded-xl shadow-md border border-gray-200 p-6 transition-all duration-300 hover:border-blue-300 fade-in">
-              <div class="flex flex-col md:flex-row md:justify-between gap-4">
-                <!-- Company Info -->
-                <div class="flex items-start space-x-4 flex-1">
-                  <div class="flex-shrink-0">
-                    <img src="/logo/<%= job.jobCompany.logoId %>" 
-                         alt="<%= job.jobCompany.companyName %>" 
-                         class="h-14 w-14 rounded-lg object-contain border border-gray-200">
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <h3 class="text-lg font-bold text-gray-900 mb-1">
-                      <%- job.jobTitle.replace(new RegExp(enteredValue, 'gi'), match => `<span class="highlight">${match}</span>`) %>
-                    </h3>
-                    
-                    <div class="flex flex-wrap items-center gap-2 text-sm text-gray-600 mb-2">
-                      <span class="font-medium"><%= job.jobCompany.companyName %></span>
-                      <span class="text-gray-400">•</span>
-                      <span class="flex items-center">
-                        <i class="fas fa-map-marker-alt mr-1 text-blue-400"></i>
-                        <%= job.jobLocation %>
-                      </span>
-                    </div>
-                    <div class="flex flex-wrap gap-2 mt-2">
-                      <span class="inline-block px-3 py-1 text-sm font-medium text-orange-500 bg-orange-100 rounded-full">
-                        <%= job.jobType %>
-                      </span>
-                      <span class="inline-block px-3 py-1 text-sm font-medium text-purple-500 bg-purple-100 rounded-full">
-                        Experience: <%= job.jobExperience %> years
-                      </span>
-                      <span class="inline-block px-3 py-1 text-sm font-medium text-green-500 bg-green-100 rounded-full">
-                        Positions: <%= job.noofPositions %>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Right side - Apply and Time -->
-                <div class="flex flex-col items-end justify-between">
-                  <span class="text-sm text-gray-500 mb-2">
-                    <i class="far fa-clock mr-1"></i>
-                    <%= formatTimeAgo(job.createdAt) %>
-                  </span>
-                  <form action="/applyforJobs/<%= job._id %>" method="POST">
-                    <button type="submit" class="btn-apply px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-300 flex items-center">
-                      Apply Now <i class="fas fa-arrow-right ml-2"></i>
-                    </button>
-                  </form>
-                </div>
-              </div>
-              
-              <!-- Job Highlights -->
-              <div class="mt-4 pt-4 border-t border-gray-100">
-                <h4 class="text-sm font-semibold text-gray-700 mb-2">Key Requirements:</h4>
-                <ul class="list-disc list-inside text-sm text-gray-600 space-y-1">
-                  <% job.jobRequirements.split('\n').slice(0, 3).forEach(point => { %>
-                    <% if (point.trim()) { %>
-                      <li><%= point.trim().replace(new RegExp(enteredValue, 'gi'), match => `<span class="highlight">${match}</span>`) %></li>
-                    <% } %>
-                  <% }); %>
-                  <% if(job.jobRequirements.split('\n').length > 3) { %>
-                    <li class="text-blue-500 font-medium">+<%= job.jobRequirements.split('\n').length - 3 %> more</li>
-                  <% } %>
-                </ul>
-              </div>
-            </div>
-          <% }); %>
-        </div>
-      </div>
-    <% } else { %>
-      
-        <h2 class="text-2xl font-semibold text-gray-800 flex items-center">
-          <i class="fas fa-briefcase mr-2 text-blue-500"></i> Job Opportunities
-        </h2>
-        <div class="bg-white rounded-xl shadow-md border border-gray-200 p-8 text-center">
-          <i class="fas fa-search fa-3x text-gray-300 mb-4"></i>
-          <h3 class="text-xl font-semibold text-gray-700 mb-2">No jobs found matching "<span class="text-blue-600"><%= enteredValue %></span>"</h3>
-          <p class="text-gray-500 mb-4">Try adjusting your search filters or browse our <a href="/jobs" class="text-blue-500 hover:underline">job listings</a>.</p>
-          <div class="flex justify-center">
-            <a href="/jobs" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-              Browse All Jobs
-            </a>
-          </div>
-        </div>
-      </div>
-        <% } %>
-
-    <!-- Internships Section -->
-    <div id="internships-section" class="space-y-6 mt-12 hidden">
-    <% if(sentResult2.length>0) { %>
-        <h2 class="text-2xl font-semibold text-gray-800 flex items-center">
-          <i class="fas fa-user-graduate mr-2 text-blue-500"></i> Internship Opportunities
-        </h2>
-        
-        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-1">
-          <% sentResult2.forEach(int => { %>
-            <div class="job-card bg-white rounded-xl shadow-md border border-gray-200 p-6 transition-all duration-300 hover:border-blue-300 fade-in">
-              <div class="flex flex-col md:flex-row md:justify-between gap-4">
-                <!-- Company Info -->
-                <div class="flex items-start space-x-4 flex-1">
-                  <div class="flex-shrink-0">
-                    <img src="/logo/<%= int.intCompany.logoId %>" 
-                         alt="<%= int.intCompany.companyName %>" 
-                         class="h-14 w-14 rounded-lg object-contain border border-gray-200">
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <h3 class="text-lg font-bold text-gray-900 mb-1">
-                      <%- int.intTitle.replace(new RegExp(enteredValue, 'gi'), match => `<span class="highlight">${match}</span>`) %>
-                    </h3>
-                    <div class="flex flex-wrap items-center gap-2 text-sm text-gray-600 mb-2">
-                      <span class="font-medium"><%= int.intCompany.companyName %></span>
-                      <span class="text-gray-400">•</span>
-                      <span class="flex items-center">
-                        <i class="fas fa-map-marker-alt mr-1 text-blue-400"></i>
-                        <%= int.intLocation %>
-                      </span>
-                    </div>
-                    <div class="flex flex-wrap gap-2 mt-2">
-                      <span class="inline-block px-3 py-1 text-sm font-medium text-orange-500 bg-orange-100 rounded-full">
-                        <%= int.intDuration %> months
-                        </span>
-                        <span class="inline-block px-3 py-1 text-sm font-medium text-purple-500 bg-purple-100 rounded-full">
-                        Experience: <%= int.intExperience %> years
-                        </span>
-                        <span class="inline-block px-3 py-1 text-sm font-medium text-green-500 bg-green-100 rounded-full">
-                        Positions: <%= int.intPositions %>
-                        </span>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Right side - Apply and Time -->
-                <div class="flex flex-col items-end justify-between">
-                  <span class="text-sm text-gray-500 mb-2">
-                    <i class="far fa-clock mr-1"></i>
-                    <%= formatTimeAgo(int.createdAt) %>
-                  </span>
-                  <form action="/applyforInternships/<%= int._id %>" method="POST">
-                    <button type="submit" class="btn-apply px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-300 flex items-center">
-                      Apply Now <i class="fas fa-arrow-right ml-2"></i>
-                    </button>
-                  </form>
-                </div>
-              </div>
-              
-              <!-- Internship Highlights -->
-              <div class="mt-4 pt-4 border-t border-gray-100">
-                <h4 class="text-sm font-semibold text-gray-700 mb-2">What You'll Do:</h4>
-                <ul class="list-disc list-inside text-sm text-gray-600 space-y-1">
-                  <% int.intDescription.split('\n').slice(0, 3).forEach(point => { %>
-                    <% if (point.trim()) { %>
-                      <li><%= point.trim().replace(new RegExp(enteredValue, 'gi'), match => `<span class="highlight">${match}</span>`) %></li>
-                    <% } %>
-                  <% }); %>
-                  <% if(int.intDescription.split('\n').length > 3) { %>
-                    <li class="text-blue-500 font-medium">+<%= int.intDescription.split('\n').length - 3 %> more</li>
-                  <% } %>
-                </ul>
-              </div>
-            </div>
-          <% }); %>
-        </div>
-      </div>
-    <% } else { %>
-        <h2 class="text-2xl font-semibold text-gray-800 flex items-center">
-          <i class="fas fa-briefcase mr-2 text-blue-500"></i> Internship Opportunities
-        </h2>
-        <div class="bg-white rounded-xl shadow-md border border-gray-200 p-8 text-center">
-          <i class="fas fa-search fa-3x text-gray-300 mb-4"></i>
-          <h3 class="text-xl font-semibold text-gray-700 mb-2">No internships found matching "<span class="text-blue-600"><%= enteredValue %></span>"</h3>
-          <p class="text-gray-500 mb-4">Try adjusting your search filters or browse our <a href="/internships" class="text-blue-500 hover:underline">internship listings</a>.</p>
-          <div class="flex justify-center">
-            <a href="/internships" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-              Browse All Interships
-            </a>
-          </div>
-        </div>
-      </div>
-    <% } %>
-
-  <% } else { %>
-    <!-- No Results Found -->
-    <div class="flex flex-col items-center justify-center py-20 text-center">
-      <div class="max-w-md mx-auto">
-        <img src="/images/No-Results.jpg" alt="No results found" class="h-64 w-64 mx-auto mb-8">
-        <h2 class="text-3xl font-bold text-gray-800 mb-4">No Results Found</h2>
-        <p class="text-lg text-gray-600 mb-6">
-          We couldn't find any jobs or internships matching "<span class="font-semibold text-blue-600"><%= enteredValue %></span>".
-        </p>
-        <div class="space-y-3">
-          <p class="text-gray-600">Try adjusting your search:</p>
-          <ul class="list-disc list-inside text-gray-600 space-y-1 max-w-xs mx-auto text-left">
-            <li>Check your spelling</li>
-            <li>Use more general keywords</li>
-            <li>Try different search terms</li>
+                <% } %>
           </ul>
         </div>
-        <a href="/jobs" class="mt-6 inline-block px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors duration-300">
-          Browse All Opportunities
-        </a>
       </div>
-    </div>
-  <% } %>
-</section>
+    </nav>
 
-<footer class="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-8">
-    <div>
-      <div class="mb-4 md:mb-0">
-        <a href="/" class="text-2xl font-bold">Go<span class="text-yellow-400">Hire</span></a>
-        <p class="mt-2 text-blue-200">Connecting talent with opportunity</p>
+    <section class="pt-28 pb-16 px-4 md:px-8 max-w-7xl mx-auto">
+      <% if(sentResult1.length>0 || sentResult2.length>0) { %>
+        <div class="mb-8 text-center">
+          <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Search Results for
+            <span class="text-blue-600">"<%= enteredValue %>"</span>
+          </h1>
+          <p class="text-gray-600">
+            Found <%= sentResult1.length %> job<% if(sentResult1.length !==1) { %>s<% } %>
+                  <% if(sentResult1.length> 0 && sentResult2.length > 0) { %> and <% } %>
+                      <%= sentResult2.length %> internship<% if(sentResult2.length !==1) { %>s<% } %>
+          </p>
+        </div>
+
+        <!-- Tabs for Jobs/Internships -->
+        <div class="flex justify-center mb-8">
+          <div class="inline-flex rounded-md shadow-sm" role="group">
+            <button id="jobs-tab"
+              class="px-4 py-2 text-sm font-medium rounded-l-lg bg-blue-600 text-white focus:z-10 focus:ring-2 focus:ring-blue-500">
+              Jobs (<%= sentResult1.length %>)
+            </button>
+            <button id="internships-tab"
+              class="px-4 py-2 text-sm font-medium rounded-r-lg bg-white text-blue-600 hover:bg-gray-50 focus:z-10 focus:ring-2 focus:ring-blue-500">
+              Internships (<%= sentResult2.length %>)
+            </button>
+          </div>
+        </div>
+
+        <!-- Jobs Section -->
+        <div id="jobs-section" class="space-y-6">
+          <% if(sentResult1.length>0) { %>
+            <h2 class="text-2xl font-semibold text-gray-800 flex items-center">
+              <i class="fas fa-briefcase mr-2 text-blue-500"></i> Job Opportunities
+            </h2>
+
+            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-1">
+              <% sentResult1.forEach(job=> { %>
+                <div
+                  class="job-card bg-white rounded-xl shadow-md border border-gray-200 p-6 transition-all duration-300 hover:border-blue-300 fade-in">
+                  <div class="flex flex-col md:flex-row md:justify-between gap-4">
+                    <!-- Company Info -->
+                    <div class="flex items-start space-x-4 flex-1">
+                      <div class="flex-shrink-0">
+                        <img src="/logo/<%= job.jobCompany.logoId %>" alt="<%= job.jobCompany.companyName %>"
+                          class="h-14 w-14 rounded-lg object-contain border border-gray-200">
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">
+                          <%- job.jobTitle.replace(new RegExp(enteredValue, 'gi' ), match=> `<span
+                              class="highlight">${match}</span>`) %>
+                        </h3>
+
+                        <div class="flex flex-wrap items-center gap-2 text-sm text-gray-600 mb-2">
+                          <span class="font-medium">
+                            <%= job.jobCompany.companyName %>
+                          </span>
+                          <span class="text-gray-400">•</span>
+                          <span class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-1 text-blue-400"></i>
+                            <%= job.jobLocation %>
+                          </span>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                          <span
+                            class="inline-block px-3 py-1 text-sm font-medium text-orange-500 bg-orange-100 rounded-full">
+                            <%= job.jobType %>
+                          </span>
+                          <span
+                            class="inline-block px-3 py-1 text-sm font-medium text-purple-500 bg-purple-100 rounded-full">
+                            Experience: <%= job.jobExperience %> years
+                          </span>
+                          <span
+                            class="inline-block px-3 py-1 text-sm font-medium text-green-500 bg-green-100 rounded-full">
+                            Positions: <%= job.noofPositions %>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Right side - Apply and Time -->
+                    <div class="flex flex-col items-end justify-between">
+                      <span class="text-sm text-gray-500 mb-2">
+                        <i class="far fa-clock mr-1"></i>
+                        <%= formatTimeAgo(job.createdAt) %>
+                      </span>
+                      <form action="/applyforJobs/<%= job._id %>" method="POST">
+                        <button type="submit"
+                          class="btn-apply px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-300 flex items-center">
+                          Apply Now <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+
+                  <!-- Job Highlights -->
+                  <div class="mt-4 pt-4 border-t border-gray-100">
+                    <h4 class="text-sm font-semibold text-gray-700 mb-2">Key Requirements:</h4>
+                    <ul class="list-disc list-inside text-sm text-gray-600 space-y-1">
+                      <% job.jobRequirements.split('\n').slice(0, 3).forEach(point=> { %>
+                        <% if (point.trim()) { %>
+                          <li>
+                            <%= point.trim().replace(new RegExp(enteredValue, 'gi' ), match=> `<span
+                                class="highlight">${match}</span>`) %>
+                          </li>
+                          <% } %>
+                            <% }); %>
+                              <% if(job.jobRequirements.split('\n').length> 3) { %>
+                                <li class="text-blue-500 font-medium">+<%= job.jobRequirements.split('\n').length - 3 %>
+                                    more</li>
+                                <% } %>
+                    </ul>
+                  </div>
+                </div>
+                <% }); %>
+            </div>
+        </div>
+        <% } else { %>
+
+          <h2 class="text-2xl font-semibold text-gray-800 flex items-center">
+            <i class="fas fa-briefcase mr-2 text-blue-500"></i> Job Opportunities
+          </h2>
+          <div class="bg-white rounded-xl shadow-md border border-gray-200 p-8 text-center">
+            <i class="fas fa-search fa-3x text-gray-300 mb-4"></i>
+            <h3 class="text-xl font-semibold text-gray-700 mb-2">No jobs found matching "<span class="text-blue-600">
+                <%= enteredValue %>
+              </span>"</h3>
+            <p class="text-gray-500 mb-4">Try adjusting your search filters or browse our <a href="/jobs"
+                class="text-blue-500 hover:underline">job listings</a>.</p>
+            <div class="flex justify-center">
+              <a href="/jobs" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                Browse All Jobs
+              </a>
+            </div>
+          </div>
+          </div>
+          <% } %>
+
+            <!-- Internships Section -->
+            <div id="internships-section" class="space-y-6 mt-12 hidden">
+              <% if(sentResult2.length>0) { %>
+                <h2 class="text-2xl font-semibold text-gray-800 flex items-center">
+                  <i class="fas fa-user-graduate mr-2 text-blue-500"></i> Internship Opportunities
+                </h2>
+
+                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-1">
+                  <% sentResult2.forEach(int=> { %>
+                    <div
+                      class="job-card bg-white rounded-xl shadow-md border border-gray-200 p-6 transition-all duration-300 hover:border-blue-300 fade-in">
+                      <div class="flex flex-col md:flex-row md:justify-between gap-4">
+                        <!-- Company Info -->
+                        <div class="flex items-start space-x-4 flex-1">
+                          <div class="flex-shrink-0">
+                            <img src="/logo/<%= int.intCompany.logoId %>" alt="<%= int.intCompany.companyName %>"
+                              class="h-14 w-14 rounded-lg object-contain border border-gray-200">
+                          </div>
+                          <div class="flex-1 min-w-0">
+                            <h3 class="text-lg font-bold text-gray-900 mb-1">
+                              <%- int.intTitle.replace(new RegExp(enteredValue, 'gi' ), match=> `<span
+                                  class="highlight">${match}</span>`) %>
+                            </h3>
+                            <div class="flex flex-wrap items-center gap-2 text-sm text-gray-600 mb-2">
+                              <span class="font-medium">
+                                <%= int.intCompany.companyName %>
+                              </span>
+                              <span class="text-gray-400">•</span>
+                              <span class="flex items-center">
+                                <i class="fas fa-map-marker-alt mr-1 text-blue-400"></i>
+                                <%= int.intLocation %>
+                              </span>
+                            </div>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                              <span
+                                class="inline-block px-3 py-1 text-sm font-medium text-orange-500 bg-orange-100 rounded-full">
+                                <%= int.intDuration %> months
+                              </span>
+                              <span
+                                class="inline-block px-3 py-1 text-sm font-medium text-purple-500 bg-purple-100 rounded-full">
+                                Experience: <%= int.intExperience %> years
+                              </span>
+                              <span
+                                class="inline-block px-3 py-1 text-sm font-medium text-green-500 bg-green-100 rounded-full">
+                                Positions: <%= int.intPositions %>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Right side - Apply and Time -->
+                        <div class="flex flex-col items-end justify-between">
+                          <span class="text-sm text-gray-500 mb-2">
+                            <i class="far fa-clock mr-1"></i>
+                            <%= formatTimeAgo(int.createdAt) %>
+                          </span>
+                          <form action="/applyforInternships/<%= int._id %>" method="POST">
+                            <button type="submit"
+                              class="btn-apply px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-300 flex items-center">
+                              Apply Now <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+
+                      <!-- Internship Highlights -->
+                      <div class="mt-4 pt-4 border-t border-gray-100">
+                        <h4 class="text-sm font-semibold text-gray-700 mb-2">What You'll Do:</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1">
+                          <% int.intDescription.split('\n').slice(0, 3).forEach(point=> { %>
+                            <% if (point.trim()) { %>
+                              <li>
+                                <%= point.trim().replace(new RegExp(enteredValue, 'gi' ), match=> `<span
+                                    class="highlight">${match}</span>`) %>
+                              </li>
+                              <% } %>
+                                <% }); %>
+                                  <% if(int.intDescription.split('\n').length> 3) { %>
+                                    <li class="text-blue-500 font-medium">+<%= int.intDescription.split('\n').length - 3
+                                        %> more</li>
+                                    <% } %>
+                        </ul>
+                      </div>
+                    </div>
+                    <% }); %>
+                </div>
+            </div>
+            <% } else { %>
+              <h2 class="text-2xl font-semibold text-gray-800 flex items-center">
+                <i class="fas fa-briefcase mr-2 text-blue-500"></i> Internship Opportunities
+              </h2>
+              <div class="bg-white rounded-xl shadow-md border border-gray-200 p-8 text-center">
+                <i class="fas fa-search fa-3x text-gray-300 mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">No internships found matching "<span
+                    class="text-blue-600">
+                    <%= enteredValue %>
+                  </span>"</h3>
+                <p class="text-gray-500 mb-4">Try adjusting your search filters or browse our <a href="/internships"
+                    class="text-blue-500 hover:underline">internship listings</a>.</p>
+                <div class="flex justify-center">
+                  <a href="/internships"
+                    class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                    Browse All Interships
+                  </a>
+                </div>
+              </div>
+              </div>
+              <% } %>
+
+                <% } else { %>
+                  <!-- No Results Found -->
+                  <div class="flex flex-col items-center justify-center py-20 text-center">
+                    <div class="max-w-md mx-auto">
+                      <img src="/images/No-Results.jpg" alt="No results found" class="h-64 w-64 mx-auto mb-8">
+                      <h2 class="text-3xl font-bold text-gray-800 mb-4">No Results Found</h2>
+                      <p class="text-lg text-gray-600 mb-6">
+                        We couldn't find any jobs or internships matching "<span class="font-semibold text-blue-600">
+                          <%= enteredValue %>
+                        </span>".
+                      </p>
+                      <div class="space-y-3">
+                        <p class="text-gray-600">Try adjusting your search:</p>
+                        <ul class="list-disc list-inside text-gray-600 space-y-1 max-w-xs mx-auto text-left">
+                          <li>Check your spelling</li>
+                          <li>Use more general keywords</li>
+                          <li>Try different search terms</li>
+                        </ul>
+                      </div>
+                      <a href="/jobs"
+                        class="mt-6 inline-block px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors duration-300">
+                        Browse All Opportunities
+                      </a>
+                    </div>
+                  </div>
+                  <% } %>
+    </section>
+
+    <footer class="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-8">
+      <div>
+        <div class="mb-4 md:mb-0">
+          <a href="/" class="text-2xl font-bold">Go<span class="text-yellow-400">Hire</span></a>
+          <p class="mt-2 text-blue-200">Connecting talent with opportunity</p>
+        </div>
+        <div class="mt-6 pt-6 border-t border-blue-700 text-center text-blue-300 text-sm">
+          &copy; 2025 GoHire. All rights reserved.
+        </div>
       </div>
-    <div class="mt-6 pt-6 border-t border-blue-700 text-center text-blue-300 text-sm">
-      &copy; 2025 GoHire. All rights reserved.
-    </div>
-  </div>
-</footer>
+    </footer>
 
-<script>
-  // Tab switching functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    const jobsTab = document.getElementById('jobs-tab');
-    const internshipsTab = document.getElementById('internships-tab');
-    const jobsSection = document.getElementById('jobs-section');
-    const internshipsSection = document.getElementById('internships-section');
+    <script>
+      // Tab switching functionality
+      document.addEventListener('DOMContentLoaded', function () {
+        const jobsTab = document.getElementById('jobs-tab');
+        const internshipsTab = document.getElementById('internships-tab');
+        const jobsSection = document.getElementById('jobs-section');
+        const internshipsSection = document.getElementById('internships-section');
 
-    if(jobsTab && internshipsTab) {
-      jobsTab.addEventListener('click', function() {
-        jobsTab.classList.remove('bg-white', 'text-blue-600', 'hover:bg-gray-50');
-        jobsTab.classList.add('bg-blue-600', 'text-white');
-        internshipsTab.classList.remove('bg-blue-600', 'text-white');
-        internshipsTab.classList.add('bg-white', 'text-blue-600', 'hover:bg-gray-50');
-        
-        if(jobsSection) jobsSection.classList.remove('hidden');
-        if(internshipsSection) internshipsSection.classList.add('hidden');
+        if (jobsTab && internshipsTab) {
+          jobsTab.addEventListener('click', function () {
+            jobsTab.classList.remove('bg-white', 'text-blue-600', 'hover:bg-gray-50');
+            jobsTab.classList.add('bg-blue-600', 'text-white');
+            internshipsTab.classList.remove('bg-blue-600', 'text-white');
+            internshipsTab.classList.add('bg-white', 'text-blue-600', 'hover:bg-gray-50');
+
+            if (jobsSection) jobsSection.classList.remove('hidden');
+            if (internshipsSection) internshipsSection.classList.add('hidden');
+          });
+
+          internshipsTab.addEventListener('click', function () {
+            internshipsTab.classList.remove('bg-white', 'text-blue-600', 'hover:bg-gray-50');
+            internshipsTab.classList.add('bg-blue-600', 'text-white');
+            jobsTab.classList.remove('bg-blue-600', 'text-white');
+            jobsTab.classList.add('bg-white', 'text-blue-600', 'hover:bg-gray-50');
+
+            if (jobsSection) jobsSection.classList.add('hidden');
+            if (internshipsSection) internshipsSection.classList.remove('hidden');
+          });
+        }
+
+        // Mobile menu toggle (from your original code)
+        document.getElementById('mobile-menu').addEventListener('click', function () {
+          document.getElementById('dropdown-menu').classList.toggle('hidden');
+        });
+
+        // Search form submission
+        document.getElementById("search-btn").addEventListener("click", function () {
+          event.preventDefault();
+          document.getElementById("search-form").submit();
+        });
+
+        document.getElementById("search-space").addEventListener("keypress", function (event) {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("search-form").submit();
+          }
+        });
       });
+    </script>
+  </body>
 
-      internshipsTab.addEventListener('click', function() {
-        internshipsTab.classList.remove('bg-white', 'text-blue-600', 'hover:bg-gray-50');
-        internshipsTab.classList.add('bg-blue-600', 'text-white');
-        jobsTab.classList.remove('bg-blue-600', 'text-white');
-        jobsTab.classList.add('bg-white', 'text-blue-600', 'hover:bg-gray-50');
-        
-        if(jobsSection) jobsSection.classList.add('hidden');
-        if(internshipsSection) internshipsSection.classList.remove('hidden');
-      });
-    }
-
-    // Mobile menu toggle (from your original code)
-    document.getElementById('mobile-menu').addEventListener('click', function () {
-      document.getElementById('dropdown-menu').classList.toggle('hidden');
-    });
-
-    // Search form submission
-    document.getElementById("search-btn").addEventListener("click", function() {
-      event.preventDefault(); 
-      document.getElementById("search-form").submit();
-    });
-
-    document.getElementById("search-space").addEventListener("keypress", function(event) {
-      if (event.key === "Enter") {
-        event.preventDefault(); 
-        document.getElementById("search-form").submit();
-      }
-    });
-  });
-</script>
-</body>
-</html>
+  </html>

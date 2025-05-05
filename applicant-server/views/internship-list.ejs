@@ -62,30 +62,36 @@
                         class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Internship</a></li>
                 <li><a href="/contact"
                         class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Contact Us</a></li>
-                <% if (user) { %>
-                    <li class="relative group">
-                        <button
-                            class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg flex items-center">
-                            <%= user.firstName || 'Profile' %>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 9l-7 7-7-7" />
+                        <% if (user) { %>
+                            <li class="relative group">
+                              <button
+                                class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-4 rounded-full transition-all duration-300 hover:shadow-lg flex items-center">
+                                <% if (user.profileImageId) { %>
+                                  <img src="/profile/image" 
+                                       class="w-8 h-8 rounded-full object-cover mr-2 border-2 border-blue-800"
+                                       alt="Profile Image">
+                                <% } else { %>
+                                  <div class="w-8 h-8 rounded-full bg-blue-800 text-white flex items-center justify-center mr-2 font-bold text-sm">
+                                    <%= user.firstName.charAt(0).toUpperCase() %>
+                                  </div>
+                                <% } %>
+                                <%= user.firstName || 'Profile' %>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24"
+                                  stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                 </svg>
-                        </button>
-                        <div
+                              </button>
+                          <div
                             class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform -translate-y-2 group-hover:translate-y-0">
-                            <a href="/profile" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-t-lg">My
-                                Profile</a>
-                            <a href="/logout"
-                                class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-b-lg">Logout</a>
-                        </div>
-                    </li>
-                    <% } else { %>
-                        <li><a href="/login"
-                                class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg">Login</a>
+                            <a href="/profile" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-t-lg">My Profile</a>
+                            <a href="/logout" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-b-lg">Logout</a>
+                          </div>
                         </li>
-                                 <% } %>
+                        <% } else { %>
+                          <li><a href="/login"
+                              class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg">Login</a>
+                          </li>
+                          <% } %>
 
             </ul>
 
