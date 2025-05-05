@@ -165,6 +165,16 @@
                                     25 March 2025
                                 </p>
                             </div>
+
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <label class="block text-sm font-medium text-blue-700">New Password</label>
+                                <input type="password" name="newPassword" id="newPassword"
+                                    class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <div class="mt-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                    <div id="passwordStrength" class="h-full transition-all duration-300"></div>
+                                </div>
+                                <p id="passwordStrengthText" class="text-xs mt-1"></p>
+                            </div>
                         </div>
 
                         <div class="mt-8 flex justify-end space-x-4">
@@ -182,5 +192,74 @@
             </div>
         </div>
     </header>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function (e) {
+            const currentPassword = document.querySelector('input[name="currentPassword"]').value;
+            const newPassword = document.querySelector('input[name="newPassword"]').value;
+            const confirmNewPassword = document.querySelector('input[name="confirmNewPassword"]').value;
+
+            // Only validate passwords if any password field is filled
+            if (currentPassword || newPassword || confirmNewPassword) {
+                if (!currentPassword || !newPassword || !confirmNewPassword) {
+                    alert('Please fill all password fields to change your password');
+                    e.preventDefault();
+                    return;
+                }
+
+                if (newPassword.length < 8) {
+                    alert('New password must be at least 8 characters long');
+                    e.preventDefault();
+                    return;
+                }
+
+                if (newPassword !== confirmNewPassword) {
+                    alert('New passwords do not match');
+                    e.preventDefault();
+                    return;
+                }
+            }
+        });
+
+        document.getElementById('newPassword').addEventListener('input', function () {
+            const password = this.value;
+            const strengthBar = document.getElementById('passwordStrength');
+            const strengthText = document.getElementById('passwordStrengthText');
+
+            // Reset
+            strengthBar.style.width = '0%';
+            strengthBar.className = 'h-full transition-all duration-300';
+            strengthText.textContent = '';
+
+            if (!password) return;
+
+            // Calculate strength
+            let strength = 0;
+            if (password.length >= 8) strength += 1;
+            if (password.match(/[a-z]/)) strength += 1;
+            if (password.match(/[A-Z]/)) strength += 1;
+            if (password.match(/[0-9]/)) strength += 1;
+            if (password.match(/[^a-zA-Z0-9]/)) strength += 1;
+
+            // Update UI
+            const width = strength * 20;
+            strengthBar.style.width = `${width}%`;
+
+            if (strength <= 2) {
+                strengthBar.className += ' bg-red-500';
+                strengthText.textContent = 'Weak';
+                strengthText.className = 'text-xs mt-1 text-red-500';
+            } else if (strength <= 3) {
+                strengthBar.className += ' bg-yellow-500';
+                strengthText.textContent = 'Medium';
+                strengthText.className = 'text-xs mt-1 text-yellow-500';
+            } else {
+                strengthBar.className += ' bg-green-500';
+                strengthText.textContent = 'Strong';
+                strengthText.className = 'text-xs mt-1 text-green-500';
+            }
+        });
+    </script>
+
 
     <%- include('layout/footer.ejs') %>

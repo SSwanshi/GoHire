@@ -20,3 +20,6 @@ const jobSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 module.exports = (connection) => {return connection.models.Job || connection.model('Job', jobSchema)};
+
+
+// module.exports = mongoose.model('Job', jobSchema);

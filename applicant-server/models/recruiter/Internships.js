@@ -18,8 +18,10 @@ const internshipSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-module.exports = (connection) => {
+ module.exports = (connection) => {
     return connection.model('Internship', internshipSchema, "internships");
-};
+ };
+
+// module.exports = mongoose.model('Internship', internshipSchema);
 
 
