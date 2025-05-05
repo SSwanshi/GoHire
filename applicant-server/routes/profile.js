@@ -17,6 +17,8 @@ const AppliedInternship = require('../models/Applied_for_Internships');
 const JobModel = require('../models/recruiter/Job');
 const InternshipModel = require('../models/recruiter/Internships');
 const CompanyModel = require('../models/recruiter/Company');
+
+const bcrypt = require('bcrypt');
 // Add authentication middleware
 const requireAuth = (req, res, next) => {
     if (!req.session.user?.authenticated) {
@@ -220,7 +222,7 @@ router.post('/resume/delete', async (req, res) => {
 });
 
 
-// Add this route to handle the edit profile page
+// GET Edit Profile Page
 router.get('/edit', requireAuth, async (req, res) => {
     try {
         const user = await User.findOne({ userId: req.session.user.id });
@@ -242,6 +244,7 @@ router.get('/edit', requireAuth, async (req, res) => {
 });
 
 
+// POST Update Profile (including password)
 router.post('/update', requireAuth, async (req, res) => {
     try {
         const { firstName, lastName, email, phone, gender, currentPassword, newPassword, confirmNewPassword } = req.body;
@@ -262,9 +265,9 @@ router.post('/update', requireAuth, async (req, res) => {
             });
         }
 
-        // Password change logic
+        // Password change logic (only if any password field is filled)
         if (currentPassword || newPassword || confirmNewPassword) {
-            // Check all fields are present
+            // Validate all fields are present
             if (!currentPassword || !newPassword || !confirmNewPassword) {
                 return res.status(400).render('edit-profile', {
                     user: updatedUser,
@@ -283,7 +286,7 @@ router.post('/update', requireAuth, async (req, res) => {
                 });
             }
 
-            // Check password match
+            // Check new password matches confirmation
             if (newPassword !== confirmNewPassword) {
                 return res.status(400).render('edit-profile', {
                     user: updatedUser,
@@ -297,25 +300,9 @@ router.post('/update', requireAuth, async (req, res) => {
                 return res.status(400).render('edit-profile', {
                     user: updatedUser,
                     title: 'Edit Profile',
-                    error: 'Password must be at least 8 characters long'
+                    error: 'Password must be at least 4 characters long'
                 });
             }
-
-            // if (!/[A-Z]/.test(newPassword)) {
-            //     return res.status(400).render('edit-profile', {
-            //         user: updatedUser,
-            //         title: 'Edit Profile',
-            //         error: 'Password must contain at least one uppercase letter'
-            //     });
-            // }
-
-            // if (!/[0-9]/.test(newPassword)) {
-            //     return res.status(400).render('edit-profile', {
-            //         user: updatedUser,
-            //         title: 'Edit Profile',
-            //         error: 'Password must contain at least one number'
-            //     });
-            // }
 
             // Hash and update password
             const salt = await bcrypt.genSalt(10);
@@ -326,7 +313,7 @@ router.post('/update', requireAuth, async (req, res) => {
             );
         }
 
-        // Update session
+        // Update session with new user data
         req.session.user = {
             ...req.session.user,
             firstName: updatedUser.firstName,
@@ -345,7 +332,8 @@ router.post('/update', requireAuth, async (req, res) => {
                     error: 'An error occurred while saving your session'
                 });
             }
-            // Check if password was changed
+
+            // Redirect with success message
             const message = (currentPassword && newPassword && confirmNewPassword)
                 ? '?success=Profile+and+password+updated+successfully'
                 : '?success=Profile+updated+successfully';

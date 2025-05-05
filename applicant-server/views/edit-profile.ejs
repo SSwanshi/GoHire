@@ -122,109 +122,118 @@
                     <h2 class="text-2xl font-bold text-blue-900 mb-6 pb-2 border-b-2 border-yellow-400">Edit Profile
                         Information</h2>
 
-                    <form action="/profile/update" method="POST">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-blue-50 p-4 rounded-lg">
-                                <label class="block text-sm font-medium text-blue-700">First Name</label>
-                                <input type="text" name="firstName" value="<%= user.firstName %>"
-                                    class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            </div>
+                  
 
-                            <div class="bg-blue-50 p-4 rounded-lg">
-                                <label class="block text-sm font-medium text-blue-700">Last Name</label>
-                                <input type="text" name="lastName" value="<%= user.lastName %>"
-                                    class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            </div>
+                            <form action="/profile/update" method="POST">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="bg-blue-50 p-4 rounded-lg">
+                                        <label class="block text-sm font-medium text-blue-700">First Name</label>
+                                        <input type="text" name="firstName" value="<%= user.firstName %>"
+                                            class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                    </div>
 
-                            <div class="bg-blue-50 p-4 rounded-lg">
-                                <label class="block text-sm font-medium text-blue-700">Email Address</label>
-                                <input type="email" name="email" value="<%= user.email %>"
-                                    class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            </div>
+                                    <div class="bg-blue-50 p-4 rounded-lg">
+                                        <label class="block text-sm font-medium text-blue-700">Last Name</label>
+                                        <input type="text" name="lastName" value="<%= user.lastName %>"
+                                            class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                    </div>
 
-                            <div class="bg-blue-50 p-4 rounded-lg">
-                                <label class="block text-sm font-medium text-blue-700">Phone Number</label>
-                                <input type="tel" name="phone" value="<%= user.phone %>"
-                                    class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            </div>
+                                    <div class="bg-blue-50 p-4 rounded-lg">
+                                        <label class="block text-sm font-medium text-blue-700">Email Address</label>
+                                        <input type="email" name="email" value="<%= user.email %>"
+                                            class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                    </div>
 
-                            <div class="bg-blue-50 p-4 rounded-lg">
-                                <label class="block text-black text-sm font-medium text-blue-700">Gender</label>
-                                <select name="gender"
-                                    class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                    <option value="male" <%=user.gender==='male' ? 'selected' : '' %>>Male</option>
-                                    <option value="female" <%=user.gender==='female' ? 'selected' : '' %>>Female
-                                    </option>
-                                    <option value="other" <%=user.gender==='other' ? 'selected' : '' %>>Other</option>
-                                </select>
-                            </div>
+                                    <div class="bg-blue-50 p-4 rounded-lg">
+                                        <label class="block text-sm font-medium text-blue-700">Phone Number</label>
+                                        <input type="tel" name="phone" value="<%= user.phone %>"
+                                            class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                    </div>
 
-                            <div class="bg-blue-50 p-4 rounded-lg">
-                                <label class="block text-sm font-medium text-blue-700">Member Since</label>
-                                <p class="text-lg text-blue-900 font-semibold">
-                                    25 March 2025
-                                </p>
-                            </div>
+                                    <div class="bg-blue-50 p-4 rounded-lg">
+                                        <label class="block text-black text-sm font-medium text-blue-700">Gender</label>
+                                        <select name="gender"
+                                            class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                            <option value="male" <%=user.gender==='male' ? 'selected' : '' %>>Male
+                                            </option>
+                                            <option value="female" <%=user.gender==='female' ? 'selected' : '' %>>Female
+                                            </option>
+                                            <option value="other" <%=user.gender==='other' ? 'selected' : '' %>>Other
+                                            </option>
+                                        </select>
+                                    </div>
 
-                            <div class="bg-blue-50 p-4 rounded-lg">
-                                <label class="block text-sm font-medium text-blue-700">New Password</label>
-                                <input type="password" name="newPassword" id="newPassword"
-                                    class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                <div class="mt-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                    <div id="passwordStrength" class="h-full transition-all duration-300"></div>
+                                    <div class="bg-blue-50 p-4 rounded-lg">
+                                        <label class="block text-sm font-medium text-blue-700">Member Since</label>
+                                        <p class="text-lg text-blue-900 font-semibold">
+                                            25 March 2025
+                                        </p>
+                                    </div>
+
+                                    <!-- Password Change Section -->
+                                    <div class="md:col-span-2 border-t-2 border-yellow-400 pt-4 mt-4">
+                                        <h3 class="text-xl font-bold text-blue-900 mb-4">Change Password</h3>
+
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div class="bg-blue-50 p-4 rounded-lg">
+                                                <label class="block text-sm font-medium text-blue-700">Current
+                                                    Password</label>
+                                                <input type="password" name="currentPassword" id="currentPassword"
+                                                    class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                            </div>
+
+                                            <div class="bg-blue-50 p-4 rounded-lg">
+                                                <label class="block text-sm font-medium text-blue-700">New
+                                                    Password</label>
+                                                <input type="password" name="newPassword" id="newPassword"
+                                                    class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                                <div class="mt-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                    <div id="passwordStrength"
+                                                        class="h-full transition-all duration-300"></div>
+                                                </div>
+                                                <p id="passwordStrengthText" class="text-xs mt-1"></p>
+                                            </div>
+
+                                            <div class="bg-blue-50 p-4 rounded-lg">
+                                                <label class="block text-sm font-medium text-blue-700">Confirm New
+                                                    Password</label>
+                                                <input type="password" name="confirmNewPassword" id="confirmNewPassword"
+                                                    class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                                <p id="passwordMatchText" class="text-xs mt-1"></p>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-2">
+                                            <p class="text-sm text-gray-600">
+                                                Note: Leave password fields blank if you don't want to change your
+                                                password.
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <p id="passwordStrengthText" class="text-xs mt-1"></p>
-                            </div>
-                        </div>
 
-                        <div class="mt-8 flex justify-end space-x-4">
-                            <a href="/profile"
-                                class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition">
-                                Cancel
-                            </a>
-                            <button type="submit"
-                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-                                Save Changes
-                            </button>
-                        </div>
-                    </form>
+                                <div class="mt-8 flex justify-end space-x-4">
+                                    <a href="/profile"
+                                        class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition">
+                                        Cancel
+                                    </a>
+                                    <button type="submit"
+                                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                                        Save Changes
+                                    </button>
+                                </div>
+                            </form>
                 </div>
             </div>
         </div>
     </header>
 
     <script>
-        document.querySelector('form').addEventListener('submit', function (e) {
-            const currentPassword = document.querySelector('input[name="currentPassword"]').value;
-            const newPassword = document.querySelector('input[name="newPassword"]').value;
-            const confirmNewPassword = document.querySelector('input[name="confirmNewPassword"]').value;
-
-            // Only validate passwords if any password field is filled
-            if (currentPassword || newPassword || confirmNewPassword) {
-                if (!currentPassword || !newPassword || !confirmNewPassword) {
-                    alert('Please fill all password fields to change your password');
-                    e.preventDefault();
-                    return;
-                }
-
-                if (newPassword.length < 8) {
-                    alert('New password must be at least 8 characters long');
-                    e.preventDefault();
-                    return;
-                }
-
-                if (newPassword !== confirmNewPassword) {
-                    alert('New passwords do not match');
-                    e.preventDefault();
-                    return;
-                }
-            }
-        });
-
         document.getElementById('newPassword').addEventListener('input', function () {
             const password = this.value;
             const strengthBar = document.getElementById('passwordStrength');
             const strengthText = document.getElementById('passwordStrengthText');
+            const confirmPassword = document.getElementById('confirmNewPassword').value;
 
             // Reset
             strengthBar.style.width = '0%';
@@ -258,8 +267,60 @@
                 strengthText.textContent = 'Strong';
                 strengthText.className = 'text-xs mt-1 text-green-500';
             }
+
+            // Check password match if confirm password is filled
+            if (confirmPassword) {
+                checkPasswordMatch();
+            }
+        });
+
+        document.getElementById('confirmNewPassword').addEventListener('input', checkPasswordMatch);
+
+        function checkPasswordMatch() {
+            const password = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmNewPassword').value;
+            const matchText = document.getElementById('passwordMatchText');
+
+            if (!password || !confirmPassword) {
+                matchText.textContent = '';
+                return;
+            }
+
+            if (password === confirmPassword) {
+                matchText.textContent = 'Passwords match!';
+                matchText.className = 'text-xs mt-1 text-green-500';
+            } else {
+                matchText.textContent = 'Passwords do not match!';
+                matchText.className = 'text-xs mt-1 text-red-500';
+            }
+        }
+
+        document.querySelector('form').addEventListener('submit', function (e) {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+            // Only validate passwords if any password field is filled
+            if (currentPassword || newPassword || confirmNewPassword) {
+                if (!currentPassword || !newPassword || !confirmNewPassword) {
+                    alert('Please fill all password fields to change your password');
+                    e.preventDefault();
+                    return;
+                }
+
+                if (newPassword.length < 4) {
+                    alert('New password must be at least 4 characters long');
+                    e.preventDefault();
+                    return;
+                }
+
+                if (newPassword !== confirmNewPassword) {
+                    alert('New passwords do not match');
+                    e.preventDefault();
+                    return;
+                }
+            }
         });
     </script>
-
 
     <%- include('layout/footer.ejs') %>
