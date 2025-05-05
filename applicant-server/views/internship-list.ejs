@@ -225,6 +225,12 @@
                                         <span class="inline-block px-3 py-1 text-sm font-medium text-green-500 bg-green-100 rounded-full">
                                         Positions: <%= int.intPositions %>
                                         </span>
+                                        <span class="inline-block px-3 py-1 text-sm font-medium text-red-500 bg-red-100 rounded-full">  
+                                            Expiry: 
+                                            <td class="inline-block px-3 py-1 text-sm font-medium text-red-500 bg-red-100 rounded-full">
+                                              <%= new Date(int.intExpiry).toLocaleDateString('en-GB') %>
+                                            </td>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
