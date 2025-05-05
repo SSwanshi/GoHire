@@ -373,6 +373,15 @@ router.post('/appliedforJobs/:jobID', async(req, res) => {
 
     // Fetch the user from the database using the userId (this is optional if you have user data in the session)
     const user = await User.findOne({ userId });
+    const userResume = user.resumeId;
+    if (!userResume) {
+      return res.render('Apply_for_Jobs', {
+        job: JobFind, 
+        applications ,
+        user: req.session.user,
+        error: 'Please upload Resume to apply for this job.'
+      });
+    }
     if (!user) return res.status(404).send("User not found");
 
     // Check if the user has already applied for the job
@@ -459,6 +468,15 @@ router.post('/appliedforInternships/:internshipID', async (req, res) => {
     }
 
     const user = await User.findOne({ userId });
+    const userResume = user.resumeId;
+    if (!userResume) {
+      return res.render('Apply_for_Internships', {
+        internship: InternshipFind,
+        applications,
+        user: req.session.user,
+        error: 'Please login to apply for this internship.'
+      });
+    }
     if (!user) return res.status(404).send("User not found");
 
     const alreadyApplied = await Applied_for_Internships.findOne({ userId, internshipId });
