@@ -143,5 +143,10 @@
     </div>
 
     <script src="/script.js"></script>
+    <% if (typeof error !== 'undefined' && error) { %>
+        <script>
+          alert("<%= error %>");
+        </script>
+      <% } %>
 </body>
 </html>
