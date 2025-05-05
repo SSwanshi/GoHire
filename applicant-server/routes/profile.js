@@ -6,8 +6,17 @@ const { connectDB, getBucket } = require('../config/db');
 const { ObjectId } = require('mongodb');
 const Job = require('../models/recruiter/Job');
 const Internship = require('../models/recruiter/Internships'); // Add this if you have an Internship model
-const recruiterDB = require('../config/recruiterDB'); // Assuming you have a separate DB connection for recruiters
+const connectRecruiterDB = require('../config/recruiterDB'); // Assuming you have a separate DB connection for recruiters
 
+const createJobModel = require('../models/recruiter/Job');
+const createInternshipModel = require('../models/recruiter/Internships');
+const createCompanyModel = require('../models/recruiter/Company');
+const AppliedJob = require('../models/Applied_for_Jobs');
+const AppliedInternship = require('../models/Applied_for_Internships');
+
+const JobModel = require('../models/recruiter/Job');
+const InternshipModel = require('../models/recruiter/Internships');
+const CompanyModel = require('../models/recruiter/Company');
 // Add authentication middleware
 const requireAuth = (req, res, next) => {
     if (!req.session.user?.authenticated) {
@@ -29,6 +38,8 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
 });
 
+// ... (previous imports remain the same)
+
 router.get('/', requireAuth, async (req, res) => {
     try {
         const user = await User.findOne({ userId: req.session.user.id });
@@ -44,31 +55,41 @@ router.get('/', requireAuth, async (req, res) => {
             if (files.length > 0) resumeName = files[0].filename;
         }
 
-        // Get applications from applicant DB
-        const AppliedJob = require('../models/Applied_for_Jobs');
-        const AppliedInternship = require('../models/Applied_for_Internships');
-
         const jobApplications = await AppliedJob.find({ userId: req.session.user.id });
         const internshipApplications = await AppliedInternship.find({ userId: req.session.user.id });
 
+        // console.log('Job Applications:', jobApplications);
+        // console.log('Internship Applications:', internshipApplications);
+
         // Get all unique job/internship IDs
         const jobIds = [...new Set(jobApplications.map(app => app.jobId).filter(Boolean))];
-
         const internshipIds = [...new Set(internshipApplications.map(app => app.internshipId).filter(Boolean))];
 
-        // Get models for recruiter DB
-        const Job = recruiterDB.model('Job', require('../models/recruiter/Job').schema);
-        const Internship = recruiterDB.model('Internship', require('../models/recruiter/Internships').schema);
+        // // Connect to recruiter DB
+        const recruiterConn = await connectRecruiterDB();
+
+        // // IMPORTANT: Get the original schemas from the models
+
+
+        // // Create models using the recruiterDB connection
+        const JobFindConn = createJobModel(recruiterConn);
+        const InternshipFindConn = createInternshipModel(recruiterConn);
+        const CompanyFindConn = createCompanyModel(recruiterConn);
 
         // Fetch details from recruiter DB
         const [jobs, internships] = await Promise.all([
-            Job.find({ _id: { $in: jobIds } }).populate('jobCompany', 'name'),
-            Internship.find({ _id: { $in: internshipIds } }).populate('intCompany', 'name')
+            jobIds.length > 0 ? JobFindConn.find({ _id: { $in: jobIds } }).populate('jobCompany', 'companyName') : [],
+            internshipIds.length > 0 ? InternshipFindConn.find({ _id: { $in: internshipIds } }).populate('intCompany', 'companyName') : []
         ]);
+        // console.log('Jobs:', jobs);
+        // console.log('Internships:', internships);
 
         // Create lookup maps
         const jobMap = jobs.reduce((map, job) => (map[job._id] = job, map), {});
         const internshipMap = internships.reduce((map, internship) => (map[internship._id] = internship, map), {});
+
+        console.log('Job Map:', jobMap);
+        console.log('Internship Map:', internshipMap);
 
         // Format application history
         const applicationHistory = [
@@ -77,7 +98,7 @@ router.get('/', requireAuth, async (req, res) => {
                 return {
                     type: 'Job',
                     title: job?.jobTitle || 'Job (Details Unavailable)',
-                    company: job?.jobCompany?.name || 'Company (Details Unavailable)',
+                    company: job?.jobCompany?.companyName || 'Company (Details Unavailable)',
                     appliedAt: app.AppliedAt,
                     status: app.isSelected ? 'Accepted' : app.isRejected ? 'Rejected' : 'Pending',
                     applicationId: app._id
@@ -88,7 +109,7 @@ router.get('/', requireAuth, async (req, res) => {
                 return {
                     type: 'Internship',
                     title: internship?.intTitle || 'Internship (Details Unavailable)',
-                    company: internship?.intCompany?.name || 'Company (Details Unavailable)',
+                    company: internship?.intCompany?.companyName || 'Company (Details Unavailable)',
                     appliedAt: app.AppliedAt,
                     status: app.isSelected ? 'Accepted' : app.isRejected ? 'Rejected' : 'Pending',
                     applicationId: app._id
@@ -112,6 +133,7 @@ router.get('/', requireAuth, async (req, res) => {
     }
 });
 
+// ... (rest of the file remains the same)
 // Upload resume
 router.post('/resume', upload.single('resume'), async (req, res) => {
     try {

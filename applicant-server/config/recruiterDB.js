@@ -18,17 +18,3 @@ const connectRecruiterDB = async () => {
 
 module.exports = connectRecruiterDB;
 
-// const mongoose = require('mongoose');
-// require('dotenv').config();
-
-// const recruiterDB = mongoose.createConnection(process.env.RECRUITER_DB_URI || 'mongodb+srv://gohire:gohire12345678@gohire.kzwudx0.mongodb.net/golfire_recruiters?retryWrites=true&w=majority');
-
-// recruiterDB.on('connected', () => {
-//   console.log('✅ Recruiter DB Connected');
-// });
-
-// recruiterDB.on('error', (err) => {
-//   console.error('❌ Recruiter DB Connection Error', err);
-// });
-
-// module.exports = recruiterDB;
