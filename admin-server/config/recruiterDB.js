@@ -20,6 +20,8 @@
 
 // config/recruiterDB.js
 const mongoose = require('mongoose');
+const recruiterSchema = require('../models/Recruiter');
+require('dotenv').config();
 
 let recruiterConn;
 
@@ -29,9 +31,10 @@ const connectRecruiterDB = async () => {
             serverSelectionTimeoutMS: 20000
         });
 
-        // Register model
-        const Recruiter = require('../models/Recruiter');
-        recruiterConn.model('Recruiter', Recruiter.schema);
+        // Register the model once the connection is established
+        if (!recruiterConn.models.Recruiter) {
+            recruiterConn.model('RecruiterUser', recruiterSchema);
+          }
 
         console.log("✅ Recruiter DB Connected");
     }
