@@ -19,7 +19,6 @@
     </div>
     <div class="login-right">
       <h2 class="login-title">Sign Up</h2>
-
       <hr>
       <br>
 
@@ -28,10 +27,14 @@
           <div class="form-group">
             <label for="firstName">First Name <span class="required">*</span></label>
             <input type="text" id="firstName" name="firstName" placeholder="First Name" required>
+            <small class="error-message" id="firstNameError" style="color: red; display: none;">First name should only
+              contain letters</small>
           </div>
           <div class="form-group">
             <label for="lastName">Last Name</label>
             <input type="text" id="lastName" name="lastName" placeholder="Last Name">
+            <small class="error-message" id="lastNameError" style="color: red; display: none;">Last name should only
+              contain letters</small>
           </div>
         </div>
 
@@ -142,15 +145,27 @@
       }
     });
 
-    // Toggle between recruiter and candidate
-    document.getElementById('recruiter-btn').addEventListener('click', function () {
-      this.classList.add('active');
-      document.getElementById('candidate-btn').classList.remove('active');
+    // Validate first name and last name on input
+    document.getElementById('firstName').addEventListener('input', function () {
+      const namePattern = /^[A-Za-z]+$/;
+      const errorElement = document.getElementById('firstNameError');
+
+      if (!namePattern.test(this.value)) {
+        errorElement.style.display = 'block';
+      } else {
+        errorElement.style.display = 'none';
+      }
     });
 
-    document.getElementById('candidate-btn').addEventListener('click', function () {
-      this.classList.add('active');
-      document.getElementById('recruiter-btn').classList.remove('active');
+    document.getElementById('lastName').addEventListener('input', function () {
+      const namePattern = /^[A-Za-z]*$/; // * instead of + to allow empty
+      const errorElement = document.getElementById('lastNameError');
+
+      if (this.value && !namePattern.test(this.value)) {
+        errorElement.style.display = 'block';
+      } else {
+        errorElement.style.display = 'none';
+      }
     });
 
     document.querySelector('.signup-form').addEventListener('submit', function (event) {
@@ -158,66 +173,75 @@
 
       // Get form values
       let firstName = document.getElementById('firstName').value.trim();
+      let lastName = document.getElementById('lastName').value.trim();
       let email = document.getElementById('email').value.trim();
       let phone = document.getElementById('phone').value.trim();
       let password = document.getElementById('password').value;
       let confirmPassword = document.getElementById('confirmPassword').value;
       let termsAgree = document.getElementById('termsAgree').checked;
 
-      // Email validation pattern
-      
-      // Phone number validation (exactly 10 digits)
-      const phonePattern = /^[0-9]{10}$/;
+      // Name validation patterns
+      const namePattern = /^[A-Za-z]+$/;
+      const lastNamePattern = /^[A-Za-z]*$/;
 
       // First name validation
       if (firstName.length === 0) {
         alert("First Name is required.");
         isValid = false;
+      } else if (!namePattern.test(firstName)) {
+        document.getElementById('firstNameError').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('firstNameError').style.display = 'none';
       }
 
-      const validDomains = ['gmail', 'yahoo', 'outlook', 'hotmail', 'icloud', 
-                          'aol', 'protonmail', 'zoho', 'example', 'company', 'iiits','google','apple','sbi','flipkart','amazon','hdfc'];
-
-      const validTLDs = [
-  'com', 'org', 'net', 'edu', 'gov', 'mil',  // General
-  'co', 'io', 'me', 'app', 'dev',            // Tech/startup
-  'info', 'biz', 'xyz', 'online', 'site',    // Generic alternatives
-  'us', 'uk', 'ca', 'au', 'in', 'de', 'fr',  // Country-specific
-  'tv', 'fm', 'ai', 'store', 'tech',         // Popular niches
-  'blog', 'news', 'media', 'cloud', 'live',  // Media/content
-  'club', 'shop', 'team', 'space', 'agency'  // Communities/businesses
-      ];
-
-      const emailPattern = /^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+)\.([a-zA-Z]{2,})$/;
-      
-      if (!emailPattern.test(email)) {
-        alert('Please Enter a valid email address.');
-        event.preventDefault();
-        return;
-      }
-      
-      // Extract domain parts
-      const domainParts = email.split('@')[1].split('.');
-      const domainName = domainParts[0];
-      const tld = domainParts[1];
-      
-      // Validate against allowed lists
-      if (!validDomains.includes(domainName)) {
-        alert('Please Enter a valid email address.');
-        event.preventDefault();
-        return;
-      }
-      
-      if (!validTLDs.includes(tld)) {
-        alert('Please Enter a valid email address.');
-        event.preventDefault();
-        return;
+      // Last name validation
+      if (lastName && !lastNamePattern.test(lastName)) {
+        document.getElementById('lastNameError').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('lastNameError').style.display = 'none';
       }
 
       // Email validation
-      
+      const validDomains = ['gmail', 'yahoo', 'outlook', 'hotmail', 'icloud',
+        'aol', 'protonmail', 'zoho', 'example', 'company', 'iiits', 'google', 'apple', 'sbi', 'flipkart', 'amazon', 'hdfc'];
+
+      const validTLDs = [
+        'com', 'org', 'net', 'edu', 'gov', 'mil',  // General
+        'co', 'io', 'me', 'app', 'dev',            // Tech/startup
+        'info', 'biz', 'xyz', 'online', 'site',    // Generic alternatives
+        'us', 'uk', 'ca', 'au', 'in', 'de', 'fr',  // Country-specific
+        'tv', 'fm', 'ai', 'store', 'tech',         // Popular niches
+        'blog', 'news', 'media', 'cloud', 'live',  // Media/content
+        'club', 'shop', 'team', 'space', 'agency'  // Communities/businesses
+      ];
+
+      const emailPattern = /^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+)\.([a-zA-Z]{2,})$/;
+
+      if (!emailPattern.test(email)) {
+        alert('Please Enter a valid email address.');
+        isValid = false;
+      } else {
+        // Extract domain parts
+        const domainParts = email.split('@')[1].split('.');
+        const domainName = domainParts[0];
+        const tld = domainParts[1];
+
+        // Validate against allowed lists
+        if (!validDomains.includes(domainName)) {
+          alert('Please Enter a valid email address.');
+          isValid = false;
+        }
+
+        if (!validTLDs.includes(tld)) {
+          alert('Please Enter a valid email address.');
+          isValid = false;
+        }
+      }
 
       // Phone validation (should be exactly 10 digits)
+      const phonePattern = /^[0-9]{10}$/;
       if (!phonePattern.test(phone)) {
         alert("Please enter a valid 10-digit phone number.");
         isValid = false;
