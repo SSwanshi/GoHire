@@ -1,35 +1,67 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const User = require('../models/User'); 
+const User = require('../models/User');
 const router = express.Router();
 const uploading = require('../middleware/multer');
 
 router.post('/signup', async (req, res) => {
   const { firstName, lastName, email, phone, gender, password, confirmPassword } = req.body;
 
-  if (!firstName || !lastName || !email || !phone || !gender || !password || !confirmPassword) {
-    return res.status(400).json({ error: 'All fields are required' });
+  // Validation
+  if (!firstName || !email || !phone || !gender || !password || !confirmPassword) {
+    return res.status(400).json({ error: 'All required fields must be filled' });
+  }
+
+  // Password length validation (matches frontend)
+  if (password.length < 4) {
+    return res.status(400).json({ error: 'Password must be at least 4 characters long' });
   }
 
   if (password !== confirmPassword) {
     return res.status(400).json({ error: 'Passwords do not match' });
   }
 
+  // Basic email format validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ error: 'Please enter a valid email address' });
+  }
+
+  // Phone number validation (10 digits)
+  const phoneRegex = /^\d{10}$/;
+  if (!phoneRegex.test(phone)) {
+    return res.status(400).json({ error: 'Phone number must be 10 digits' });
+  }
+
   try {
+    // Check if user exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ error: 'Email already registered' });
     }
 
+    // Hash password and create user
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ firstName, lastName, email, phone, gender, password: hashedPassword });
+    const newUser = new User({
+      firstName,
+      lastName,
+      email,
+      phone,
+      gender,
+      password: hashedPassword
+    });
+
     await newUser.save();
 
-    req.session.successMessage = 'Signed up successfully, now login';
-    res.redirect('/auth/login');
+    // Set success message and redirect
+    req.session.successMessage = 'Signed up successfully! Please login.';
+    return res.redirect('/auth/login');
+
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Signup error:', error);
+    return res.status(500).json({
+      error: 'An unexpected error occurred. Please try again later.'
+    });
   }
 });
 
@@ -49,7 +81,7 @@ router.post('/login', async (req, res) => {
     }
 
     req.session.user = user;
-    req.session.userId = user._id; 
+    req.session.userId = user._id;
 
     res.redirect('/recruiter/home');
   } catch (error) {
@@ -62,7 +94,7 @@ router.get('/user/:email', async (req, res) => {
   const { email } = req.params;
 
   try {
-    const user = await User.findOne({ email }, '-password'); 
+    const user = await User.findOne({ email }, '-password');
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -111,7 +143,7 @@ router.get('/profile', async (req, res) => {
     if (!userId) return res.redirect('/auth/login');
 
     const user = await User.findById(userId);
-    res.render('profile', { user }); 
+    res.render('profile', { user });
   } catch (err) {
     console.error(err);
     res.status(500).send("Server error");
