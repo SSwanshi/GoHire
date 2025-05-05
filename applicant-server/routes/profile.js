@@ -26,7 +26,7 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
 });
 
-// Get profile page
+// In your profile.js file, update the GET route for the profile page
 router.get('/', requireAuth, async (req, res) => {
     try {
         const user = await User.findOne({ userId: req.session.user.id });
@@ -43,9 +43,39 @@ router.get('/', requireAuth, async (req, res) => {
             if (files.length > 0) resumeName = files[0].filename;
         }
 
+        // Fetch application history
+        const AppliedJob = require('../models/Applied_for_Jobs');
+        const AppliedInternship = require('../models/Applied_for_Internships');
+
+        // Get both job and internship applications
+        const jobApplications = await AppliedJob.find({ userId: req.session.user.id });
+        const internshipApplications = await AppliedInternship.find({ userId: req.session.user.id });
+
+        // Combine and format the applications
+        const applicationHistory = [
+            ...jobApplications.map(app => ({
+                type: 'Job',
+                title: app.jobId, // You might want to populate the actual job title here
+                company: 'Company Name', // You'll need to fetch this from the Job model
+                appliedAt: app.AppliedAt,
+                status: app.isSelected ? 'Accepted' : app.isRejected ? 'Rejected' : 'Pending'
+            })),
+            ...internshipApplications.map(app => ({
+                type: 'Internship',
+                title: app.internshipId, // You might want to populate the actual internship title
+                company: 'Company Name', // You'll need to fetch this from the Internship model
+                appliedAt: app.AppliedAt,
+                status: app.isSelected ? 'Accepted' : app.isRejected ? 'Rejected' : 'Pending'
+            }))
+        ];
+
+        // Sort by application date (newest first)
+        applicationHistory.sort((a, b) => b.appliedAt - a.appliedAt);
+
         res.render('profile', {
             user,
             resumeName,
+            applicationHistory,
             title: 'User Profile'
         });
 
@@ -55,6 +85,37 @@ router.get('/', requireAuth, async (req, res) => {
         res.redirect('/login');
     }
 });
+
+// // Update the application history fetching part in profile.js
+// const jobApplications = await AppliedJob.find({ userId: req.session.user.id })
+//     .populate({
+//         path: 'jobId',
+//         select: 'title company.name' // Adjust based on your Job model
+//     });
+
+// const internshipApplications = await AppliedInternship.find({ userId: req.session.user.id })
+//     .populate({
+//         path: 'internshipId',
+//         select: 'title company.name' // Adjust based on your Internship model
+//     });
+
+// // Combine and format the applications
+// const applicationHistory = [
+//     ...jobApplications.map(app => ({
+//         type: 'Job',
+//         title: app.jobId?.title || 'Job',
+//         company: app.jobId?.company?.name || 'Company',
+//         appliedAt: app.AppliedAt,
+//         status: app.isSelected ? 'Accepted' : app.isRejected ? 'Rejected' : 'Pending'
+//     })),
+//     ...internshipApplications.map(app => ({
+//         type: 'Internship',
+//         title: app.internshipId?.title || 'Internship',
+//         company: app.internshipId?.company?.name || 'Company',
+//         appliedAt: app.AppliedAt,
+//         status: app.isSelected ? 'Accepted' : app.isRejected ? 'Rejected' : 'Pending'
+//     }))
+// ];
 
 // Upload resume
 router.post('/resume', upload.single('resume'), async (req, res) => {
