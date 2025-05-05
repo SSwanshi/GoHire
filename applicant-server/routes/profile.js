@@ -97,8 +97,8 @@ router.get('/', requireAuth, async (req, res) => {
                 const job = app.jobId ? jobMap[app.jobId] : null;
                 return {
                     type: 'Job',
-                    title: job?.jobTitle || 'Job (Details Unavailable)',
-                    company: job?.jobCompany?.companyName || 'Company (Details Unavailable)',
+                    title: job?.jobTitle || 'Job No Longer Available',
+                    company: job?.jobCompany?.companyName || 'Company No Longer Available',
                     appliedAt: app.AppliedAt,
                     status: app.isSelected ? 'Accepted' : app.isRejected ? 'Rejected' : 'Pending',
                     applicationId: app._id
@@ -108,8 +108,8 @@ router.get('/', requireAuth, async (req, res) => {
                 const internship = app.internshipId ? internshipMap[app.internshipId] : null;
                 return {
                     type: 'Internship',
-                    title: internship?.intTitle || 'Internship (Details Unavailable)',
-                    company: internship?.intCompany?.companyName || 'Company (Details Unavailable)',
+                    title: internship?.intTitle || 'Internship No Longer Available',
+                    company: internship?.intCompany?.companyName || 'Company No Longer Available',
                     appliedAt: app.AppliedAt,
                     status: app.isSelected ? 'Accepted' : app.isRejected ? 'Rejected' : 'Pending',
                     applicationId: app._id
