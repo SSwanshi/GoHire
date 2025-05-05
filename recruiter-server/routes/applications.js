@@ -6,35 +6,52 @@ const applicantConnection = require('../config/applicantDb');
 const Job = require('../models/Jobs');
 const { ObjectId, GridFSBucket } = require('mongodb');
 const applicantDb = require('../config/applicantDb');
+const PremiumUser = require('../models/PremiumUser');
 
 // View all applicants for a specific job
 router.get('/:jobId', async (req, res) => {
-    try {
-      const jobId = req.params.jobId;
-      console.log('Requested jobId:', jobId);
-  
-      const job = await Job.findById(jobId);
-      console.log('Fetched job:', job);
+  try {
+    const jobId = req.params.jobId;
+    console.log('Requested jobId:', jobId);
 
-      const jobs = await Job.findById(jobId).populate("jobCompany");
-  
-      if (!job) {
-        return res.status(404).send('Job not found');
-      }
-  
-      const applicants = await AppliedJob.find({ jobId });
-  
-      res.render('applications', {
-        applicants,
-        jobTitle: job.jobTitle,
-        jobCompany: jobs.jobCompany.companyName,
-        jobId
-      });
-    } catch (err) {
-      console.error('Error fetching applications:', err);
-      res.status(500).send('Internal Server Error');
+    const job = await Job.findById(jobId);
+    const jobs = await Job.findById(jobId).populate("jobCompany");
+
+    if (!job) {
+      return res.status(404).send('Job not found');
     }
-  });
+
+    const applicants = await AppliedJob.find({ jobId });
+
+    // Fetch all premium user IDs from applicant DB
+    const premiumUsers = await PremiumUser.find({}, 'userId');
+    const premiumUserIds = premiumUsers.map(user => user.userId);
+
+    // Sort applicants: premium first, others after
+    const premiumApplicants = [];
+    const normalApplicants = [];
+
+    applicants.forEach(applicant => {
+      if (premiumUserIds.includes(applicant.userId)) {
+        premiumApplicants.push(applicant);
+      } else {
+        normalApplicants.push(applicant);
+      }
+    });
+
+    const sortedApplicants = [...premiumApplicants, ...normalApplicants];
+
+    res.render('applications', {
+      applicants: sortedApplicants,
+      jobTitle: job.jobTitle,
+      jobCompany: jobs.jobCompany.companyName,
+      jobId
+    });
+  } catch (err) {
+    console.error('Error fetching applications:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
   
   router.post('/:id/status', async (req, res) => {
     const appId = req.params.id;

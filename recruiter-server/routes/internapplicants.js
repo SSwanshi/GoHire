@@ -4,31 +4,49 @@ const AppliedInternship = require('../models/AppliedInternship');
 const Internship = require('../models/Internship');
 const { ObjectId, GridFSBucket } = require('mongodb');
 const applicantDb = require('../config/applicantDb');
+const PremiumUser = require('../models/PremiumUser');
 
 // View all applicants for a specific internship
 router.get('/:internshipId', async (req, res) => {
   try {
     const internshipId = req.params.internshipId;
 
-    // Fetch internship details by intId
+    // Fetch internship details
     const intern = await Internship.findById(internshipId);
     if (!intern) return res.status(404).send('Internship not found');
-    
-    // Fetch all applicants for this internship
-    const intapplicants = await AppliedInternship.find({ internshipId });
 
+    // Fetch all applicants for this internship
+    const allApplicants = await AppliedInternship.find({ internshipId });
+
+    // Fetch premium user IDs
+    const premiumUsers = await PremiumUser.find({}, 'userId');
+    const premiumUserIds = premiumUsers.map(user => user.userId);
+
+    // Sort applicants: premium first
+    const premiumApplicants = [];
+    const normalApplicants = [];
+
+    allApplicants.forEach(applicant => {
+      if (premiumUserIds.includes(applicant.userId)) {
+        premiumApplicants.push(applicant);
+      } else {
+        normalApplicants.push(applicant);
+      }
+    });
+
+    const sortedApplicants = [...premiumApplicants, ...normalApplicants];
+
+    // Fetch company name using population
     const internsh = await Internship.findById(internshipId).populate("intCompany");
 
-    console.log('Applicants:', intapplicants);  // Log the applicants for debugging
-
     res.render('intapplication', {
-      intapplicants,
+      intapplicants: sortedApplicants,
       intTitle: intern.intTitle,
       intCompany: internsh.intCompany.companyName,
       internshipId
     });
   } catch (err) {
-    console.error('Error fetching applications:', err);
+    console.error('Error fetching internship applications:', err);
     res.status(500).send('Internal Server Error');
   }
 });
