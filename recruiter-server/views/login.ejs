@@ -20,20 +20,17 @@
             <div class="login-right">
                 <h2 class="login-title">Log in</h2>
                 <div class="toggle-buttons">
-                    <button class="toggle-btn active">As Recruiter</button>
-                    <button class="toggle-btn">As Candidate</button>
+                    <button class="toggle-btn active" id='recruiter-btn'>As Recruiter</button>
+                    <button class="toggle-btn" id="candidate-btn">As Candidate</button>
                 </div>
-                <div class="social-login">
-                    <button class="google-login">Continue with Google</button>
-                </div>
-                <p class="divider">Or login with email</p>
+            
+                <p class="divider">Login with email</p>
                 <form id="loginForm" class="login-form" action="/auth/login" method="POST">
                     <input type="email" id="email" name="email" class="input-field" placeholder="Email Id" required>
                     <p id="emailError" class="error-message"></p>
                     <input type="password" id="password" name="password" class="input-field"
                         placeholder="Enter Your Password" required>
                     <p id="passwordError" class="error-message"></p>
-                    <a href="#" class="forgot-password">Forgot password?</a>
                     <button type="submit" class="login-button">Login</button>
                 </form>
                 <p class="signup-text">Don't have an account? <a href="/auth/signup">Sign up</a></p>
@@ -71,6 +68,12 @@
                 event.preventDefault();
             }
         });
+
+        document.getElementById('candidate-btn').addEventListener('click', function () {
+      this.classList.add('active');
+      document.getElementById('recruiter-btn').classList.remove('active');
+      window.location.href = 'http://localhost:3000/login';
+    });
     </script>
 </body>
 

@@ -13,10 +13,7 @@
           <button class="toggle-btn" id="recruiter-btn">As Recruiter</button>
           <button class="toggle-btn active" id="candidate-btn">As Candidate</button>
         </div>
-        <div class="social-login">
-          <button class="google-login">Continue with Google</button>
-        </div>
-        <p class="divider">Or login with email</p>
+        <p class="divider">Login with email</p>
         <form class="login-form" action="/auth/login" method="POST">
           <input type="email" id="email" name="email" class="input-field" placeholder="Email Id" required>
           <input type="password" id="password" name="password" class="input-field" placeholder="Enter Your Password"
@@ -33,6 +30,7 @@
     document.getElementById('recruiter-btn').addEventListener('click', function () {
       this.classList.add('active');
       document.getElementById('candidate-btn').classList.remove('active');
+      window.location.href = 'http://localhost:5000/auth/login';
     });
 
     document.getElementById('candidate-btn').addEventListener('click', function () {
