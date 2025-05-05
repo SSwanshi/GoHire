@@ -122,157 +122,217 @@
                     <h2 class="text-2xl font-bold text-blue-900 mb-6 pb-2 border-b-2 border-yellow-400">Edit Profile
                         Information</h2>
 
-                  
 
-                            <form action="/profile/update" method="POST">
+
+                    <form action="/profile/update" method="POST" id="profileForm">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- First Name -->
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <label class="block text-sm font-medium text-blue-700">First Name</label>
+                                <input type="text" name="firstName" id="firstName" value="<%= user.firstName %>"
+                                    class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <p id="firstNameError" class="text-xs mt-1 text-red-500 hidden">First name
+                                    should contain only letters</p>
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <label class="block text-sm font-medium text-blue-700">Last Name</label>
+                                <input type="text" name="lastName" id="lastName" value="<%= user.lastName %>"
+                                    class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <p id="lastNameError" class="text-xs mt-1 text-red-500 hidden">Last name should
+                                    contain only letters</p>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <label class="block text-sm font-medium text-blue-700">Email Address</label>
+                                <input type="email" name="email" id="email" value="<%= user.email %>"
+                                    class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <p id="emailError" class="text-xs mt-1 text-red-500 hidden">Please enter a valid
+                                    email address</p>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <label class="block text-sm font-medium text-blue-700">Phone Number</label>
+                                <input type="tel" name="phone" id="phone" value="<%= user.phone %>"
+                                    class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <p id="phoneError" class="text-xs mt-1 text-red-500 hidden">Please enter a valid
+                                    phone number (digits only)</p>
+                            </div>
+
+                            <!-- Gender -->
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <label class="block text-black text-sm font-medium text-blue-700">Gender</label>
+                                <select name="gender" id="gender"
+                                    class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="male" <%=user.gender==='male' ? 'selected' : '' %>>Male
+                                    </option>
+                                    <option value="female" <%=user.gender==='female' ? 'selected' : '' %>>Female
+                                    </option>
+                                    <option value="other" <%=user.gender==='other' ? 'selected' : '' %>>Other
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <label class="block text-sm font-medium text-blue-700">Member Since</label>
+                                <p class="text-lg text-blue-900 font-semibold">
+                                    25 March 2025
+                                </p>
+                            </div>
+
+                            <!-- Password Change Section -->
+                            <div class="md:col-span-2 border-t-2 border-yellow-400 pt-4 mt-4">
+                                <h3 class="text-xl font-bold text-blue-900 mb-4">Change Password</h3>
+
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div class="bg-blue-50 p-4 rounded-lg">
-                                        <label class="block text-sm font-medium text-blue-700">First Name</label>
-                                        <input type="text" name="firstName" value="<%= user.firstName %>"
+                                        <label class="block text-sm font-medium text-blue-700">Current
+                                            Password</label>
+                                        <input type="password" name="currentPassword" id="currentPassword"
                                             class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                    </div>
-
-                                    <div class="bg-blue-50 p-4 rounded-lg">
-                                        <label class="block text-sm font-medium text-blue-700">Last Name</label>
-                                        <input type="text" name="lastName" value="<%= user.lastName %>"
-                                            class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                    </div>
-
-                                    <div class="bg-blue-50 p-4 rounded-lg">
-                                        <label class="block text-sm font-medium text-blue-700">Email Address</label>
-                                        <input type="email" name="email" value="<%= user.email %>"
-                                            class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                    </div>
-
-                                    <div class="bg-blue-50 p-4 rounded-lg">
-                                        <label class="block text-sm font-medium text-blue-700">Phone Number</label>
-                                        <input type="tel" name="phone" value="<%= user.phone %>"
-                                            class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                    </div>
-
-                                    <div class="bg-blue-50 p-4 rounded-lg">
-                                        <label class="block text-black text-sm font-medium text-blue-700">Gender</label>
-                                        <select name="gender"
-                                            class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                            <option value="male" <%=user.gender==='male' ? 'selected' : '' %>>Male
-                                            </option>
-                                            <option value="female" <%=user.gender==='female' ? 'selected' : '' %>>Female
-                                            </option>
-                                            <option value="other" <%=user.gender==='other' ? 'selected' : '' %>>Other
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                    <div class="bg-blue-50 p-4 rounded-lg">
-                                        <label class="block text-sm font-medium text-blue-700">Member Since</label>
-                                        <p class="text-lg text-blue-900 font-semibold">
-                                            25 March 2025
+                                        <p id="currentPasswordError" class="text-xs mt-1 text-red-500 hidden">
                                         </p>
                                     </div>
 
-                                    <!-- Password Change Section -->
-                                    <div class="md:col-span-2 border-t-2 border-yellow-400 pt-4 mt-4">
-                                        <h3 class="text-xl font-bold text-blue-900 mb-4">Change Password</h3>
-
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div class="bg-blue-50 p-4 rounded-lg">
-                                                <label class="block text-sm font-medium text-blue-700">Current
-                                                    Password</label>
-                                                <input type="password" name="currentPassword" id="currentPassword"
-                                                    class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                            </div>
-
-                                            <div class="bg-blue-50 p-4 rounded-lg">
-                                                <label class="block text-sm font-medium text-blue-700">New
-                                                    Password</label>
-                                                <input type="password" name="newPassword" id="newPassword"
-                                                    class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                                <div class="mt-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                    <div id="passwordStrength"
-                                                        class="h-full transition-all duration-300"></div>
-                                                </div>
-                                                <p id="passwordStrengthText" class="text-xs mt-1"></p>
-                                            </div>
-
-                                            <div class="bg-blue-50 p-4 rounded-lg">
-                                                <label class="block text-sm font-medium text-blue-700">Confirm New
-                                                    Password</label>
-                                                <input type="password" name="confirmNewPassword" id="confirmNewPassword"
-                                                    class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                                <p id="passwordMatchText" class="text-xs mt-1"></p>
-                                            </div>
+                                    <div class="bg-blue-50 p-4 rounded-lg">
+                                        <label class="block text-sm font-medium text-blue-700">New
+                                            Password</label>
+                                        <input type="password" name="newPassword" id="newPassword"
+                                            class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                        <div class="mt-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                            <div id="passwordStrength" class="h-full transition-all duration-300"></div>
                                         </div>
+                                        <p id="passwordStrengthText" class="text-xs mt-1"></p>
+                                        <p id="newPasswordError" class="text-xs mt-1 text-red-500 hidden"></p>
+                                    </div>
 
-                                        <div class="mt-2">
-                                            <p class="text-sm text-gray-600">
-                                                Note: Leave password fields blank if you don't want to change your
-                                                password.
-                                            </p>
-                                        </div>
+                                    <div class="bg-blue-50 p-4 rounded-lg">
+                                        <label class="block text-sm font-medium text-blue-700">Confirm New
+                                            Password</label>
+                                        <input type="password" name="confirmNewPassword" id="confirmNewPassword"
+                                            class="mt-1 block text-black w-full border border-blue-300 rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                        <p id="passwordMatchText" class="text-xs mt-1"></p>
                                     </div>
                                 </div>
 
-                                <div class="mt-8 flex justify-end space-x-4">
-                                    <a href="/profile"
-                                        class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition">
-                                        Cancel
-                                    </a>
-                                    <button type="submit"
-                                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-                                        Save Changes
-                                    </button>
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-600">
+                                        Note: Leave password fields blank if you don't want to change your
+                                        password.
+                                    </p>
                                 </div>
-                            </form>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 flex justify-end space-x-4">
+                            <a href="/profile"
+                                class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition">
+                                Cancel
+                            </a>
+                            <button type="submit"
+                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </header>
 
     <script>
-        document.getElementById('newPassword').addEventListener('input', function () {
-            const password = this.value;
-            const strengthBar = document.getElementById('passwordStrength');
-            const strengthText = document.getElementById('passwordStrengthText');
-            const confirmPassword = document.getElementById('confirmNewPassword').value;
+        // Validation functions
+        function validateName(name) {
+            return /^[A-Za-z]+$/.test(name);
+        }
 
-            // Reset
-            strengthBar.style.width = '0%';
-            strengthBar.className = 'h-full transition-all duration-300';
-            strengthText.textContent = '';
+        function validateEmail(email) {
+            // Basic email format validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) return false;
 
-            if (!password) return;
+            // Extract domain part after @
+            const domain = email.split('@')[1];
 
-            // Calculate strength
-            let strength = 0;
-            if (password.length >= 8) strength += 1;
-            if (password.match(/[a-z]/)) strength += 1;
-            if (password.match(/[A-Z]/)) strength += 1;
-            if (password.match(/[0-9]/)) strength += 1;
-            if (password.match(/[^a-zA-Z0-9]/)) strength += 1;
+            // Check if domain ends with numbers only (like .000)
+            if (/\.\d+$/.test(domain)) return false;
 
-            // Update UI
-            const width = strength * 20;
-            strengthBar.style.width = `${width}%`;
+            // Check for valid TLD (top-level domain)
+            const tld = domain.split('.').pop();
+            const validTlds = ['com', 'org', 'net', 'edu', 'gov', 'co', 'io', 'ai', 'in', 'uk', 'us', 'ca', 'au', 'nz', 'de', 'fr', 'es', 'it', 'br', 'mx', 'jp', 'cn', 'ru'];
 
-            if (strength <= 2) {
-                strengthBar.className += ' bg-red-500';
-                strengthText.textContent = 'Weak';
-                strengthText.className = 'text-xs mt-1 text-red-500';
-            } else if (strength <= 3) {
-                strengthBar.className += ' bg-yellow-500';
-                strengthText.textContent = 'Medium';
-                strengthText.className = 'text-xs mt-1 text-yellow-500';
+            // If TLD is not in our list of valid TLDs and is not at least 2 letters long
+            if (!validTlds.includes(tld.toLowerCase()) && tld.length < 2) return false;
+
+            return true;
+        }
+
+        // Email validation handler
+        document.getElementById('email').addEventListener('blur', function () {
+            const errorElement = document.getElementById('emailError');
+            if (!validateEmail(this.value)) {
+                errorElement.textContent = 'Please enter a valid email address (e.g., example@domain.com)';
+                errorElement.classList.remove('hidden');
+                this.classList.add('border-red-500');
             } else {
-                strengthBar.className += ' bg-green-500';
-                strengthText.textContent = 'Strong';
-                strengthText.className = 'text-xs mt-1 text-green-500';
-            }
-
-            // Check password match if confirm password is filled
-            if (confirmPassword) {
-                checkPasswordMatch();
+                errorElement.classList.add('hidden');
+                this.classList.remove('border-red-500');
             }
         });
+
+        function validatePhone(phone) {
+            return /^\d+$/.test(phone);
+        }
+
+        // Field validation handlers
+        document.getElementById('firstName').addEventListener('blur', function () {
+            const errorElement = document.getElementById('firstNameError');
+            if (!validateName(this.value)) {
+                errorElement.classList.remove('hidden');
+                this.classList.add('border-red-500');
+            } else {
+                errorElement.classList.add('hidden');
+                this.classList.remove('border-red-500');
+            }
+        });
+
+        document.getElementById('lastName').addEventListener('blur', function () {
+            const errorElement = document.getElementById('lastNameError');
+            if (!validateName(this.value)) {
+                errorElement.classList.remove('hidden');
+                this.classList.add('border-red-500');
+            } else {
+                errorElement.classList.add('hidden');
+                this.classList.remove('border-red-500');
+            }
+        });
+
+        document.getElementById('email').addEventListener('blur', function () {
+            const errorElement = document.getElementById('emailError');
+            if (!validateEmail(this.value)) {
+                errorElement.classList.remove('hidden');
+                this.classList.add('border-red-500');
+            } else {
+                errorElement.classList.add('hidden');
+                this.classList.remove('border-red-500');
+            }
+        });
+
+        document.getElementById('phone').addEventListener('blur', function () {
+            const errorElement = document.getElementById('phoneError');
+            if (!validatePhone(this.value)) {
+                errorElement.classList.remove('hidden');
+                this.classList.add('border-red-500');
+            } else {
+                errorElement.classList.add('hidden');
+                this.classList.remove('border-red-500');
+            }
+        });
+
+
 
         document.getElementById('confirmNewPassword').addEventListener('input', checkPasswordMatch);
 
@@ -295,30 +355,82 @@
             }
         }
 
-        document.querySelector('form').addEventListener('submit', function (e) {
+        // Form submission validation
+        document.getElementById('profileForm').addEventListener('submit', function (e) {
+            let isValid = true;
+
+            // Validate names
+            if (!validateName(document.getElementById('firstName').value)) {
+                document.getElementById('firstNameError').classList.remove('hidden');
+                document.getElementById('firstName').classList.add('border-red-500');
+                isValid = false;
+            }
+
+            if (!validateName(document.getElementById('lastName').value)) {
+                document.getElementById('lastNameError').classList.remove('hidden');
+                document.getElementById('lastName').classList.add('border-red-500');
+                isValid = false;
+            }
+
+            // Validate email
+            if (!validateEmail(document.getElementById('email').value)) {
+                document.getElementById('emailError').classList.remove('hidden');
+                document.getElementById('email').classList.add('border-red-500');
+                isValid = false;
+            }
+
+            // Validate phone
+            if (!validatePhone(document.getElementById('phone').value)) {
+                document.getElementById('phoneError').classList.remove('hidden');
+                document.getElementById('phone').classList.add('border-red-500');
+                isValid = false;
+            }
+
+            // Password validation (only if any password field is filled)
             const currentPassword = document.getElementById('currentPassword').value;
             const newPassword = document.getElementById('newPassword').value;
             const confirmNewPassword = document.getElementById('confirmNewPassword').value;
 
-            // Only validate passwords if any password field is filled
             if (currentPassword || newPassword || confirmNewPassword) {
                 if (!currentPassword || !newPassword || !confirmNewPassword) {
-                    alert('Please fill all password fields to change your password');
-                    e.preventDefault();
-                    return;
+                    document.getElementById('currentPasswordError').textContent = 'All password fields are required';
+                    document.getElementById('currentPasswordError').classList.remove('hidden');
+                    isValid = false;
                 }
 
                 if (newPassword.length < 4) {
-                    alert('New password must be at least 4 characters long');
-                    e.preventDefault();
-                    return;
+                    document.getElementById('newPasswordError').textContent = 'Password must be at least 4 characters';
+                    document.getElementById('newPasswordError').classList.remove('hidden');
+                    isValid = false;
                 }
 
                 if (newPassword !== confirmNewPassword) {
-                    alert('New passwords do not match');
-                    e.preventDefault();
-                    return;
+                    document.getElementById('passwordMatchText').textContent = 'Passwords do not match!';
+                    document.getElementById('passwordMatchText').className = 'text-xs mt-1 text-red-500';
+                    isValid = false;
                 }
+            }
+
+
+            if (!isValid) {
+                e.preventDefault();
+                // Scroll to the first error
+                const firstError = document.querySelector('.border-red-500');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+
+        document.getElementById('currentPassword').addEventListener('blur', function () {
+            const errorElement = document.getElementById('currentPasswordError');
+            if (this.value && this.value.length < 4) {
+                errorElement.textContent = 'Password must be at least 4 characters';
+                errorElement.classList.remove('hidden');
+                this.classList.add('border-red-500');
+            } else {
+                errorElement.classList.add('hidden');
+                this.classList.remove('border-red-500');
             }
         });
     </script>
