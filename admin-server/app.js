@@ -202,7 +202,7 @@ app.get("/companylist", async (req, res) => {
   }
 });
 
-// company and job delete route
+// company, job, applicant delete route
 app.delete('/:type/:id', async (req, res) => {
   try {
       const { type, id } = req.params;
@@ -212,14 +212,21 @@ app.delete('/:type/:id', async (req, res) => {
       }
 
       const recruiterConn = await connectRecruiterDB();
+      const applicantConn = await connectApplicantDB();
+
 
       let Model;
       if (type === 'company') {
           Model = createCompanyModel(recruiterConn);
       } else if (type === 'job') {
           Model = createJobModel(recruiterConn);
-      } else {
-          return res.status(400).json({ message: 'Invalid type. Use "company" or "job".' });
+      } else if (type === 'applicant'){
+          Model = createUserModel(applicantConn);
+      } else if (type === 'internship'){
+          Model = createInternshipModel(recruiterConn)
+      }
+      else {
+          return res.status(400).json({ message: 'Invalid type. Use "company" or "job" or "applicant" or "internship".' });
       }
 
       const deletedDoc = await Model.findByIdAndDelete(id);

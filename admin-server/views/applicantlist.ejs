@@ -52,12 +52,12 @@
 <script>
     async function deleteApplicant(applicantId) {
         const confirmDelete = confirm(
-        "Are you sure you want to delete this company?"
+        "Are you sure you want to delete this ?"
         );
         if (!confirmDelete) return;
 
         try {
-        const response = await fetch(`/company/${applicantId}`, {
+        const response = await fetch(`/applicant/${applicantId}`, {
             method: "DELETE",
             headers: {
             "Content-Type": "application/json",
