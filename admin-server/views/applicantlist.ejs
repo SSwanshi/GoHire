@@ -11,7 +11,8 @@
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email
                         </th>
-                       
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -24,6 +25,14 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <%= applicant.email %>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <button
+                                        onclick="deleteApplicant('<%= applicant._id %>')"
+                                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition duration-200"
+                                    >
+                                        Delete
+                                    </button>
                                 </td>
                             </tr>
                             <% }); %>
@@ -39,3 +48,34 @@
     </div>
 
     <%- include('layout/footer') %>
+
+<script>
+    async function deleteApplicant(applicantId) {
+        const confirmDelete = confirm(
+        "Are you sure you want to delete this company?"
+        );
+        if (!confirmDelete) return;
+
+        try {
+        const response = await fetch(`/company/${applicantId}`, {
+            method: "DELETE",
+            headers: {
+            "Content-Type": "application/json",
+            },
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            alert(result.message);
+            // Optionally reload or remove the company from the DOM
+            location.reload(); // or remove the element manually from the page
+        } else {
+            alert(`Error: ${result.message}`);
+        }
+        } catch (err) {
+        console.error(err);
+        alert("Something went wrong. Check console for details.");
+        }
+    }
+</script>
