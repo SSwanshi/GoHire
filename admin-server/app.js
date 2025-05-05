@@ -202,25 +202,38 @@ app.get("/companylist", async (req, res) => {
   }
 });
 
-// company delete route
-app.delete('/:id', async (req, res) => {
+// company and job delete route
+app.delete('/:type/:id', async (req, res) => {
   try {
-      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      const { type, id } = req.params;
+
+      if (!mongoose.Types.ObjectId.isValid(id)) {
           return res.status(400).json({ message: 'Invalid ID format' });
       }
 
       const recruiterConn = await connectRecruiterDB();
-      const CompanyModel = createCompanyModel(recruiterConn);
-      
-      const company = await CompanyModel.findByIdAndDelete(req.params.id);
-      if (!company) {
-        return res.status(404).json({ message: 'Company not found' });
+
+      let Model;
+      if (type === 'company') {
+          Model = createCompanyModel(recruiterConn);
+      } else if (type === 'job') {
+          Model = createJobModel(recruiterConn);
+      } else {
+          return res.status(400).json({ message: 'Invalid type. Use "company" or "job".' });
       }
-      res.json({ message: 'Company deleted successfully' });
+
+      const deletedDoc = await Model.findByIdAndDelete(id);
+      if (!deletedDoc) {
+          return res.status(404).json({ message: `${type.charAt(0).toUpperCase() + type.slice(1)} not found.` });
+      }
+
+      res.json({ message: `${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully.` });
   } catch (err) {
-      res.status(500).json({ message: err.message });
+      console.error(`Error deleting ${req.params.type}:`, err);
+      res.status(500).json({ message: 'Internal server error.' });
   }
 });
+
 
 // internship list
 app.get("/internshiplist", async (req, res) => {
@@ -304,6 +317,8 @@ app.get("/joblist", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+
 
 app.get("/logo/:logoId", async (req, res) => {
   try {
