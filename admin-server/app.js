@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const Job = require("../recruiter-server/models/Jobs");
 const Internship = require("../recruiter-server/models/Internship");
+const User = require("../recruiter-server/models/User")
 const { applications } = require("../recruiter-server/routes/recruiter");
 const { users } = require("../recruiter-server/routes/auth");
 const connectDB = require("./config/db");
@@ -10,6 +11,7 @@ const createInternshipModel = require("../admin-server/models/Internship");
 const createCompanyModel = require("../admin-server/models/Company");
 const connectRecruiterDB = require("../admin-server/config/recruiterDB");
 const connectApplicantDB = require("../admin-server/config/applicantDB");
+const createRecruiterModel = require("../admin-server/models/Recruiter");
 
 
 
@@ -122,9 +124,9 @@ app.get("/applicantlist", async (req, res) => {
 });
 
 // function createRecruiterModel(connection) {
-//   if (connection.models.Recruiter) {
-//     return connection.model("Recruiter");
-//   }
+//   // if (connection.models.Recruiter) {
+//   //   return connection.model("RecruiterUser");
+//   // }
 //   const recruiterSchema = new mongoose.Schema({
 //     firstName: {
 //       type: String,
@@ -138,56 +140,47 @@ app.get("/applicantlist", async (req, res) => {
 //       type: String,
 //       required: true,
 //       unique: true
-//     },
-//     company: String,
-
+//     }
 //   }, { timestamps: true });
 
-//   return connection.model("Recruiter", recruiterSchema);
+//   return connection.model("RecruiterUser", recruiterSchema);
 // }
 
 
+app.get("/recruiterlist", async (req, res) => {
+  try {
+    const recruiterConn = await connectRecruiterDB(); // Ensure this is awaited
+    const RecruiterModel = recruiterConn.model('RecruiterUser');
+    const recruiters = await RecruiterModel.find({});
+
+    res.render("recruiterlist", {recruiters});
+  } catch (error) {
+    console.error("Error fetching recruiters:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 // app.get("/recruiterlist", async (req, res) => {
 //   try {
-//     const recruiterConn = await connectRecruiterDB(); // Ensure this is awaited
-//     const RecruiterModel = createRecruiterModel(recruiterConn);
-//     const recruiters = await RecruiterModel.find({});
+//     const recruiterConn = await connectRecruiterDB();
+//     const Recruiter = recruiterConn.model('Recruiter');
+    
+//     const recruiters = await Recruiter.find({})
+//       .select('firstName lastName email company')
+//       .lean();
 
 //     res.render("recruiterlist", {
-//       // recruiters: recruiters.map(r => ({
-//       //   fullName: `${r.firstName} ${r.lastName}`,
-//       //   email: r.email,
-//       //   company: r.company
-//       // }))
-//       recruiters
+//       recruiters: recruiters.map(r => ({
+//         fullName: ${r.firstName} ${r.lastName},
+//         email: r.email,
+//         company: r.company
+//       }))
 //     });
 //   } catch (error) {
 //     console.error("Error fetching recruiters:", error);
 //     res.status(500).send("Internal Server Error");
 //   }
 // });
-
-app.get("/recruiterlist", async (req, res) => {
-  try {
-    const recruiterConn = await connectRecruiterDB();
-    const Recruiter = recruiterConn.model('Recruiter');
-    
-    const recruiters = await Recruiter.find({})
-      .select('firstName lastName email company')
-      .lean();
-
-    res.render("recruiterlist", {
-      recruiters: recruiters.map(r => ({
-        fullName: `${r.firstName} ${r.lastName}`,
-        email: r.email,
-        company: r.company
-      }))
-    });
-  } catch (error) {
-    console.error("Error fetching recruiters:", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
 
 
 app.get("/companylist", async (req, res) => {
@@ -202,7 +195,7 @@ app.get("/companylist", async (req, res) => {
   }
 });
 
-// company, job, applicant delete route
+// company and job delete route
 app.delete('/:type/:id', async (req, res) => {
   try {
       const { type, id } = req.params;
@@ -212,31 +205,24 @@ app.delete('/:type/:id', async (req, res) => {
       }
 
       const recruiterConn = await connectRecruiterDB();
-      const applicantConn = await connectApplicantDB();
-
 
       let Model;
       if (type === 'company') {
           Model = createCompanyModel(recruiterConn);
       } else if (type === 'job') {
           Model = createJobModel(recruiterConn);
-      } else if (type === 'applicant'){
-          Model = createUserModel(applicantConn);
-      } else if (type === 'internship'){
-          Model = createInternshipModel(recruiterConn)
-      }
-      else {
-          return res.status(400).json({ message: 'Invalid type. Use "company" or "job" or "applicant" or "internship".' });
+      } else {
+          return res.status(400).json({ message: 'Invalid type. Use "company" or "job".' });
       }
 
       const deletedDoc = await Model.findByIdAndDelete(id);
       if (!deletedDoc) {
-          return res.status(404).json({ message: `${type.charAt(0).toUpperCase() + type.slice(1)} not found.` });
+          return res.status(404).json({ message: ${type.charAt(0).toUpperCase() + type.slice(1)} not found. });
       }
 
-      res.json({ message: `${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully.` });
+      res.json({ message: ${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully. });
   } catch (err) {
-      console.error(`Error deleting ${req.params.type}:`, err);
+      console.error(Error deleting ${req.params.type}:, err);
       res.status(500).json({ message: 'Internal server error.' });
   }
 });
@@ -334,7 +320,7 @@ app.get("/logo/:logoId", async (req, res) => {
     // Fetch the logo from recruiter server
     const response = await axios({
       method: "get",
-      url: `http://localhost:5000/recruiter/logo/${logoId}`,
+      url: http://localhost:5000/recruiter/logo/${logoId},
       responseType: "stream",
     });
 
@@ -367,5 +353,5 @@ app.get("/premiumuser", isPremiumUser, (req, res) => {
 connectDB();
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(Server is running on http://localhost:${PORT});
 });
