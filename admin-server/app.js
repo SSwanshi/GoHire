@@ -11,6 +11,8 @@ const createCompanyModel = require("../admin-server/models/Company");
 const connectRecruiterDB = require("../admin-server/config/recruiterDB");
 const connectApplicantDB = require("../admin-server/config/applicantDB");
 
+
+
 const mongoose = require("mongoose");
 // const Applicant = require('../admin-server/models/applicant'); // Adjust path as needed
 
@@ -30,6 +32,7 @@ app.use(
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+//app.use(express.static(path.join(__dirname,'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -196,6 +199,26 @@ app.get("/companylist", async (req, res) => {
   } catch (error) {
     console.error("Error fetching companies:", error);  // Fixed: using error instead of err
     res.status(500).send("Internal Server Error");
+  }
+});
+
+// company delete route
+app.delete('/:id', async (req, res) => {
+  try {
+      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+          return res.status(400).json({ message: 'Invalid ID format' });
+      }
+
+      const recruiterConn = await connectRecruiterDB();
+      const CompanyModel = createCompanyModel(recruiterConn);
+      
+      const company = await CompanyModel.findByIdAndDelete(req.params.id);
+      if (!company) {
+        return res.status(404).json({ message: 'Company not found' });
+      }
+      res.json({ message: 'Company deleted successfully' });
+  } catch (err) {
+      res.status(500).json({ message: err.message });
   }
 });
 
