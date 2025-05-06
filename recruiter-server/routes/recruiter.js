@@ -6,7 +6,7 @@ const Job = require("../models/Jobs");
 const User = require("../models/User");
 const Internship = require("../models/Internship");
 const { Application, InternshipApplication } = require("../../applicant-server/models/Application");
-const { GridFSBucket } = require("mongodb");
+const { GridFSBucket, ObjectId } = require("mongodb");
 const { GridFsStorage } = require("multer-gridfs-storage");
 const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
@@ -32,6 +32,16 @@ const upload = multer({ storage });
 //         };
 //     }
 // });
+
+const proof_conn = mongoose.connection;
+
+let gfs;
+proof_conn.once('open', () => {
+    console.log('[GridFS] Connection opened');
+  gfs = new GridFSBucket(proof_conn.db, {
+    bucketName: 'uploads'// change this if your bucket name is different
+  });
+});
 
 
 router.post("/add-company", upload.fields([{ name: "logo" }, { name: "proofDocument" }]), async (req, res) => {
@@ -582,6 +592,59 @@ router.get("/recruiter/company/:id", async (req, res) => {
     }
 });
 
+router.get('/proof/:id', async (req, res) => {
+    const fileIdParam = req.params.id;
+    console.log(`[Route Hit] GET /proof/${fileIdParam}`);
+  
+    let fileId;
+    try {
+      fileId = new ObjectId(fileIdParam);
+    } catch (err) {
+      console.error('[Error] Invalid ObjectId:', err.message);
+      return res.status(400).send('Invalid file ID');
+    }
+  
+    if (!gfs) {
+      console.error('[Error] GridFSBucket not initialized');
+      return res.status(500).send('File system not ready');
+    }
+  
+    try {
+      console.log('[Info] Awaiting file metadata from GridFS...');
+      const files = await gfs.find({ _id: fileId }).toArray();
+  
+      if (!files || files.length === 0) {
+        console.warn('[Warning] No file found for ID:', fileId);
+        return res.status(404).send('No file found');
+      }
+  
+      const file = files[0];
+      console.log('[Success] File metadata found:', {
+        filename: file.filename,
+        contentType: file.contentType,
+        length: file.length
+      });
+  
+      res.set('Content-Type', file.contentType || 'application/pdf');
+      res.set('Content-Disposition', `inline; filename="${file.filename}"`);
+  
+      const downloadStream = gfs.openDownloadStream(file._id);
+  
+      downloadStream.on('error', (streamErr) => {
+        console.error('[Stream Error]', streamErr);
+        res.status(500).send('Stream failed');
+      });
+  
+      downloadStream.on('end', () => {
+        console.log('[Success] File streamed successfully');
+      });
+  
+      downloadStream.pipe(res);
+    } catch (err) {
+      console.error('[Fatal Error]', err);
+      res.status(500).send('Internal server error');
+    }
+  });
   
   
   

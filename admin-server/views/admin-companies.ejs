@@ -25,11 +25,17 @@
                             <td class="px-4 py-3 border"><%= company.location %></td>
                             <td class="px-4 py-3 border">
                                 <% if (company.proofDocumentId) { %>
-                                    <a href="/company/proof/<%= company.proofDocumentId %>" class="text-green-600 hover:underline" target="_blank">View Proof</a>
+                                    <a href="http://localhost:5000/recruiter/proof/<%= company.proofDocumentId %>" 
+                                       class="text-green-600 hover:underline" 
+                                       target="_blank" 
+                                       title="Click to view the proof document">
+                                        View Proof
+                                    </a>
                                 <% } else { %>
-                                    <span class="text-gray-500">Not provided</span>
+                                    <span class="text-gray-500">Proof not provided</span>
                                 <% } %>
                             </td>
+                            
                             <td class="px-4 py-3 border text-center">
                                 <form action="/admin/verify-company/<%= company._id %>" method="POST">
                                     <button type="submit" class="bg-blue-600 hover:bg-blue-800 text-white px-4 py-2 rounded">
