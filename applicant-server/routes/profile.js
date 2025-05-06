@@ -351,6 +351,47 @@ router.post('/update', requireAuth, async (req, res) => {
     }
 });
 
+router.post('/delete', requireAuth, async (req, res) => {
+    try {
+        const userId = req.session.user.id;
+
+        const user = await User.findOne({ userId });
+
+        if (!user) {
+            return res.status(404).render('edit-profile', {
+                user: req.session.user,
+                title: 'Edit Profile',
+                error: 'User not found'
+            });
+        }
+
+        await User.deleteOne({ userId });
+
+        req.session.destroy(err => {
+            if (err) {
+                console.error('Session destroy error:', err);
+                return res.status(500).render('edit-profile', {
+                    user: req.session.user,
+                    title: 'Edit Profile',
+                    error: 'An error occurred while logging out'
+                });
+            }
+
+            res.clearCookie('connect.sid');
+            return res.redirect('/?success=Account+deleted+successfully');
+        });
+
+    } catch (error) {
+        console.error('Delete profile error:', error);
+        res.status(500).render('edit-profile', {
+            user: req.session.user,
+            title: 'Edit Profile',
+            error: 'An unexpected error occurred while deleting your profile'
+        });
+    }
+});
+
+
 // Profile image upload
 const profileImageUpload = multer({
     storage: multer.memoryStorage(),
