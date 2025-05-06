@@ -525,6 +525,33 @@ router.get('/edit-internship/:id', async (req, res) => {
     }
   });
 
+  router.post('/delete-profile', async (req, res) => {
+    try {
+      const user = await User.findById(req.session.userId);
+  
+      if (!user) {
+        return res.redirect('/auth/login');
+      }
+  
+      await User.findByIdAndDelete(user._id);
+  
+      // Also clear the session after deletion
+      req.session.destroy(err => {
+        if (err) {
+          console.error('Session destroy error:', err);
+        }
+        res.redirect('/auth/login');
+      });
+  
+    } catch (err) {
+      console.error('Error deleting profile:', err);
+      res.redirect('/auth/login');
+    }
+  });
+  
+
+
+
   router.post("/recruiter/upload-verification/:id", upload.single("proofDocument"), async (req, res) => {
     try {
         const company = await Company.findById(req.params.id);

@@ -1,154 +1,160 @@
 <%- include('layout/header') %>
 
+<div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg my-8">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-  <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg my-8">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="md:col-span-1 flex flex-col items-center justify-start">
+      <div class="relative group mb-4">
+        <img src="/auth/profile-image/<%= user._id %>" alt="Profile Photo" class="w-40 h-40 object-cover rounded-full"
+          onerror="this.onerror=null; this.src='/images/default.png';" />
 
-      <div class="md:col-span-1 flex flex-col items-center justify-start">
-        <div class="relative group mb-4">
-          <img src="/auth/profile-image/<%= user._id %>" alt="Profile Photo" class="w-40 h-40 object-cover rounded-full"
-            onerror="this.onerror=null; this.src='/images/default.png';" />
-
-
-          <div
-            class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
-            <label for="imageUpload" class="flex flex-col items-center text-white">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <span class="text-sm font-medium mt-1">Change Photo</span>
-            </label>
-          </div>
-        </div>
-
-        <form id="profileImageForm" action="/auth/<%= user._id %>/profile-image" method="POST"
-          enctype="multipart/form-data" class="max-w-md mx-auto p-4 bg-white rounded-lg shadow-sm">
-          <div class="mb-4">
-            <label for="imageUpload" class="block text-sm font-medium text-gray-700 mb-2">
-              Choose profile image:
-            </label>
-            <input type="file" id="imageUpload" name="image" accept="image/jpeg, image/png" required
-              class="block w-full text-sm border border-gray-300 rounded-md cursor-pointer file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200">
-          </div>
-          <button type="submit"
-            class="w-full py-2 px-4 bg-blue-500 text-white font-medium rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
-            Upload Image
-          </button>
-        </form>
-
-
-
-      </div>
-
-      <!-- Profile Information Section -->
-      <div class="md:col-span-2">
-        <h2 class="text-2xl font-bold text-blue-900 mb-6 pb-2 border-b-2 border-yellow-400">Profile Information</h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- First Name -->
-          <div class="bg-blue-50 p-4 rounded-lg hover:bg-blue-100 transition-colors duration-300">
-            <label class="block text-sm font-medium text-blue-700 mb-1">First Name</label>
-            <p class="text-lg text-blue-900 font-semibold">
-              <%= user.firstName %>
-            </p>
-          </div>
-
-          <!-- Last Name -->
-          <div class="bg-blue-50 p-4 rounded-lg hover:bg-blue-100 transition-colors duration-300">
-            <label class="block text-sm font-medium text-blue-700 mb-1">Last Name</label>
-            <p class="text-lg text-blue-900 font-semibold">
-              <%= user.lastName %>
-            </p>
-          </div>
-
-          <!-- Email -->
-          <div class="bg-blue-50 p-4 rounded-lg hover:bg-blue-100 transition-colors duration-300">
-            <label class="block text-sm font-medium text-blue-700 mb-1">Email Address</label>
-            <p class="text-lg text-blue-900 font-semibold flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-              <%= user.email %>
-            </p>
-          </div>
-
-          <!-- Phone -->
-          <div class="bg-blue-50 p-4 rounded-lg hover:bg-blue-100 transition-colors duration-300">
-            <label class="block text-sm font-medium text-blue-700 mb-1">Phone Number</label>
-            <p class="text-lg text-blue-900 font-semibold flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-              <%= user.phone %>
-            </p>
-          </div>
-
-          <!-- Gender -->
-          <div class="bg-blue-50 p-4 rounded-lg hover:bg-blue-100 transition-colors duration-300">
-            <label class="block text-sm font-medium text-blue-700 mb-1">Gender</label>
-            <p class="text-lg text-blue-900 font-semibold capitalize">
-              <%= user.gender %>
-            </p>
-          </div>
-
-          <!-- Member Since -->
-          <div class="bg-blue-50 p-4 rounded-lg hover:bg-blue-100 transition-colors duration-300">
-            <label class="block text-sm font-medium text-blue-700 mb-1">Member Since</label>
-            <p class="text-lg text-blue-900 font-semibold">
-              <%= user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long' ,
-                year: 'numeric' }) : 'March 2025' %>
-            </p>
-          </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="mt-8 flex justify-end space-x-4">
-          <button onclick="window.location.href = '/recruiter/edit-profile'"
-            class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg transition duration-300 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+        <div
+          class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
+          <label for="imageUpload" class="flex flex-col items-center text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
-            Edit Profile
-          </button>
-          <button onclick="window.location.href = '/logout'"
-            class="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-6 rounded-lg transition duration-300 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
+                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            Log Out
-          </button>
+            <span class="text-sm font-medium mt-1">Change Photo</span>
+          </label>
         </div>
       </div>
+
+      <form id="profileImageForm" action="/auth/<%= user._id %>/profile-image" method="POST"
+        enctype="multipart/form-data" class="max-w-md mx-auto p-4 bg-white rounded-lg shadow-sm">
+        <div class="mb-4">
+          <label for="imageUpload" class="block text-sm font-medium text-gray-700 mb-2">
+            Choose profile image:
+          </label>
+          <input type="file" id="imageUpload" name="image" accept="image/jpeg, image/png" required
+            class="block w-full text-sm border border-gray-300 rounded-md cursor-pointer file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200">
+        </div>
+        <button type="submit"
+          class="w-full py-2 px-4 bg-blue-500 text-white font-medium rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+          Upload Image
+        </button>
+      </form>
+    </div>
+
+    <!-- Profile Information Section -->
+    <div class="md:col-span-2">
+      <h2 class="text-2xl font-bold text-blue-900 mb-6 pb-2 border-b-2 border-yellow-400">Profile Information</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- First Name -->
+        <div class="bg-blue-50 p-4 rounded-lg hover:bg-blue-100 transition-colors duration-300">
+          <label class="block text-sm font-medium text-blue-700 mb-1">First Name</label>
+          <p class="text-lg text-blue-900 font-semibold">
+            <%= user.firstName %>
+          </p>
+        </div>
+
+        <!-- Last Name -->
+        <div class="bg-blue-50 p-4 rounded-lg hover:bg-blue-100 transition-colors duration-300">
+          <label class="block text-sm font-medium text-blue-700 mb-1">Last Name</label>
+          <p class="text-lg text-blue-900 font-semibold">
+            <%= user.lastName %>
+          </p>
+        </div>
+
+        <!-- Email -->
+        <div class="bg-blue-50 p-4 rounded-lg hover:bg-blue-100 transition-colors duration-300">
+          <label class="block text-sm font-medium text-blue-700 mb-1">Email Address</label>
+          <p class="text-lg text-blue-900 font-semibold flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            <%= user.email %>
+          </p>
+        </div>
+
+        <!-- Phone -->
+        <div class="bg-blue-50 p-4 rounded-lg hover:bg-blue-100 transition-colors duration-300">
+          <label class="block text-sm font-medium text-blue-700 mb-1">Phone Number</label>
+          <p class="text-lg text-blue-900 font-semibold flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+            <%= user.phone %>
+          </p>
+        </div>
+
+        <!-- Gender -->
+        <div class="bg-blue-50 p-4 rounded-lg hover:bg-blue-100 transition-colors duration-300">
+          <label class="block text-sm font-medium text-blue-700 mb-1">Gender</label>
+          <p class="text-lg text-blue-900 font-semibold capitalize">
+            <%= user.gender %>
+          </p>
+        </div>
+
+        <!-- Member Since -->
+        <div class="bg-blue-50 p-4 rounded-lg hover:bg-blue-100 transition-colors duration-300">
+          <label class="block text-sm font-medium text-blue-700 mb-1">Member Since</label>
+          <p class="text-lg text-blue-900 font-semibold">
+            <%= user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long' ,
+              year: 'numeric' }) : 'March 2025' %>
+          </p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="mt-8 flex justify-end space-x-4">
+        <button onclick="window.location.href = '/recruiter/edit-profile'"
+          class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg transition duration-300 flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          Edit Profile
+        </button>
+        <button onclick="window.location.href = '/logout'"
+          class="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-6 rounded-lg transition duration-300 flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          Log Out
+        </button>
+      </div>
+
+      <!-- Delete Profile Button -->
+      <form action="/recruiter/delete-profile" method="POST" onsubmit="return confirm('Are you sure you want to delete your profile? This action cannot be undone.');" class="mt-4 flex justify-end">
+        <button type="submit" class="bg-red-600 hover:bg-red-700 text-white py-2 px-6 rounded-lg transition duration-300 flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          Delete Profile
+        </button>
+      </form>
     </div>
   </div>
+</div>
 
-  <script>
-    document.getElementById('imageUpload').addEventListener('change', function () {
-      if (this.files && this.files[0]) {
-        const validTypes = ['image/jpeg', 'image/png'];
-        if (!validTypes.includes(this.files[0].type)) {
-          alert('Please select a JPEG or PNG image');
-          return;
-        }
-        if (this.files[0].size > 5 * 1024 * 1024) {
-          alert('File size must be less than 5MB');
-          return;
-        }
-        document.getElementById('profileImageForm').submit();
+<script>
+  document.getElementById('imageUpload').addEventListener('change', function () {
+    if (this.files && this.files[0]) {
+      const validTypes = ['image/jpeg', 'image/png'];
+      if (!validTypes.includes(this.files[0].type)) {
+        alert('Please select a JPEG or PNG image');
+        return;
       }
-    });
-  </script>
+      if (this.files[0].size > 5 * 1024 * 1024) {
+        alert('File size must be less than 5MB');
+        return;
+      }
+      document.getElementById('profileImageForm').submit();
+    }
+  });
+</script>
 
-  <%- include('layout/footer') %>
+<%- include('layout/footer') %>
