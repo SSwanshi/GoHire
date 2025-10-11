@@ -59,12 +59,6 @@ router.get('/jobs', async (req, res) => {
       const JobFind = await JobFindConn.find({}).populate({path: 'jobCompany',
         strictPopulate: false});
 
-        JobFind.forEach(job => {
-          console.log("Job Title:", job.jobTitle);
-          console.log("Company Name:", job.jobCompany.companyName);
-          console.log("Company Logo ID:", job.jobCompany.logoId);
-        });
-
       res.render('job-list', { JobFind, filters: {} }); 
   } catch (err) {
       console.error('Error fetching jobs from recruiter DB:', err);
@@ -107,10 +101,6 @@ router.get('/internships', async (req, res) => {
 
     const InternshipFind = await InternshipFindConn.find({}).populate({path: 'intCompany', strictPopulate: false});
 
-    InternshipFind.forEach(intern => {
-      console.log("Internship Title:", intern.intTitle);
-      console.log("Company Name:", intern.intCompany.companyName);
-    });
 
     res.render('internship-list', { InternshipFind, filters: {} });
   } catch (err) {
