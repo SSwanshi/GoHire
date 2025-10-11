@@ -1,198 +1,322 @@
-/* Header */
+/* GLOBAL STYLES */
+body {
+margin: 0;
+padding: 0;
+font-family: 'Segoe UI', sans-serif;
+background-color: #eaf4fc;
+color: #333;
+}
+
+/* HEADER */
 header {
-    background-color: #007BFF;
-    color: white;
-    padding: 20px;
-    text-align: center;
+background-color: #007BFF;
+color: white;
+padding: 20px;
+text-align: center;
+position: relative;
 }
 
 .logo {
-    font-size: 32px;
-    font-weight: bold;
+position: absolute;
+top: 20px;
+left: 20px;
+font-size: 32px;
+font-weight: bold;
 }
 
 .logo .go {
-    color: #000; /* Black */
+color: #000;
 }
 
 .logo .hire {
-    color: #FFD700; /* Golden yellow */
+color: #FFD700;
 }
 
 header h1 {
-    margin: 0;
+font-size: 28px;
+margin: 10px 0 5px;
 }
 
 header p {
-    margin: 5px 0 0;
-    font-style: italic;
+font-size: 16px;
+font-style: italic;
+margin: 0;
 }
 
-/* Main Content */
+/* MAIN WRAPPER */
+.main-wrapper {
+max-width: 1200px;
+margin: 0 auto;
+padding: 30px 20px;
+box-sizing: border-box;
+}
+
+/* FLEX CONTAINER */
 .container {
-    display: flex;
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
+display: flex;
+gap: 30px;
+flex-wrap: wrap;
 }
 
+/* SIDEBAR (LEFT) - REDUCED SIZE */
 .sidebar {
-    width: 25%;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-right: 1px solid #ddd;
+flex: 1;
+min-width: 250px; /* Reduced from 300px */
+padding: 20px; /* Reduced from 25px */
+background-color: #ffffff;
+border-radius: 12px;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar h2 {
-    margin-top: 0;
+color: #002f86;
+font-size: 20px; /* Reduced from 22px */
+margin-bottom: 12px; /* Reduced from 15px */
 }
 
 .sidebar ul {
-    list-style-type: none;
-    padding: 0;
+list-style-type: none;
+padding: 0;
 }
 
-.sidebar li {
-    margin-bottom: 20px;
+.sidebar ul li {
+background: linear-gradient(to right, #002f86, #e29400);
+color: white;
+padding: 12px; /* Reduced from 15px */
+border-radius: 8px;
+margin-bottom: 15px; /* Reduced from 20px */
+font-weight: bold;
+font-size: 14px; /* Added smaller font size */
 }
 
+.sidebar li strong {
+display: block;
+margin-bottom: 4px; /* Reduced from 6px */
+}
+
+.sidebar > ul > li > ul {
+margin-top: 8px; /* Reduced from 10px */
+background-color: white;
+color: #333;
+padding: 8px; /* Reduced from 10px */
+border-radius: 8px;
+list-style-type: disc;
+margin-left: 15px; /* Reduced from 20px */
+font-size: 13px; /* Added smaller font size */
+}
+
+/* PAYMENT FORM (RIGHT) */
 .payment-form {
-    width: 75%;
-    padding: 20px;
+flex: 2;
+min-width: 400px;
+padding: 30px;
+background-color: white;
+border-radius: 12px;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.payment-form h2 {
+color: #002f86;
+margin-bottom: 20px;
 }
 
 .form-group {
-    margin-bottom: 15px;
+margin-bottom: 20px;
 }
 
 label {
-    display: block;
-    margin-bottom: 5px;
-    color: #555;
+display: block;
+font-weight: 600;
+margin-bottom: 6px;
+color: #444;
 }
 
-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+input[type="text"],
+select {
+width: 100%;
+padding: 12px;
+font-size: 15px;
+border: 1px solid #ccc;
+border-radius: 6px;
+box-sizing: border-box;
 }
 
-.btn {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+/* SUBMIT BUTTON */
+button.btn {
+width: 100%;
+background: linear-gradient(to right, #ffb300, #ff8c00);
+color: white;
+font-weight: bold;
+font-size: 16px;
+padding: 12px;
+border: none;
+border-radius: 6px;
+cursor: pointer;
+transition: background 0.3s ease;
 }
 
-.btn:hover {
-    background-color: #218838;
+button.btn:hover {
+background: linear-gradient(to right, #ff6a00, #ee0979);
 }
 
-/* Terms and Conditions */
+/* TERMS SECTION (BOTTOM) */
 .terms {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-top: 1px solid #ddd;
+margin-top: 40px;
+padding: 25px;
+background-color: #f8f9fa;
+border-top: 1px solid #ddd;
+border-radius: 8px;
 }
 
 .terms h2 {
-    margin-top: 0;
+color: #002f86;
 }
 
-/* Logo and Welcome Message */
+.terms p {
+font-size: 15px;
+line-height: 1.6;
+}
+
+.terms a {
+color: #007BFF;
+text-decoration: none;
+}
+
+.terms a:hover {
+text-decoration: underline;
+}
+/* GLOBAL RECEIPT STYLES */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #eaf4fc, #ffffff);
+  color: #333;
+}
+
+/* HEADER */
 header {
-    text-align: center;
-    margin-bottom: 20px;
-    position: relative;
+  background-color: #007BFF;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  position: relative;
 }
 
 .logo {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    font-size: 32px;
-    font-weight: bold;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 32px;
+  font-weight: bold;
 }
 
 .logo .go {
-    color: #000; /* Black */
+  color: #000;
 }
 
 .logo .hire {
-    color: #FFD700; /* Golden yellow */
+  color: #FFD700;
 }
 
 header h1 {
-    font-size: 28px;
-    color: #333;
-    margin: 10px 0;
+  font-size: 28px;
+  margin: 10px 0 5px;
 }
 
 header p {
-    font-size: 18px;
-    color: #555;
-    font-style: italic;
+  font-size: 16px;
+  font-style: italic;
+  margin: 0;
 }
 
-/* Receipt Container */
+/* RECEIPT CONTAINER */
 .receipt-container {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    text-align: center;
-    font-family: Arial, sans-serif;
+  max-width: 600px;
+  margin: 50px auto;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  border: 2px solid #FFD700;
 }
 
-/* Payment Successful Message */
+/* SUCCESS MESSAGE */
 .success-message {
-    color: #28a745; /* Green color */
-    font-size: 32px;
-    margin-bottom: 20px;
+  font-size: 30px;
+  font-weight: bold;
+  color: #28a745;
+  margin-bottom: 20px;
+  background-color: #e9f9ee;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #b8e6c1;
 }
 
-/* Receipt Details */
+/* RECEIPT BOX */
 .receipt-details {
-    background-color: #FFFACD; /* Light yellow background */
-    border: 2px solid #FFD700; /* Golden yellow border */
-    border-radius: 10px;
-    padding: 20px;
-    margin: 20px auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: left;
-    display: inline-block;
+  background-color: #fffdf4;
+  border: 1px solid #FFD700;
+  border-radius: 10px;
+  padding: 25px;
+  text-align: left;
+  box-shadow: inset 0 0 8px rgba(255, 215, 0, 0.25);
 }
 
 .receipt-details h3 {
-    color: #FF8C00; /* Dark orange */
-    margin-top: 0;
+  color: #002f86;
+  border-bottom: 2px solid #FFD700;
+  padding-bottom: 8px;
+  margin-bottom: 15px;
 }
 
 .receipt-details p {
-    margin: 10px 0;
-    font-size: 16px;
-    color: #333;
+  font-size: 16px;
+  margin: 8px 0;
+  color: #333;
 }
 
-/* Thank You Message */
+/* THANK YOU */
 .thank-you {
-    font-size: 24px;
-    color: #333;
-    margin: 20px 0;
+  font-size: 22px;
+  color: #333;
+  font-weight: bold;
+  margin-top: 25px;
 }
 
-/* Return Home Link */
+/* RETURN HOME BUTTON */
 .return-home {
-    font-size: 18px;
-    color: #FF8C00; /* Dark orange */
-    text-decoration: none;
+  display: inline-block;
+  margin-top: 15px;
+  background: linear-gradient(to right, #ffb300, #ff8c00);
+  color: white;
+  padding: 10px 25px;
+  border-radius: 6px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease;
 }
 
 .return-home:hover {
-    text-decoration: underline;
+  background: linear-gradient(to right, #ff6a00, #ee0979);
+  text-decoration: none;
+}
+
+/* GREEN SUCCESS ICON (OPTIONAL) */
+.success-icon {
+  font-size: 60px;
+  color: #28a745;
+  margin-bottom: 10px;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+  .receipt-container {
+    width: 90%;
+    padding: 20px;
+  }
+  .receipt-details {
+    padding: 15px;
+  }
 }
