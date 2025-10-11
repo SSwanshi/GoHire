@@ -50,6 +50,9 @@ router.post("/add-company", upload.fields([{ name: "logo" }, { name: "proofDocum
 
         // Check if required fields are filled
         if (!companyName || !website || !location) {
+            if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+                return res.status(400).json({ success: false, message: "All fields are required" });
+            }
             return res.status(400).json({ error: "All fields are required" });
         }
 
@@ -79,10 +82,18 @@ router.post("/add-company", upload.fields([{ name: "logo" }, { name: "proofDocum
 
         await newCompany.save();
 
+        // Check if request is AJAX
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            return res.json({ success: true, message: "Company added successfully, awaiting verification!" });
+        }
+
         req.session.successMessage = "Company added successfully, awaiting verification!";
         res.redirect("/recruiter/companies");
     } catch (error) {
         console.error("Error adding company:", error);
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            return res.status(500).json({ success: false, message: "Failed to add company" });
+        }
         if (!res.headersSent) {
             res.status(500).json({ error: "Failed to add company" });
         }
@@ -113,6 +124,9 @@ router.post("/add-job", async (req, res) => {
             !jobTitle || !jobDescription || !jobRequirements || !jobSalary ||
             !jobLocation || !jobType || !jobExperience || !noofPositions || !jobCompany || !jobExpiry
         ) {
+            if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+                return res.status(400).json({ success: false, message: "All fields are required" });
+            }
             return res.status(400).json({ error: "All fields are required" });
         }
 
@@ -123,6 +137,9 @@ router.post("/add-job", async (req, res) => {
         });
 
         if (!companyExists) {
+            if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+                return res.status(400).json({ success: false, message: "Company must be verified to post a job." });
+            }
             return res.status(400).json({ error: "Company must be verified to post a job." });
         }
 
@@ -143,11 +160,19 @@ router.post("/add-job", async (req, res) => {
         await newJob.save();
         console.log("✅ Job Saved Successfully:", newJob);
 
+        // Check if request is AJAX
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            return res.json({ success: true, message: "Job added successfully!" });
+        }
+
         req.session.successMessage = "Job added successfully!";
         res.redirect("/recruiter/jobs");
 
     } catch (error) {
         console.error("❌ Error adding job:", error);
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            return res.status(500).json({ success: false, message: "Failed to add job" });
+        }
         res.status(500).json({ error: "Failed to add job" });
     }
 });
@@ -219,6 +244,9 @@ router.post('/add-internship', async (req, res) => {
 
         if (!intTitle || !intDescription || !intRequirements || !intStipend ||
             !intLocation || !intDuration || !intExperience || !intPositions || !intCompany || !intExpiry) {
+            if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+                return res.status(400).json({ success: false, message: 'All fields are required' });
+            }
             return res.status(400).json({ error: 'All fields are required' });
         }
 
@@ -229,6 +257,9 @@ router.post('/add-internship', async (req, res) => {
         });
 
         if (!companyExists) {
+            if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+                return res.status(400).json({ success: false, message: "Company must be verified to post an internship." });
+            }
             return res.status(400).json({ error: "Company must be verified to post an internship." });
         }
 
@@ -249,10 +280,18 @@ router.post('/add-internship', async (req, res) => {
         await newInternship.save();
         console.log("✅ Internship Saved Successfully:", newInternship);
 
+        // Check if request is AJAX
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            return res.json({ success: true, message: "Internship added successfully!" });
+        }
+
         req.session.successMessage = "Internship added successfully!";
         res.redirect('/recruiter/internships');
     } catch (error) {
         console.error("❌ Error adding internship:", error);
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            return res.status(500).json({ success: false, message: 'Failed to add internship' });
+        }
         res.status(500).json({ error: 'Failed to add internship' });
     }
 });
@@ -282,18 +321,50 @@ router.post('/delete-company/:companyId', async (req, res) => {
 
 router.post('/delete-job/:jobId', async (req, res) => {
     try {
-        await Job.findByIdAndDelete(req.params.jobId);
+        const job = await Job.findByIdAndDelete(req.params.jobId);
+        if (!job) {
+            if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+                return res.status(404).json({ success: false, message: 'Job not found' });
+            }
+            return res.status(404).send('Job not found');
+        }
+
+        // Check if request is AJAX
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            return res.json({ success: true, message: 'Job deleted successfully' });
+        }
+        
         res.redirect('/recruiter/jobs');
     } catch (error) {
+        console.error('Error deleting job:', error);
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            return res.status(500).json({ success: false, message: 'Failed to delete job' });
+        }
         res.status(500).json({ error: 'Failed to delete job' });
     }
 });
 
 router.post('/delete-intern/:intId', async (req, res) => {
     try {
-        await Internship.findByIdAndDelete(req.params.intId);
+        const internship = await Internship.findByIdAndDelete(req.params.intId);
+        if (!internship) {
+            if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+                return res.status(404).json({ success: false, message: 'Internship not found' });
+            }
+            return res.status(404).send('Internship not found');
+        }
+
+        // Check if request is AJAX
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            return res.json({ success: true, message: 'Internship deleted successfully' });
+        }
+        
         res.redirect('/recruiter/internships');
     } catch (error) {
+        console.error('Error deleting internship:', error);
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            return res.status(500).json({ success: false, message: 'Failed to delete internship' });
+        }
         res.status(500).json({ error: 'Failed to delete internship' });
     }
 });

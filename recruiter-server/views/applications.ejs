@@ -53,21 +53,19 @@
 
         <div class="mt-4">
           <% if (!app.isSelected && !app.isRejected) { %>
-            <form action="/applications/<%= app._id %>/status" method="POST" class="flex flex-wrap gap-4 mt-2">
-              <input type="hidden" name="status" id="status-<%= app._id %>" value="" />
-              
-              <button type="submit"
-                      onclick="document.getElementById('status-<%= app._id %>').value='accept'"
+            <div class="flex flex-wrap gap-4 mt-2">
+              <button type="button"
+                      onclick="updateApplicationStatus('<%= app._id %>', 'accept')"
                       class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md transition w-full sm:w-auto">
                 ✅ Accept
               </button>
 
-              <button type="submit"
-                      onclick="document.getElementById('status-<%= app._id %>').value='reject'"
+              <button type="button"
+                      onclick="updateApplicationStatus('<%= app._id %>', 'reject')"
                       class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md transition w-full sm:w-auto">
                 ❌ Reject
               </button>
-            </form>
+            </div>
           <% } else if (app.isSelected) { %>
             <span class="inline-block bg-green-600 text-white px-4 py-2 rounded-md font-semibold">Accepted</span>
           <% } else if (app.isRejected) { %>
@@ -84,5 +82,79 @@
     </a>
   </div>
 </div>
+
+<script>
+function updateApplicationStatus(appId, status) {
+  // Show loading state
+  const buttons = document.querySelectorAll(`button[onclick*="${appId}"]`);
+  buttons.forEach(btn => {
+    btn.disabled = true;
+    btn.innerHTML = '⏳ Processing...';
+  });
+
+  // Create XMLHttpRequest
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', `/applications/${appId}/status`, true);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        if (response.success) {
+          // Show success message
+          showNotification(response.message, 'success');
+          
+          // Update UI
+          const statusContainer = document.querySelector(`button[onclick*="${appId}"]`).closest('.mt-4');
+          if (status === 'accept') {
+            statusContainer.innerHTML = '<span class="inline-block bg-green-600 text-white px-4 py-2 rounded-md font-semibold">Accepted</span>';
+          } else {
+            statusContainer.innerHTML = '<span class="inline-block bg-red-600 text-white px-4 py-2 rounded-md font-semibold">Rejected</span>';
+          }
+        } else {
+          showNotification(response.message, 'error');
+          // Reset buttons
+          buttons.forEach(btn => {
+            btn.disabled = false;
+            btn.innerHTML = status === 'accept' ? '✅ Accept' : '❌ Reject';
+          });
+        }
+      } else {
+        showNotification('Error updating application status', 'error');
+        // Reset buttons
+        buttons.forEach(btn => {
+          btn.disabled = false;
+          btn.innerHTML = status === 'accept' ? '✅ Accept' : '❌ Reject';
+        });
+      }
+    }
+  };
+  
+  xhr.send(`status=${status}`);
+}
+
+function showNotification(message, type) {
+  // Remove existing notifications
+  const existing = document.querySelector('.notification');
+  if (existing) existing.remove();
+  
+  const notification = document.createElement('div');
+  notification.className = `notification fixed top-5 right-5 p-4 rounded-md shadow-lg z-50 ${
+    type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+  }`;
+  notification.textContent = message;
+  
+  document.body.appendChild(notification);
+  
+  // Auto remove after 3 seconds
+  setTimeout(() => {
+    if (notification.parentNode) {
+      notification.parentNode.removeChild(notification);
+    }
+  }, 3000);
+}
+</script>
 
 <%- include('layout/footer') %>

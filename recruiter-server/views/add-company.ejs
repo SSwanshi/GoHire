@@ -63,7 +63,7 @@
   </div>
   
 
-  <button type="submit"
+  <button type="submit" id="submitBtn"
           class="w-full bg-blue-700 text-yellow-400 font-semibold py-2 rounded-md hover:bg-blue-800 hover:text-yellow-300 transition-all">
     <%= isEdit ? 'Update Company' : 'Add Company' %>
   </button>
@@ -74,6 +74,8 @@
 
 <script>
 document.getElementById("companyForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Always prevent default form submission
+    
     let isValid = true;
 
     const companyName = document.getElementById("companyName").value.trim();
@@ -126,9 +128,80 @@ document.getElementById("companyForm").addEventListener("submit", function(event
     }
 
     if (!isValid) {
-        event.preventDefault();
+        return;
     }
+
+    // Submit form via AJAX
+    submitCompanyForm();
 });
+
+function submitCompanyForm() {
+    const form = document.getElementById("companyForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const originalText = submitBtn.innerHTML;
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '⏳ Processing...';
+
+    // Create FormData for file upload
+    const formData = new FormData(form);
+
+    // Create XMLHttpRequest
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', form.action, true);
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    showNotification(response.message, 'success');
+                    // Reset form
+                    form.reset();
+                    // Redirect after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = '/recruiter/companies';
+                    }, 2000);
+                } else {
+                    showNotification(response.message, 'error');
+                    // Reset button
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }
+            } else {
+                showNotification('Error submitting form', 'error');
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        }
+    };
+    
+    xhr.send(formData);
+}
+
+function showNotification(message, type) {
+    // Remove existing notifications
+    const existing = document.querySelector('.notification');
+    if (existing) existing.remove();
+    
+    const notification = document.createElement('div');
+    notification.className = `notification fixed top-5 right-5 p-4 rounded-md shadow-lg z-50 ${
+        type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+    }`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+        }
+    }, 3000);
+}
 </script>
 
 <%- include('layout/footer') %>

@@ -77,11 +77,20 @@ router.get('/:jobId', async (req, res) => {
   
       if (result.nModified === 0) {
         console.log('No application was updated. This might mean the appId was incorrect.');
+        return res.status(404).json({ success: false, message: 'Application not found' });
       }
   
+      // Check if request is AJAX
+      if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+        return res.json({ success: true, message: 'Status updated successfully', status: status });
+      }
+      
       res.redirect('back');
     } catch (err) {
       console.error('Error updating application status:', err);
+      if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+        return res.status(500).json({ success: false, message: 'Server error' });
+      }
       res.status(500).send('Server error');
     }
   });

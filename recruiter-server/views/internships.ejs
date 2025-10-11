@@ -52,11 +52,11 @@
                               </td>
                               
                             <td class="px-6 py-4 border border-gray-300 flex items-center justify-center gap-4 mt-3">
-                                <form action="/recruiter/delete-intern/<%= internships[i]._id %>" method="POST">
-                                    <button type="submit" class="bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 rounded">
-                                        Delete
-                                    </button> 
-                                </form>
+                                <button type="button" 
+                                        onclick="deleteInternship('<%= internships[i]._id %>')" 
+                                        class="bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 rounded">
+                                    Delete
+                                </button>
                                 <a href="/recruiter/edit-internship/<%= internships[i]._id %>" 
                                     class="bg-green-500 hover:bg-green-800 text-white font-bold py-2 px-4 rounded inline-block text-center">
                                     Edit
@@ -82,5 +82,77 @@
         </table>
     </div>
 </section>
+
+<script>
+function deleteInternship(internshipId) {
+  if (!confirm('Are you sure you want to delete this internship? This action cannot be undone.')) {
+    return;
+  }
+
+  // Show loading state
+  const button = document.querySelector(`button[onclick*="${internshipId}"]`);
+  const originalText = button.innerHTML;
+  button.disabled = true;
+  button.innerHTML = '⏳ Deleting...';
+
+  // Create XMLHttpRequest
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', `/recruiter/delete-intern/${internshipId}`, true);
+  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        if (response.success) {
+          // Show success message
+          showNotification(response.message, 'success');
+          
+          // Remove the row from table
+          const row = button.closest('tr');
+          row.style.transition = 'opacity 0.3s ease';
+          row.style.opacity = '0';
+          setTimeout(() => {
+            row.remove();
+          }, 300);
+        } else {
+          showNotification(response.message, 'error');
+          // Reset button
+          button.disabled = false;
+          button.innerHTML = originalText;
+        }
+      } else {
+        showNotification('Error deleting internship', 'error');
+        // Reset button
+        button.disabled = false;
+        button.innerHTML = originalText;
+      }
+    }
+  };
+  
+  xhr.send();
+}
+
+function showNotification(message, type) {
+  // Remove existing notifications
+  const existing = document.querySelector('.notification');
+  if (existing) existing.remove();
+  
+  const notification = document.createElement('div');
+  notification.className = `notification fixed top-5 right-5 p-4 rounded-md shadow-lg z-50 ${
+    type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+  }`;
+  notification.textContent = message;
+  
+  document.body.appendChild(notification);
+  
+  // Auto remove after 3 seconds
+  setTimeout(() => {
+    if (notification.parentNode) {
+      notification.parentNode.removeChild(notification);
+    }
+  }, 3000);
+}
+</script>
 
 <%- include('layout/footer') %> 
