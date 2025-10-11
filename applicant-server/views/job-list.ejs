@@ -272,7 +272,7 @@
                     <span class="inline-block px-3 py-1 text-sm font-medium text-red-500 bg-red-100 rounded-full">
                       Expiry:
                       <td class="inline-block px-3 py-1 text-sm font-medium text-red-500 bg-red-100 rounded-full">
-                        <%= new Date(job.jobExpiry).toLocaleDateString('en-GB') %>
+                        <%= (job.jobExpiry > Date.now() ? new Date(job.jobExpiry).toLocaleDateString('en-GB') : "Expired") %>
                       </td>
                     </span>
                   </div>
