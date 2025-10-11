@@ -1,30 +1,20 @@
-// Show/hide payment fields based on selected payment method
+// Show/hide payment fields
 document.getElementById('paymentMethod').addEventListener('change', function () {
     const paymentMethod = this.value;
     const creditCardFields = document.getElementById('creditCardFields');
     const netBankingFields = document.getElementById('netBankingFields');
     const upiFields = document.getElementById('upiFields');
-    const walletFields = document.getElementById('walletFields');
 
-    // Hide all fields initially
     creditCardFields.style.display = 'none';
     netBankingFields.style.display = 'none';
     upiFields.style.display = 'none';
-    walletFields.style.display = 'none';
 
-    // Show fields based on selected payment method
-    if (paymentMethod === 'creditCard') {
-        creditCardFields.style.display = 'block';
-    } else if (paymentMethod === 'netBanking') {
-        netBankingFields.style.display = 'block';
-    } else if (paymentMethod === 'upi') {
-        upiFields.style.display = 'block';
-    } else if (paymentMethod === 'wallet') {
-        walletFields.style.display = 'block';
-    }
+    if (paymentMethod === 'creditCard') creditCardFields.style.display = 'block';
+    else if (paymentMethod === 'netBanking') netBankingFields.style.display = 'block';
+    else if (paymentMethod === 'upi') upiFields.style.display = 'block';
 });
 
-// Update payment amount and hidden input field
+// Subscription plan selection
 document.addEventListener('DOMContentLoaded', () => {
     const subscriptionPlans = document.querySelectorAll('#subscriptionPlans li');
     const paymentAmountInput = document.getElementById('paymentAmount');
@@ -33,11 +23,34 @@ document.addEventListener('DOMContentLoaded', () => {
     subscriptionPlans.forEach(plan => {
         plan.addEventListener('click', () => {
             const price = plan.getAttribute('data-price');
-            console.log('Selected Price:', price); // Debugging
-            paymentAmountInput.value = `₹${price}`; // Update visible amount
-            amountInput.value = price; // Update hidden input for backend
+            paymentAmountInput.value = `₹${price}`;
+            amountInput.value = price;
         });
     });
+});
+
+// Net Banking simulation
+document.getElementById('processNetBanking').addEventListener('click', function () {
+    const bankName = document.getElementById('bankName').value;
+    const bankUserId = document.getElementById('bankUserId').value;
+    const bankPassword = document.getElementById('bankPassword').value;
+    const amount = document.getElementById('amount').value;
+    const summary = document.getElementById('transactionSummary');
+
+    if (!bankName || !bankUserId || !bankPassword) {
+        alert('Please fill all Net Banking fields.');
+        return;
+    }
+
+    // Simulate bank authentication & payment processing
+    setTimeout(() => {
+        summary.value = `Bank: ${bankName.toUpperCase()}\n` +
+                        `User ID: ${bankUserId}\n` +
+                        `Amount Paid: ₹${amount}\n` +
+                        `Transaction ID: TXN${Date.now()}\n` +
+                        `Status: SUCCESS`;
+        alert('Payment Successful via Net Banking!');
+    }, 1000);
 });
 
 // Form validation
@@ -55,15 +68,8 @@ document.getElementById('paymentForm').addEventListener('submit', function (even
         const expiryDate = document.getElementById('expiryDate').value;
         const cvv = document.getElementById('cvv').value;
         const cardholderName = document.getElementById('cardholderName').value;
-
         if (!cardNumber || !expiryDate || !cvv || !cardholderName) {
             alert('Please fill out all credit card fields.');
-            event.preventDefault();
-        } else if (!/^\d{16}$/.test(cardNumber)) {
-            alert('Invalid card number. Please enter a 16-digit card number.');
-            event.preventDefault();
-        } else if (!/^\d{3}$/.test(cvv)) {
-            alert('Invalid CVV. Please enter a 3-digit CVV.');
             event.preventDefault();
         }
     } else if (paymentMethod === 'netBanking') {
@@ -74,14 +80,11 @@ document.getElementById('paymentForm').addEventListener('submit', function (even
         }
     } else if (paymentMethod === 'upi') {
         const upiId = document.getElementById('upiId').value;
-        if (!upiId) {
-            alert('Please enter your UPI ID.');
-            event.preventDefault();
-        }
-    } else if (paymentMethod === 'wallet') {
-        const walletType = document.getElementById('walletType').value;
-        if (!walletType) {
-            alert('Please select a wallet.');
+        const upiName = document.getElementById('upiName').value;
+        const upiApp = document.getElementById('upiApp').value;
+        const upiPassword = document.getElementById('upiPassword').value;
+        if (!upiName || !upiId || !upiPassword || !upiApp) {
+            alert('Please fill out all UPI fields.');
             event.preventDefault();
         }
     }
