@@ -109,381 +109,475 @@
       </div>
     </div>
   </nav>
+<header class="pt-24 pb-16 bg-gradient-to-br from-blue-50 to-indigo-50 min-h-screen">
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed top-4 right-4 z-50 max-w-sm w-full"></div>
 
-  <header class="pt-32 pb-24 text-white relative overflow-hidden">
-    <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-4">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- Profile Initial Avatar or Uploaded Image -->
-        <div class="md:col-span-1 flex flex-col items-center justify-start">
-          <div class="relative">
-            <% if (user.profileImageId) { %>
-              <img src="/profile/image?<%= Date.now() %>"
-                class="w-40 h-40 rounded-full border-4 border-yellow-400 shadow-md object-cover" alt="Profile Image">
+  <div class="max-w-6xl mx-auto px-4">
+    <!-- Header Section -->
+    <div class="text-center mb-8">
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <!-- Left Sidebar -->
+      <div class="lg:col-span-1 space-y-6">
+        <!-- Profile Card -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+          <div class="flex flex-col items-center">
+            <!-- Profile Image -->
+            <div class="relative mb-4">
+              <% if (user.profileImageId) { %>
+                <img src="/profile/image?<%= Date.now() %>"
+                  class="w-32 h-32 rounded-full border-4 border-blue-200 shadow-lg object-cover" alt="Profile Image">
               <% } else { %>
                 <div id="profileInitial"
-                  class="w-40 h-40 flex items-center justify-center rounded-full border-4 border-yellow-400 shadow-md bg-blue-50 text-blue-900 text-6xl font-bold">
+                  class="w-32 h-32 flex items-center justify-center rounded-full border-4 border-blue-200 shadow-lg bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-700 text-4xl font-bold">
                   <%= user.firstName.charAt(0).toUpperCase() %>
                 </div>
+              <% } %>
+              <div class="absolute -bottom-2 -right-2 bg-white rounded-full p-1 shadow-md">
+                <div class="bg-green-500 rounded-full w-4 h-4 border-2 border-white"></div>
+              </div>
+            </div>
+
+            <h2 class="text-xl font-bold text-gray-900"><%= user.firstName %> <%= user.lastName %></h2>
+            <p class="text-gray-600 text-sm mb-4"><%= user.email %></p>
+
+            <!-- Image Upload Form -->
+            <form action="/profile/image" method="POST" enctype="multipart/form-data" class="w-full">
+              <label class="block mb-3">
+                <span class="sr-only">Choose profile image</span>
+                <div class="flex items-center justify-center w-full">
+                  <label class="flex flex-col items-center justify-center w-full h-10 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 border-gray-300 hover:border-blue-500 transition-colors">
+                    <div class="flex flex-col items-center justify-center pt-1 pb-1">
+                      <i class="fas fa-camera text-gray-500 mb-1"></i>
+                      <p class="text-xs text-gray-600">Change Photo</p>
+                    </div>
+                    <input type="file" name="profileImage" accept="image/*" class="hidden">
+                  </label>
+                </div>
+              </label>
+              <div class="flex space-x-2">
+                <button type="submit"
+                  class="flex-1 px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition flex items-center justify-center">
+                  <i class="fas fa-upload mr-1"></i> Upload
+                </button>
+                <% if (user.profileImage) { %>
+                  <button type="button" onclick="deleteProfileImage()"
+                    class="px-3 py-2 bg-red-100 text-red-700 text-sm rounded-lg hover:bg-red-200 transition flex items-center justify-center">
+                    <i class="fas fa-trash mr-1"></i>
+                  </button>
                 <% } %>
-                  <!-- Image Upload Form -->
-                  <form action="/profile/image" method="POST" enctype="multipart/form-data" class="mt-4">
-                    <label class="block">
-                      <span class="sr-only">Choose profile image</span>
-                      <input type="file" name="profileImage" accept="image/*" class="block w-full text-sm text-gray-500
-                      file:mr-4 file:py-2 file:px-4
-                      file:rounded file:border-0
-                      file:text-sm file:font-semibold
-                      file:bg-blue-50 file:text-blue-700
-                      hover:file:bg-blue-100">
-                    </label>
-                    <button type="submit"
-                      class="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
-                      Upload Image
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+          <h3 class="font-semibold text-gray-900 mb-4 flex items-center">
+            <i class="fas fa-bolt text-yellow-500 mr-2"></i> Quick Actions
+          </h3>
+          <div class="space-y-3">
+            <a href="/profile/edit" class="flex items-center p-3 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition group">
+              <i class="fas fa-edit mr-3 text-blue-600"></i>
+              <span>Edit Profile</span>
+              <i class="fas fa-chevron-right ml-auto text-blue-400 group-hover:text-blue-600"></i>
+            </a>
+            <a href="/jobs" class="flex items-center p-3 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition group">
+              <i class="fas fa-briefcase mr-3 text-green-600"></i>
+              <span>Browse Jobs</span>
+              <i class="fas fa-chevron-right ml-auto text-green-400 group-hover:text-green-600"></i>
+            </a>
+           
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="lg:col-span-3 space-y-8">
+        <!-- Profile Information -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+          <div class="bg-gradient-to-r from-blue-600 to-indigo-700 px-6 py-4">
+            <h2 class="text-xl font-bold text-black flex items-center">
+              <i class="fas fa-user-circle mr-3"></i> Profile Information
+            </h2>
+          </div>
+          <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 transition-all hover:shadow-sm">
+                <label class="block text-sm font-medium text-blue-700 mb-1 flex items-center">
+                  <i class="fas fa-user mr-2"></i> First Name
+                </label>
+                <p class="text-lg text-gray-900 font-semibold">
+                  <%= user.firstName %>
+                </p>
+              </div>
+
+              <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 transition-all hover:shadow-sm">
+                <label class="block text-sm font-medium text-blue-700 mb-1 flex items-center">
+                  <i class="fas fa-user mr-2"></i> Last Name
+                </label>
+                <p class="text-lg text-gray-900 font-semibold">
+                  <%= user.lastName %>
+                </p>
+              </div>
+
+              <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 transition-all hover:shadow-sm">
+                <label class="block text-sm font-medium text-blue-700 mb-1 flex items-center">
+                  <i class="fas fa-envelope mr-2"></i> Email Address
+                </label>
+                <p class="text-lg text-gray-900 font-semibold">
+                  <%= user.email %>
+                </p>
+              </div>
+
+              <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 transition-all hover:shadow-sm">
+                <label class="block text-sm font-medium text-blue-700 mb-1 flex items-center">
+                  <i class="fas fa-phone mr-2"></i> Phone Number
+                </label>
+                <p class="text-lg text-gray-900 font-semibold">
+                  <%= user.phone %>
+                </p>
+              </div>
+
+              <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 transition-all hover:shadow-sm">
+                <label class="block text-sm font-medium text-blue-700 mb-1 flex items-center">
+                  <i class="fas fa-venus-mars mr-2"></i> Gender
+                </label>
+                <p class="text-lg text-gray-900 font-semibold">
+                  <%= user.gender %>
+                </p>
+              </div>
+
+              <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 transition-all hover:shadow-sm">
+                <label class="block text-sm font-medium text-blue-700 mb-1 flex items-center">
+                  <i class="fas fa-calendar-alt mr-2"></i> Member Since
+                </label>
+                <p class="text-lg text-gray-900 font-semibold">
+                  25 March 2025
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resume Section -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+          <div class="bg-gradient-to-r from-green-600 to-emerald-700 px-6 py-4">
+            <h2 class="text-xl font-bold text-black flex items-center">
+              <i class="fas fa-file-alt mr-3"></i> Resume Section
+            </h2>
+          </div>
+          <div class="p-6">
+            <% if (resumeName) { %>
+              <div class="flex flex-col md:flex-row md:items-center justify-between p-5 bg-green-50 rounded-xl border border-green-200">
+                <div class="mb-4 md:mb-0">
+                  <p class="text-gray-700 font-medium mb-1">
+                    <i class="fas fa-file-pdf text-red-500 mr-2"></i> Uploaded Resume
+                  </p>
+                  <p class="text-gray-900 font-semibold">
+                    <%= resumeName %>
+                  </p>
+                </div>
+                <div class="flex space-x-3">
+                  <a href="/profile/resume" target="_blank"
+                    class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center">
+                    <i class="fas fa-eye mr-2"></i> View
+                  </a>
+                  <form action="/profile/resume/delete" method="POST">
+                    <button type="submit" class="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition flex items-center">
+                      <i class="fas fa-trash mr-2"></i> Delete
                     </button>
-                    <% if (user.profileImage) { %>
-                      <button type="button" onclick="deleteProfileImage()"
-                        class="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
-                        Delete Image
-                      </button>
-                      <% } %>
                   </form>
+                </div>
+              </div>
+            <% } else { %>
+              <form action="/profile/resume" method="POST" enctype="multipart/form-data">
+                <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <i class="fas fa-file-upload text-gray-400 text-4xl mb-4"></i>
+                  <h3 class="text-lg font-medium text-gray-700 mb-2">Upload Your Resume</h3>
+                  <p class="text-gray-500 mb-4">Drag & drop your resume here or click to browse</p>
+                  
+                  <label class="block mb-4">
+                    <span class="sr-only">Choose resume file</span>
+                    <input type="file" name="resume" accept=".pdf" required class="block w-full text-sm text-gray-500
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-lg file:border-0
+                                file:text-sm file:font-semibold
+                                file:bg-blue-50 file:text-blue-700
+                                hover:file:bg-blue-100">
+                  </label>
+                  
+                  <button type="submit" class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center mx-auto">
+                    <i class="fas fa-cloud-upload-alt mr-2"></i> Upload Resume
+                  </button>
+                  <p class="text-xs text-gray-500 mt-3">Maximum size: 5MB (PDF only)</p>
+                </div>
+              </form>
+            <% } %>
           </div>
         </div>
 
-        <div class="md:col-span-2">
-          <h2 class="text-2xl font-bold text-blue-900 mb-6 pb-2 border-b-2 border-yellow-400">Profile
-            Information</h2>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-blue-50 p-4 rounded-lg">
-              <label class="block text-sm font-medium text-blue-700">First Name</label>
-              <p class="text-lg text-blue-900 font-semibold">
-                <%= user.firstName %>
-              </p>
-            </div>
-
-            <div class="bg-blue-50 p-4 rounded-lg">
-              <label class="block text-sm font-medium text-blue-700">Last Name</label>
-              <p class="text-lg text-blue-900 font-semibold">
-                <%= user.lastName %>
-              </p>
-            </div>
-
-            <div class="bg-blue-50 p-4 rounded-lg">
-              <label class="block text-sm font-medium text-blue-700">Email Address</label>
-              <p class="text-lg text-blue-900 font-semibold flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-600" fill="none"
-                  viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                <%= user.email %>
-              </p>
-            </div>
-
-            <div class="bg-blue-50 p-4 rounded-lg">
-              <label class="block text-sm font-medium text-blue-700">Phone Number</label>
-              <p class="text-lg text-blue-900 font-semibold flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-600" fill="none"
-                  viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                <%= user.phone %>
-              </p>
-            </div>
-
-            <div class="bg-blue-50 p-4 rounded-lg">
-              <label class="block text-sm font-medium text-blue-700">Gender</label>
-              <p class="text-lg text-blue-900 font-semibold">
-                <%= user.gender %>
-              </p>
-            </div>
-
-            <div class="bg-blue-50 p-4 rounded-lg">
-              <label class="block text-sm font-medium text-blue-700">Member Since</label>
-              <p class="text-lg text-blue-900 font-semibold">
-                25 March 2025
-              </p>
-            </div>
+        <!-- Application History -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+          <div class="bg-gradient-to-r from-purple-600 to-indigo-700 px-6 py-4">
+            <h2 class="text-xl font-bold text-black flex items-center">
+              <i class="fas fa-history mr-3"></i> Application History
+            </h2>
+          </div>
+          <div class="p-6">
+            <% if (applicationHistory && applicationHistory.length> 0) { %>
+              <div class="overflow-x-auto rounded-lg border border-gray-200">
+                <table class="min-w-full divide-y divide-blue-200">
+                  <thead class="bg-gradient-to-br from-blue-600 to-indigo-700">
+                    <tr>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applied Date</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                    <% applicationHistory.forEach(application=> { %>
+                      <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          <%= application.type %>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <%= application.title %>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <%= application.company %>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <%= application.appliedAt.toLocaleDateString() %>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
+                            <%= application.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : '' %>
+                            <%= application.status === 'Accepted' ? 'bg-green-100 text-green-800' : '' %>
+                            <%= application.status === 'Rejected' ? 'bg-red-100 text-red-800' : '' %>">
+                            <%= application.status %>
+                          </span>
+                        </td>
+                      </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+            <% } else { %>
+              <div class="text-center py-12">
+                <i class="fas fa-file-alt text-gray-300 text-5xl mb-4"></i>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">No Applications Yet</h3>
+                <p class="text-gray-500 max-w-md mx-auto mb-6">You haven't applied to any jobs or internships yet. Start your job search today!</p>
+                <a href="/jobs" class="inline-flex items-center px-5 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition">
+                  <i class="fas fa-briefcase mr-2"></i> Browse Jobs
+                </a>
+              </div>
+            <% } %>
           </div>
         </div>
-      </div>
 
-      <div class="flex justify-end mt-4">
-        <a href="/profile/edit" class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition">
-          Edit Profile
-        </a>
-      </div>
-
-      <div class="bg-white rounded-lg shadow-md p-6 mt-8">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">Resume</h2>
-        <div class="border-b border-gray-300 mb-6"></div>
-
-        <% if (resumeName) { %>
-          <div class="space-y-4">
-            <p class="text-gray-700">
-              <span class="font-semibold">Uploaded Resume:</span>
-              <%= resumeName %>
-            </p>
-            <div class="flex space-x-4">
-              <a href="/profile/resume" target="_blank"
-                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-                View Resume
-              </a>
-              <form action="/profile/resume/delete" method="POST">
-                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
-                  Delete Resume
+        <!-- Danger Zone -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-red-200">
+          <div class="bg-gradient-to-r from-red-600 to-rose-700 px-6 py-4">
+            <h2 class="text-xl font-bold text-black flex items-center">
+              <i class="fas fa-exclamation-triangle mr-3"></i> Danger Zone
+            </h2>
+          </div>
+          <div class="p-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+              <div class="mb-4 md:mb-0">
+                <h3 class="text-lg font-semibold text-red-800 mb-1">Delete Account</h3>
+                <p class="text-red-700">Permanently delete your account. This action is irreversible.</p>
+              </div>
+              <form action="/profile/delete" method="POST" onsubmit="return confirmDelete(event)">
+                <button type="submit"
+                        class="px-5 py-2.5 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition flex items-center">
+                  <i class="fas fa-trash mr-2"></i> Delete My Account
                 </button>
               </form>
             </div>
           </div>
-          <% } else { %>
-            <form action="/profile/resume" method="POST" enctype="multipart/form-data" class="space-y-4">
-              <div class="flex items-center space-x-4">
-                <label class="block">
-                  <span class="sr-only">Choose resume file</span>
-                  <input type="file" name="resume" accept=".pdf" required class="block w-full text-sm text-gray-500
-                              file:mr-4 file:py-2 file:px-4
-                              file:rounded file:border-0
-                              file:text-sm file:font-semibold
-                              file:bg-blue-50 file:text-blue-700
-                              hover:file:bg-blue-100">
-                </label>
-                <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
-                  Upload Resume
-                </button>
-              </div>
-              <p class="text-xs text-gray-500">Maximum size: 5MB (PDF only)</p>
-            </form>
-            <% } %>
-      </div>
-
-      <!-- Delete Account Section -->
-      <div class="bg-red-50 rounded-lg shadow-md p-6 mt-8 border border-red-300">
-        <h2 class="text-2xl font-bold text-red-800 mb-4">Danger Zone</h2>
-        <div class="border-b border-red-200 mb-4"></div>
-        <p class="text-red-700 mb-4">Permanently delete your account. This action is irreversible.</p>
-      
-        <form action="/profile/delete" method="POST" onsubmit="return confirmDelete(event)">
-          <button type="submit"
-                  class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
-            Delete My Account
-          </button>
-        </form>
-      </div>
-      <!-- Application History Section -->
-      <div class="mt-8">
-        <h3 class="text-2xl text-black mb-4 font-bold">Application History</h3>
-
-        <% if (applicationHistory && applicationHistory.length> 0) { %>
-          <div class="overflow-x-auto">
-            <table class="min-w-full bg-white rounded-lg overflow-hidden">
-              <thead class="bg-gray-100">
-                <tr>
-                  <th class="py-3 text-black px-4 text-left text-gray-700 font-medium">Type</th>
-                  <th class="py-3  text-black px-4 text-left text-gray-700 font-medium">Title</th>
-                  <th class="py-3  text-black px-4 text-left text-gray-700 font-medium">Company</th>
-                  <th class="py-3 text-black  px-4 text-left text-gray-700 font-medium">Applied Date</th>
-                  <th class="py-3  text-black px-4 text-left text-gray-700 font-medium">Status</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-gray-200">
-                <% applicationHistory.forEach(application=> { %>
-                  <tr class="hover:bg-gray-50 transition-colors">
-                    <td class="py-3 px-4 text-black">
-                      <%= application.type %>
-                    </td>
-                    <td class="py-3 px-4 text-black">
-                      <%= application.title %>
-                    </td>
-                    <td class="py-3 px-4 text-black">
-                      <%= application.company %>
-                    </td>
-                    <td class="py-3 px-4 text-black">
-                      <%= application.appliedAt.toLocaleDateString() %>
-                    </td>
-                    <td class="py-3 px-4">
-                      <span class="px-2 py-1 text-xs font-medium rounded-full 
-                  <%= application.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : '' %>
-                  <%= application.status === 'Accepted' ? 'bg-green-100 text-green-800' : '' %>
-                  <%= application.status === 'Rejected' ? 'bg-red-100 text-red-800' : '' %>">
-                        <%= application.status %>
-                      </span>
-                    </td>
-                  </tr>
-                  <% }); %>
-              </tbody>
-            </table>
-          </div>
-          <% } else { %>
-            <div class="bg-blue-50 border-l-4 border-blue-400 p-4">
-              <div class="flex">
-                <div class="flex-shrink-0">
-                  <svg class="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                    fill="currentColor">
-                    <path fill-rule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z"
-                      clip-rule="evenodd" />
-                  </svg>
-                </div>
-                <div class="ml-3">
-                  <p class="text-sm text-blue-700">
-                    No applications found. Start applying to jobs and internships to see your history here.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <% } %>
+        </div>
       </div>
     </div>
+  </div>
+</header>
 
+<script>
+  // Mobile menu functionality
+  document.getElementById('mobile-menu')?.addEventListener('click', function () {
+    document.getElementById('dropdown-menu').classList.toggle('hidden');
+  });
 
-  </header>
+  // File upload handling
+  async function uploadResume(file) {
+    try {
+      const formData = new FormData();
+      formData.append('resume', file);
 
-  <script>
-    document.getElementById('mobile-menu').addEventListener('click', function () {
-      document.getElementById('dropdown-menu').classList.toggle('hidden');
-    });
-    async function uploadResume(file) {
+      const response = await fetch('/resume', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Upload failed');
+      }
+
+      if (data.success) {
+        showToast('Resume uploaded successfully!', true);
+        setTimeout(() => location.reload(), 1500);
+      } else {
+        throw new Error(data.message || 'Upload failed');
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      showToast(`Upload error: ${error.message}`, false);
+    }
+  }
+
+  // Update the file input event listener
+  document.getElementById('resumeFile')?.addEventListener('change', async function () {
+    if (this.files && this.files[0]) {
+      const file = this.files[0];
+
+      // Validate file
+      if (file.size > 5 * 1024 * 1024) {
+        showToast('File is too large. Maximum size is 5MB.', false);
+        return;
+      }
+
+      if (!file.type.includes('pdf')) {
+        showToast('Only PDF files are allowed.', false);
+        return;
+      }
+
+      // Show loading state
+      const uploadBtn = document.querySelector('[onclick*="resumeFile"]');
+      const originalText = uploadBtn.textContent;
+      uploadBtn.textContent = 'Uploading...';
+      uploadBtn.disabled = true;
+
       try {
-        const formData = new FormData();
-        formData.append('resume', file);
-
-        const response = await fetch('/resume', {
-          method: 'POST',
-          body: formData
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.message || 'Upload failed');
-        }
-
-        if (data.success) {
-          alert('Resume uploaded successfully!');
-          location.reload();
-        } else {
-          throw new Error(data.message || 'Upload failed');
-        }
-      } catch (error) {
-        console.error('Upload error:', error);
-        alert(`Upload error: ${error.message}`);
+        await uploadResume(file);
+      } finally {
+        uploadBtn.textContent = originalText;
+        uploadBtn.disabled = false;
       }
     }
+  });
 
-    // Update the file input event listener
-    document.getElementById('resumeFile')?.addEventListener('change', async function () {
-      if (this.files && this.files[0]) {
-        const file = this.files[0];
-
-        // Validate file
-        if (file.size > 5 * 1024 * 1024) {
-          alert('File is too large. Maximum size is 5MB.');
-          return;
-        }
-
-        if (!file.type.includes('pdf')) {
-          alert('Only PDF files are allowed.');
-          return;
-        }
-
-        // Show loading state
-        const uploadBtn = document.querySelector('[onclick*="resumeFile"]');
-        const originalText = uploadBtn.textContent;
-        uploadBtn.textContent = 'Uploading...';
-        uploadBtn.disabled = true;
-
-        try {
-          await uploadResume(file);
-        } finally {
-          uploadBtn.textContent = originalText;
-          uploadBtn.disabled = false;
-        }
-      }
-    });
-
-    async function deleteProfileImage() {
-      try {
-        const response = await fetch('/profile/image', {
-          method: 'DELETE'
-        });
-
-        if (response.ok) {
-          location.reload();
-        } else {
-          alert('Failed to delete image');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred');
-      }
+  // Profile image deletion
+  async function deleteProfileImage() {
+    if (!confirm('Are you sure you want to delete your profile image?')) {
+      return;
     }
+    
+    try {
+      const response = await fetch('/profile/image', {
+        method: 'DELETE'
+      });
 
-    function showToast(message, isSuccess = true) {
-      const toastContainer = document.getElementById('toast-container');
-
-      // Create toast element
-      const toast = document.createElement('div');
-      toast.className = `flex items-center p-4 mb-2 rounded-lg shadow-lg transform transition-all duration-300 ${isSuccess ? 'bg-green-400' : 'bg-red-400'} text-black`;
-
-      // Add icon based on success/error
-      const icon = document.createElement('div');
-      icon.className = 'mr-3';
-      icon.innerHTML = isSuccess ?
-        '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>' :
-        '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
-
-      // Add message
-      const messageEl = document.createElement('div');
-      messageEl.className = 'font-semibold';
-      messageEl.textContent = message;
-
-      // Add close button
-      const closeBtn = document.createElement('button');
-      closeBtn.className = 'ml-auto text-gray-800 hover:text-black';
-      closeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>';
-      closeBtn.onclick = () => {
-        toast.classList.add('opacity-0');
-        setTimeout(() => toast.remove(), 300);
-      };
-
-      // Assemble toast
-      toast.appendChild(icon);
-      toast.appendChild(messageEl);
-      toast.appendChild(closeBtn);
-
-      // Add to container
-      toastContainer.appendChild(toast);
-
-      // Animate in
-      setTimeout(() => {
-        toast.classList.add('opacity-0');
-        setTimeout(() => toast.remove(), 300);
-      }, 3000);
+      if (response.ok) {
+        showToast('Profile image deleted successfully', true);
+        setTimeout(() => location.reload(), 1000);
+      } else {
+        showToast('Failed to delete image', false);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      showToast('An error occurred while deleting the image', false);
     }
+  }
 
-    // For form submission
-    document.querySelector('form')?.addEventListener('submit', function (e) {
-      e.preventDefault();
+  // Toast notification system
+  function showToast(message, isSuccess = true) {
+    const toastContainer = document.getElementById('toast-container');
 
-      // Here you would normally submit the form via fetch or let it submit normally
-      // For demo, we'll just show the toast
-      showToast('Profile updated successfully!', true);
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = `flex items-center p-4 mb-3 rounded-xl shadow-lg transform transition-all duration-300 ${isSuccess ? 'bg-green-500' : 'bg-red-500'} text-white animate-fade-in`;
 
-      // If you want to actually submit the form after showing toast:
-      setTimeout(() => this.submit(), 1000);
-    });
+    // Add icon based on success/error
+    const icon = document.createElement('div');
+    icon.className = 'mr-3';
+    icon.innerHTML = isSuccess ?
+      '<i class="fas fa-check-circle"></i>' :
+      '<i class="fas fa-exclamation-circle"></i>';
 
-    function confirmDelete(event) {
-    const confirmAction = confirm("Are you absolutely sure you want to delete your account?");
+    // Add message
+    const messageEl = document.createElement('div');
+    messageEl.className = 'font-medium flex-1';
+    messageEl.textContent = message;
+
+    // Add close button
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'ml-4 text-white hover:text-gray-200 transition-colors';
+    closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+    closeBtn.onclick = () => {
+      toast.classList.add('opacity-0', 'scale-95');
+      setTimeout(() => toast.remove(), 300);
+    };
+
+    // Assemble toast
+    toast.appendChild(icon);
+    toast.appendChild(messageEl);
+    toast.appendChild(closeBtn);
+
+    // Add to container
+    toastContainer.appendChild(toast);
+
+    // Animate in
+    setTimeout(() => {
+      toast.classList.add('opacity-0', 'scale-95');
+      setTimeout(() => toast.remove(), 300);
+    }, 5000);
+  }
+
+  // Add CSS for animation
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fade-in 0.3s ease-out forwards;
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Account deletion confirmation
+  function confirmDelete(event) {
+    const confirmAction = confirm("Are you absolutely sure you want to delete your account? This action cannot be undone.");
     if (!confirmAction) {
       event.preventDefault();
       return false;
     }
     return true;
   }
-  </script>
+
+  // Enhance file input UI
+  document.querySelectorAll('input[type="file"]').forEach(input => {
+    input.addEventListener('change', function() {
+      const fileName = this.files[0]?.name || 'No file chosen';
+      const label = this.closest('label');
+      const displayElement = label.querySelector('.file-display') || 
+                            document.createElement('span');
+      
+      if (!label.querySelector('.file-display')) {
+        displayElement.className = 'file-display text-sm text-gray-600 mt-1';
+        label.appendChild(displayElement);
+      }
+      
+      displayElement.textContent = fileName;
+    });
+  });
+</script>
 
   <%- include('layout/footer.ejs') %>
