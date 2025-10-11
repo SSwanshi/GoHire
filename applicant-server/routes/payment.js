@@ -3,22 +3,17 @@ const User = require('../models/user');
 const premium_user = require('../models/premium_user');
 const router = express.Router();
 
-// Render the payment page
 router.get('/payment', (req, res) => {
     res.render('payment');
 });
 
-// Render the Terms of Service page
 router.get('/terms', (req, res) => {
     res.render('terms');
 });
 
-// Render the Privacy Policy page
 router.get('/privacy', (req, res) => {
     res.render('privacy');
 });
-
-// Process payment form submission
 router.post('/process-payment', async(req, res) => {
     const { paymentMethod, cardNumber, expiryDate, cvv, cardholderName, bankName, upiId, walletType } = req.body;
     const userId = req.session.user?.id;

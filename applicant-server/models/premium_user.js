@@ -6,7 +6,7 @@ const PremiumUserSchema = new mongoose.Schema({
         type: String,
         unique: true,
         default: () => Math.random().toString(36).substring(2, 15) +
-            Math.random().toString(36).substring(2, 15) // Random string
+            Math.random().toString(36).substring(2, 15)
     },
     firstName: {
         type: String,
@@ -20,7 +20,7 @@ const PremiumUserSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        match: [/.+\@.+\..+/, 'Please enter a valid email'] // Simple email validation
+        match: [/.+\@.+\..+/, 'Please enter a valid email']
     },
     phone: {
         type: String,
@@ -29,15 +29,15 @@ const PremiumUserSchema = new mongoose.Schema({
     gender: {
         type: String,
         required: true,
-        enum: ['male', 'female', 'other'] // Optional: restrict to specific values
+        enum: ['male', 'female', 'other']
     },
-    password: {  // NEW: Added password field for authentication
+    password: {
         type: String,
         required: true
     },
     memberSince: {
         type: Date,
-        default: Date.now // Changed from String to Date type
+        default: Date.now
     },
     resumeId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -45,5 +45,4 @@ const PremiumUserSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-// Password hashing middleware
 module.exports = mongoose.model('Premium_User', PremiumUserSchema);

@@ -1,8 +1,6 @@
-// test-fetch-jobs.js
 const mongoose = require('mongoose');
 
-
-const uri = 'mongodb+srv://gohire:gohire12345678@gohire.kzwudx0.mongodb.net/goHire_recruiters?retryWrites=true&w=majority&appName=GoHire'; // use the recruiter DB URI (not applicant)
+const uri = 'mongodb+srv://gohire:gohire12345678@gohire.kzwudx0.mongodb.net/goHire_recruiters?retryWrites=true&w=majority&appName=GoHire';
 
 const jobSchema = new mongoose.Schema({
   jobTitle: String,

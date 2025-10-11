@@ -23,7 +23,7 @@ const AppliedInternshipSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        match: [/.+\@.+\..+/, 'Please enter a valid email'] // Simple email validation
+        match: [/.+\@.+\..+/, 'Please enter a valid email']
     },
     phone: {
         type: String,
@@ -32,19 +32,19 @@ const AppliedInternshipSchema = new mongoose.Schema({
     gender: {
         type: String,
         required: true,
-        enum: ['male', 'female', 'other'] // Optional: restrict to specific values
+        enum: ['male', 'female', 'other']
     },
-    password: {  // NEW: Added password field for authentication
+    password: {
         type: String,
         required: true
     },
     memberSince: {
         type: Date,
-        default: Date.now // Changed from String to Date type
+        default: Date.now
     },
     AppliedAt: {
         type: Date,
-        default: Date.now // Changed from String to Date type
+        default: Date.now
     },
     resumeId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -62,5 +62,4 @@ const AppliedInternshipSchema = new mongoose.Schema({
 
 AppliedInternshipSchema.index({ userId: 1, internshipId: 1 }, { unique: true });
 
-// Password hashing middleware
 module.exports = mongoose.model('Applied_for_Internships', AppliedInternshipSchema);

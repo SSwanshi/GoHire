@@ -1,4 +1,3 @@
-// models/recruiter/Job.js
 const mongoose = require('mongoose');
 
 const jobSchema = new mongoose.Schema({
@@ -15,11 +14,8 @@ const jobSchema = new mongoose.Schema({
     jobExpiry: { 
         type: Date, 
         required: true,
-        default: () => new Date(Date.now() + 30*24*60*60*1000) 
+        default: () => new Date(Date.now() + 30*24*60*60*1000)
     }
 }, { timestamps: true });
 
 module.exports = (connection) => {return connection.models.Job || connection.model('Job', jobSchema)};
-
-
-// module.exports = mongoose.model('Job', jobSchema);

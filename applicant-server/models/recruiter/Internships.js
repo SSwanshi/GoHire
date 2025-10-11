@@ -14,14 +14,10 @@ const internshipSchema = new mongoose.Schema({
     intExpiry: { 
         type: Date, 
         required: true,
-        default: () => new Date(Date.now() + 30*24*60*60*1000) 
+        default: () => new Date(Date.now() + 30*24*60*60*1000)
     }
 }, { timestamps: true });
 
  module.exports = (connection) => {
     return connection.model('Internship', internshipSchema, "internships");
  };
-
-// module.exports = mongoose.model('Internship', internshipSchema);
-
-

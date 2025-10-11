@@ -18,10 +18,7 @@ const Internship = require('../../recruiter-server/models/Internship');
 const axios = require('axios');
 const User = require('../models/user');
 const Applied_for_Jobs = require('../models/Applied_for_Jobs');
-const Applied_for_Internships = require('../models/Applied_for_Internships'); // Adjust the path according to your project structure
-
-
-// router.use(bodyParser.urlencoded({extended:true}));
+const Applied_for_Internships = require('../models/Applied_for_Internships');
 
 const conn = mongoose.connection;
 let bucket;
@@ -43,13 +40,9 @@ const intapplication = [
   { name: 'Saurav Kumar Roy', email: 'sauravkumar@gmail.com', resume: '/resumes/jane_smith.pdf' }
 ];
 
-// Home
 router.get('/', (req, res) => {
   res.render('home', { user: req.session.user});
 });
-
-// Job Listings
-// Example route in applicant.js or similar
 router.get('/jobs', async (req, res) => {
   try {
       const recruiterConn = await connectRecruiterDB();
@@ -90,9 +83,6 @@ router.get('/logo/:logoId', async (req, res) => {
   }
 });
 
-
-
-//Internship List
 router.get('/internships', async (req, res) => {
   try {
     const recruiterConn = await connectRecruiterDB();
@@ -119,17 +109,13 @@ router.get('/contact', async (req, res) => {
   res.render('contact',{user: req.session.user});
 })
 
-// Search Results
 router.get('/search', async (req, res) => {
   res.render('search-results' , {user: req.session.user});
 });
-
-//Premium page
 router.get('/competitions', async (req, res) => {
   res.render('competitions' , {user: req.session.user});
 });
 
-//Apply_for_Job page
 router.get('/applyforJobs', async (req, res) => {
   res.render('Apply_for_Jobs' , {user: req.session.user});
 });
@@ -142,7 +128,6 @@ router.get('/AppliedforInternships', async (req, res) => {
   res.render('Applied_for_Internships' , {user: req.session.user});
 });
 
-//Apply_for_Internship page
 router.get('/applyforInternships', async (req, res) => {
   res.render('Apply_for_Internships' , {user: req.session.user});
 });

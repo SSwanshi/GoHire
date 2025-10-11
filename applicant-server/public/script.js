@@ -1,4 +1,3 @@
-// Show/hide payment fields
 document.getElementById('paymentMethod').addEventListener('change', function () {
     const paymentMethod = this.value;
     const creditCardFields = document.getElementById('creditCardFields');
@@ -14,7 +13,6 @@ document.getElementById('paymentMethod').addEventListener('change', function () 
     else if (paymentMethod === 'upi') upiFields.style.display = 'block';
 });
 
-// Subscription plan selection
 document.addEventListener('DOMContentLoaded', () => {
     const subscriptionPlans = document.querySelectorAll('#subscriptionPlans li');
     const paymentAmountInput = document.getElementById('paymentAmount');
@@ -29,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Net Banking simulation
 document.getElementById('processNetBanking').addEventListener('click', function () {
     const bankName = document.getElementById('bankName').value;
     const bankUserId = document.getElementById('bankUserId').value;
@@ -42,7 +39,6 @@ document.getElementById('processNetBanking').addEventListener('click', function 
         return;
     }
 
-    // Simulate bank authentication & payment processing
     setTimeout(() => {
         summary.value = `Bank: ${bankName.toUpperCase()}\n` +
                         `User ID: ${bankUserId}\n` +
@@ -53,7 +49,6 @@ document.getElementById('processNetBanking').addEventListener('click', function 
     }, 1000);
 });
 
-// Form validation
 document.getElementById('paymentForm').addEventListener('submit', function (event) {
     const paymentMethod = document.getElementById('paymentMethod').value;
 
