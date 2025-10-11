@@ -6,7 +6,7 @@ const CompanySchema = new mongoose.Schema({
     location: { type: String, required: true },
     logoId: { type: mongoose.Schema.Types.ObjectId, ref: "uploads.files" },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-
+    DateOfESt: {type: String, required: true},
     // 🔒 Added for verification
     verified: { type: Boolean, default: false },
     proofDocumentId: { type: mongoose.Schema.Types.ObjectId, ref: "uploads.files" }, // stored with GridFS

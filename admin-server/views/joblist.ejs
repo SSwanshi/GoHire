@@ -15,11 +15,7 @@
         onclick="toggleDropdown('<%= company._id %>')"
       >
         <div class="flex items-center space-x-4">
-          <img
-            src="<%= company.logoId || '/default-logo.png' %>"
-            alt="<%= company.companyName %> Logo"
-            class="h-12 w-12 object-contain rounded-full border border-gray-200"
-          />
+          
           <div>
             <h3 class="text-xl font-semibold"><%= company.companyName %></h3>
             <p class="text-gray-500"><%= company.location %></p>
