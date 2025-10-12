@@ -99,13 +99,195 @@
 
 
 <script>
+  // Form validation patterns
+  const validationPatterns = {
+    firstName: /^[a-zA-Z\s]{2,30}$/,
+    lastName: /^[a-zA-Z\s]{0,30}$/,
+    phone: /^[6-9]\d{9}$/
+  };
+
+  // Error messages
+  const errorMessages = {
+    firstName: 'First name must be 2-30 characters, letters and spaces only',
+    lastName: 'Last name must be 0-30 characters, letters and spaces only',
+    phone: 'Phone number must be 10 digits starting with 6-9',
+    confirmPassword: 'Passwords do not match'
+  };
+
+  // Get form elements
+  const form = document.querySelector('form');
+  const firstNameInput = document.getElementById('firstName');
+  const lastNameInput = document.getElementById('lastName');
+  const phoneInput = document.getElementById('phone');
   const newPasswordInput = document.getElementById('newPassword');
   const confirmPasswordInput = document.getElementById('confirmPassword');
 
+  // Function to show error message
+  function showError(input, message) {
+    const errorDiv = input.parentNode.querySelector('.error-message');
+    const successDiv = input.parentNode.querySelector('.success-message');
+    
+    // Remove success message if exists
+    if (successDiv) {
+      successDiv.remove();
+    }
+    
+    if (errorDiv) {
+      errorDiv.textContent = message;
+    } else {
+      const errorElement = document.createElement('div');
+      errorElement.className = 'error-message text-red-500 text-sm mt-1';
+      errorElement.textContent = message;
+      input.parentNode.appendChild(errorElement);
+    }
+    input.classList.add('border-red-500', 'focus:ring-red-500');
+    input.classList.remove('border-blue-200', 'focus:ring-blue-500', 'border-green-500');
+  }
+
+  // Function to show success message
+  function showSuccess(input, message) {
+    const errorDiv = input.parentNode.querySelector('.error-message');
+    const successDiv = input.parentNode.querySelector('.success-message');
+    
+    // Remove error message if exists
+    if (errorDiv) {
+      errorDiv.remove();
+    }
+    
+    if (successDiv) {
+      successDiv.textContent = message;
+    } else {
+      const successElement = document.createElement('div');
+      successElement.className = 'success-message text-green-500 text-sm mt-1';
+      successElement.textContent = message;
+      input.parentNode.appendChild(successElement);
+    }
+  }
+
+  // Function to clear error message
+  function clearError(input) {
+    const errorDiv = input.parentNode.querySelector('.error-message');
+    const successDiv = input.parentNode.querySelector('.success-message');
+    
+    if (errorDiv) {
+      errorDiv.remove();
+    }
+    if (successDiv) {
+      successDiv.remove();
+    }
+    
+    input.classList.remove('border-red-500', 'focus:ring-red-500', 'border-green-500');
+    input.classList.add('border-blue-200', 'focus:ring-blue-500');
+  }
+
+  // Function to validate field
+  function validateField(input, pattern, errorMessage) {
+    const value = input.value.trim();
+    
+    if (input.hasAttribute('required') && !value) {
+      showError(input, 'This field is required');
+      return false;
+    }
+    
+    if (value && !pattern.test(value)) {
+      showError(input, errorMessage);
+      return false;
+    }
+    
+    clearError(input);
+    return true;
+  }
+
+  // Function to validate password confirmation
+  function validatePasswordConfirmation() {
+    const password = newPasswordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+    
+    // If confirm password has value, validate it
+    if (confirmPassword) {
+      if (password !== confirmPassword) {
+        showError(confirmPasswordInput, errorMessages.confirmPassword);
+        return false;
+      } else {
+        // Show success message and styling when passwords match
+        showSuccess(confirmPasswordInput, 'Passwords match!');
+        confirmPasswordInput.classList.add('border-green-500');
+        confirmPasswordInput.classList.remove('border-blue-200');
+        return true;
+      }
+    }
+    
+    // If confirm password is empty, clear any existing error and styling
+    clearError(confirmPasswordInput);
+    return true;
+  }
+
+  // Real-time validation for first name
+  firstNameInput.addEventListener('input', () => {
+    validateField(firstNameInput, validationPatterns.firstName, errorMessages.firstName);
+  });
+
+  // Real-time validation for last name
+  lastNameInput.addEventListener('input', () => {
+    validateField(lastNameInput, validationPatterns.lastName, errorMessages.lastName);
+  });
+
+  // Real-time validation for phone
+  phoneInput.addEventListener('input', () => {
+    validateField(phoneInput, validationPatterns.phone, errorMessages.phone);
+  });
+
+  // Real-time validation for new password
+  newPasswordInput.addEventListener('input', () => {
+    // Always validate confirmation when password changes
+    validatePasswordConfirmation();
+  });
+
+  // Real-time validation for confirm password
+  confirmPasswordInput.addEventListener('input', () => {
+    validatePasswordConfirmation();
+  });
+
+  // Enable confirm password when new password is focused
   newPasswordInput.addEventListener('focus', () => {
     confirmPasswordInput.disabled = false;
     confirmPasswordInput.classList.remove('bg-gray-50', 'text-gray-400');
     confirmPasswordInput.classList.add('bg-white', 'text-black', 'border-blue-200');
+  });
+
+  // Form submission validation
+  form.addEventListener('submit', (e) => {
+    let isValid = true;
+
+    // Validate all required fields
+    isValid &= validateField(firstNameInput, validationPatterns.firstName, errorMessages.firstName);
+    isValid &= validateField(phoneInput, validationPatterns.phone, errorMessages.phone);
+
+    // Validate last name if it has value
+    if (lastNameInput.value.trim()) {
+      isValid &= validateField(lastNameInput, validationPatterns.lastName, errorMessages.lastName);
+    }
+
+    // Validate password if provided
+    if (newPasswordInput.value) {
+      isValid &= validatePasswordConfirmation();
+    }
+
+    if (!isValid) {
+      e.preventDefault();
+      // Scroll to first error
+      const firstError = form.querySelector('.error-message');
+      if (firstError) {
+        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  });
+
+  // Clear errors on focus
+  [firstNameInput, lastNameInput, phoneInput, newPasswordInput, confirmPasswordInput].forEach(input => {
+    input.addEventListener('focus', () => {
+      clearError(input);
+    });
   });
 
 </script>
