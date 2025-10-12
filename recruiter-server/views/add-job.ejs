@@ -117,7 +117,6 @@
 
       let isValid = true;
 
-      // Alphabets only validation
       function validateAlphabets(id, errorId) {
         const value = document.getElementById(id).value.trim();
         const errorElement = document.getElementById(errorId);
@@ -130,7 +129,6 @@
         }
       }
 
-      // Alphanumeric validation
       function validateAlphanumeric(id, errorId) {
         const value = document.getElementById(id).value.trim();
         const errorElement = document.getElementById(errorId);
@@ -143,7 +141,6 @@
         }
       }
 
-      // Number validation
       function validateNumberField(id, minValue, errorId) {
         const value = document.getElementById(id).value;
         const errorElement = document.getElementById(errorId);
@@ -155,7 +152,6 @@
         }
       }
 
-      // Date validation
       function validateDateField(id, errorId) {
         const value = document.getElementById(id).value;
         const errorElement = document.getElementById(errorId);
@@ -170,7 +166,6 @@
         }
       }
 
-      // Job Type validation
       function validateJobType(id, errorId) {
         const value = document.getElementById(id).value.trim();
         const errorElement = document.getElementById(errorId);
@@ -182,7 +177,6 @@
         }
       }
 
-      // Run validations
       validateAlphabets("jobTitle", "titleError");
       validateAlphanumeric("jobRequirements", "requirementsError");
       validateAlphabets("jobLocation", "locationError");
