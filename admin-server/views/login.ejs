@@ -4,62 +4,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoHire - Login</title>
+    <title>GoHire - Admin Login</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .input-focus:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.15);
+        }
+        .button-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+        .error-shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 
-<body class="bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700 flex items-center justify-center h-screen">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h1 class="text-2xl font-bold text-center mb-6 text-blue-800">Login</h1>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 flex items-center justify-center min-h-screen p-4">
+    <div class="glass-effect rounded-2xl shadow-2xl w-full max-w-md p-8 fade-in">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+            <p class="text-gray-200 text-sm">Sign in to your admin account</p>
+        </div>
+        
         <form id="loginForm" action="/login" method="POST" class="space-y-6">
-            <div>
-                <label for="email" class="block text-sm font-medium text-blue-700">Email</label>
+            <div class="space-y-2">
+                <label for="email" class="block text-sm font-semibold text-white">Email Address</label>
                 <input type="email" id="email" name="email" required
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                <p id="emailError" class="text-red-500 text-xs mt-1"></p>
+                    class="input-focus w-full px-4 py-3 bg-white/90 border border-white/20 rounded-xl text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"
+                    placeholder="Enter your email">
+                <p id="emailError" class="text-red-300 text-xs mt-1 hidden"></p>
             </div>
-            <div>
-                <label for="password" class="block text-sm font-medium text-blue-700">Password</label>
+            
+            <div class="space-y-2">
+                <label for="password" class="block text-sm font-semibold text-white">Password</label>
                 <input type="password" id="password" name="password" required
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                <p id="passwordError" class="text-red-500 text-xs mt-1"></p>
+                    class="input-focus w-full px-4 py-3 bg-white/90 border border-white/20 rounded-xl text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"
+                    placeholder="Enter your password">
+                <p id="passwordError" class="text-red-300 text-xs mt-1 hidden"></p>
             </div>
-            <div>
-                <button type="submit"
-                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    Login
+            
+            <div class="pt-2">
+                <button type="submit" id="submitBtn"
+                    class="button-hover w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-transparent transition-all duration-300">
+                    <span id="btnText">Sign In</span>
+                    <span id="btnLoader" class="hidden">Signing in...</span>
                 </button>
             </div>
         </form>
+        
+        <div class="mt-6 text-center">
+            <p class="text-gray-300 text-sm">Secure admin access portal</p>
+        </div>
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function (event) {
-            let isValid = true;
-            let email = document.getElementById('email').value.trim();
-            let password = document.getElementById('password').value.trim();
-            let emailError = document.getElementById('emailError');
-            let passwordError = document.getElementById('passwordError');
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('loginForm');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoader = document.getElementById('btnLoader');
 
-            emailError.textContent = "";
-            passwordError.textContent = "";
+            // Real-time validation
+            emailInput.addEventListener('input', validateEmail);
+            passwordInput.addEventListener('input', validatePassword);
 
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailPattern.test(email)) {
-                emailError.textContent = "Please enter a valid email address.";
-                alert("Please enter a valid email address.");
-                isValid = false;
+            function validateEmail() {
+                const email = emailInput.value.trim();
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                
+                if (email === '') {
+                    hideError(emailError);
+                    return true;
+                }
+                
+                if (!emailPattern.test(email)) {
+                    showError(emailError, 'Please enter a valid email address');
+                    addErrorClass(emailInput);
+                    return false;
+                } else {
+                    hideError(emailError);
+                    removeErrorClass(emailInput);
+                    return true;
+                }
             }
 
-            if (password.length < 4) {
-                passwordError.textContent = "Please enter at least 4 characters for the password.";
-                alert("Please enter at least 4 characters for the password.");
-                isValid = false;
+            function validatePassword() {
+                const password = passwordInput.value.trim();
+                
+                if (password === '') {
+                    hideError(passwordError);
+                    return true;
+                }
+                
+                // No password restrictions - just check if it's not empty
+                hideError(passwordError);
+                removeErrorClass(passwordInput);
+                return true;
             }
 
-            if (!isValid) {
-                event.preventDefault();
+            function showError(errorElement, message) {
+                errorElement.textContent = message;
+                errorElement.classList.remove('hidden');
+                errorElement.classList.add('error-shake');
+                setTimeout(() => errorElement.classList.remove('error-shake'), 500);
             }
+
+            function hideError(errorElement) {
+                errorElement.classList.add('hidden');
+                errorElement.textContent = '';
+            }
+
+            function addErrorClass(inputElement) {
+                inputElement.classList.add('border-red-400', 'ring-2', 'ring-red-400');
+                inputElement.classList.remove('border-white/20', 'ring-blue-400');
+            }
+
+            function removeErrorClass(inputElement) {
+                inputElement.classList.remove('border-red-400', 'ring-2', 'ring-red-400');
+                inputElement.classList.add('border-white/20');
+            }
+
+            function showLoading() {
+                btnText.classList.add('hidden');
+                btnLoader.classList.remove('hidden');
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+            }
+
+            function hideLoading() {
+                btnText.classList.remove('hidden');
+                btnLoader.classList.add('hidden');
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+
+            form.addEventListener('submit', function(event) {
+                const isEmailValid = validateEmail();
+                const isPasswordValid = validatePassword();
+                
+                if (!isEmailValid || !isPasswordValid) {
+                    event.preventDefault();
+                    // Add shake animation to form
+                    form.classList.add('error-shake');
+                    setTimeout(() => form.classList.remove('error-shake'), 500);
+                    return;
+                }
+
+                // Show loading state
+                showLoading();
+                
+                // Allow form to submit normally after validation passes
+                // The form will submit to /login route on the server
+            });
+
+            // Add focus effects
+            [emailInput, passwordInput].forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.classList.add('ring-2', 'ring-blue-400');
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.classList.remove('ring-2', 'ring-blue-400');
+                });
+            });
         });
     </script>
 </body>
