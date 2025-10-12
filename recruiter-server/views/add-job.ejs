@@ -1,282 +1,271 @@
 <%- include('layout/header') %>
 
-<div class="gradientyandb min-h-screen flex items-center justify-center">
-  <div class="max-w-lg mx-auto p-6 bg-blue-100 rounded-lg shadow-md md:w-full max-w-[800px] mx-auto">
-    <h2 class="text-2xl font-bold text-blue-800 mb-4">Post a New Job</h2>
-    <form id="jobForm" action="<%= isEdit ? '/recruiter/edit-job/' + job._id : '/recruiter/add-job' %>" method="POST" class="space-y-4">
+  <div class="gradientyandb min-h-screen flex items-center justify-center">
+    <div class="max-w-lg mx-auto p-6 bg-blue-100 rounded-lg shadow-md md:w-full max-w-[800px] mx-auto">
+      <h2 class="text-2xl font-bold text-blue-800 mb-4">Post a New Job</h2>
+      <form id="jobForm" action="<%= isEdit ? '/recruiter/edit-job/' + job._id : '/recruiter/add-job' %>" method="POST"
+        class="space-y-4">
 
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label for="jobTitle" class="block text-blue-700 font-medium">Title</label>
-          <input type="text" id="jobTitle" name="jobTitle" required
-                 value="<%= isEdit ? job.jobTitle : '' %>"
-                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="titleError">Title must be at least 5 characters.</p>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="jobTitle" class="block text-blue-700 font-medium">Title</label>
+            <input type="text" id="jobTitle" name="jobTitle" required value="<%= isEdit ? job.jobTitle : '' %>"
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <p class="text-red-500 text-sm hidden" id="titleError">Title must be at least 5 characters.</p>
+          </div>
+
+          <div>
+            <label for="jobDescription" class="block text-blue-700 font-medium">Description</label>
+            <input type="text" id="jobDescription" name="jobDescription" required
+              value="<%= isEdit ? job.jobDescription : '' %>"
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <p class="text-red-500 text-sm hidden" id="descriptionError">Description must be at least 10 characters.</p>
+          </div>
         </div>
-    
-        <div>
-          <label for="jobDescription" class="block text-blue-700 font-medium">Description</label>
-          <input type="text" id="jobDescription" name="jobDescription" required
-                 value="<%= isEdit ? job.jobDescription : '' %>"
-                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="descriptionError">Description must be at least 10 characters.</p>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="jobRequirements" class="block text-blue-700 font-medium">Requirements</label>
+            <input type="text" id="jobRequirements" name="jobRequirements" required
+              value="<%= isEdit ? job.jobRequirements : '' %>"
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <p class="text-red-500 text-sm hidden" id="requirementsError">Requirements must be at least 5 characters.
+            </p>
+          </div>
+
+          <div>
+            <label for="jobSalary" class="block text-blue-700 font-medium">Salary (in LPA)</label>
+            <input type="number" id="jobSalary" name="jobSalary" required min="0"
+              value="<%= isEdit ? job.jobSalary : '' %>"
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <p class="text-red-500 text-sm hidden" id="salaryError">Salary must be a positive number.</p>
+          </div>
         </div>
-      </div>
-    
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label for="jobRequirements" class="block text-blue-700 font-medium">Requirements</label>
-          <input type="text" id="jobRequirements" name="jobRequirements" required
-                 value="<%= isEdit ? job.jobRequirements : '' %>"
-                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="requirementsError">Requirements must be at least 5 characters.</p>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="jobLocation" class="block text-blue-700 font-medium">Location</label>
+            <input type="text" id="jobLocation" name="jobLocation" required value="<%= isEdit ? job.jobLocation : '' %>"
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <p class="text-red-500 text-sm hidden" id="locationError">Location must be at least 3 characters.</p>
+          </div>
+
+          <div>
+            <label for="jobType" class="block text-blue-700 font-medium">Job Type</label>
+            <input type="text" id="jobType" name="jobType" required value="<%= isEdit ? job.jobType : '' %>"
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <p class="text-red-500 text-sm hidden" id="jobTypeError">Job type is required.</p>
+          </div>
         </div>
-    
-        <div>
-          <label for="jobSalary" class="block text-blue-700 font-medium">Salary (in LPA)</label>
-          <input type="number" id="jobSalary" name="jobSalary" required min="0"
-                 value="<%= isEdit ? job.jobSalary : '' %>"
-                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="salaryError">Salary must be a positive number.</p>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="jobExperience" class="block text-blue-700 font-medium">Experience Level (in years)</label>
+            <input type="number" id="jobExperience" name="jobExperience" required min="0"
+              value="<%= isEdit ? job.jobExperience : '' %>"
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <p class="text-red-500 text-sm hidden" id="experienceError">Experience must be 0 or more years.</p>
+          </div>
+
+          <div>
+            <label for="noofPositions" class="block text-blue-700 font-medium">No of Positions</label>
+            <input type="number" id="noofPositions" name="noofPositions" required min="1"
+              value="<%= isEdit ? job.noofPositions : '' %>"
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <p class="text-red-500 text-sm hidden" id="positionsError">Must be at least 1 position.</p>
+          </div>
         </div>
-      </div>
-    
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label for="jobLocation" class="block text-blue-700 font-medium">Location</label>
-          <input type="text" id="jobLocation" name="jobLocation" required
-                 value="<%= isEdit ? job.jobLocation : '' %>"
-                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="locationError">Location must be at least 3 characters.</p>
-        </div>
-    
-        <div>
-          <label for="jobType" class="block text-blue-700 font-medium">Job Type</label>
-          <input type="text" id="jobType" name="jobType" required
-                 value="<%= isEdit ? job.jobType : '' %>"
-                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="jobTypeError">Job type is required.</p>
-        </div>
-      </div>
-    
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label for="jobExperience" class="block text-blue-700 font-medium">Experience Level (in years)</label>
-          <input type="number" id="jobExperience" name="jobExperience" required min="0"
-                 value="<%= isEdit ? job.jobExperience : '' %>"
-                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="experienceError">Experience must be 0 or more years.</p>
-        </div>
-    
-        <div>
-          <label for="noofPositions" class="block text-blue-700 font-medium">No of Positions</label>
-          <input type="number" id="noofPositions" name="noofPositions" required min="1"
-                 value="<%= isEdit ? job.noofPositions : '' %>"
-                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="positionsError">Must be at least 1 position.</p>
-        </div>
-      </div>
-    
-      <div>
 
         <div>
-          <label for="jobExpiry" class="block text-blue-700 font-medium">Application Deadline</label>
-          <input type="date" id="jobExpiry" name="jobExpiry" required
-                 value="<%= isEdit ? job.jobExpiry.toISOString().substring(0, 10) : '' %>"
-                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="expiryError">Application deadline must be today or in the future.</p>
+
+          <div>
+            <label for="jobExpiry" class="block text-blue-700 font-medium">Application Deadline</label>
+            <input type="date" id="jobExpiry" name="jobExpiry" required
+              value="<%= isEdit ? job.jobExpiry.toISOString().substring(0, 10) : '' %>"
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <p class="text-red-500 text-sm hidden" id="expiryError">Application deadline must be today or in the future.
+            </p>
+          </div>
+
+
+          <div>
+            <label for="jobCompany" class="block text-blue-700 font-medium">Company</label>
+            <select id="jobCompany" name="jobCompany" required
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <option value="">Select a company</option>
+              <% companies.forEach(company=> { %>
+                <option value="<%= company._id %>" <%=isEdit && job.jobCompany && company._id.equals(job.jobCompany._id)
+                  ? 'selected' : '' %> >
+                  <%= company.companyName %>
+                </option>
+                <% }); %>
+            </select>
+            <p class="text-red-500 text-sm hidden" id="companyError">Please select a company.</p>
+          </div>
         </div>
-        
-        
-        <div>
-        <label for="jobCompany" class="block text-blue-700 font-medium">Company</label>
-        <select id="jobCompany" name="jobCompany" required
-                class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <option value="">Select a company</option>
-          <% companies.forEach(company => { %>
-            <option value="<%= company._id %>" <%= isEdit && job.jobCompany && company._id.equals(job.jobCompany._id) ? 'selected' : '' %> >
-              <%= company.companyName %>
-            </option>
-          <% }); %>
-        </select>
-        <p class="text-red-500 text-sm hidden" id="companyError">Please select a company.</p>
-      </div>
-      </div>
-    
-      <button type="submit" id="submitBtn"
-              class="w-full bg-blue-700 text-yellow-400 font-semibold py-2 rounded-md hover:bg-blue-800 hover:text-yellow-300 transition-all">
-        <%= isEdit ? 'Update Job' : 'Post New Job' %>
-      </button>
-    
-    </form>
-    
+
+        <button type="submit" id="submitBtn"
+          class="w-full bg-blue-700 text-yellow-400 font-semibold py-2 rounded-md hover:bg-blue-800 hover:text-yellow-300 transition-all">
+          <%= isEdit ? 'Update Job' : 'Post New Job' %>
+        </button>
+
+      </form>
+
+    </div>
   </div>
-</div>
 
-<script>
-document.getElementById("jobForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Always prevent default form submission
-    
-    console.log('Form submission started');
-    let isValid = true;
+  <script>
+    document.getElementById("jobForm").addEventListener("submit", function (event) {
+      event.preventDefault();
 
-    function validateField(id, minLength, errorId) {
+      console.log('Form submission started');
+      let isValid = true;
+
+      function validateField(id, minLength, errorId) {
         const value = document.getElementById(id).value.trim();
         const errorElement = document.getElementById(errorId);
         console.log(`Validating ${id}:`, { value, length: value.length, minLength, errorElement });
-        
-        if (value.length < minLength) {
-            errorElement.classList.remove("hidden");
-            isValid = false;
-            console.log(`Showing error for ${id}`);
-        } else {
-            errorElement.classList.add("hidden");
-            console.log(`Hiding error for ${id}`);
-        }
-    }
 
-    function validateNumberField(id, minValue, errorId) {
+        if (value.length < minLength) {
+          errorElement.classList.remove("hidden");
+          isValid = false;
+          console.log(`Showing error for ${id}`);
+        } else {
+          errorElement.classList.add("hidden");
+          console.log(`Hiding error for ${id}`);
+        }
+      }
+
+      function validateNumberField(id, minValue, errorId) {
         const value = document.getElementById(id).value;
         const errorElement = document.getElementById(errorId);
         if (value === "" || value < minValue) {
-            errorElement.classList.remove("hidden");
-            isValid = false;
+          errorElement.classList.remove("hidden");
+          isValid = false;
         } else {
-            errorElement.classList.add("hidden");
+          errorElement.classList.add("hidden");
         }
-    }
+      }
 
-    function validateDateField(id, errorId) {
+      function validateDateField(id, errorId) {
         const value = document.getElementById(id).value;
         const errorElement = document.getElementById(errorId);
         const selectedDate = new Date(value);
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // Reset time to start of day for accurate comparison
-        
+        today.setHours(0, 0, 0, 0);
+
         console.log('Date validation:', { value, selectedDate, today, isPast: selectedDate < today });
-        
+
         if (value === "" || selectedDate < today) {
-            errorElement.classList.remove("hidden");
-            isValid = false;
-            console.log('Showing error for date field');
+          errorElement.classList.remove("hidden");
+          isValid = false;
+          console.log('Showing error for date field');
         } else {
-            errorElement.classList.add("hidden");
-            console.log('Hiding error for date field');
+          errorElement.classList.add("hidden");
+          console.log('Hiding error for date field');
         }
-    }
+      }
 
-    validateField("jobTitle", 5, "titleError");
-    validateField("jobDescription", 10, "descriptionError");
-    validateField("jobRequirements", 5, "requirementsError");
-    validateField("jobLocation", 3, "locationError");
-    validateField("jobType", 1, "jobTypeError");
+      validateField("jobTitle", 5, "titleError");
+      validateField("jobDescription", 10, "descriptionError");
+      validateField("jobRequirements", 5, "requirementsError");
+      validateField("jobLocation", 3, "locationError");
+      validateField("jobType", 1, "jobTypeError");
 
-    validateNumberField("jobSalary", 0, "salaryError");
-    validateNumberField("jobExperience", 0, "experienceError");
-    validateNumberField("noofPositions", 1, "positionsError");
-    validateDateField("jobExpiry", "expiryError");
+      validateNumberField("jobSalary", 0, "salaryError");
+      validateNumberField("jobExperience", 0, "experienceError");
+      validateNumberField("noofPositions", 1, "positionsError");
+      validateDateField("jobExpiry", "expiryError");
 
-    const company = document.getElementById("jobCompany").value;
-    if (company === "") {
+      const company = document.getElementById("jobCompany").value;
+      if (company === "") {
         document.getElementById("companyError").classList.remove("hidden");
         isValid = false;
-    } else {
+      } else {
         document.getElementById("companyError").classList.add("hidden");
-    }
+      }
 
-    console.log('Validation complete. isValid:', isValid);
-    
-    if (!isValid) {
+      console.log('Validation complete. isValid:', isValid);
+
+      if (!isValid) {
         console.log('Form validation failed, not submitting');
         return;
-    }
+      }
 
-    console.log('Form validation passed, submitting...');
-    // Submit form via AJAX
-    submitJobForm();
-});
+      console.log('Form validation passed, submitting...');
+      submitJobForm();
+    });
 
-function submitJobForm() {
-    const form = document.getElementById("jobForm");
-    const submitBtn = document.getElementById("submitBtn");
-    const originalText = submitBtn.innerHTML;
-    
-    console.log('submitJobForm called');
-    
-    // Show loading state
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '⏳ Processing...';
+    function submitJobForm() {
+      const form = document.getElementById("jobForm");
+      const submitBtn = document.getElementById("submitBtn");
+      const originalText = submitBtn.innerHTML;
 
-    // Create FormData
-    const formData = new FormData(form);
-    
-    // Debug: Log form data
-    console.log('Form data entries:');
-    for (let [key, value] of formData.entries()) {
+      console.log('submitJobForm called');
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '⏳ Processing...';
+
+      const formData = new FormData(form);
+
+      console.log('Form data entries:');
+      for (let [key, value] of formData.entries()) {
         console.log(key, value);
+      }
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', form.action, true);
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+      xhr.onreadystatechange = function () {
+        console.log('XHR readyState:', xhr.readyState, 'status:', xhr.status);
+
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            console.log('Response received:', xhr.responseText);
+            const response = JSON.parse(xhr.responseText);
+            console.log('Parsed response:', response);
+
+            if (response.success) {
+              showNotification(response.message, 'success');
+              form.reset();
+              setTimeout(() => {
+                window.location.href = '/recruiter/jobs';
+              }, 2000);
+            } else {
+              showNotification(response.message, 'error');
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalText;
+            }
+          } else {
+            console.log('XHR error:', xhr.status, xhr.responseText);
+            showNotification('Error submitting form', 'error');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+          }
+        }
+      };
+
+      xhr.send(formData);
     }
 
-    // Create XMLHttpRequest
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', form.action, true);
-    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    
-    xhr.onreadystatechange = function() {
-        console.log('XHR readyState:', xhr.readyState, 'status:', xhr.status);
-        
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                console.log('Response received:', xhr.responseText);
-                const response = JSON.parse(xhr.responseText);
-                console.log('Parsed response:', response);
-                
-                if (response.success) {
-                    showNotification(response.message, 'success');
-                    // Reset form
-                    form.reset();
-                    // Redirect after 2 seconds
-                    setTimeout(() => {
-                        window.location.href = '/recruiter/jobs';
-                    }, 2000);
-                } else {
-                    showNotification(response.message, 'error');
-                    // Reset button
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalText;
-                }
-            } else {
-                console.log('XHR error:', xhr.status, xhr.responseText);
-                showNotification('Error submitting form', 'error');
-                // Reset button
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
-            }
-        }
-    };
-    
-    xhr.send(formData);
-}
+    function showNotification(message, type) {
+      const existing = document.querySelector('.notification');
+      if (existing) existing.remove();
 
-function showNotification(message, type) {
-    // Remove existing notifications
-    const existing = document.querySelector('.notification');
-    if (existing) existing.remove();
-    
-    const notification = document.createElement('div');
-    notification.className = `notification fixed top-5 right-5 p-4 rounded-md shadow-lg z-50 ${
-        type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-    }`;
-    notification.textContent = message;
-    
-    document.body.appendChild(notification);
-    
-    // Auto remove after 3 seconds
-    setTimeout(() => {
+      const notification = document.createElement('div');
+      notification.className = `notification fixed top-5 right-5 p-4 rounded-md shadow-lg z-50 ${type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+        }`;
+      notification.textContent = message;
+
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
         if (notification.parentNode) {
-            notification.parentNode.removeChild(notification);
+          notification.parentNode.removeChild(notification);
         }
-    }, 3000);
-}
-</script>
+      }, 3000);
+    }
+  </script>
 
-<%- include('layout/footer') %>
+  <%- include('layout/footer') %>
