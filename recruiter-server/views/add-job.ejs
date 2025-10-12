@@ -11,7 +11,7 @@
             <label for="jobTitle" class="block text-blue-700 font-medium">Title</label>
             <input type="text" id="jobTitle" name="jobTitle" required value="<%= isEdit ? job.jobTitle : '' %>"
               class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            <p class="text-red-500 text-sm hidden" id="titleError">Title must be at least 5 characters.</p>
+            <p class="text-red-500 text-sm hidden" id="titleError">Title must contain only alphabets.</p>
           </div>
 
           <div>
@@ -29,8 +29,7 @@
             <input type="text" id="jobRequirements" name="jobRequirements" required
               value="<%= isEdit ? job.jobRequirements : '' %>"
               class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            <p class="text-red-500 text-sm hidden" id="requirementsError">Requirements must be at least 5 characters.
-            </p>
+            <p class="text-red-500 text-sm hidden" id="requirementsError">Requirements must be alphanumeric.</p>
           </div>
 
           <div>
@@ -47,14 +46,15 @@
             <label for="jobLocation" class="block text-blue-700 font-medium">Location</label>
             <input type="text" id="jobLocation" name="jobLocation" required value="<%= isEdit ? job.jobLocation : '' %>"
               class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            <p class="text-red-500 text-sm hidden" id="locationError">Location must be at least 3 characters.</p>
+            <p class="text-red-500 text-sm hidden" id="locationError">Location must contain only alphabets.</p>
           </div>
 
           <div>
             <label for="jobType" class="block text-blue-700 font-medium">Job Type</label>
             <input type="text" id="jobType" name="jobType" required value="<%= isEdit ? job.jobType : '' %>"
               class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            <p class="text-red-500 text-sm hidden" id="jobTypeError">Job type is required.</p>
+            <p class="text-red-500 text-sm hidden" id="jobTypeError">Job type must be either "Full-Time" or "Part-Time".
+            </p>
           </div>
         </div>
 
@@ -77,7 +77,6 @@
         </div>
 
         <div>
-
           <div>
             <label for="jobExpiry" class="block text-blue-700 font-medium">Application Deadline</label>
             <input type="date" id="jobExpiry" name="jobExpiry" required
@@ -86,7 +85,6 @@
             <p class="text-red-500 text-sm hidden" id="expiryError">Application deadline must be today or in the future.
             </p>
           </div>
-
 
           <div>
             <label for="jobCompany" class="block text-blue-700 font-medium">Company</label>
@@ -110,7 +108,6 @@
         </button>
 
       </form>
-
     </div>
   </div>
 
@@ -118,24 +115,35 @@
     document.getElementById("jobForm").addEventListener("submit", function (event) {
       event.preventDefault();
 
-      console.log('Form submission started');
       let isValid = true;
 
-      function validateField(id, minLength, errorId) {
+      // Alphabets only validation
+      function validateAlphabets(id, errorId) {
         const value = document.getElementById(id).value.trim();
         const errorElement = document.getElementById(errorId);
-        console.log(`Validating ${id}:`, { value, length: value.length, minLength, errorElement });
-
-        if (value.length < minLength) {
+        const regex = /^[A-Za-z\s]+$/;
+        if (!regex.test(value) || value.length === 0) {
           errorElement.classList.remove("hidden");
           isValid = false;
-          console.log(`Showing error for ${id}`);
         } else {
           errorElement.classList.add("hidden");
-          console.log(`Hiding error for ${id}`);
         }
       }
 
+      // Alphanumeric validation
+      function validateAlphanumeric(id, errorId) {
+        const value = document.getElementById(id).value.trim();
+        const errorElement = document.getElementById(errorId);
+        const regex = /^[A-Za-z0-9\s]+$/;
+        if (!regex.test(value) || value.length === 0) {
+          errorElement.classList.remove("hidden");
+          isValid = false;
+        } else {
+          errorElement.classList.add("hidden");
+        }
+      }
+
+      // Number validation
       function validateNumberField(id, minValue, errorId) {
         const value = document.getElementById(id).value;
         const errorElement = document.getElementById(errorId);
@@ -147,30 +155,38 @@
         }
       }
 
+      // Date validation
       function validateDateField(id, errorId) {
         const value = document.getElementById(id).value;
         const errorElement = document.getElementById(errorId);
         const selectedDate = new Date(value);
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-
-        console.log('Date validation:', { value, selectedDate, today, isPast: selectedDate < today });
-
         if (value === "" || selectedDate < today) {
           errorElement.classList.remove("hidden");
           isValid = false;
-          console.log('Showing error for date field');
         } else {
           errorElement.classList.add("hidden");
-          console.log('Hiding error for date field');
         }
       }
 
-      validateField("jobTitle", 5, "titleError");
-      validateField("jobDescription", 10, "descriptionError");
-      validateField("jobRequirements", 5, "requirementsError");
-      validateField("jobLocation", 3, "locationError");
-      validateField("jobType", 1, "jobTypeError");
+      // Job Type validation
+      function validateJobType(id, errorId) {
+        const value = document.getElementById(id).value.trim();
+        const errorElement = document.getElementById(errorId);
+        if (value !== "Full-Time" && value !== "Part-Time") {
+          errorElement.classList.remove("hidden");
+          isValid = false;
+        } else {
+          errorElement.classList.add("hidden");
+        }
+      }
+
+      // Run validations
+      validateAlphabets("jobTitle", "titleError");
+      validateAlphanumeric("jobRequirements", "requirementsError");
+      validateAlphabets("jobLocation", "locationError");
+      validateJobType("jobType", "jobTypeError");
 
       validateNumberField("jobSalary", 0, "salaryError");
       validateNumberField("jobExperience", 0, "experienceError");
@@ -185,14 +201,8 @@
         document.getElementById("companyError").classList.add("hidden");
       }
 
-      console.log('Validation complete. isValid:', isValid);
+      if (!isValid) return;
 
-      if (!isValid) {
-        console.log('Form validation failed, not submitting');
-        return;
-      }
-
-      console.log('Form validation passed, submitting...');
       submitJobForm();
     });
 
@@ -201,44 +211,29 @@
       const submitBtn = document.getElementById("submitBtn");
       const originalText = submitBtn.innerHTML;
 
-      console.log('submitJobForm called');
-
       submitBtn.disabled = true;
       submitBtn.innerHTML = '⏳ Processing...';
 
       const formData = new FormData(form);
-
-      console.log('Form data entries:');
-      for (let [key, value] of formData.entries()) {
-        console.log(key, value);
-      }
 
       const xhr = new XMLHttpRequest();
       xhr.open('POST', form.action, true);
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
       xhr.onreadystatechange = function () {
-        console.log('XHR readyState:', xhr.readyState, 'status:', xhr.status);
-
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
-            console.log('Response received:', xhr.responseText);
             const response = JSON.parse(xhr.responseText);
-            console.log('Parsed response:', response);
-
             if (response.success) {
               showNotification(response.message, 'success');
               form.reset();
-              setTimeout(() => {
-                window.location.href = '/recruiter/jobs';
-              }, 2000);
+              setTimeout(() => { window.location.href = '/recruiter/jobs'; }, 2000);
             } else {
               showNotification(response.message, 'error');
               submitBtn.disabled = false;
               submitBtn.innerHTML = originalText;
             }
           } else {
-            console.log('XHR error:', xhr.status, xhr.responseText);
             showNotification('Error submitting form', 'error');
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalText;
@@ -254,16 +249,12 @@
       if (existing) existing.remove();
 
       const notification = document.createElement('div');
-      notification.className = `notification fixed top-5 right-5 p-4 rounded-md shadow-lg z-50 ${type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-        }`;
+      notification.className = `notification fixed top-5 right-5 p-4 rounded-md shadow-lg z-50 ${type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`;
       notification.textContent = message;
-
       document.body.appendChild(notification);
 
       setTimeout(() => {
-        if (notification.parentNode) {
-          notification.parentNode.removeChild(notification);
-        }
+        if (notification.parentNode) notification.parentNode.removeChild(notification);
       }, 3000);
     }
   </script>
