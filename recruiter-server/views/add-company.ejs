@@ -1,207 +1,188 @@
 <%- include('layout/header') %>
 
-<div class="gradientyandb min-h-screen flex items-center justify-center">
-  <div class="max-w-lg mx-auto p-6 bg-blue-100 rounded-lg shadow-md md:w-full max-w-[800px] mx-auto">
-    <h2 class="text-2xl font-bold text-blue-800 mb-4">Add a New Company</h2>
-    <form id="companyForm"
-      action="<%= isEdit ? '/recruiter/edit-company/' + company._id : '/recruiter/add-company' %>" 
-      method="POST"
-      enctype="multipart/form-data"
-      class="space-y-4">
+    <div class="gradientyandb min-h-screen flex items-center justify-center">
+        <div class="max-w-lg mx-auto p-6 bg-blue-100 rounded-lg shadow-md md:w-full max-w-[800px] mx-auto">
+            <h2 class="text-2xl font-bold text-blue-800 mb-4">Add a New Company</h2>
+            <form id="companyForm"
+                action="<%= isEdit ? '/recruiter/edit-company/' + company._id : '/recruiter/add-company' %>"
+                method="POST" enctype="multipart/form-data" class="space-y-4">
 
-  <div>
-    <label for="companyName" class="block text-blue-700 font-medium">Company Name:</label>
-    <input type="text" id="companyName" name="companyName" required
-           value="<%= company ? company.companyName : '' %>"
-           class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-    <p class="text-red-500 text-sm hidden" id="companyNameError">Company name must be at least 3 characters.</p>
-  </div>
+                <div>
+                    <label for="companyName" class="block text-blue-700 font-medium">Company Name:</label>
+                    <input type="text" id="companyName" name="companyName" required
+                        value="<%= company ? company.companyName : '' %>"
+                        class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <p class="text-red-500 text-sm hidden" id="companyNameError">Company name must contain only
+                        alphabets.</p>
+                </div>
 
-  <div>
-    <label for="description" class="block text-blue-700 font-medium">Company Description:</label>
-    <textarea id="description" name="description" required
-              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"><%= company ? company.description : '' %></textarea>
-    <p class="text-red-500 text-sm hidden" id="descriptionError">Description must be at least 10 characters.</p>
-  </div>
+                <div>
+                    <label for="description" class="block text-blue-700 font-medium">Company Description:</label>
+                    <textarea id="description" name="description" required
+                        class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"><%= company ? company.description : '' %></textarea>
+                    <p class="text-red-500 text-sm hidden" id="descriptionError">Description must be at least 10
+                        characters.</p>
+                </div>
 
-  <div>
-    <label for="website" class="block text-blue-700 font-medium">Company Website:</label>
-    <input type="url" id="website" name="website" required
-           value="<%= company ? company.website : '' %>"
-           class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-    <p class="text-red-500 text-sm hidden" id="websiteError">Enter a valid website URL (https://example.com).</p>
-  </div>
+                <div>
+                    <label for="website" class="block text-blue-700 font-medium">Company Website:</label>
+                    <input type="url" id="website" name="website" required value="<%= company ? company.website : '' %>"
+                        class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <p class="text-red-500 text-sm hidden" id="websiteError">Enter a valid website URL
+                        (https://example.com).</p>
+                </div>
 
-  <div>
-    <label for="location" class="block text-blue-700 font-medium">Company Location:</label>
-    <input type="text" id="location" name="location" required
-           value="<%= company ? company.location : '' %>"
-           class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-    <p class="text-red-500 text-sm hidden" id="locationError">Location must be at least 3 characters.</p>
-  </div>
+                <div>
+                    <label for="location" class="block text-blue-700 font-medium">Company Location:</label>
+                    <input type="text" id="location" name="location" required
+                        value="<%= company ? company.location : '' %>"
+                        class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <p class="text-red-500 text-sm hidden" id="locationError">Location must contain only alphabets.</p>
+                </div>
 
-  <div>
-    <label for="logo" class="block text-blue-700 font-medium">Company Logo:</label>
-    <input type="file" id="logo" name="logo" accept="image/*"
-           <%= isEdit ? '' : 'required' %>
-           class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-    <p class="text-red-500 text-sm hidden" id="logoError">Only image files (JPG, PNG, GIF) are allowed.</p>
-    <% if (isEdit && company.logoId) { %>
-      <p class="text-sm text-gray-500 mt-1">Leave blank to keep existing logo.</p>
-    <% } %>
-  </div>
+                <div>
+                    <label for="logo" class="block text-blue-700 font-medium">Company Logo:</label>
+                    <input type="file" id="logo" name="logo" accept="image/*" <%=isEdit ? '' : 'required' %>
+                    class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500
+                    focus:outline-none">
+                    <p class="text-red-500 text-sm hidden" id="logoError">Only image files (JPG, PNG, GIF) are allowed.
+                    </p>
+                    <% if (isEdit && company.logoId) { %>
+                        <p class="text-sm text-gray-500 mt-1">Leave blank to keep existing logo.</p>
+                        <% } %>
+                </div>
 
-  <div>
-    <label for="proofDocument" class="block text-blue-700 font-medium">Verification Document:</label>
-    <input type="file" id="proofDocument" name="proofDocument" accept=".pdf,image/*"
-           <%= isEdit ? '' : 'required' %>
-           class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-    <p class="text-red-500 text-sm hidden" id="proofError">Upload a valid image or PDF document.</p>
-    <% if (isEdit && company.proofDocumentId) { %>
-      <p class="text-sm text-gray-500 mt-1">Leave blank to keep existing document.</p>
-    <% } %>
-  </div>
-  
+                <div>
+                    <label for="proofDocument" class="block text-blue-700 font-medium">Verification Document:</label>
+                    <input type="file" id="proofDocument" name="proofDocument" accept=".pdf,image/*" <%=isEdit ? ''
+                        : 'required' %>
+                    class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500
+                    focus:outline-none">
+                    <p class="text-red-500 text-sm hidden" id="proofError">Upload a valid image or PDF document.</p>
+                    <% if (isEdit && company.proofDocumentId) { %>
+                        <p class="text-sm text-gray-500 mt-1">Leave blank to keep existing document.</p>
+                        <% } %>
+                </div>
 
-  <button type="submit" id="submitBtn"
-          class="w-full bg-blue-700 text-yellow-400 font-semibold py-2 rounded-md hover:bg-blue-800 hover:text-yellow-300 transition-all">
-    <%= isEdit ? 'Update Company' : 'Add Company' %>
-  </button>
-</form>
+                <button type="submit" id="submitBtn"
+                    class="w-full bg-blue-700 text-yellow-400 font-semibold py-2 rounded-md hover:bg-blue-800 hover:text-yellow-300 transition-all">
+                    <%= isEdit ? 'Update Company' : 'Add Company' %>
+                </button>
+            </form>
+        </div>
+    </div>
 
-  </div>
-</div> 
+    <script>
+        document.getElementById("companyForm").addEventListener("submit", function (event) {
+            event.preventDefault();
 
-<script>
-document.getElementById("companyForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Always prevent default form submission
-    
-    let isValid = true;
+            let isValid = true;
 
-    const companyName = document.getElementById("companyName").value.trim();
-    const companyNameError = document.getElementById("companyNameError");
-    if (companyName.length < 3) {
-        companyNameError.classList.remove("hidden");
-        isValid = false;
-    } else {
-        companyNameError.classList.add("hidden");
-    }
+            const companyName = document.getElementById("companyName").value.trim();
+            const companyNameError = document.getElementById("companyNameError");
+            if (!/^[A-Za-z\s]{3,}$/.test(companyName)) {
+                companyNameError.classList.remove("hidden");
+                isValid = false;
+            } else {
+                companyNameError.classList.add("hidden");
+            }
 
-    const description = document.getElementById("description").value.trim();
-    const descriptionError = document.getElementById("descriptionError");
-    if (description.length < 10) {
-        descriptionError.classList.remove("hidden");
-        isValid = false;
-    } else {
-        descriptionError.classList.add("hidden");
-    }
+            const description = document.getElementById("description").value.trim();
+            const descriptionError = document.getElementById("descriptionError");
+            if (description.length < 10) {
+                descriptionError.classList.remove("hidden");
+                isValid = false;
+            } else {
+                descriptionError.classList.add("hidden");
+            }
 
-    const website = document.getElementById("website").value.trim();
-    const websiteError = document.getElementById("websiteError");
-    const urlPattern = /^(https?:\/\/)?([\w-]+)+([\w.-]+)+([\w]*)?(:\d+)?(\/[\w-]*)*\/?$/;
-    if (!urlPattern.test(website)) {
-        websiteError.classList.remove("hidden");
-        isValid = false;
-    } else {
-        websiteError.classList.add("hidden");
-    }
+            const website = document.getElementById("website").value.trim();
+            const websiteError = document.getElementById("websiteError");
+            const urlPattern = /^(https?:\/\/)?([\w-]+)+([\w.-]+)+([\w]*)?(:\d+)?(\/[\w-]*)*\/?$/;
+            if (!urlPattern.test(website)) {
+                websiteError.classList.remove("hidden");
+                isValid = false;
+            } else {
+                websiteError.classList.add("hidden");
+            }
 
-    const location = document.getElementById("location").value.trim();
-    const locationError = document.getElementById("locationError");
-    if (location.length < 3) {
-        locationError.classList.remove("hidden");
-        isValid = false;
-    } else {
-        locationError.classList.add("hidden");
-    }
+            const location = document.getElementById("location").value.trim();
+            const locationError = document.getElementById("locationError");
+            if (!/^[A-Za-z\s]{3,}$/.test(location)) {
+                locationError.classList.remove("hidden");
+                isValid = false;
+            } else {
+                locationError.classList.add("hidden");
+            }
 
-    const logo = document.getElementById("logo").files[0];
-    const logoError = document.getElementById("logoError");
-    if (logo) {
-        const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
-        if (!allowedTypes.includes(logo.type)) {
-            logoError.classList.remove("hidden");
-            isValid = false;
-        } else {
-            logoError.classList.add("hidden");
-        }
-    }
-
-    if (!isValid) {
-        return;
-    }
-
-    // Submit form via AJAX
-    submitCompanyForm();
-});
-
-function submitCompanyForm() {
-    const form = document.getElementById("companyForm");
-    const submitBtn = document.getElementById("submitBtn");
-    const originalText = submitBtn.innerHTML;
-    
-    // Show loading state
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '⏳ Processing...';
-
-    // Create FormData for file upload
-    const formData = new FormData(form);
-
-    // Create XMLHttpRequest
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', form.action, true);
-    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                const response = JSON.parse(xhr.responseText);
-                if (response.success) {
-                    showNotification(response.message, 'success');
-                    // Reset form
-                    form.reset();
-                    // Redirect after 2 seconds
-                    setTimeout(() => {
-                        window.location.href = '/recruiter/companies';
-                    }, 2000);
+            const logo = document.getElementById("logo").files[0];
+            const logoError = document.getElementById("logoError");
+            if (logo) {
+                const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+                if (!allowedTypes.includes(logo.type)) {
+                    logoError.classList.remove("hidden");
+                    isValid = false;
                 } else {
-                    showNotification(response.message, 'error');
-                    // Reset button
+                    logoError.classList.add("hidden");
+                }
+            }
+
+            if (!isValid) return;
+
+            submitCompanyForm();
+        });
+
+        function submitCompanyForm() {
+            const form = document.getElementById("companyForm");
+            const submitBtn = document.getElementById("submitBtn");
+            const originalText = submitBtn.innerHTML;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '⏳ Processing...';
+
+            const formData = new FormData(form);
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', form.action, true);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = originalText;
+
+                    if (xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            showNotification(response.message, 'success');
+                            form.reset();
+                            setTimeout(() => window.location.href = '/recruiter/companies', 2000);
+                        } else {
+                            showNotification(response.message, 'error');
+                        }
+                    } else {
+                        showNotification('Error submitting form', 'error');
+                    }
                 }
-            } else {
-                showNotification('Error submitting form', 'error');
-                // Reset button
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
-            }
-        }
-    };
-    
-    xhr.send(formData);
-}
+            };
 
-function showNotification(message, type) {
-    // Remove existing notifications
-    const existing = document.querySelector('.notification');
-    if (existing) existing.remove();
-    
-    const notification = document.createElement('div');
-    notification.className = `notification fixed top-5 right-5 p-4 rounded-md shadow-lg z-50 ${
-        type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-    }`;
-    notification.textContent = message;
-    
-    document.body.appendChild(notification);
-    
-    // Auto remove after 3 seconds
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.parentNode.removeChild(notification);
+            xhr.send(formData);
         }
-    }, 3000);
-}
-</script>
 
-<%- include('layout/footer') %>
+        function showNotification(message, type) {
+            const existing = document.querySelector('.notification');
+            if (existing) existing.remove();
+
+            const notification = document.createElement('div');
+            notification.className = `notification fixed top-5 right-5 p-4 rounded-md shadow-lg z-50 ${type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+                }`;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentNode) notification.parentNode.removeChild(notification);
+            }, 3000);
+        }
+    </script>
+
+    <%- include('layout/footer') %>

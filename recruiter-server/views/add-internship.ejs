@@ -1,279 +1,240 @@
 <%- include('layout/header') %>
 
-<div class="gradientyandb min-h-screen flex items-center justify-center">
-  <div class="max-w-lg mx-auto p-6 bg-blue-100 rounded-lg shadow-md md:w-full max-w-[800px] mx-auto">
-    <h2 class="text-2xl font-bold text-blue-800 mb-4">Post a New Internship</h2>
-    <form id="internshipForm" action="<%= isEdit ? '/recruiter/edit-internship/' + internship._id : '/recruiter/add-internship' %>" method="POST" class="space-y-4">
+  <div class="gradientyandb min-h-screen flex items-center justify-center">
+    <div class="max-w-lg mx-auto p-6 bg-blue-100 rounded-lg shadow-md md:w-full max-w-[800px]">
+      <h2 class="text-2xl font-bold text-blue-800 mb-4">Post a New Internship</h2>
+      <form id="internshipForm"
+        action="<%= isEdit ? '/recruiter/edit-internship/' + internship._id : '/recruiter/add-internship' %>"
+        method="POST" class="space-y-4">
 
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label for="intTitle" class="block text-blue-700 font-medium">Title</label>
-          <input type="text" id="intTitle" name="intTitle" required
-                 value="<%= isEdit && internship ? internship.intTitle : '' %>"
-                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="titleError">Title must be at least 5 characters.</p>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="intTitle" class="block text-blue-700 font-medium">Title</label>
+            <input type="text" id="intTitle" name="intTitle" required
+              value="<%= isEdit && internship ? internship.intTitle : '' %>"
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <p class="text-red-500 text-sm hidden" id="titleError">Title must contain only alphabets.</p>
+          </div>
+          <div>
+            <label for="intDescription" class="block text-blue-700 font-medium">Description</label>
+            <input type="text" id="intDescription" name="intDescription" required
+              value="<%= isEdit && internship ? internship.intDescription : '' %>"
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <p class="text-red-500 text-sm hidden" id="descriptionError">Description must be at least 10 characters.</p>
+          </div>
         </div>
-        <div>
-          <label for="intDescription" class="block text-blue-700 font-medium">Description</label>
-          <input type="text" id="intDescription" name="intDescription" required
-                 value="<%= isEdit && internship ? internship.intDescription : '' %>"
-                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="descriptionError">Description must be at least 10 characters.</p>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="intRequirements" class="block text-blue-700 font-medium">Requirements</label>
+            <input type="text" id="intRequirements" name="intRequirements" required
+              value="<%= isEdit && internship ? internship.intRequirements : '' %>"
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <p class="text-red-500 text-sm hidden" id="requirementsError">Requirements must be at least 5 characters.
+            </p>
+          </div>
+          <div>
+            <label for="intStipend" class="block text-blue-700 font-medium">Stipend (per month)</label>
+            <input type="number" id="intStipend" name="intStipend" required min="0"
+              value="<%= isEdit && internship ? internship.intStipend : '' %>"
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <p class="text-red-500 text-sm hidden" id="stipendError">Stipend must be a positive number.</p>
+          </div>
         </div>
-      </div>
-    
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label for="intRequirements" class="block text-blue-700 font-medium">Requirements</label>
-          <input type="text" id="intRequirements" name="intRequirements" required
-                 value="<%= isEdit && internship ? internship.intRequirements : '' %>"
-                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="requirementsError">Requirements must be at least 5 characters.</p>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="intLocation" class="block text-blue-700 font-medium">Location</label>
+            <input type="text" id="intLocation" name="intLocation" required
+              value="<%= isEdit && internship ? internship.intLocation : '' %>"
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <p class="text-red-500 text-sm hidden" id="locationError">Location must contain only alphabets.</p>
+          </div>
+          <div>
+            <label for="intDuration" class="block text-blue-700 font-medium">Internship Duration (in months)</label>
+            <input type="number" id="intDuration" name="intDuration" required min="1"
+              value="<%= isEdit && internship ? internship.intDuration : '' %>"
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <p class="text-red-500 text-sm hidden" id="durationError">Duration must be at least 1 month.</p>
+          </div>
         </div>
-        <div>
-          <label for="intStipend" class="block text-blue-700 font-medium">Stipend (per month)</label>
-          <input type="number" id="intStipend" name="intStipend" required min="0"
-                 value="<%= isEdit && internship ? internship.intStipend : '' %>"
-                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="stipendError">Stipend must be a positive number.</p>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="intExperience" class="block text-blue-700 font-medium">Experience Level (in years)</label>
+            <input type="number" id="intExperience" name="intExperience" required min="0"
+              value="<%= isEdit && internship ? internship.intExperience : '' %>"
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <p class="text-red-500 text-sm hidden" id="experienceError">Experience must be 0 or more years.</p>
+          </div>
+          <div>
+            <label for="intPositions" class="block text-blue-700 font-medium">No of Positions</label>
+            <input type="number" id="intPositions" name="intPositions" required min="1"
+              value="<%= isEdit && internship ? internship.intPositions : '' %>"
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <p class="text-red-500 text-sm hidden" id="positionsError">Must be at least 1 position.</p>
+          </div>
         </div>
-      </div>
-    
-      <div class="grid grid-cols-2 gap-4">
+
         <div>
-          <label for="intLocation" class="block text-blue-700 font-medium">Location</label>
-          <input type="text" id="intLocation" name="intLocation" required
-                 value="<%= isEdit && internship ? internship.intLocation : '' %>"
-                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="locationError">Location must be at least 3 characters.</p>
+          <div>
+            <label for="intExpiry" class="block text-blue-700 font-medium">Application Deadline</label>
+            <input type="date" id="intExpiry" name="intExpiry" required
+              value="<%= isEdit && internship ? internship.intExpiry.toISOString().substring(0, 10) : '' %>"
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <p class="text-red-500 text-sm hidden" id="expiryError">Application deadline must be today or in the future.
+            </p>
+          </div>
+
+          <div>
+            <label for="intCompany" class="block text-blue-700 font-medium">Company</label>
+            <select id="intCompany" name="intCompany" required
+              class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <option value="">Select a company</option>
+              <% companies.forEach(company=> { %>
+                <option value="<%= company._id %>" <%=isEdit && internship && internship.intCompany &&
+                  internship.intCompany._id.toString()===company._id.toString() ? 'selected' : '' %>>
+                  <%= company.companyName %>
+                </option>
+                <% }); %>
+            </select>
+            <p class="text-red-500 text-sm hidden" id="companyError">Please select a company.</p>
+          </div>
         </div>
-        <div>
-          <label for="intDuration" class="block text-blue-700 font-medium">Internship Duration (in months)</label>
-          <input type="number" id="intDuration" name="intDuration" required min="1"
-                 value="<%= isEdit && internship ? internship.intDuration : '' %>"
-                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="durationError">Duration must be at least 1 month.</p>
-        </div>
-      </div>
-    
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label for="intExperience" class="block text-blue-700 font-medium">Experience Level (in years)</label>
-          <input type="number" id="intExperience" name="intExperience" required min="0"
-                 value="<%= isEdit && internship ? internship.intExperience : '' %>"
-                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="experienceError">Experience must be 0 or more years.</p>
-        </div>
-        <div>
-          <label for="intPositions" class="block text-blue-700 font-medium">No of Positions</label>
-          <input type="number" id="intPositions" name="intPositions" required min="1"
-                 value="<%= isEdit && internship ? internship.intPositions : '' %>"
-                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="positionsError">Must be at least 1 position.</p>
-        </div>
-      </div>
-    
-      <div>
-        <div>
-          <label for="intExpiry" class="block text-blue-700 font-medium">Application Deadline</label>
-          <input type="date" id="intExpiry" name="intExpiry" required
-                 value="<%= isEdit && internship ? internship.intExpiry.toISOString().substring(0, 10) : '' %>"
-                 class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <p class="text-red-500 text-sm hidden" id="expiryError">Application deadline must be today or in the future.</p>
-        </div>
-        
-        <div>
-        <label for="intCompany" class="block text-blue-700 font-medium">Company</label>
-        <select id="intCompany" name="intCompany" required
-                class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <option value="">Select a company</option>
-          <% companies.forEach(company => { %>
-            <option value="<%= company._id %>"
-              <%= isEdit && internship && internship.intCompany && internship.intCompany._id.toString() === company._id.toString() ? 'selected' : '' %>>
-              <%= company.companyName %>
-            </option>
-          <% }); %>
-        </select>
-        <p class="text-red-500 text-sm hidden" id="companyError">Please select a company.</p>
-      </div>
-      </div>
-    
-      <button type="submit" id="submitBtn"
-              class="w-full bg-blue-700 text-yellow-400 font-semibold py-2 rounded-md hover:bg-blue-800 hover:text-yellow-300 transition-all">
-        <%= isEdit ? 'Update Internship' : 'Post New Internship' %>
-      </button>
-    
-    </form>
-    
+
+        <button type="submit" id="submitBtn"
+          class="w-full bg-blue-700 text-yellow-400 font-semibold py-2 rounded-md hover:bg-blue-800 hover:text-yellow-300 transition-all">
+          <%= isEdit ? 'Update Internship' : 'Post New Internship' %>
+        </button>
+
+      </form>
+    </div>
   </div>
-</div>
 
-<script>
-document.getElementById("internshipForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Always prevent default form submission
-    
-    console.log('Internship form submission started');
-    let isValid = true;
+  <script>
+    document.getElementById("internshipForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      let isValid = true;
 
-    function validateField(id, minLength, errorId) {
+      function validateAlphabets(id, errorId) {
+        const value = document.getElementById(id).value.trim();
+        const regex = /^[A-Za-z\s]+$/;
+        const errorElement = document.getElementById(errorId);
+        if (!regex.test(value) || value.length === 0) {
+          errorElement.classList.remove("hidden");
+          isValid = false;
+        } else {
+          errorElement.classList.add("hidden");
+        }
+      }
+
+      function validateFieldLength(id, minLength, errorId) {
         const value = document.getElementById(id).value.trim();
         const errorElement = document.getElementById(errorId);
-        console.log(`Validating ${id}:`, { value, length: value.length, minLength, errorElement });
-        
         if (value.length < minLength) {
-            errorElement.classList.remove("hidden");
-            isValid = false;
-            console.log(`Showing error for ${id}`);
+          errorElement.classList.remove("hidden");
+          isValid = false;
         } else {
-            errorElement.classList.add("hidden");
-            console.log(`Hiding error for ${id}`);
+          errorElement.classList.add("hidden");
         }
-    }
+      }
 
-    function validateNumberField(id, minValue, errorId) {
+      function validateNumberField(id, minValue, errorId) {
         const value = document.getElementById(id).value;
         const errorElement = document.getElementById(errorId);
-        console.log(`Validating number ${id}:`, { value, minValue, errorElement });
-        
         if (value === "" || value < minValue) {
-            errorElement.classList.remove("hidden");
-            isValid = false;
-            console.log(`Showing error for ${id}`);
+          errorElement.classList.remove("hidden");
+          isValid = false;
         } else {
-            errorElement.classList.add("hidden");
-            console.log(`Hiding error for ${id}`);
+          errorElement.classList.add("hidden");
         }
-    }
+      }
 
-    function validateDateField(id, errorId) {
+      function validateDateField(id, errorId) {
         const value = document.getElementById(id).value;
         const errorElement = document.getElementById(errorId);
         const selectedDate = new Date(value);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0); // Reset time to start of day for accurate comparison
-        
-        console.log('Date validation:', { value, selectedDate, today, isPast: selectedDate < today });
-        
+        const today = new Date(); today.setHours(0, 0, 0, 0);
         if (value === "" || selectedDate < today) {
-            errorElement.classList.remove("hidden");
-            isValid = false;
-            console.log('Showing error for date field');
+          errorElement.classList.remove("hidden");
+          isValid = false;
         } else {
-            errorElement.classList.add("hidden");
-            console.log('Hiding error for date field');
+          errorElement.classList.add("hidden");
         }
-    }
+      }
 
-    validateField("intTitle", 5, "titleError");
-    validateField("intDescription", 10, "descriptionError");
-    validateField("intRequirements", 5, "requirementsError");
-    validateField("intLocation", 3, "locationError");
+      validateAlphabets("intTitle", "titleError");
+      validateFieldLength("intDescription", 10, "descriptionError");
+      validateFieldLength("intRequirements", 5, "requirementsError");
+      validateAlphabets("intLocation", "locationError");
 
-    validateNumberField("intStipend", 0, "stipendError");
-    validateNumberField("intDuration", 1, "durationError");
-    validateNumberField("intExperience", 0, "experienceError");
-    validateNumberField("intPositions", 1, "positionsError");
-    validateDateField("intExpiry", "expiryError");
+      validateNumberField("intStipend", 0, "stipendError");
+      validateNumberField("intDuration", 1, "durationError");
+      validateNumberField("intExperience", 0, "experienceError");
+      validateNumberField("intPositions", 1, "positionsError");
+      validateDateField("intExpiry", "expiryError");
 
-    const company = document.getElementById("intCompany").value;
-    console.log('Company validation:', { company });
-    
-    if (company === "") {
+      const company = document.getElementById("intCompany").value;
+      if (company === "") {
         document.getElementById("companyError").classList.remove("hidden");
         isValid = false;
-        console.log('Showing error for company');
-    } else {
+      } else {
         document.getElementById("companyError").classList.add("hidden");
-        console.log('Hiding error for company');
-    }
+      }
 
-    console.log('Internship validation complete. isValid:', isValid);
-    
-    if (!isValid) {
-        console.log('Internship form validation failed, not submitting');
-        return;
-    }
+      if (!isValid) return;
 
-    console.log('Internship form validation passed, submitting...');
-    // Submit form via AJAX
-    submitInternshipForm();
-});
+      submitInternshipForm();
+    });
 
-function submitInternshipForm() {
-    const form = document.getElementById("internshipForm");
-    const submitBtn = document.getElementById("submitBtn");
-    const originalText = submitBtn.innerHTML;
-    
-    console.log('submitInternshipForm called');
-    
-    // Show loading state
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '⏳ Processing...';
+    function submitInternshipForm() {
+      const form = document.getElementById("internshipForm");
+      const submitBtn = document.getElementById("submitBtn");
+      const originalText = submitBtn.innerHTML;
 
-    // Create FormData
-    const formData = new FormData(form);
-    
-    // Debug: Log form data
-    console.log('Internship form data entries:');
-    for (let [key, value] of formData.entries()) {
-        console.log(key, value);
-    }
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '⏳ Processing...';
 
-    // Create XMLHttpRequest
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', form.action, true);
-    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    
-    xhr.onreadystatechange = function() {
+      const formData = new FormData(form);
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', form.action, true);
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+      xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                const response = JSON.parse(xhr.responseText);
-                if (response.success) {
-                    showNotification(response.message, 'success');
-                    // Reset form
-                    form.reset();
-                    // Redirect after 2 seconds
-                    setTimeout(() => {
-                        window.location.href = '/recruiter/internships';
-                    }, 2000);
-                } else {
-                    showNotification(response.message, 'error');
-                    // Reset button
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalText;
-                }
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+
+          if (xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+            if (response.success) {
+              showNotification(response.message, 'success');
+              form.reset();
+              setTimeout(() => { window.location.href = '/recruiter/internships'; }, 2000);
             } else {
-                showNotification('Error submitting form', 'error');
-                // Reset button
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
+              showNotification(response.message, 'error');
             }
+          } else {
+            showNotification('Error submitting form', 'error');
+          }
         }
-    };
-    
-    xhr.send(formData);
-}
+      };
 
-function showNotification(message, type) {
-    // Remove existing notifications
-    const existing = document.querySelector('.notification');
-    if (existing) existing.remove();
-    
-    const notification = document.createElement('div');
-    notification.className = `notification fixed top-5 right-5 p-4 rounded-md shadow-lg z-50 ${
-        type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-    }`;
-    notification.textContent = message;
-    
-    document.body.appendChild(notification);
-    
-    // Auto remove after 3 seconds
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.parentNode.removeChild(notification);
-        }
-    }, 3000);
-}
-</script>
+      xhr.send(formData);
+    }
 
-<%- include('layout/footer') %>
+    function showNotification(message, type) {
+      const existing = document.querySelector('.notification');
+      if (existing) existing.remove();
+
+      const notification = document.createElement('div');
+      notification.className = `notification fixed top-5 right-5 p-4 rounded-md shadow-lg z-50 ${type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+
+      setTimeout(() => { if (notification.parentNode) notification.parentNode.removeChild(notification); }, 3000);
+    }
+  </script>
+
+  <%- include('layout/footer') %>
