@@ -101,7 +101,7 @@ router.post("/add-company", upload.fields([{ name: "logo" }, { name: "proofDocum
 });
 
 
-router.post("/add-job", async (req, res) => {
+router.post("/add-job", upload.none(), async (req, res) => {
     try {
         const {
             jobTitle,
@@ -119,6 +119,18 @@ router.post("/add-job", async (req, res) => {
         const userId = req.session.userId;
 
         console.log("Received Job Data:", req.body);
+        console.log("Individual field values:", {
+            jobTitle: !!jobTitle,
+            jobDescription: !!jobDescription,
+            jobRequirements: !!jobRequirements,
+            jobSalary: !!jobSalary,
+            jobLocation: !!jobLocation,
+            jobType: !!jobType,
+            jobExperience: !!jobExperience,
+            noofPositions: !!noofPositions,
+            jobCompany: !!jobCompany,
+            jobExpiry: !!jobExpiry
+        });
 
         if (
             !jobTitle || !jobDescription || !jobRequirements || !jobSalary ||
@@ -154,7 +166,7 @@ router.post("/add-job", async (req, res) => {
             noofPositions: parseInt(noofPositions),
             jobCompany: new mongoose.Types.ObjectId(jobCompany),
             createdBy: userId,
-            jobExpiry 
+            jobExpiry: new Date(jobExpiry)
         });
 
         await newJob.save();
@@ -225,7 +237,7 @@ router.get('/jobs', async (req, res) => {
 });
 
 
-router.post('/add-internship', async (req, res) => {
+router.post('/add-internship', upload.none(), async (req, res) => {
     try {
         const {
             intTitle,
@@ -274,7 +286,7 @@ router.post('/add-internship', async (req, res) => {
             intPositions: parseInt(intPositions),
             intCompany: companyExists._id,
             createdBy: req.session.userId,
-            intExpiry
+            intExpiry: new Date(intExpiry)
         });
 
         await newInternship.save();

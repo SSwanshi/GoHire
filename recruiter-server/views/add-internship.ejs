@@ -79,6 +79,7 @@
           <input type="date" id="intExpiry" name="intExpiry" required
                  value="<%= isEdit && internship ? internship.intExpiry.toISOString().substring(0, 10) : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <p class="text-red-500 text-sm hidden" id="expiryError">Application deadline must be today or in the future.</p>
         </div>
         
         <div>
@@ -111,27 +112,55 @@
 document.getElementById("internshipForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Always prevent default form submission
     
+    console.log('Internship form submission started');
     let isValid = true;
 
     function validateField(id, minLength, errorId) {
         const value = document.getElementById(id).value.trim();
         const errorElement = document.getElementById(errorId);
+        console.log(`Validating ${id}:`, { value, length: value.length, minLength, errorElement });
+        
         if (value.length < minLength) {
             errorElement.classList.remove("hidden");
             isValid = false;
+            console.log(`Showing error for ${id}`);
         } else {
             errorElement.classList.add("hidden");
+            console.log(`Hiding error for ${id}`);
         }
     }
 
     function validateNumberField(id, minValue, errorId) {
         const value = document.getElementById(id).value;
         const errorElement = document.getElementById(errorId);
+        console.log(`Validating number ${id}:`, { value, minValue, errorElement });
+        
         if (value === "" || value < minValue) {
             errorElement.classList.remove("hidden");
             isValid = false;
+            console.log(`Showing error for ${id}`);
         } else {
             errorElement.classList.add("hidden");
+            console.log(`Hiding error for ${id}`);
+        }
+    }
+
+    function validateDateField(id, errorId) {
+        const value = document.getElementById(id).value;
+        const errorElement = document.getElementById(errorId);
+        const selectedDate = new Date(value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Reset time to start of day for accurate comparison
+        
+        console.log('Date validation:', { value, selectedDate, today, isPast: selectedDate < today });
+        
+        if (value === "" || selectedDate < today) {
+            errorElement.classList.remove("hidden");
+            isValid = false;
+            console.log('Showing error for date field');
+        } else {
+            errorElement.classList.add("hidden");
+            console.log('Hiding error for date field');
         }
     }
 
@@ -144,19 +173,28 @@ document.getElementById("internshipForm").addEventListener("submit", function(ev
     validateNumberField("intDuration", 1, "durationError");
     validateNumberField("intExperience", 0, "experienceError");
     validateNumberField("intPositions", 1, "positionsError");
+    validateDateField("intExpiry", "expiryError");
 
     const company = document.getElementById("intCompany").value;
+    console.log('Company validation:', { company });
+    
     if (company === "") {
         document.getElementById("companyError").classList.remove("hidden");
         isValid = false;
+        console.log('Showing error for company');
     } else {
         document.getElementById("companyError").classList.add("hidden");
+        console.log('Hiding error for company');
     }
 
+    console.log('Internship validation complete. isValid:', isValid);
+    
     if (!isValid) {
+        console.log('Internship form validation failed, not submitting');
         return;
     }
 
+    console.log('Internship form validation passed, submitting...');
     // Submit form via AJAX
     submitInternshipForm();
 });
@@ -166,12 +204,20 @@ function submitInternshipForm() {
     const submitBtn = document.getElementById("submitBtn");
     const originalText = submitBtn.innerHTML;
     
+    console.log('submitInternshipForm called');
+    
     // Show loading state
     submitBtn.disabled = true;
     submitBtn.innerHTML = '⏳ Processing...';
 
     // Create FormData
     const formData = new FormData(form);
+    
+    // Debug: Log form data
+    console.log('Internship form data entries:');
+    for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+    }
 
     // Create XMLHttpRequest
     const xhr = new XMLHttpRequest();

@@ -11,6 +11,7 @@
           <input type="text" id="jobTitle" name="jobTitle" required
                  value="<%= isEdit ? job.jobTitle : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <p class="text-red-500 text-sm hidden" id="titleError">Title must be at least 5 characters.</p>
         </div>
     
         <div>
@@ -18,6 +19,7 @@
           <input type="text" id="jobDescription" name="jobDescription" required
                  value="<%= isEdit ? job.jobDescription : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <p class="text-red-500 text-sm hidden" id="descriptionError">Description must be at least 10 characters.</p>
         </div>
       </div>
     
@@ -27,6 +29,7 @@
           <input type="text" id="jobRequirements" name="jobRequirements" required
                  value="<%= isEdit ? job.jobRequirements : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <p class="text-red-500 text-sm hidden" id="requirementsError">Requirements must be at least 5 characters.</p>
         </div>
     
         <div>
@@ -34,6 +37,7 @@
           <input type="number" id="jobSalary" name="jobSalary" required min="0"
                  value="<%= isEdit ? job.jobSalary : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <p class="text-red-500 text-sm hidden" id="salaryError">Salary must be a positive number.</p>
         </div>
       </div>
     
@@ -43,6 +47,7 @@
           <input type="text" id="jobLocation" name="jobLocation" required
                  value="<%= isEdit ? job.jobLocation : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <p class="text-red-500 text-sm hidden" id="locationError">Location must be at least 3 characters.</p>
         </div>
     
         <div>
@@ -50,6 +55,7 @@
           <input type="text" id="jobType" name="jobType" required
                  value="<%= isEdit ? job.jobType : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <p class="text-red-500 text-sm hidden" id="jobTypeError">Job type is required.</p>
         </div>
       </div>
     
@@ -59,6 +65,7 @@
           <input type="number" id="jobExperience" name="jobExperience" required min="0"
                  value="<%= isEdit ? job.jobExperience : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <p class="text-red-500 text-sm hidden" id="experienceError">Experience must be 0 or more years.</p>
         </div>
     
         <div>
@@ -66,6 +73,7 @@
           <input type="number" id="noofPositions" name="noofPositions" required min="1"
                  value="<%= isEdit ? job.noofPositions : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <p class="text-red-500 text-sm hidden" id="positionsError">Must be at least 1 position.</p>
         </div>
       </div>
     
@@ -76,6 +84,7 @@
           <input type="date" id="jobExpiry" name="jobExpiry" required
                  value="<%= isEdit ? job.jobExpiry.toISOString().substring(0, 10) : '' %>"
                  class="w-full mt-1 p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <p class="text-red-500 text-sm hidden" id="expiryError">Application deadline must be today or in the future.</p>
         </div>
         
         
@@ -90,6 +99,7 @@
             </option>
           <% }); %>
         </select>
+        <p class="text-red-500 text-sm hidden" id="companyError">Please select a company.</p>
       </div>
       </div>
     
@@ -107,16 +117,21 @@
 document.getElementById("jobForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Always prevent default form submission
     
+    console.log('Form submission started');
     let isValid = true;
 
     function validateField(id, minLength, errorId) {
         const value = document.getElementById(id).value.trim();
         const errorElement = document.getElementById(errorId);
+        console.log(`Validating ${id}:`, { value, length: value.length, minLength, errorElement });
+        
         if (value.length < minLength) {
             errorElement.classList.remove("hidden");
             isValid = false;
+            console.log(`Showing error for ${id}`);
         } else {
             errorElement.classList.add("hidden");
+            console.log(`Hiding error for ${id}`);
         }
     }
 
@@ -131,6 +146,25 @@ document.getElementById("jobForm").addEventListener("submit", function(event) {
         }
     }
 
+    function validateDateField(id, errorId) {
+        const value = document.getElementById(id).value;
+        const errorElement = document.getElementById(errorId);
+        const selectedDate = new Date(value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Reset time to start of day for accurate comparison
+        
+        console.log('Date validation:', { value, selectedDate, today, isPast: selectedDate < today });
+        
+        if (value === "" || selectedDate < today) {
+            errorElement.classList.remove("hidden");
+            isValid = false;
+            console.log('Showing error for date field');
+        } else {
+            errorElement.classList.add("hidden");
+            console.log('Hiding error for date field');
+        }
+    }
+
     validateField("jobTitle", 5, "titleError");
     validateField("jobDescription", 10, "descriptionError");
     validateField("jobRequirements", 5, "requirementsError");
@@ -140,6 +174,7 @@ document.getElementById("jobForm").addEventListener("submit", function(event) {
     validateNumberField("jobSalary", 0, "salaryError");
     validateNumberField("jobExperience", 0, "experienceError");
     validateNumberField("noofPositions", 1, "positionsError");
+    validateDateField("jobExpiry", "expiryError");
 
     const company = document.getElementById("jobCompany").value;
     if (company === "") {
@@ -149,10 +184,14 @@ document.getElementById("jobForm").addEventListener("submit", function(event) {
         document.getElementById("companyError").classList.add("hidden");
     }
 
+    console.log('Validation complete. isValid:', isValid);
+    
     if (!isValid) {
+        console.log('Form validation failed, not submitting');
         return;
     }
 
+    console.log('Form validation passed, submitting...');
     // Submit form via AJAX
     submitJobForm();
 });
@@ -162,12 +201,20 @@ function submitJobForm() {
     const submitBtn = document.getElementById("submitBtn");
     const originalText = submitBtn.innerHTML;
     
+    console.log('submitJobForm called');
+    
     // Show loading state
     submitBtn.disabled = true;
     submitBtn.innerHTML = '⏳ Processing...';
 
     // Create FormData
     const formData = new FormData(form);
+    
+    // Debug: Log form data
+    console.log('Form data entries:');
+    for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+    }
 
     // Create XMLHttpRequest
     const xhr = new XMLHttpRequest();
@@ -175,9 +222,14 @@ function submitJobForm() {
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     
     xhr.onreadystatechange = function() {
+        console.log('XHR readyState:', xhr.readyState, 'status:', xhr.status);
+        
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
+                console.log('Response received:', xhr.responseText);
                 const response = JSON.parse(xhr.responseText);
+                console.log('Parsed response:', response);
+                
                 if (response.success) {
                     showNotification(response.message, 'success');
                     // Reset form
@@ -193,6 +245,7 @@ function submitJobForm() {
                     submitBtn.innerHTML = originalText;
                 }
             } else {
+                console.log('XHR error:', xhr.status, xhr.responseText);
                 showNotification('Error submitting form', 'error');
                 // Reset button
                 submitBtn.disabled = false;
