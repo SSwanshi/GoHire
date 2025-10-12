@@ -181,7 +181,13 @@
                   <!-- Company Info -->
                   <div class="flex items-start space-x-4 flex-1">
                     <div class="flex-shrink-0">
-                      <img src="/logo/<%= job.jobCompany.logoId %>" alt="<%= job.jobCompany.companyName %>" class="h-14 w-14 rounded-lg object-contain border border-gray-200">
+                      <% if (job.jobCompany && job.jobCompany.logoId) { %>
+                        <img src="/logo/<%= job.jobCompany.logoId %>" alt="<%= job.jobCompany.companyName || 'Company' %>" class="h-14 w-14 rounded-lg object-contain border border-gray-200">
+                      <% } else { %>
+                        <div class="h-14 w-14 bg-gray-300 rounded-lg flex items-center justify-center border border-gray-200">
+                          <span class="text-gray-500 text-xs font-bold">N/A</span>
+                        </div>
+                      <% } %>
                     </div>
                     <div class="flex-1 min-w-0">
                       <h3 class="text-lg font-bold text-gray-900 mb-1">
@@ -190,7 +196,7 @@
                       
                       <div class="flex flex-wrap items-center gap-2 text-sm text-gray-600 mb-2">
                         <span class="font-medium">
-                          <%= job.jobCompany.companyName %>
+                          <%= job.jobCompany ? job.jobCompany.companyName : 'Company Not Available' %>
                         </span>
                         <span class="text-gray-400">•</span>
                         <span class="flex items-center">
@@ -278,7 +284,13 @@
                   <!-- Company Info -->
                   <div class="flex items-start space-x-4 flex-1">
                     <div class="flex-shrink-0">
-                      <img src="/logo/<%= int.intCompany.logoId %>" alt="<%= int.intCompany.companyName %>" class="h-14 w-14 rounded-lg object-contain border border-gray-200">
+                      <% if (int.intCompany && int.intCompany.logoId) { %>
+                        <img src="/logo/<%= int.intCompany.logoId %>" alt="<%= int.intCompany.companyName || 'Company' %>" class="h-14 w-14 rounded-lg object-contain border border-gray-200">
+                      <% } else { %>
+                        <div class="h-14 w-14 bg-gray-300 rounded-lg flex items-center justify-center border border-gray-200">
+                          <span class="text-gray-500 text-xs font-bold">N/A</span>
+                        </div>
+                      <% } %>
                     </div>
                     <div class="flex-1 min-w-0">
                       <h3 class="text-lg font-bold text-gray-900 mb-1">
@@ -287,7 +299,7 @@
                       
                       <div class="flex flex-wrap items-center gap-2 text-sm text-gray-600 mb-2">
                         <span class="font-medium">
-                          <%= int.intCompany.companyName %>
+                          <%= int.intCompany ? int.intCompany.companyName : 'Company Not Available' %>
                         </span>
                         <span class="text-gray-400">•</span>
                         <span class="flex items-center">

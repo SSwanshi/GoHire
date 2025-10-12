@@ -116,14 +116,20 @@ id="navbar">
             <!-- Company Header Section -->
             <div class="bg-blue-50 p-6 flex items-center space-x-4 border-b border-gray-200">
                 <div class="flex-shrink-0">
-                    <img src="/logo/<%= job.jobCompany.logoId %>" 
-                         alt="<%= job.jobCompany.companyName %>" 
-                         class="h-16 w-16 rounded-lg object-contain border border-gray-200">
+                    <% if (job.jobCompany && job.jobCompany.logoId) { %>
+                        <img src="/logo/<%= job.jobCompany.logoId %>" 
+                             alt="<%= job.jobCompany.companyName || 'Company' %>" 
+                             class="h-16 w-16 rounded-lg object-contain border border-gray-200">
+                    <% } else { %>
+                        <div class="h-16 w-16 bg-gray-300 rounded-lg flex items-center justify-center border border-gray-200">
+                            <span class="text-gray-500 text-sm font-bold">N/A</span>
+                        </div>
+                    <% } %>
                 </div>
                 <div>
                     <h1 class="text-2xl font-bold text-gray-800"><%= job.jobTitle %></h1>
                     <div class="flex items-center mt-1">
-                        <span class="text-lg font-medium text-blue-600"><%= job.jobCompany.companyName %></span>
+                        <span class="text-lg font-medium text-blue-600"><%= job.jobCompany ? job.jobCompany.companyName : 'Company Not Available' %></span>
                         <span class="mx-2 text-gray-400">•</span>
                         <span class="flex items-center text-gray-600">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">

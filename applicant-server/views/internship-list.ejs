@@ -254,9 +254,15 @@
                                 <div class="flex items-center gap-3">
                                     <!-- Company Logo -->
                                     <div class="bg-gray-100 p-1.5 rounded-lg">
-                                        <img src="/logo/<%= int.intCompany.logoId %>"
-                                            alt="<%= int.intCompany.companyName %> Logo"
-                                            class="h-12 w-12 object-contain rounded-md">
+                                        <% if (int.intCompany && int.intCompany.logoId) { %>
+                                            <img src="/logo/<%= int.intCompany.logoId %>"
+                                                alt="<%= int.intCompany.companyName || 'Company' %> Logo"
+                                                class="h-12 w-12 object-contain rounded-md">
+                                        <% } else { %>
+                                            <div class="h-12 w-12 bg-gray-300 rounded-md flex items-center justify-center">
+                                                <span class="text-gray-500 text-xs font-bold">N/A</span>
+                                            </div>
+                                        <% } %>
                                     </div>
 
                                     <!-- Internship Title and Company Info -->
@@ -266,7 +272,7 @@
                                         </h3>
                                         <div class="flex items-center gap-1 text-sm text-gray-600">
                                             <span class="font-semibold">
-                                                <%= int.intCompany.companyName %>
+                                                <%= int.intCompany ? int.intCompany.companyName : 'Company Not Available' %>
                                             </span>
                                             <span>•</span>
                                             <span

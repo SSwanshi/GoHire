@@ -249,16 +249,22 @@
               <div class="flex items-center gap-3">
                 <!-- Company Logo -->
                 <div class="bg-gray-100 p-1.5 rounded-lg">
-                  <img src="/logo/<%= job.jobCompany.logoId %>" 
-                       alt="<%= job.jobCompany.companyName %> Logo" 
-                       class="h-12 w-12 object-contain rounded-md">
+                  <% if (job.jobCompany && job.jobCompany.logoId) { %>
+                    <img src="/logo/<%= job.jobCompany.logoId %>" 
+                         alt="<%= job.jobCompany.companyName || 'Company' %> Logo" 
+                         class="h-12 w-12 object-contain rounded-md">
+                  <% } else { %>
+                    <div class="h-12 w-12 bg-gray-300 rounded-md flex items-center justify-center">
+                      <span class="text-gray-500 text-xs font-bold">N/A</span>
+                    </div>
+                  <% } %>
                 </div>
                 
                 <!-- Job Title and Company Info -->
                 <div>
                   <h3 class="text-lg font-semibold text-gray-900"><%= job.jobTitle %></h3>
                   <div class="flex items-center gap-1 text-sm text-gray-600">
-                    <span class="font-semibold"><%= job.jobCompany.companyName %></span>
+                    <span class="font-semibold"><%= job.jobCompany ? job.jobCompany.companyName : 'Company Not Available' %></span>
                     <span>•</span>
                     <span class="inline-block px-3 py-1 text-sm font-medium text-orange-500 bg-orange-100 rounded-full">
                       <%= job.jobType %>

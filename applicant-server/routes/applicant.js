@@ -145,19 +145,25 @@ router.post('/search', async (req, res) => {
   const InternshipFindConn = createInternshipModel(recruiterConn);
   const CompanyModel = createCompanyModel(recruiterConn);
 
-  const options1 = {
-    keys: ["jobCompany.companyName", "jobTitle"],
-    threshold: 0.3,
-    includeScore: true
-  };
-
   const JobFind = await JobFindConn.find({}).populate({path: 'jobCompany',
     strictPopulate: false});
 
     JobFind.forEach(job => {
       console.log("Job Title:", job.jobTitle);
-      console.log("Company Name:", job.jobCompany.companyName);
+      console.log("Company Name:", job.jobCompany ? job.jobCompany.companyName : 'Company Not Available');
     });
+
+  const options1 = {
+    keys: [
+      {
+        name: "companyName",
+        getFn: (obj) => obj.jobCompany ? obj.jobCompany.companyName : ""
+      },
+      "jobTitle"
+    ],
+    threshold: 0.3,
+    includeScore: true
+  };
   
 const fuse1 = new Fuse(JobFind, options1);
 function searchJobs(enteredValue) {
@@ -167,19 +173,25 @@ function searchJobs(enteredValue) {
 }
 const resultValue1 = searchJobs(enteredValue);
 
-  const options2 = {
-    keys: ["intCompany.companyName", "intTitle"],
-    threshold: 0.3,
-    includeScore: true
-  };
-
   const InternshipFind = await InternshipFindConn.find({}).populate({path: 'intCompany',
     strictPopulate: false});
 
     InternshipFind.forEach(intern => {
       console.log("Internship Title:", intern.intTitle);
-      console.log("Company Name:", intern.intCompany.companyName);
+      console.log("Company Name:", intern.intCompany ? intern.intCompany.companyName : 'Company Not Available');
     });
+
+  const options2 = {
+    keys: [
+      {
+        name: "companyName",
+        getFn: (obj) => obj.intCompany ? obj.intCompany.companyName : ""
+      },
+      "intTitle"
+    ],
+    threshold: 0.3,
+    includeScore: true
+  };
     
   const fuse2 = new Fuse(InternshipFind, options2);
 

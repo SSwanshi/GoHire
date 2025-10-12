@@ -120,8 +120,14 @@
             <!-- Company Header Section -->
             <div class="bg-blue-50 p-6 flex items-center space-x-4 border-b border-gray-200">
                 <div class="flex-shrink-0">
-                    <img src="/logo/<%= internship.intCompany.logoId %>" alt="<%= internship.intCompany.companyName %>"
-                        class="h-16 w-16 rounded-lg object-contain border border-gray-200">
+                    <% if (internship.intCompany && internship.intCompany.logoId) { %>
+                        <img src="/logo/<%= internship.intCompany.logoId %>" alt="<%= internship.intCompany.companyName || 'Company' %>"
+                            class="h-16 w-16 rounded-lg object-contain border border-gray-200">
+                    <% } else { %>
+                        <div class="h-16 w-16 bg-gray-300 rounded-lg flex items-center justify-center border border-gray-200">
+                            <span class="text-gray-500 text-sm font-bold">N/A</span>
+                        </div>
+                    <% } %>
                 </div>
                 <div>
                     <h1 class="text-2xl font-bold text-gray-800">
@@ -129,7 +135,7 @@
                     </h1>
                     <div class="flex items-center mt-1">
                         <span class="text-lg font-medium text-blue-600">
-                            <%= internship.intCompany.companyName %>
+                            <%= internship.intCompany ? internship.intCompany.companyName : 'Company Not Available' %>
                         </span>
                         <span class="mx-2 text-gray-400">•</span>
                         <span class="flex items-center text-gray-600">
