@@ -6,44 +6,52 @@
     <title>Payment Successful - GoHire</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
-<body>
+<body class="receipt-page">  <!-- Added receipt-page class -->
     <!-- Logo and Welcome Message -->
     <header>
         <div class="logo">
             <span class="go">Go</span><span class="hire">Hire</span>
         </div>
-        <h1>Welcome to GoHire</h1>
-        <p>"Your dream job is just a click away!"</p>
+        <h1>Payment Successful - GoHire</h1>  <!-- Updated heading -->
+        <p>"Your subscription has been activated!"</p>  <!-- Updated message -->
     </header>
 
     <!-- Receipt Content -->
     <div class="receipt-container">
         <!-- Payment Successful Message -->
-        <h2 class="success-message">Payment Successful!</h2>
+        <div class="success-message">
+            <div class="success-icon">✓</div>
+            Payment Successful!
+        </div>
 
         <!-- Receipt Details -->
         <div class="receipt-details">
-            <h3>Receipt</h3>
+            <h3>Transaction Receipt</h3>
+            <p><strong>Transaction ID:</strong> <%= transactionId || 'TXN' + Date.now() %></p>
             <p><strong>Payment Method:</strong> <%= paymentDetails.method %></p>
+            
             <% if (paymentDetails.method === 'Credit/Debit Card') { %>
                 <p><strong>Card Number:</strong> **** **** **** <%= paymentDetails.cardNumber %></p>
                 <p><strong>Cardholder Name:</strong> <%= paymentDetails.cardholderName %></p>
             <% } else if (paymentDetails.method === 'Net Banking') { %>
                 <p><strong>Bank:</strong> <%= paymentDetails.bankName %></p>
+                <p><strong>User ID:</strong> <%= paymentDetails.bankUserId %></p>
             <% } else if (paymentDetails.method === 'UPI') { %>
                 <p><strong>UPI ID:</strong> <%= paymentDetails.upiId %></p>
-            <% } else if (paymentDetails.method === 'Wallet') { %>
-                <p><strong>Wallet:</strong> <%= paymentDetails.walletType %></p>
+                <p><strong>UPI App:</strong> <%= paymentDetails.upiApp %></p>
             <% } %>
-            <p><strong>Amount:</strong> ₹<%= amount %></p> <!-- Changed $ to ₹ -->
-            <p><strong>Date:</strong> <%= date %></p>
+            
+            <p><strong>Subscription Plan:</strong> <%= subscriptionPlan || 'Premium Plan' %></p>
+            <p><strong>Amount Paid:</strong> ₹<%= amount %></p>
+            <p><strong>Transaction Date:</strong> <%= new Date().toLocaleString() %></p>
+            <p><strong>Status:</strong> <span style="color: #28a745; font-weight: bold;">COMPLETED</span></p>
         </div>
 
         <!-- Thank You Message -->
-        <p class="thank-you">Thank You!</p>
+        <p class="thank-you">Thank you for your payment! Your subscription is now active.</p>
 
         <!-- Return Home Link -->
-        <a href="/" class="return-home">Return Home</a>
+        <a href="/" class="return-home">Return to Homepage</a>
     </div>
 </body>
 </html>

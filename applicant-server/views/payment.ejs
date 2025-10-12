@@ -18,153 +18,154 @@
     </header>
 
     <!-- Main Content -->
-    <div class="container">
-        <!-- Sidebar for Subscription Plans -->
-        <div class="sidebar">
-            <h2>Subscription Plans</h2>
-            <ul>
-                <li>
-                    <h3>Premium Plan</h3>
-                    <ul id="subscriptionPlans">
-                        <li data-price="1499">
-                            <strong>Monthly:</strong> ₹1499
-                        </li>
-                        <li data-price="5999">
-                            <strong>6 Months:</strong> ₹5999
-                        </li>
-                        <li data-price="9999">
-                            <strong>Anually:</strong> ₹9999
-                        </li>
-                    </ul>
-                    <p>Features:</p>
-                    <ul>
-                        <li>Post unlimited jobs</li>
-                        <li>Advanced analytics</li>
-                        <li>Featured job listings</li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
+    <div class="main-wrapper">
+        <div class="container">
+            <!-- Sidebar for Subscription Plans -->
+            <div class="sidebar">
+                <h2>Subscription Plans</h2>
+                <ul>
+                    <li>
+                        <h3>Premium Plan</h3>
+                        <ul id="subscriptionPlans">
+                            <li data-price="1499" class="subscription-plan">
+                                <strong>Monthly:</strong> ₹1499
+                            </li>
+                            <li data-price="5999" class="subscription-plan">
+                                <strong>6 Months:</strong> ₹5999
+                            </li>
+                            <li data-price="9999" class="subscription-plan">
+                                <strong>Annually:</strong> ₹9999
+                            </li>
+                        </ul>
+                        <p>Features:</p>
+                        <ul>
+                            <li>Post unlimited jobs</li>
+                            <li>Advanced analytics</li>
+                            <li>Featured job listings</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
 
-        <!-- Payment Form -->
-        <div class="payment-form">
-            <h2>Complete Your Payment</h2>
-            <form id="paymentForm" action="/process-payment" method="POST">
-                <!-- Hidden input for amount -->
-                <input type="hidden" id="amount" name="amount" value="">
+            <!-- Payment Form -->
+            <div class="payment-form">
+                <h2>Complete Your Payment</h2>
+                <form id="paymentForm" action="/process-payment" method="POST">
+                    <!-- Hidden input for amount -->
+                    <input type="hidden" id="amount" name="amount" value="">
 
-                <!-- Payment Amount Display -->
-                <div class="form-group">
-                    <label for="paymentAmount">Amount to Pay</label>
-                    <input type="text" id="paymentAmount" name="paymentAmount" readonly>
-                </div>
+                    <!-- Payment Amount Display -->
+                    <div class="form-group">
+                        <label for="paymentAmount">Amount to Pay</label>
+                        <input type="text" id="paymentAmount" name="paymentAmount" readonly class="form-control">
+                    </div>
 
-                <!-- Payment Method Selection -->
-                <div class="form-group">
-                    <label for="paymentMethod">Select Payment Method</label>
-                    <select id="paymentMethod" name="paymentMethod" required>
-                        <option value="">--Select--</option>
-                        <option value="creditCard">Credit/Debit Card</option>
-                        <option value="netBanking">Net Banking</option>
-                        <option value="upi">UPI</option>
-                    </select>
-                </div>
-
-                <!-- Credit/Debit Card Fields -->
-                <div id="creditCardFields" class="payment-fields">
+                    <!-- Payment Method Selection -->
                     <div class="form-group">
-                        <label for="cardNumber">Card Number</label>
-                        <input type="text" id="cardNumber" name="cardNumber">
-                    </div>
-                    <div class="form-group">
-                        <label for="expiryDate">Expiration Date</label>
-                        <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY">
-                    </div>
-                    <div class="form-group">
-                        <label for="cvv">CVV</label>
-                        <input type="text" id="cvv" name="cvv">
-                    </div>
-                    <div class="form-group">
-                        <label for="cardholderName">Cardholder Name</label>
-                        <input type="text" id="cardholderName" name="cardholderName">
-                    </div>
-                </div>
-
-                <!-- Net Banking Fields -->
-                <div id="netBankingFields" class="payment-fields" style="display: none;">
-                  <div class="form-group">
-                     <label for="bankName">Select Bank</label>
-                     <select id="bankName" name="bankName">
-                        <option value="">--Select Bank--</option>
-                        <option value="sbi">State Bank of India</option>
-                         <option value="hdfc">HDFC Bank</option>
-                         <option value="icici">ICICI Bank</option>
-                        <option value="axis">Axis Bank</option>
-                    </select>
-                    </div>
-                <div class="form-group">
-             <label for="bankUserId">Bank User ID</label>
-        <input type="text" id="bankUserId" name="bankUserId" placeholder="Enter your bank login ID">
-    </div>
-    <div class="form-group">
-        <label for="bankPassword">Bank Password</label>
-        <input type="password" id="bankPassword" name="bankPassword" placeholder="Enter your bank password">
-    </div>
-    <div class="form-group">
-        <label for="transactionSummary">Transaction Summary</label>
-        <textarea id="transactionSummary" name="transactionSummary" readonly placeholder="Transaction details will appear here after payment"></textarea>
-    </div>
-    <button type="button" id="processNetBanking" class="btn">Process Payment</button>
-</div>
-
-
-                <!-- UPI Fields -->
-                <div id="upiFields" class="payment-fields" style="display: none;">
-                    <div class="form-group">
-                        <label for="upiName">Full Name</label>
-                        <input type="text" id="upiName" name="upiName" placeholder="Enter your full name as per bank records">
-                    </div>
-                    <div class="form-group">
-                        <label for="upiId">UPI ID</label>
-                        <input type="text" id="upiId" name="upiId" placeholder="example@upi">
-                    </div>
-                    <div class="form-group">
-                        <label for="upiPassword">UPI PIN/Password</label>
-                        <input type="password" id="upiPassword" name="upiPassword" placeholder="Enter your UPI PIN" maxlength="6">
-                    </div>
-                    <div class="form-group">
-                        <label for="upiApp">Select UPI App</label>
-                        <select id="upiApp" name="upiApp">
-                            <option value="">--Select UPI App--</option>
-                            <option value="gpay">Google Pay</option>
-                            <option value="phonepe">PhonePe</option>
-                            <option value="paytm">Paytm</option>
-                            <option value="bhim">BHIM UPI</option>
-                            <option value="other">Other UPI App</option>
+                        <label for="paymentMethod">Select Payment Method</label>
+                        <select id="paymentMethod" name="paymentMethod" required class="form-control">
+                            <option value="">--Select--</option>
+                            <option value="creditCard">Credit/Debit Card</option>
+                            <option value="netBanking">Net Banking</option>
+                            <option value="upi">UPI</option>
                         </select>
                     </div>
-                </div>
 
-                <button type="submit" class="btn">Pay Now</button>
-            </form>
+                    <!-- Credit/Debit Card Fields -->
+                    <div id="creditCardFields" class="payment-section" style="display: none;">
+                        <h3>Credit/Debit Card Details</h3>
+                        <div class="form-group">
+                            <label for="cardNumber">Card Number</label>
+                            <input type="text" id="cardNumber" name="cardNumber" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19">
+                        </div>
+                        <div class="form-group">
+                            <label for="expiryDate">Expiration Date</label>
+                            <input type="text" id="expiryDate" name="expiryDate" class="form-control" placeholder="MM/YY" maxlength="5">
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" name="cvv" class="form-control" placeholder="123" maxlength="4">
+                        </div>
+                        <div class="form-group">
+                            <label for="cardholderName">Cardholder Name</label>
+                            <input type="text" id="cardholderName" name="cardholderName" class="form-control" placeholder="Enter cardholder name">
+                        </div>
+                    </div>
+
+                    <!-- Net Banking Fields -->
+                    <div id="netBankingFields" class="payment-section" style="display: none;">
+                        <h3>Net Banking Details</h3>
+                        <div class="form-group">
+                            <label for="bankName">Select Bank</label>
+                            <select id="bankName" name="bankName" class="form-control">
+                                <option value="">--Select Bank--</option>
+                                <option value="sbi">State Bank of India</option>
+                                <option value="hdfc">HDFC Bank</option>
+                                <option value="icici">ICICI Bank</option>
+                                <option value="axis">Axis Bank</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bankUserId">Bank User ID</label>
+                            <input type="text" id="bankUserId" name="bankUserId" class="form-control" placeholder="Enter your bank login ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="bankPassword">Bank Password</label>
+                            <input type="password" id="bankPassword" name="bankPassword" class="form-control" placeholder="Enter your bank password">
+                        </div>
+                        <!-- Transaction Summary REMOVED -->
+                        <button type="button" id="processNetBanking" class="btn">Process Payment</button>
+                    </div>
+
+                    <!-- UPI Fields -->
+                    <div id="upiFields" class="payment-section" style="display: none;">
+                        <h3>UPI Payment Details</h3>
+                        <div class="form-group">
+                            <label for="upiName">Full Name</label>
+                            <input type="text" id="upiName" name="upiName" class="form-control" placeholder="Enter your full name as per bank records">
+                        </div>
+                        <div class="form-group">
+                            <label for="upiId">UPI ID</label>
+                            <input type="text" id="upiId" name="upiId" class="form-control" placeholder="example@upi">
+                        </div>
+                        <div class="form-group">
+                            <label for="upiApp">Select UPI App</label>
+                            <select id="upiApp" name="upiApp" class="form-control">
+                                <option value="">--Select UPI App--</option>
+                                <option value="gpay">Google Pay</option>
+                                <option value="phonepe">PhonePe</option>
+                                <option value="paytm">Paytm</option>
+                                <option value="bhim">BHIM UPI</option>
+                                <option value="other">Other UPI App</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="upiPassword">UPI PIN</label>
+                            <input type="password" id="upiPassword" name="upiPassword" class="form-control" placeholder="Enter your UPI PIN" maxlength="6">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn">Pay Now</button>
+                </form>
+            </div>
         </div>
-    </div>
 
-    <!-- Terms and Conditions -->
-    <div class="terms">
-        <h2>Terms and Conditions</h2>
-        <p>
-            By completing this payment, you agree to our 
-            <a href="/terms">Terms of Service</a> and 
-            <a href="/privacy">Privacy Policy</a>.
-            All payments are non-refundable.
-        </p>
+        <!-- Terms and Conditions -->
+        <div class="terms">
+            <h2>Terms and Conditions</h2>
+            <p>
+                By completing this payment, you agree to our 
+                <a href="/terms">Terms of Service</a> and 
+                <a href="/privacy">Privacy Policy</a>.
+                All payments are non-refundable.
+            </p>
+        </div>
     </div>
 
     <script src="/script.js"></script>
     <% if (typeof error !== 'undefined' && error) { %>
         <script>
-          alert("<%= error %>");
+            alert("<%= error %>");
         </script>
     <% } %>
 </body>
