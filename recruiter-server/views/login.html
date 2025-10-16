@@ -69,7 +69,7 @@
             emailError.textContent = "";
             passwordError.textContent = "";
 
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,10}$/;
             if (!emailPattern.test(email)) {
                 emailError.textContent = "Please enter a valid email address.";
                 emailError.style.color = "red";
