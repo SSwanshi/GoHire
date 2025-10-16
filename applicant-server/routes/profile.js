@@ -27,6 +27,14 @@ const requireAuth = (req, res, next) => {
     next();
 };
 
+// API authentication middleware (returns JSON instead of redirecting)
+const requireAuthAPI = (req, res, next) => {
+    if (!req.session.user?.authenticated) {
+        return res.status(401).json({ message: 'Not authenticated' });
+    }
+    next();
+};
+
 // Simple multer memory storage for PDFs only
 const upload = multer({
     storage: multer.memoryStorage(),
@@ -43,96 +51,8 @@ const upload = multer({
 // ... (previous imports remain the same)
 
 router.get('/', requireAuth, async (req, res) => {
-    try {
-        const user = await User.findOne({ userId: req.session.user.id });
-        if (!user) {
-            req.session.destroy();
-            return res.redirect('/login');
-        }
-
-        let resumeName = null;
-        if (user.resumeId) {
-            const bucket = getBucket();
-            const files = await bucket.find({ _id: new ObjectId(user.resumeId) }).toArray();
-            if (files.length > 0) resumeName = files[0].filename;
-        }
-
-        const jobApplications = await AppliedJob.find({ userId: req.session.user.id });
-        const internshipApplications = await AppliedInternship.find({ userId: req.session.user.id });
-
-        // console.log('Job Applications:', jobApplications);
-        // console.log('Internship Applications:', internshipApplications);
-
-        // Get all unique job/internship IDs
-        const jobIds = [...new Set(jobApplications.map(app => app.jobId).filter(Boolean))];
-        const internshipIds = [...new Set(internshipApplications.map(app => app.internshipId).filter(Boolean))];
-
-        // // Connect to recruiter DB
-        const recruiterConn = await connectRecruiterDB();
-
-        // // IMPORTANT: Get the original schemas from the models
-
-
-        // // Create models using the recruiterDB connection
-        const JobFindConn = createJobModel(recruiterConn);
-        const InternshipFindConn = createInternshipModel(recruiterConn);
-        const CompanyFindConn = createCompanyModel(recruiterConn);
-
-        // Fetch details from recruiter DB
-        const [jobs, internships] = await Promise.all([
-            jobIds.length > 0 ? JobFindConn.find({ _id: { $in: jobIds } }).populate('jobCompany', 'companyName') : [],
-            internshipIds.length > 0 ? InternshipFindConn.find({ _id: { $in: internshipIds } }).populate('intCompany', 'companyName') : []
-        ]);
-        // console.log('Jobs:', jobs);
-        // console.log('Internships:', internships);
-
-        // Create lookup maps
-        const jobMap = jobs.reduce((map, job) => (map[job._id] = job, map), {});
-        const internshipMap = internships.reduce((map, internship) => (map[internship._id] = internship, map), {});
-
-        console.log('Job Map:', jobMap);
-        console.log('Internship Map:', internshipMap);
-
-        // Format application history
-        const applicationHistory = [
-            ...jobApplications.map(app => {
-                const job = app.jobId ? jobMap[app.jobId] : null;
-                return {
-                    type: 'Job',
-                    title: job?.jobTitle || 'Job No Longer Available',
-                    company: job?.jobCompany?.companyName || 'Company No Longer Available',
-                    appliedAt: app.AppliedAt,
-                    status: app.isSelected ? 'Accepted' : app.isRejected ? 'Rejected' : 'Pending',
-                    applicationId: app._id
-                };
-            }),
-            ...internshipApplications.map(app => {
-                const internship = app.internshipId ? internshipMap[app.internshipId] : null;
-                return {
-                    type: 'Internship',
-                    title: internship?.intTitle || 'Internship No Longer Available',
-                    company: internship?.intCompany?.companyName || 'Company No Longer Available',
-                    appliedAt: app.AppliedAt,
-                    status: app.isSelected ? 'Accepted' : app.isRejected ? 'Rejected' : 'Pending',
-                    applicationId: app._id
-                };
-            })
-        ];
-
-        // Sort by date (newest first)
-        applicationHistory.sort((a, b) => new Date(b.appliedAt) - new Date(a.appliedAt));
-
-        res.render('profile', {
-            user,
-            resumeName,
-            applicationHistory,
-            title: 'User Profile'
-        });
-
-    } catch (error) {
-        console.error('Profile error:', error);
-        res.redirect('/login');
-    }
+    // Serve the static HTML file
+    res.sendFile(require('path').join(__dirname, '../public/profile.html'));
 });
 
 // ... (rest of the file remains the same)
@@ -162,7 +82,12 @@ router.post('/resume', upload.single('resume'), async (req, res) => {
         uploadStream.on('finish', async () => {
             user.resumeId = uploadStream.id;
             await user.save();
-            res.redirect('/profile');
+            // Check if it's an AJAX request
+            if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+                res.json({ success: true, message: 'Resume uploaded successfully' });
+            } else {
+                res.redirect('/profile');
+            }
         });
 
         uploadStream.on('error', (err) => {
@@ -171,7 +96,11 @@ router.post('/resume', upload.single('resume'), async (req, res) => {
 
     } catch (error) {
         console.error('Upload error:', error);
-        res.status(500).send('Upload failed');
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            res.status(500).json({ message: 'Upload failed' });
+        } else {
+            res.status(500).send('Upload failed');
+        }
     }
 });
 
@@ -214,10 +143,19 @@ router.post('/resume/delete', async (req, res) => {
         user.resumeId = null;
         await user.save();
 
-        res.redirect('/profile');
+        // Check if it's an AJAX request
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            res.json({ success: true, message: 'Resume deleted successfully' });
+        } else {
+            res.redirect('/profile');
+        }
     } catch (error) {
         console.error('Delete error:', error);
-        res.status(500).send('Error deleting resume');
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            res.status(500).json({ message: 'Error deleting resume' });
+        } else {
+            res.status(500).send('Error deleting resume');
+        }
     }
 });
 
@@ -370,24 +308,37 @@ router.post('/delete', requireAuth, async (req, res) => {
         req.session.destroy(err => {
             if (err) {
                 console.error('Session destroy error:', err);
-                return res.status(500).render('edit-profile', {
-                    user: req.session.user,
-                    title: 'Edit Profile',
-                    error: 'An error occurred while logging out'
-                });
+                if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+                    return res.status(500).json({ message: 'An error occurred while logging out' });
+                } else {
+                    return res.status(500).render('edit-profile', {
+                        user: req.session.user,
+                        title: 'Edit Profile',
+                        error: 'An error occurred while logging out'
+                    });
+                }
             }
 
             res.clearCookie('connect.sid');
-            return res.redirect('/?success=Account+deleted+successfully');
+            // Check if it's an AJAX request
+            if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+                res.json({ success: true, message: 'Account deleted successfully' });
+            } else {
+                res.redirect('/?success=Account+deleted+successfully');
+            }
         });
 
     } catch (error) {
         console.error('Delete profile error:', error);
-        res.status(500).render('edit-profile', {
-            user: req.session.user,
-            title: 'Edit Profile',
-            error: 'An unexpected error occurred while deleting your profile'
-        });
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            res.status(500).json({ message: 'An unexpected error occurred while deleting your profile' });
+        } else {
+            res.status(500).render('edit-profile', {
+                user: req.session.user,
+                title: 'Edit Profile',
+                error: 'An unexpected error occurred while deleting your profile'
+            });
+        }
     }
 });
 
@@ -431,7 +382,12 @@ router.post('/image', profileImageUpload.single('profileImage'), async (req, res
         uploadStream.on('finish', async () => {
             user.profileImageId = uploadStream.id;
             await user.save();
-            res.redirect('/profile');
+            // Check if it's an AJAX request
+            if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+                res.json({ success: true, message: 'Profile image uploaded successfully' });
+            } else {
+                res.redirect('/profile');
+            }
         });
 
         uploadStream.on('error', (err) => {
@@ -440,7 +396,11 @@ router.post('/image', profileImageUpload.single('profileImage'), async (req, res
 
     } catch (error) {
         console.error('Upload error:', error);
-        res.status(500).send('Upload failed');
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            res.status(500).json({ message: 'Upload failed' });
+        } else {
+            res.status(500).send('Upload failed');
+        }
     }
 });
 

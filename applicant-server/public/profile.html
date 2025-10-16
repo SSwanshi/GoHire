@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GoHire - My Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-blue-50">
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50"></div>
+
+  <!-- Navigation Bar -->
+  <nav class="bg-blue-500 p-5 shadow-xl fixed w-full z-10 transition-all duration-300" id="navbar">
+    <div class="container mx-auto flex justify-between items-center">
+      <!-- Logo -->
+      <a href="/" class="text-black text-3xl font-bold transition-transform hover:scale-105 duration-300 ml-2">Go<span class="text-yellow-400">Hire</span></a>
+
+      <!-- Search bar -->
+      <div class="relative w-1/3 group">
+        <form action="/search" method="POST" id="search-form">
+          <input id="search-space" type="text" placeholder="Search for Opportunities" name="parsedValue" class="w-full p-3 rounded-full border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 shadow-md placeholder:text-gray-700">
+        </form>
+        <div class="absolute right-3 top-3.5 text-yellow-500">
+          <a href="/search" id="search-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Desktop Menu -->
+      <ul class="hidden md:flex items-center space-x-8 text-white" id="desktop-menu">
+        <!-- Will be populated by JavaScript -->
+      </ul>
+
+      <!-- Mobile Menu -->
+      <div class="md:hidden relative" id="mobile-menu-container">
+        <div class="flex flex-col space-y-1 cursor-pointer" id="mobile-menu">
+          <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
+          <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
+          <span class="block w-6 h-0.5 bg-white transition-all duration-300"></span>
+        </div>
+        <ul id="dropdown-menu" class="absolute right-0 mt-10 w-40 bg-yellow-500 text-blue-500 rounded-lg shadow-lg hidden flex flex-col text-blue-800">
+          <!-- Will be populated by JavaScript -->
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <header class="pt-24 pb-16 bg-gradient-to-br from-blue-50 to-indigo-50 min-h-screen">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- Left Sidebar -->
+        <div class="lg:col-span-1 space-y-6">
+          <!-- Profile Card -->
+          <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+            <div class="flex flex-col items-center">
+              <!-- Profile Image -->
+              <div class="relative mb-4">
+                <div id="profileImageContainer">
+                  <!-- Will be populated by JavaScript -->
+                </div>
+                <div class="absolute -bottom-2 -right-2 bg-white rounded-full p-1 shadow-md">
+                  <div class="bg-green-500 rounded-full w-4 h-4 border-2 border-white"></div>
+                </div>
+              </div>
+
+              <h2 class="text-xl font-bold text-gray-900" id="userName"></h2>
+              <p class="text-gray-600 text-sm mb-4" id="userEmail"></p>
+
+              <!-- Image Upload Form -->
+              <form id="profileImageForm" class="w-full">
+                <label class="block mb-3">
+                  <span class="sr-only">Choose profile image</span>
+                  <div class="flex items-center justify-center w-full">
+                    <label class="flex flex-col items-center justify-center w-full h-10 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 border-gray-300 hover:border-blue-500 transition-colors">
+                      <div class="flex flex-col items-center justify-center pt-1 pb-1">
+                        <i class="fas fa-camera text-gray-500 mb-1"></i>
+                        <p class="text-xs text-gray-600">Change Photo</p>
+                      </div>
+                      <input type="file" id="profileImageInput" name="profileImage" accept="image/*" class="hidden">
+                    </label>
+                  </div>
+                </label>
+                <div class="flex space-x-2">
+                  <button type="submit" class="flex-1 px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition flex items-center justify-center">
+                    <i class="fas fa-upload mr-1"></i> Upload
+                  </button>
+                  <button type="button" id="deleteImageBtn" class="px-3 py-2 bg-red-100 text-red-700 text-sm rounded-lg hover:bg-red-200 transition flex items-center justify-center" style="display: none;">
+                    <i class="fas fa-trash mr-1"></i>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+            <h3 class="font-bold text-gray-900 mb-4 flex items-center">
+            ------ Quick Actions ------
+            </h3>
+            <div class="space-y-3">
+              <a href="/profile/edit" class="flex items-center p-3 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition group">
+                <i class="fas fa-edit mr-3 text-blue-600"></i>
+                <span>Edit Profile</span>
+                <i class="fas fa-chevron-right ml-auto text-blue-400 group-hover:text-blue-600"></i>
+              </a>
+              <a href="/jobs" class="flex items-center p-3 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition group">
+                <i class="fas fa-briefcase mr-3 text-green-600"></i>
+                <span>Browse Jobs</span>
+                <i class="fas fa-chevron-right ml-auto text-green-400 group-hover:text-green-600"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="lg:col-span-3 space-y-8">
+          <!-- Profile Information -->
+          <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+            <div class="px-6 py-4">
+              <h2 class="text-xl font-bold text-black flex items-center">
+                <i class="fas fa-user-circle mr-3"></i> Profile Information
+              </h2>
+            </div>
+            <div class="p-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="profileInfo">
+                <!-- Will be populated by JavaScript -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Resume Section -->
+          <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+            <div class="px-6 py-4">
+              <h2 class="text-xl font-bold text-black flex items-center">
+                <i class="fas fa-file-alt mr-3"></i> Resume Section
+              </h2>
+            </div>
+            <div class="p-6" id="resumeSection">
+              <!-- Will be populated by JavaScript -->
+            </div>
+          </div>
+
+          <!-- Application History -->
+          <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+            <div class="px-6 py-4">
+              <h2 class="text-xl font-bold text-black flex items-center">
+                <i class="fas fa-history mr-3"></i> Application History
+              </h2>
+            </div>
+            <div class="p-6" id="applicationHistory">
+              <!-- Will be populated by JavaScript -->
+            </div>
+          </div>
+
+          <!-- Danger Zone -->
+          <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-red-200">
+            <div class="px-6 py-4">
+              <h2 class="text-xl font-bold text-black flex items-center">
+                <i class="fas fa-exclamation-triangle mr-3"></i> Danger Zone
+              </h2>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div class="mb-4 md:mb-0">
+                  <h3 class="text-lg font-semibold text-red-800 mb-1">Delete Account</h3>
+                  <p class="text-red-700">Permanently delete your account. This action is irreversible.</p>
+                </div>
+                <button onclick="confirmDeleteAccount()" class="px-5 py-2.5 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition flex items-center">
+                  <i class="fas fa-trash mr-2"></i> Delete My Account
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-8">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col items-center justify-center space-y-4">
+        <p class="text-sm text-gray-400">&copy; 2025 GoHire. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let userData = null;
+    let hasProfileImage = false;
+
+    // Toast notification function
+    function showToast(message, type = 'success') {
+      const toastContainer = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `flex items-center p-4 mb-3 rounded-xl shadow-lg transform transition-all duration-300 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white animate-fade-in`;
+      
+      const icon = document.createElement('div');
+      icon.className = 'mr-3';
+      icon.innerHTML = type === 'success' ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-exclamation-circle"></i>';
+      
+      const messageEl = document.createElement('div');
+      messageEl.className = 'font-medium flex-1';
+      messageEl.textContent = message;
+      
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'ml-4 text-white hover:text-gray-200 transition-colors';
+      closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+      closeBtn.onclick = () => {
+        toast.classList.add('opacity-0', 'scale-95');
+        setTimeout(() => toast.remove(), 300);
+      };
+      
+      toast.appendChild(icon);
+      toast.appendChild(messageEl);
+      toast.appendChild(closeBtn);
+      toastContainer.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'scale-95');
+        setTimeout(() => toast.remove(), 300);
+      }, 5000);
+    }
+
+    // Add animation CSS
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes fade-in {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-in {
+        animation: fade-in 0.3s ease-out forwards;
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Fetch profile data
+    async function fetchProfileData() {
+      try {
+        const response = await fetch('/api/profile');
+        if (!response.ok) {
+          if (response.status === 401) {
+            window.location.href = '/login.html';
+            return;
+          }
+          throw new Error('Failed to fetch profile data');
+        }
+        
+        const data = await response.json();
+        userData = data.user;
+        renderProfile(data);
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('Failed to load profile data', 'error');
+      }
+    }
+
+    // Render navigation
+    function renderNavigation() {
+      const desktopMenu = document.getElementById('desktop-menu');
+      const mobileMenu = document.getElementById('dropdown-menu');
+      
+      const navItems = `
+        <li><a href="/" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Home</a></li>
+        <li><a href="/jobs" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Jobs</a></li>
+        <li><a href="/internships" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Internship</a></li>
+        <li><a href="/contact" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Contact Us</a></li>
+      `;
+      
+      if (userData) {
+        const profileDropdown = `
+          <li class="relative group flex items-center">
+            <button class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-4 rounded-full transition-all duration-300 hover:shadow-lg flex items-center">
+              ${hasProfileImage ? 
+                `<img src="/profile/image?t=${Date.now()}" class="w-8 h-8 rounded-full object-cover mr-2 border-2 border-blue-800" alt="Profile">` :
+                `<div class="w-8 h-8 rounded-full bg-blue-800 text-white flex items-center justify-center mr-2 font-bold text-sm">${userData.firstName.charAt(0).toUpperCase()}</div>`
+              }
+              <span class="leading-none flex items-center">${userData.firstName}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 transform transition-transform duration-300 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform -translate-y-2 group-hover:translate-y-0">
+              <a href="/profile.html" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-t-lg">My Profile</a>
+              <a href="/auth/logout" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-b-lg">Logout</a>
+            </div>
+          </li>
+        `;
+        desktopMenu.innerHTML = navItems + profileDropdown;
+      } else {
+        const loginBtn = '<li><a href="/login.html" class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg flex items-center">Login</a></li>';
+        desktopMenu.innerHTML = navItems + loginBtn;
+      }
+    }
+
+    // Render profile
+    function renderProfile(data) {
+      const { user, resumeName, applicationHistory } = data;
+      hasProfileImage = !!user.profileImageId;
+      
+      // Render navigation
+      renderNavigation();
+      
+      // Profile image
+      const profileImageContainer = document.getElementById('profileImageContainer');
+      if (user.profileImageId) {
+        profileImageContainer.innerHTML = `<img src="/profile/image?t=${Date.now()}" class="w-32 h-32 rounded-full border-4 border-blue-200 shadow-lg object-cover" alt="Profile">`;
+        document.getElementById('deleteImageBtn').style.display = 'block';
+      } else {
+        profileImageContainer.innerHTML = `<div class="w-32 h-32 flex items-center justify-center rounded-full border-4 border-blue-200 shadow-lg bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-700 text-4xl font-bold">${user.firstName.charAt(0).toUpperCase()}</div>`;
+        document.getElementById('deleteImageBtn').style.display = 'none';
+      }
+      
+      // User info
+      document.getElementById('userName').textContent = `${user.firstName} ${user.lastName}`;
+      document.getElementById('userEmail').textContent = user.email;
+      
+      // Profile information
+      const profileInfo = document.getElementById('profileInfo');
+      profileInfo.innerHTML = `
+        <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 transition-all hover:shadow-sm">
+          <label class="block text-sm font-medium text-blue-700 mb-1 flex items-center">
+            <i class="fas fa-user mr-2"></i> First Name
+          </label>
+          <p class="text-lg text-gray-900 font-semibold">${user.firstName}</p>
+        </div>
+        <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 transition-all hover:shadow-sm">
+          <label class="block text-sm font-medium text-blue-700 mb-1 flex items-center">
+            <i class="fas fa-user mr-2"></i> Last Name
+          </label>
+          <p class="text-lg text-gray-900 font-semibold">${user.lastName}</p>
+        </div>
+        <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 transition-all hover:shadow-sm">
+          <label class="block text-sm font-medium text-blue-700 mb-1 flex items-center">
+            <i class="fas fa-envelope mr-2"></i> Email Address
+          </label>
+          <p class="text-lg text-gray-900 font-semibold">${user.email}</p>
+        </div>
+        <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 transition-all hover:shadow-sm">
+          <label class="block text-sm font-medium text-blue-700 mb-1 flex items-center">
+            <i class="fas fa-phone mr-2"></i> Phone Number
+          </label>
+          <p class="text-lg text-gray-900 font-semibold">${user.phone}</p>
+        </div>
+        <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 transition-all hover:shadow-sm">
+          <label class="block text-sm font-medium text-blue-700 mb-1 flex items-center">
+            <i class="fas fa-venus-mars mr-2"></i> Gender
+          </label>
+          <p class="text-lg text-gray-900 font-semibold">${user.gender}</p>
+        </div>
+        <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 transition-all hover:shadow-sm">
+          <label class="block text-sm font-medium text-blue-700 mb-1 flex items-center">
+            <i class="fas fa-calendar-alt mr-2"></i> Member Since
+          </label>
+          <p class="text-lg text-gray-900 font-semibold">25 March 2025</p>
+        </div>
+      `;
+      
+      // Resume section
+      renderResumeSection(resumeName);
+      
+      // Application history
+      renderApplicationHistory(applicationHistory);
+    }
+
+    // Render resume section
+    function renderResumeSection(resumeName) {
+      const resumeSection = document.getElementById('resumeSection');
+      
+      if (resumeName) {
+        resumeSection.innerHTML = `
+          <div class="flex flex-col md:flex-row md:items-center justify-between p-5 bg-green-50 rounded-xl border border-green-200">
+            <div class="mb-4 md:mb-0">
+              <p class="text-gray-700 font-medium mb-1">
+                <i class="fas fa-file-pdf text-red-500 mr-2"></i> Uploaded Resume
+              </p>
+              <p class="text-gray-900 font-semibold">${resumeName}</p>
+            </div>
+            <div class="flex space-x-3">
+              <a href="/profile/resume" target="_blank" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center">
+                <i class="fas fa-eye mr-2"></i> View
+              </a>
+              <button onclick="deleteResume()" class="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition flex items-center">
+                <i class="fas fa-trash mr-2"></i> Delete
+              </button>
+            </div>
+          </div>
+        `;
+      } else {
+        resumeSection.innerHTML = `
+          <form id="resumeUploadForm" enctype="multipart/form-data">
+            <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center bg-gray-50 hover:bg-gray-100 transition-colors">
+              <i class="fas fa-file-upload text-gray-400 text-4xl mb-4"></i>
+              <h3 class="text-lg font-medium text-gray-700 mb-2">Upload Your Resume</h3>
+              <p class="text-gray-500 mb-4">Drag & drop your resume here or click to browse</p>
+              <label class="block mb-4">
+                <span class="sr-only">Choose resume file</span>
+                <input type="file" id="resumeFile" name="resume" accept=".pdf" required class="block w-full text-sm text-gray-500
+                  file:mr-4 file:py-2 file:px-4
+                  file:rounded-lg file:border-0
+                  file:text-sm file:font-semibold
+                  file:bg-blue-50 file:text-blue-700
+                  hover:file:bg-blue-100">
+              </label>
+              <button type="submit" class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center mx-auto">
+                <i class="fas fa-cloud-upload-alt mr-2"></i> Upload Resume
+              </button>
+              <p class="text-xs text-gray-500 mt-3">Maximum size: 5MB (PDF only)</p>
+            </div>
+          </form>
+        `;
+        
+        // Attach resume upload handler
+        document.getElementById('resumeUploadForm').addEventListener('submit', uploadResume);
+      }
+    }
+
+    // Render application history
+    function renderApplicationHistory(applicationHistory) {
+      const historyContainer = document.getElementById('applicationHistory');
+      
+      if (applicationHistory && applicationHistory.length > 0) {
+        const tableRows = applicationHistory.map(app => {
+          const statusClass = app.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                             app.status === 'Accepted' ? 'bg-green-100 text-green-800' :
+                             'bg-red-100 text-red-800';
+          
+          return `
+            <tr class="hover:bg-blue-50 transition-colors">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${app.type}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${app.title}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${app.company}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${new Date(app.appliedAt).toLocaleDateString()}</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">
+                  ${app.status}
+                </span>
+              </td>
+            </tr>
+          `;
+        }).join('');
+        
+        historyContainer.innerHTML = `
+          <div class="overflow-x-auto rounded-lg border border-gray-200">
+            <table class="min-w-full divide-y divide-blue-200">
+              <thead class="bg-gradient-to-br from-blue-600 to-indigo-700">
+                <tr>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Type</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Title</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Company</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Applied Date</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Status</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                ${tableRows}
+              </tbody>
+            </table>
+          </div>
+        `;
+      } else {
+        historyContainer.innerHTML = `
+          <div class="text-center py-12">
+            <i class="fas fa-file-alt text-gray-300 text-5xl mb-4"></i>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">No Applications Yet</h3>
+            <p class="text-gray-500 max-w-md mx-auto mb-6">You haven't applied to any jobs or internships yet. Start your job search today!</p>
+            <a href="/jobs" class="inline-flex items-center px-5 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition">
+              <i class="fas fa-briefcase mr-2"></i> Browse Jobs
+            </a>
+          </div>
+        `;
+      }
+    }
+
+    // Profile image upload
+    document.getElementById('profileImageForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const fileInput = document.getElementById('profileImageInput');
+      const file = fileInput.files[0];
+      
+      if (!file) {
+        showToast('Please select an image', 'error');
+        return;
+      }
+      
+      if (!file.type.startsWith('image/')) {
+        showToast('Only image files are allowed', 'error');
+        return;
+      }
+      
+      if (file.size > 2 * 1024 * 1024) {
+        showToast('Image size must be less than 2MB', 'error');
+        return;
+      }
+      
+      const formData = new FormData();
+      formData.append('profileImage', file);
+      
+      try {
+        const response = await fetch('/profile/image', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (response.ok) {
+          showToast('Profile image uploaded successfully!', 'success');
+          setTimeout(() => location.reload(), 1500);
+        } else {
+          const data = await response.json();
+          showToast(data.message || 'Upload failed', 'error');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('An error occurred while uploading', 'error');
+      }
+    });
+
+    // Delete profile image
+    document.getElementById('deleteImageBtn').addEventListener('click', async function() {
+      if (!confirm('Are you sure you want to delete your profile image?')) {
+        return;
+      }
+      
+      try {
+        const response = await fetch('/profile/image', {
+          method: 'DELETE'
+        });
+        
+        if (response.ok) {
+          showToast('Profile image deleted successfully!', 'success');
+          setTimeout(() => location.reload(), 1000);
+        } else {
+          showToast('Failed to delete image', 'error');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('An error occurred', 'error');
+      }
+    });
+
+    // Resume upload
+    async function uploadResume(e) {
+      e.preventDefault();
+      
+      const fileInput = document.getElementById('resumeFile');
+      const file = fileInput.files[0];
+      
+      if (!file) {
+        showToast('Please select a file', 'error');
+        return;
+      }
+      
+      if (file.type !== 'application/pdf') {
+        showToast('Only PDF files are allowed', 'error');
+        return;
+      }
+      
+      if (file.size > 5 * 1024 * 1024) {
+        showToast('File size must be less than 5MB', 'error');
+        return;
+      }
+      
+      const formData = new FormData();
+      formData.append('resume', file);
+      
+      try {
+        const response = await fetch('/profile/resume', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (response.ok) {
+          showToast('Resume uploaded successfully!', 'success');
+          setTimeout(() => location.reload(), 1500);
+        } else {
+          const data = await response.json();
+          showToast(data.message || 'Upload failed', 'error');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('An error occurred while uploading', 'error');
+      }
+    }
+
+    // Delete resume
+    async function deleteResume() {
+      if (!confirm('Are you sure you want to delete your resume?')) {
+        return;
+      }
+      
+      try {
+        const response = await fetch('/profile/resume/delete', {
+          method: 'POST'
+        });
+        
+        if (response.ok) {
+          showToast('Resume deleted successfully!', 'success');
+          setTimeout(() => location.reload(), 1000);
+        } else {
+          showToast('Failed to delete resume', 'error');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('An error occurred', 'error');
+      }
+    }
+
+    // Delete account
+    async function confirmDeleteAccount() {
+      if (!confirm('Are you absolutely sure you want to delete your account? This action cannot be undone.')) {
+        return;
+      }
+      
+      try {
+        const response = await fetch('/profile/delete', {
+          method: 'POST'
+        });
+        
+        if (response.ok) {
+          showToast('Account deleted successfully', 'success');
+          setTimeout(() => {
+            window.location.href = '/?success=Account+deleted+successfully';
+          }, 1500);
+        } else {
+          showToast('Failed to delete account', 'error');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('An error occurred', 'error');
+      }
+    }
+
+    // Mobile menu toggle
+    document.getElementById('mobile-menu')?.addEventListener('click', function() {
+      document.getElementById('dropdown-menu').classList.toggle('hidden');
+    });
+
+    // Initialize page
+    fetchProfileData();
+  </script>
+</body>
+</html>
