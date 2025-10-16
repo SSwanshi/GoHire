@@ -3,8 +3,10 @@ const router = express.Router();
 const passport = require('passport');
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
+const path = require('path');
+
 router.get('/signup', (req, res) => {
-  res.render('signup', { title: 'Sign Up' });
+  res.sendFile(path.join(__dirname, '../public/signup.html'));
 });
 
 router.get('/logout', (req, res) => {
@@ -47,18 +49,20 @@ router.post('/signup', async (req, res) => {
     console.log('New user signed up:', newUser);
 
     req.session.successMessage = 'Signed up successfully, please login.';
-    res.redirect('/auth/login');
+    
+    // Return JSON response for AJAX request
+    res.status(201).json({ 
+      message: 'Signup successful! Please login.',
+      redirectUrl: '/login.html'
+    });
 
   } catch (err) {
     console.error('Signup error:', err);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ message: 'Server error. Please try again.' });
   }
 });
 router.get('/login', (req, res) => {
-  const successMessage = req.session.successMessage;
-  req.session.successMessage = null;
-
-  res.render('login', { title: 'Login', successMessage });
+  res.sendFile(path.join(__dirname, '../public/login.html'));
 });
 
 router.post('/login', async (req, res) => {
@@ -68,7 +72,7 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(400).json({ error: 'Invalid email or password' });
+      return res.status(400).json({ message: 'Invalid email or password' });
     }
 
     req.session.user = {
@@ -81,11 +85,16 @@ router.post('/login', async (req, res) => {
 
     await req.session.save();
     console.log(`User ${email} logged in successfully`);
-    res.redirect('/');
+    
+    // Return JSON response for AJAX request
+    res.status(200).json({ 
+      message: 'Login successful!',
+      redirectUrl: '/'
+    });
 
   } catch (err) {
     console.error('Login error:', err);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ message: 'Server error. Please try again.' });
   }
 });
 router.get('/user/:email', async (req, res) => {

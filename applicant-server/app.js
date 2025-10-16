@@ -96,11 +96,11 @@ app.use('/auth', authRoutes);
 app.use('/', applicantRoutes);
 
 app.get('/login', (req, res) => {
-  res.render('login');
+  res.sendFile(path.join(__dirname, 'public/login.html'));
 });
 
 app.get('/signup', (req, res) => {
-  res.render('signup');
+  res.sendFile(path.join(__dirname, 'public/signup.html'));
 });
 
 app.get('/', (req, res) => {

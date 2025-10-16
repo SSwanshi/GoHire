@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GoHire - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-blue-50">
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50"></div>
+  
+  <div class="bodywala">
+    <div class="login-container">
+      <div class="login-left">
+        <div class="login-heading">
+          <h1 class="main-heading">Go<span style="color:#FFD700">Hire</span></h1>
+          <p class="sub-heading" style="color:black;">Get Yourself Hired</p>
+        </div>
+      </div>
+      <div class="login-right">
+        <h2 class="login-title">Log in</h2>
+        <div class="toggle-buttons">
+          <button class="toggle-btn" id="recruiter-btn">As Recruiter</button>
+          <button class="toggle-btn active" id="candidate-btn">As Candidate</button>
+        </div>
+        <p class="divider">Login with email</p>
+        <form class="login-form" id="loginForm">
+          <input type="email" id="email" name="email" class="input-field" placeholder="Email Id" required>
+          <input type="password" id="password" name="password" class="input-field" placeholder="Enter Your Password" required>
+          <button type="submit" class="login-button">Login</button>
+        </form>
+        <p class="signup-text">Don't have an account? <a href="/signup.html">Sign up</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Toast notification function
+    function showToast(message, type = 'success') {
+      const toastContainer = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type} p-4 mb-3 rounded-lg shadow-lg text-white ${
+        type === 'success' ? 'bg-green-500' : 'bg-red-500'
+      }`;
+      toast.textContent = message;
+      toastContainer.appendChild(toast);
+
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+
+    // Toggle between recruiter and candidate
+    document.getElementById('recruiter-btn').addEventListener('click', function () {
+      this.classList.add('active');
+      document.getElementById('candidate-btn').classList.remove('active');
+      window.location.href = 'http://localhost:5000/auth/login';
+    });
+
+    document.getElementById('candidate-btn').addEventListener('click', function () {
+      this.classList.add('active');
+      document.getElementById('recruiter-btn').classList.remove('active');
+    });
+
+    // Handle form submission with fetch API
+    document.getElementById('loginForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+      // Client-side validation
+      if (!emailPattern.test(email)) {
+        showToast('Please enter a valid email address.', 'error');
+        return;
+      }
+
+      if (password.length < 4) {
+        showToast('Password must be at least 4 characters long.', 'error');
+        return;
+      }
+
+      // Prepare form data
+      const formData = {
+        email: email,
+        password: password
+      };
+
+      try {
+        // Send POST request to login endpoint
+        const response = await fetch('/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showToast('Login successful! Redirecting...', 'success');
+          // Redirect to home or dashboard after successful login
+          setTimeout(() => {
+            window.location.href = data.redirectUrl || '/home';
+          }, 1000);
+        } else {
+          showToast(data.message || 'Login failed. Please try again.', 'error');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('An error occurred. Please try again.', 'error');
+      }
+    });
+  </script>
+
+</body>
+</html>
