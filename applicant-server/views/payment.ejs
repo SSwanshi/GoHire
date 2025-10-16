@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Page - GoHire</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
+
 <body>
     <!-- Header -->
     <header>
@@ -39,7 +41,6 @@
                         </ul>
                         <p>Features:</p>
                         <ul>
-                            <li>Post unlimited jobs</li>
                             <li>Advanced analytics</li>
                             <li>Featured job listings</li>
                         </ul>
@@ -76,11 +77,13 @@
                         <h3>Credit/Debit Card Details</h3>
                         <div class="form-group">
                             <label for="cardNumber">Card Number</label>
-                            <input type="text" id="cardNumber" name="cardNumber" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19">
+                            <input type="text" id="cardNumber" name="cardNumber" class="form-control"
+                                placeholder="1234 5678 9012 3456" maxlength="19">
                         </div>
                         <div class="form-group">
                             <label for="expiryDate">Expiration Date</label>
-                            <input type="text" id="expiryDate" name="expiryDate" class="form-control" placeholder="MM/YY" maxlength="5">
+                            <input type="text" id="expiryDate" name="expiryDate" class="form-control"
+                                placeholder="MM/YY" maxlength="5">
                         </div>
                         <div class="form-group">
                             <label for="cvv">CVV</label>
@@ -88,7 +91,8 @@
                         </div>
                         <div class="form-group">
                             <label for="cardholderName">Cardholder Name</label>
-                            <input type="text" id="cardholderName" name="cardholderName" class="form-control" placeholder="Enter cardholder name">
+                            <input type="text" id="cardholderName" name="cardholderName" class="form-control"
+                                placeholder="Enter cardholder name">
                         </div>
                     </div>
 
@@ -107,11 +111,13 @@
                         </div>
                         <div class="form-group">
                             <label for="bankUserId">Bank User ID</label>
-                            <input type="text" id="bankUserId" name="bankUserId" class="form-control" placeholder="Enter your bank login ID">
+                            <input type="text" id="bankUserId" name="bankUserId" class="form-control"
+                                placeholder="Enter your bank login ID">
                         </div>
                         <div class="form-group">
                             <label for="bankPassword">Bank Password</label>
-                            <input type="password" id="bankPassword" name="bankPassword" class="form-control" placeholder="Enter your bank password">
+                            <input type="password" id="bankPassword" name="bankPassword" class="form-control"
+                                placeholder="Enter your bank password">
                         </div>
                         <!-- Transaction Summary REMOVED -->
                         <button type="button" id="processNetBanking" class="btn">Process Payment</button>
@@ -122,7 +128,8 @@
                         <h3>UPI Payment Details</h3>
                         <div class="form-group">
                             <label for="upiName">Full Name</label>
-                            <input type="text" id="upiName" name="upiName" class="form-control" placeholder="Enter your full name as per bank records">
+                            <input type="text" id="upiName" name="upiName" class="form-control"
+                                placeholder="Enter your full name as per bank records">
                         </div>
                         <div class="form-group">
                             <label for="upiId">UPI ID</label>
@@ -141,7 +148,8 @@
                         </div>
                         <div class="form-group">
                             <label for="upiPassword">UPI PIN</label>
-                            <input type="password" id="upiPassword" name="upiPassword" class="form-control" placeholder="Enter your UPI PIN" maxlength="6">
+                            <input type="password" id="upiPassword" name="upiPassword" class="form-control"
+                                placeholder="Enter your UPI PIN" maxlength="6">
                         </div>
                     </div>
 
@@ -154,8 +162,8 @@
         <div class="terms">
             <h2>Terms and Conditions</h2>
             <p>
-                By completing this payment, you agree to our 
-                <a href="/terms">Terms of Service</a> and 
+                By completing this payment, you agree to our
+                <a href="/terms">Terms of Service</a> and
                 <a href="/privacy">Privacy Policy</a>.
                 All payments are non-refundable.
             </p>
@@ -163,10 +171,11 @@
     </div>
 
     <script src="/script.js"></script>
-    <% if (typeof error !== 'undefined' && error) { %>
+    <% if (typeof error !=='undefined' && error) { %>
         <script>
             alert("<%= error %>");
         </script>
-    <% } %>
+        <% } %>
 </body>
+
 </html>

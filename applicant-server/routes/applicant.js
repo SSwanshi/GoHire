@@ -6,7 +6,7 @@ const { companies } = require('../../recruiter-server/routes/recruiter');
 const { appUsers } = require('./auth');
 const Fuse = require('fuse.js');
 const connectRecruiterDB = require('../config/recruiterDB');
-const { connectDB }= require('../config/db');
+const { connectDB } = require('../config/db');
 const createJobModel = require('../models/recruiter/Job');
 const createInternshipModel = require('../models/recruiter/Internships');
 const createCompanyModel = require('../models/recruiter/Company');
@@ -23,8 +23,8 @@ const Applied_for_Internships = require('../models/Applied_for_Internships');
 const conn = mongoose.connection;
 let bucket;
 conn.once("open", () => {
-    bucket = new GridFSBucket(conn.db, { bucketName: "uploads" });
-    console.log("✅ GridFS Bucket Initialized");
+  bucket = new GridFSBucket(conn.db, { bucketName: "uploads" });
+  console.log("✅ GridFS Bucket Initialized");
 });
 
 const storage = multer.memoryStorage();
@@ -41,45 +41,47 @@ const intapplication = [
 ];
 
 router.get('/', (req, res) => {
-  res.render('home', { user: req.session.user});
+  res.render('home', { user: req.session.user });
 });
 router.get('/jobs', async (req, res) => {
   try {
-      const recruiterConn = await connectRecruiterDB();
-      const JobFindConn = createJobModel(recruiterConn);
-      const CompanyModel = createCompanyModel(recruiterConn);
+    const recruiterConn = await connectRecruiterDB();
+    const JobFindConn = createJobModel(recruiterConn);
+    const CompanyModel = createCompanyModel(recruiterConn);
 
-      const JobFind = await JobFindConn.find({}).populate({path: 'jobCompany',
-        strictPopulate: false});
+    const JobFind = await JobFindConn.find({}).populate({
+      path: 'jobCompany',
+      strictPopulate: false
+    });
 
-      res.render('job-list', { JobFind, filters: {} }); 
+    res.render('job-list', { JobFind, filters: {} });
   } catch (err) {
-      console.error('Error fetching jobs from recruiter DB:', err);
-      res.status(500).send('Internal Server Error');
+    console.error('Error fetching jobs from recruiter DB:', err);
+    res.status(500).send('Internal Server Error');
   }
 });
 
 
 router.get('/logo/:logoId', async (req, res) => {
   try {
-      const logoId = req.params.logoId;
+    const logoId = req.params.logoId;
 
-      // Fetch the logo from recruiter server
-      const response = await axios({
-          method: 'get',
-          url: `http://localhost:5000/recruiter/logo/${logoId}`,
-          responseType: 'stream'
-      });
+    // Fetch the logo from recruiter server
+    const response = await axios({
+      method: 'get',
+      url: `http://localhost:5000/recruiter/logo/${logoId}`,
+      responseType: 'stream'
+    });
 
-      // Set the same content type
-      res.setHeader('Content-Type', response.headers['content-type']);
+    // Set the same content type
+    res.setHeader('Content-Type', response.headers['content-type']);
 
-      // Pipe the data (image) to the response
-      response.data.pipe(res);
+    // Pipe the data (image) to the response
+    response.data.pipe(res);
 
   } catch (error) {
-      console.error('Error proxying logo:', error.message);
-      res.status(500).json({ error: 'Failed to fetch logo' });
+    console.error('Error proxying logo:', error.message);
+    res.status(500).json({ error: 'Failed to fetch logo' });
   }
 });
 
@@ -89,7 +91,7 @@ router.get('/internships', async (req, res) => {
     const InternshipFindConn = createInternshipModel(recruiterConn);
     const CompanyModel = createCompanyModel(recruiterConn);
 
-    const InternshipFind = await InternshipFindConn.find({}).populate({path: 'intCompany', strictPopulate: false});
+    const InternshipFind = await InternshipFindConn.find({}).populate({ path: 'intCompany', strictPopulate: false });
 
 
     res.render('internship-list', { InternshipFind, filters: {} });
@@ -102,42 +104,42 @@ router.get('/internships', async (req, res) => {
 // Company List
 router.get('/companies', async (req, res) => {
   // const companies = await Company.find();
-  res.render('companylist', { companies: companies ,user: req.session.user});
+  res.render('companylist', { companies: companies, user: req.session.user });
 });
 
 router.get('/contact', async (req, res) => {
-  res.render('contact',{user: req.session.user});
+  res.render('contact', { user: req.session.user });
 })
 
 router.get('/search', async (req, res) => {
-  res.render('search-results' , {user: req.session.user});
+  res.render('search-results', { user: req.session.user });
 });
 router.get('/competitions', async (req, res) => {
-  res.render('competitions' , {user: req.session.user});
+  res.sendFile(require('path').join(__dirname, '../views/competitions.html'));
 });
 
 router.get('/applyforJobs', async (req, res) => {
-  res.render('Apply_for_Jobs' , {user: req.session.user});
+  res.render('Apply_for_Jobs', { user: req.session.user });
 });
 
 router.get('/AppliedforJobs', async (req, res) => {
-  res.render('Applied_for_Jobs' , {user: req.session.user});
+  res.render('Applied_for_Jobs', { user: req.session.user });
 });
 
 router.get('/AppliedforInternships', async (req, res) => {
-  res.render('Applied_for_Internships' , {user: req.session.user});
+  res.render('Applied_for_Internships', { user: req.session.user });
 });
 
 router.get('/applyforInternships', async (req, res) => {
-  res.render('Apply_for_Internships' , {user: req.session.user});
+  res.render('Apply_for_Internships', { user: req.session.user });
 });
 
 router.get('/Subscription', async (req, res) => {
-  res.render('Subscription' , {user: req.session.user});
+  res.render('Subscription', { user: req.session.user });
 });
 
 router.post('/search', async (req, res) => {
-    console.log("Received Body:", req.body); 
+  console.log("Received Body:", req.body);
   const enteredValue = req.body.parsedValue;
 
   const recruiterConn = await connectRecruiterDB();
@@ -145,13 +147,15 @@ router.post('/search', async (req, res) => {
   const InternshipFindConn = createInternshipModel(recruiterConn);
   const CompanyModel = createCompanyModel(recruiterConn);
 
-  const JobFind = await JobFindConn.find({}).populate({path: 'jobCompany',
-    strictPopulate: false});
+  const JobFind = await JobFindConn.find({}).populate({
+    path: 'jobCompany',
+    strictPopulate: false
+  });
 
-    JobFind.forEach(job => {
-      console.log("Job Title:", job.jobTitle);
-      console.log("Company Name:", job.jobCompany ? job.jobCompany.companyName : 'Company Not Available');
-    });
+  JobFind.forEach(job => {
+    console.log("Job Title:", job.jobTitle);
+    console.log("Company Name:", job.jobCompany ? job.jobCompany.companyName : 'Company Not Available');
+  });
 
   const options1 = {
     keys: [
@@ -164,22 +168,24 @@ router.post('/search', async (req, res) => {
     threshold: 0.3,
     includeScore: true
   };
-  
-const fuse1 = new Fuse(JobFind, options1);
-function searchJobs(enteredValue) {
-  if (!enteredValue) return;
-  const results1 = fuse1.search(enteredValue);
-  return results1.map(result => result.item);
-}
-const resultValue1 = searchJobs(enteredValue);
 
-  const InternshipFind = await InternshipFindConn.find({}).populate({path: 'intCompany',
-    strictPopulate: false});
+  const fuse1 = new Fuse(JobFind, options1);
+  function searchJobs(enteredValue) {
+    if (!enteredValue) return;
+    const results1 = fuse1.search(enteredValue);
+    return results1.map(result => result.item);
+  }
+  const resultValue1 = searchJobs(enteredValue);
 
-    InternshipFind.forEach(intern => {
-      console.log("Internship Title:", intern.intTitle);
-      console.log("Company Name:", intern.intCompany ? intern.intCompany.companyName : 'Company Not Available');
-    });
+  const InternshipFind = await InternshipFindConn.find({}).populate({
+    path: 'intCompany',
+    strictPopulate: false
+  });
+
+  InternshipFind.forEach(intern => {
+    console.log("Internship Title:", intern.intTitle);
+    console.log("Company Name:", intern.intCompany ? intern.intCompany.companyName : 'Company Not Available');
+  });
 
   const options2 = {
     keys: [
@@ -192,7 +198,7 @@ const resultValue1 = searchJobs(enteredValue);
     threshold: 0.3,
     includeScore: true
   };
-    
+
   const fuse2 = new Fuse(InternshipFind, options2);
 
   function searchIntern(enteredValue) {
@@ -201,10 +207,10 @@ const resultValue1 = searchJobs(enteredValue);
     return results2.map(result => result.item);
   }
 
-const resultValue2 = searchIntern(enteredValue);
-console.log("jobs",resultValue1);
+  const resultValue2 = searchIntern(enteredValue);
+  console.log("jobs", resultValue1);
 
-  res.render('search-results', { enteredValue: enteredValue, sentResult2: resultValue2, sentResult1: resultValue1, user: req.session.user});
+  res.render('search-results', { enteredValue: enteredValue, sentResult2: resultValue2, sentResult1: resultValue1, user: req.session.user });
 });
 
 router.post('/submit-jobs', async (req, res) => {
@@ -224,7 +230,7 @@ router.post('/submit-jobs', async (req, res) => {
     const recruiterConn = await connectRecruiterDB();
     const JobFindConn = createJobModel(recruiterConn)
     const CompanyModel = createCompanyModel(recruiterConn);
-  
+
     // Construct query object
     const query = {};
 
@@ -233,7 +239,7 @@ router.post('/submit-jobs', async (req, res) => {
     if (salary1) salaryConditions.push({ jobSalary: { $lt: 10 } });
     if (salary2) salaryConditions.push({ jobSalary: { $gte: 10, $lte: 20 } });
     if (salary3) salaryConditions.push({ jobSalary: { $gte: 20, $lte: 30 } });
-    if(salary4) salaryConditions.push({ jobSalary: { $gte: 30}});
+    if (salary4) salaryConditions.push({ jobSalary: { $gte: 30 } });
 
     // // Custom salary
     // if (salary4 && req.body.customMin && req.body.customMax) {
@@ -261,8 +267,10 @@ router.post('/submit-jobs', async (req, res) => {
       query.$and = query.$and || [];
       query.$and.push({ $or: expConditions });
     }
-    const JobFind = await JobFindConn.find(query).populate({path: 'jobCompany',
-      strictPopulate: false});
+    const JobFind = await JobFindConn.find(query).populate({
+      path: 'jobCompany',
+      strictPopulate: false
+    });
 
     res.render('job-list', { JobFind, filters: req.body }); // or send JSON: res.json(jobs);
   } catch (err) {
@@ -275,7 +283,7 @@ router.post('/submit-internship', async (req, res) => {
   try {
     const {
       dur1,
-      dur2, 
+      dur2,
       dur3,
       dur4,
     } = req.body;
@@ -288,19 +296,19 @@ router.post('/submit-internship', async (req, res) => {
 
     // duration filter
     let durConditions = [];
-    if(dur1) durConditions.push({intDuration: {$lte: 1}});
-    if(dur2) durConditions.push({intDuration: {$gt: 1, $lte: 3}});
-    if(dur3) durConditions.push({intDuration: {$gt: 3, $lte: 6}});
-    if(dur4) durConditions.push({intDuration: {$gt: 6}});
+    if (dur1) durConditions.push({ intDuration: { $lte: 1 } });
+    if (dur2) durConditions.push({ intDuration: { $gt: 1, $lte: 3 } });
+    if (dur3) durConditions.push({ intDuration: { $gt: 3, $lte: 6 } });
+    if (dur4) durConditions.push({ intDuration: { $gt: 6 } });
 
 
-    if(durConditions.length > 0){
+    if (durConditions.length > 0) {
       query.$or = durConditions;
     }
 
     // final query
 
-    const InternshipFind = await InternshipFindConn.find(query).populate({path: 'intCompany', strictPopulate: false});
+    const InternshipFind = await InternshipFindConn.find(query).populate({ path: 'intCompany', strictPopulate: false });
     res.render('internship-list', { InternshipFind, filters: req.body });
 
   } catch (err) {
@@ -310,7 +318,7 @@ router.post('/submit-internship', async (req, res) => {
 
 });
 
-router.post('/applyforJobs/:jobID', async(req, res) => { 
+router.post('/applyforJobs/:jobID', async (req, res) => {
   const jobId = req.params.jobID;
   const userId = req.session.user?.id;  // If you're using Passport.js or some other session-based auth
 
@@ -318,23 +326,26 @@ router.post('/applyforJobs/:jobID', async(req, res) => {
   const JobFindConn = createJobModel(recruiterConn);
   const CompanyModel = createCompanyModel(recruiterConn);
 
-  const JobFind = await JobFindConn.findById(jobId).populate({path: 'jobCompany',
-    strictPopulate: false});
-    console.log(JobFind);
+  const JobFind = await JobFindConn.findById(jobId).populate({
+    path: 'jobCompany',
+    strictPopulate: false
+  });
+  console.log(JobFind);
 
   if (!JobFind) {
     return res.status(404).json({ error: 'Job not found' });
   }
 
-  const alreadyApplied = await Applied_for_Jobs.findOne({userId, jobId });
-    if (alreadyApplied) {
-      return res.render('Applied_for_Jobs', { job: JobFind, applications ,user: req.session.user});
-    }
-    else{
-      return res.render('Apply_for_Jobs', { job: JobFind, applications ,user: req.session.user});}
+  const alreadyApplied = await Applied_for_Jobs.findOne({ userId, jobId });
+  if (alreadyApplied) {
+    return res.render('Applied_for_Jobs', { job: JobFind, applications, user: req.session.user });
+  }
+  else {
+    return res.render('Apply_for_Jobs', { job: JobFind, applications, user: req.session.user });
+  }
 });
 
-router.post('/appliedforJobs/:jobID', async(req, res) => { 
+router.post('/appliedforJobs/:jobID', async (req, res) => {
   try {
     // Get user data from session (assuming user is authenticated and data is in req.user)
     const userId = req.session.user?.id;  // If you're using Passport.js or some other session-based auth
@@ -344,27 +355,29 @@ router.post('/appliedforJobs/:jobID', async(req, res) => {
     const recruiterConn = await connectRecruiterDB();
     const JobModel = createJobModel(recruiterConn);
     const JobFindConn = createJobModel(recruiterConn);
-    const JobFind = await JobFindConn.findById(jobId).populate({path: 'jobCompany',
-      strictPopulate: false});
+    const JobFind = await JobFindConn.findById(jobId).populate({
+      path: 'jobCompany',
+      strictPopulate: false
+    });
     const job = await JobModel.findById(jobId);
     if (!job) return res.status(404).send("Job not found");
 
-      if (!userId) {
-        return res.render('Apply_for_Jobs', {
-          job: JobFind, 
-          applications ,
-          user: req.session.user,
-          error: 'Please login to apply for this job.'
-        });
-      }
+    if (!userId) {
+      return res.render('Apply_for_Jobs', {
+        job: JobFind,
+        applications,
+        user: req.session.user,
+        error: 'Please login to apply for this job.'
+      });
+    }
 
     // Fetch the user from the database using the userId (this is optional if you have user data in the session)
     const user = await User.findOne({ userId });
     const userResume = user.resumeId;
     if (!userResume) {
       return res.render('Apply_for_Jobs', {
-        job: JobFind, 
-        applications ,
+        job: JobFind,
+        applications,
         user: req.session.user,
         error: 'Please upload Resume to apply for this job.'
       });
@@ -372,7 +385,7 @@ router.post('/appliedforJobs/:jobID', async(req, res) => {
     if (!user) return res.status(404).send("User not found");
 
     // Check if the user has already applied for the job
-    const alreadyApplied = await Applied_for_Jobs.findOne({userId, jobId });
+    const alreadyApplied = await Applied_for_Jobs.findOne({ userId, jobId });
     console.log(alreadyApplied);
     if (alreadyApplied) {
       return res.status(400).send("You have already applied for this job.");
@@ -397,14 +410,14 @@ router.post('/appliedforJobs/:jobID', async(req, res) => {
     await application.save();
 
     // Send a success message or redirect the user to another page
-    res.render('Applied_for_Jobs', { job: JobFind, applications ,user: req.session.user});  // Redirect to the applications list or a confirmation page
+    res.render('Applied_for_Jobs', { job: JobFind, applications, user: req.session.user });  // Redirect to the applications list or a confirmation page
   } catch (err) {
     console.error(err);
     res.status(500).send("Server Error");
   }
 });
 
-router.post('/ApplyforInternships/:intID', async(req, res) => {
+router.post('/ApplyforInternships/:intID', async (req, res) => {
   const internshipId = req.params.intID;
   const userId = req.session.user?.id;
 
@@ -412,19 +425,22 @@ router.post('/ApplyforInternships/:intID', async(req, res) => {
   const InternshipFindConn = createInternshipModel(recruiterConn);
   const CompanyModel = createCompanyModel(recruiterConn);
 
-  const InternshipFind = await InternshipFindConn.findById(internshipId).populate({path: 'intCompany',
-    strictPopulate: false});
+  const InternshipFind = await InternshipFindConn.findById(internshipId).populate({
+    path: 'intCompany',
+    strictPopulate: false
+  });
 
   if (!InternshipFind) {
-      return res.status(404).json({ error: 'Internship not found' });
+    return res.status(404).json({ error: 'Internship not found' });
   }
 
-  const alreadyApplied = await Applied_for_Internships.findOne({userId, internshipId });
-    if (alreadyApplied) {
-      return res.render('Applied_for_Internships', { internship: InternshipFind, applications ,user: req.session.user});
-    }
-    else{
-      return res.render('Apply_for_Internships', { internship: InternshipFind, applications ,user: req.session.user});}
+  const alreadyApplied = await Applied_for_Internships.findOne({ userId, internshipId });
+  if (alreadyApplied) {
+    return res.render('Applied_for_Internships', { internship: InternshipFind, applications, user: req.session.user });
+  }
+  else {
+    return res.render('Apply_for_Internships', { internship: InternshipFind, applications, user: req.session.user });
+  }
 });
 
 router.post('/appliedforInternships/:internshipID', async (req, res) => {
