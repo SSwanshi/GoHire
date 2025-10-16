@@ -48,9 +48,9 @@
         id="navbar">
         <div class="container mx-auto flex justify-between items-center">
             <!-- Logo -->
-            <a href="/"
-                class="text-black text-3xl font-bold transition-transform hover:scale-105 duration-300 ml-2">Go<span
-                    class="text-yellow-400">Hire</span></a>
+            <a href="/" class="text-black text-3xl font-bold transition-transform hover:scale-105 duration-300 ml-2">
+                Go<span class="text-yellow-400">Hire</span>
+            </a>
 
             <!-- Search bar -->
             <div class="relative w-1/3 group">
@@ -79,7 +79,6 @@
                         class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Internship</a></li>
                 <li><a href="/contact"
                         class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Contact Us</a></li>
-                <!-- Dynamic content will be injected here -->
             </ul>
 
             <!-- Mobile Menu -->
@@ -95,181 +94,78 @@
                     <li><a href="/" class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Home</a>
                     </li>
                     <li><a href="/jobs"
-                            class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Jobs</a>
-                    </li>
+                            class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Jobs</a></li>
                     <li><a href="/internships"
                             class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Internships</a>
                     </li>
                     <li><a href="/contact"
                             class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Contact Us</a>
                     </li>
-
-                    <% if (user) { %>
-                        <li class="relative group flex justify-center">
-                            <button
-                                class="bg-yellow-400 hover:bg-blue-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg flex items-center justify-center">
-                                <%= user.firstName || 'Profile' %>
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="h-4 w-4 ml-1 transform transition-transform duration-300 group-hover:rotate-180"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7" />
-                                    </svg>
-                            </button>
-                            <div
-                                class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform -translate-y-2 group-hover:translate-y-0 flex justify-center flex-col">
-                                <a href="/profile"
-                                    class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-t-lg">My
-                                    Profile</a>
-                                <a href="/logout"
-                                    class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-b-lg">Logout</a>
-                            </div>
-                        </li>
-                        <% } else { %>
-                            <li><a href="/login"
-                                    class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg flex justify-center">Login</a>
-                            </li>
-                            <% } %>
                 </ul>
             </div>
         </div>
     </nav>
 
+    <!-- Contact Section -->
     <section class="pt-28 bg-gradient-to-r from-blue-100 to-yellow-100 h-[800px]">
         <div
             class="flex justify-around fade-in bg-gradient-to-r from-blue-700 to-yellow-700 bg-clip-text text-transparent">
             <div class="flex flex-col justify-center font-bold">
-                <div><img src="/images/Sarvjeet.jpg" alt="Trophy and competition"
-                        class="h-[200px] w-[200px] object-contain rounded-full"></div>
+                <img src="/images/Sarvjeet.jpg" alt="Sarvjeet Swanshi"
+                    class="h-[200px] w-[200px] object-contain rounded-full">
                 <div class="ml-8 mt-2">Sarvjeet Swanshi</div>
-                <a href="mailto:sarvjeet.s23@iiits.in">
-                    <div class="ml-6 mt-2">sarvjeet.s23@iiits.in</div>
-                </a>
+                <a href="mailto:sarvjeet.s23@iiits.in" class="ml-6 mt-2">sarvjeet.s23@iiits.in</a>
                 <div class="ml-12 mt-2">8102109959</div>
             </div>
+
             <div class="flex flex-col justify-center font-bold">
-                <div><img src="/images/kartik.jpg" alt="Trophy and competition"
-                        class="h-[200px] w-[200px] object-contain rounded-full"></div>
+                <img src="/images/kartik.jpg" alt="Kartik Raghuvanshi"
+                    class="h-[200px] w-[200px] object-contain rounded-full">
                 <div class="ml-6 mt-2">Kartik Raghuvanshi</div>
-                <a href="mailto:kartik.r23@iiits.in">
-                    <div class="ml-8 mt-2">kartik.r23@iiits.in</div>
-                </a>
+                <a href="mailto:kartik.r23@iiits.in" class="ml-8 mt-2">kartik.r23@iiits.in</a>
                 <div class="ml-12 mt-2">8269229339</div>
             </div>
+
             <div class="flex flex-col justify-center font-bold">
-                <div><img src="/images/AnujRathore.jpg" alt="Trophy and competition"
-                        class="h-[200px] w-[200px] object-contain rounded-full"></div>
+                <img src="/images/AnujRathore.jpg" alt="Anuj Rathore"
+                    class="h-[200px] w-[200px] object-contain rounded-full">
                 <div class="ml-12 mt-2">Anuj Rathore</div>
-                <a href="mailto:anuj.r23@iiits.in">
-                    <div class="ml-10 mt-2">anuj.r23@iiits.in</div>
-                </a>
+                <a href="mailto:anuj.r23@iiits.in" class="ml-10 mt-2">anuj.r23@iiits.in</a>
                 <div class="ml-14 mt-2">9340041042</div>
             </div>
         </div>
+
         <div
             class="flex justify-evenly mt-12 fade-out bg-gradient-to-r from-blue-700 to-yellow-700 bg-clip-text text-transparent">
             <div class="flex flex-col justify-center font-bold">
-                <div><img src="/images/Saurav.jpg" alt="Trophy and competition"
-                        class="h-[200px] w-[200px] object-contain rounded-full"></div>
+                <img src="/images/Saurav.jpg" alt="Saurav Kumar Roy"
+                    class="h-[200px] w-[200px] object-contain rounded-full">
                 <div class="ml-8 mt-2">Saurav Kumar Roy</div>
-                <a href="mailto:sauravkumar.r23@iiits.in">
-                    <div class="ml-4 mt-2">sauravkumar.r23@iiits.in</div>
-                </a>
+                <a href="mailto:sauravkumar.r23@iiits.in" class="ml-4 mt-2">sauravkumar.r23@iiits.in</a>
                 <div class="ml-12 mt-2">7283886537</div>
             </div>
+
             <div class="flex flex-col justify-center font-bold">
-                <div><img src="/images/likhitha.jpg" alt="Trophy and competition"
-                        class="h-[200px] w-[200px] object-contain rounded-full"></div>
+                <img src="/images/likhitha.jpg" alt="Bandi Likhitha"
+                    class="h-[200px] w-[200px] object-contain rounded-full">
                 <div class="ml-12 mt-2">Bandi Likhitha</div>
-                <a href="mailto:likhitha.b23@iiits.in">
-                    <div class="ml-6 mt-2">likhitha.b23@iiits.in</div>
-                </a>
+                <a href="mailto:likhitha.b23@iiits.in" class="ml-6 mt-2">likhitha.b23@iiits.in</a>
                 <div class="ml-14 mt-2">7093630717</div>
             </div>
         </div>
     </section>
 
     <script>
+        // Mobile menu toggle
         document.getElementById('mobile-menu').addEventListener('click', function () {
             document.getElementById('dropdown-menu').classList.toggle('hidden');
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            async function checkUserSession() {
-                try {
-                    const response = await fetch('/api/auth/check-session');
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (data.success && data.user) {
-                            renderUserNav(data.user);
-                        } else {
-                            renderGuestNav();
-                        }
-                    } else {
-                        renderGuestNav();
-                    }
-                } catch (error) {
-                    console.error('Error checking user session:', error);
-                    renderGuestNav();
-                }
-            }
-
-            function renderUserNav(user) {
-                const desktopMenu = document.getElementById('desktop-menu');
-                const mobileMenu = document.getElementById('dropdown-menu');
-
-                const profileImageHtml = user.profileImageId
-                    ? `<img src="/profile/image" class="w-8 h-8 rounded-full object-cover mr-2 border-2 border-blue-800" alt="Profile Image">`
-                    : `<div class="w-8 h-8 rounded-full bg-blue-800 text-white flex items-center justify-center mr-2 font-bold text-sm">${user.firstName.charAt(0).toUpperCase()}</div>`;
-
-                // Desktop Profile Dropdown
-                const desktopProfile = `
-                    <li class="relative group flex items-center">
-                        <button class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-4 rounded-full transition-all duration-300 hover:shadow-lg flex items-center">
-                            ${profileImageHtml}
-                            <span class="leading-none flex items-center">${user.firstName || 'Profile'}</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 transform transition-transform duration-300 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform -translate-y-2 group-hover:translate-y-0 top-full">
-                            <a href="/profile.html" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-t-lg">My Profile</a>
-                            <a href="/auth/logout" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-b-lg">Logout</a>
-                        </div>
-                    </li>`;
-                desktopMenu.insertAdjacentHTML('beforeend', desktopProfile);
-
-                // Mobile Profile Links
-                const mobileProfile = `
-                    <li><a href="/profile.html" class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">My Profile</a></li>
-                    <li><a href="/auth/logout" class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Logout</a></li>
-                `;
-                mobileMenu.insertAdjacentHTML('beforeend', mobileProfile);
-            }
-
-            function renderGuestNav() {
-                const desktopMenu = document.getElementById('desktop-menu');
-                const mobileMenu = document.getElementById('dropdown-menu');
-
-                // Desktop Login Button
-                const desktopLogin = `
-                    <li>
-                        <a href="/login.html" class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg flex items-center">Login</a>
-                    </li>`;
-                desktopMenu.insertAdjacentHTML('beforeend', desktopLogin);
-
-                // Mobile Login Button
-                const mobileLogin = `<li><a href="/login.html" class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Login</a></li>`;
-                mobileMenu.insertAdjacentHTML('beforeend', mobileLogin);
-            }
-
-            checkUserSession();
         });
     </script>
 
 </body>
+
 <footer>
-    <div class="footerbox py-4">
+    <div class="footerbox py-4 text-center bg-blue-700 text-yellow-200 font-semibold">
         <p>&copy; 2025 GoHire. All rights reserved.</p>
     </div>
 </footer>
