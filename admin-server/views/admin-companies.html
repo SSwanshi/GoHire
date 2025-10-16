@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoHire - Admin Dashboard</title>
+    <title>GoHire - Companies Awaiting Verification</title>
     <link rel="stylesheet" href="/admin-server/public/style.css">
     <link href="/css/tailwind.min.css" rel="stylesheet">
-    <body>
+</head>
+<body>
     <div class="relative bg-white shadow-md bg-indigo-400">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between h-16">
@@ -84,13 +85,122 @@
           </div>
         </div>
       </div>
-      <script>
-        const mobileMenuButton = document.querySelector('.mobile-menu-button');
-        const mobileMenu = document.querySelector('.mobile-menu');
-        
-        mobileMenuButton.addEventListener('click', () => {
-          mobileMenu.classList.toggle('hidden');
-          const menuIcons = mobileMenuButton.querySelectorAll('svg');
-          menuIcons.forEach(icon => icon.classList.toggle('hidden'));
+
+<h2 class="text-2xl font-bold text-center mt-10 mb-6">Companies Awaiting Verification</h2>
+
+<section class="flex justify-center">
+    <div class="w-full max-w-5xl">
+        <table class="w-full text-left border border-gray-300 border-collapse">
+            <thead>
+                <tr class="bg-gray-200 text-gray-700">
+                    <th class="px-4 py-2 border">Company Name</th>
+                    <th class="px-4 py-2 border">Website</th>
+                    <th class="px-4 py-2 border">Location</th>
+                    <th class="px-4 py-2 border">Proof Document</th>
+                    <th class="px-4 py-2 border text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody id="companiesTableBody">
+                <!-- Companies will be loaded dynamically here -->
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<footer class="bg-gray-800 text-white py-12">
+    <div class="container mx-auto px-6 lg:px-8">
+        Thank You Admin.
+      <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+        <p class="text-gray-400">&copy; 2025 GoHire. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+<script>
+  const mobileMenuButton = document.querySelector('.mobile-menu-button');
+  const mobileMenu = document.querySelector('.mobile-menu');
+  
+  mobileMenuButton.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+    const menuIcons = mobileMenuButton.querySelectorAll('svg');
+    menuIcons.forEach(icon => icon.classList.toggle('hidden'));
+  });
+
+  async function verifyCompany(companyId) {
+    try {
+      const response = await fetch(`/admin/verify-company/${companyId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        alert('Company verified successfully!');
+        loadCompanies(); // Reload the list
+      } else {
+        alert('Error verifying company');
+      }
+    } catch (error) {
+      console.error('Error verifying company:', error);
+      alert('Error verifying company');
+    }
+  }
+
+  // Load companies awaiting verification
+  async function loadCompanies() {
+    try {
+      const response = await fetch('/api/companies/awaiting-verification');
+      const companies = await response.json();
+      
+      const tableBody = document.getElementById('companiesTableBody');
+      tableBody.innerHTML = '';
+      
+      if (companies && companies.length > 0) {
+        companies.forEach(company => {
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-gray-100';
+          row.innerHTML = `
+            <td class="px-4 py-3 border">${company.companyName}</td>
+            <td class="px-4 py-3 border">
+              <a href="${company.website}" class="text-blue-500 hover:underline" target="_blank">Visit</a>
+            </td>
+            <td class="px-4 py-3 border">${company.location}</td>
+            <td class="px-4 py-3 border">
+              ${company.proofDocumentId ? `
+                <a href="http://localhost:5000/recruiter/proof/${company.proofDocumentId}" 
+                   class="text-green-600 hover:underline" 
+                   target="_blank" 
+                   title="Click to view the proof document">
+                  View Proof
+                </a>
+              ` : `
+                <span class="text-gray-500">Proof not provided</span>
+              `}
+            </td>
+            <td class="px-4 py-3 border text-center">
+              <button onclick="verifyCompany('${company._id}')" class="bg-blue-600 hover:bg-blue-800 text-white px-4 py-2 rounded">
+                Verify
+              </button>
+            </td>
+          `;
+          tableBody.appendChild(row);
         });
-      </script>
+      } else {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td colspan="5" class="text-center px-4 py-4 text-gray-500">No companies awaiting verification.</td>
+        `;
+        tableBody.appendChild(row);
+      }
+    } catch (error) {
+      console.error('Error loading companies:', error);
+      document.getElementById('companiesTableBody').innerHTML = '<tr><td colspan="5" class="text-center px-4 py-4 text-red-500">Error loading companies</td></tr>';
+    }
+  }
+
+  // Load companies when page loads
+  document.addEventListener('DOMContentLoaded', loadCompanies);
+</script>
+</body>
+</html>

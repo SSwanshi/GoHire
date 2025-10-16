@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoHire - Premium Users</title>
+    <link rel="stylesheet" href="/admin-server/public/style.css">
+    <link href="/css/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="relative bg-white shadow-md bg-indigo-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between h-16">
+            <div class="flex">
+              <div class="flex-shrink-0 flex items-center">
+                <span class="text-xl font-bold">Go<span style="color: yellow;">Hire</span></span>
+              </div>
+              <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                <a href="/home" class="border-transparent hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Home Page
+                </a>
+                <a href="/companylist" class="border-transparent hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Company Listed
+                </a>
+                <a href="/joblist" class="border-transparent hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Jobs Listed
+                </a>
+                <a href="/internshiplist" class="border-transparent hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Internship Listed
+                </a>
+                <a href="/applicantlist" class="border-transparent hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Applicants Listed
+                </a>
+                <a href="recruiterlist" class="border-transparent hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Recruiters Listed
+                </a>
+                <a href="premiumuser" class="border-transparent hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Premium Users
+                </a>
+                <a href="/" class="border-transparent hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Logout
+                </a>
+              </div>
+            </div>
+
+            <div class="flex items-center sm:hidden">
+              <button type="button" class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" aria-expanded="false">
+                <span class="sr-only">Open main menu</span>
+
+                <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+
+                <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="hidden mobile-menu sm:hidden">
+          <div class="pt-2 pb-3 space-y-1">
+            <a href="/home" class="bg-indigo-50 border-indigo-500 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+              Home Page
+            </a>
+            <a href="/companylist" class="border-transparent hover:bg-gray-50 hover:border-gray-300 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+              Company Listed
+            </a>
+            <a href="joblist" class="border-transparent hover:bg-gray-50 hover:border-gray-300 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+              Jobs Listed
+            </a>
+            <a href="applicantlist" class="border-transparent hover:bg-gray-50 hover:border-gray-300 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+              Applicants Listed
+            </a>
+            <a href="recruiterlist" class="border-transparent hover:bg-gray-50 hover:border-gray-300 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+              Recruiters Listed
+            </a>
+            <a href="premiumuser" class="border-transparent hover:bg-gray-50 hover:border-gray-300 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+              Premium Users
+            </a>
+            <a href="/" class="border-transparent hover:bg-gray-50 hover:border-gray-300 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+              Logout
+            </a>
+          </div>
+        </div>
+      </div>
+
+<div class="max-w-3xl mx-auto py-6">
+    <div class="bg-white rounded shadow overflow-hidden p-6">
+        <div class="mt-6">
+            <h2 class="text-xl font-semibold mb-2">Premium Users</h2>
+            <table class="min-w-full divide-y divide-gray-200" id="premiumUsersTable">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200" id="premiumUsersTableBody">
+                    <!-- Premium users will be loaded dynamically here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="mt-48"></div>
+</div>
+
+<footer class="bg-gray-800 text-white py-12">
+    <div class="container mx-auto px-6 lg:px-8">
+        Thank You Admin.
+      <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+        <p class="text-gray-400">&copy; 2025 GoHire. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+<script>
+  const mobileMenuButton = document.querySelector('.mobile-menu-button');
+  const mobileMenu = document.querySelector('.mobile-menu');
+  
+  mobileMenuButton.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+    const menuIcons = mobileMenuButton.querySelectorAll('svg');
+    menuIcons.forEach(icon => icon.classList.toggle('hidden'));
+  });
+
+  // Load premium users dynamically
+  async function loadPremiumUsers() {
+    try {
+      const response = await fetch('/api/premium-users');
+      const premiumUsers = await response.json();
+      
+      const tableBody = document.getElementById('premiumUsersTableBody');
+      tableBody.innerHTML = '';
+      
+      if (premiumUsers && premiumUsers.length > 0) {
+        premiumUsers.forEach(user => {
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-gray-50';
+          row.innerHTML = `
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              ${user.email}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              Premium
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } else {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td colspan="2" class="px-6 py-4 text-center text-sm text-gray-500">
+            No premium users found.
+          </td>
+        `;
+        tableBody.appendChild(row);
+      }
+    } catch (error) {
+      console.error('Error loading premium users:', error);
+      document.getElementById('premiumUsersTableBody').innerHTML = '<tr><td colspan="2" class="px-6 py-4 text-center text-sm text-red-500">Error loading premium users</td></tr>';
+    }
+  }
+
+  // Load premium users when page loads
+  document.addEventListener('DOMContentLoaded', loadPremiumUsers);
+</script>
+</body>
+</html>

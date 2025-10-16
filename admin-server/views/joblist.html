@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoHire - Job List</title>
+    <link rel="stylesheet" href="/admin-server/public/style.css">
+    <link href="/css/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="relative bg-white shadow-md bg-indigo-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between h-16">
+            <div class="flex">
+              <div class="flex-shrink-0 flex items-center">
+                <span class="text-xl font-bold">Go<span style="color: yellow;">Hire</span></span>
+              </div>
+              <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                <a href="/home" class="border-transparent hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Home Page
+                </a>
+                <a href="/companylist" class="border-transparent hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Company Listed
+                </a>
+                <a href="/joblist" class="border-transparent hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Jobs Listed
+                </a>
+                <a href="/internshiplist" class="border-transparent hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Internship Listed
+                </a>
+                <a href="/applicantlist" class="border-transparent hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Applicants Listed
+                </a>
+                <a href="recruiterlist" class="border-transparent hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Recruiters Listed
+                </a>
+                <a href="premiumuser" class="border-transparent hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Premium Users
+                </a>
+                <a href="/" class="border-transparent hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Logout
+                </a>
+              </div>
+            </div>
+
+            <div class="flex items-center sm:hidden">
+              <button type="button" class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" aria-expanded="false">
+                <span class="sr-only">Open main menu</span>
+
+                <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+
+                <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="hidden mobile-menu sm:hidden">
+          <div class="pt-2 pb-3 space-y-1">
+            <a href="/home" class="bg-indigo-50 border-indigo-500 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+              Home Page
+            </a>
+            <a href="/companylist" class="border-transparent hover:bg-gray-50 hover:border-gray-300 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+              Company Listed
+            </a>
+            <a href="joblist" class="border-transparent hover:bg-gray-50 hover:border-gray-300 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+              Jobs Listed
+            </a>
+            <a href="applicantlist" class="border-transparent hover:bg-gray-50 hover:border-gray-300 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+              Applicants Listed
+            </a>
+            <a href="recruiterlist" class="border-transparent hover:bg-gray-50 hover:border-gray-300 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+              Recruiters Listed
+            </a>
+            <a href="premiumuser" class="border-transparent hover:bg-gray-50 hover:border-gray-300 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+              Premium Users
+            </a>
+            <a href="/" class="border-transparent hover:bg-gray-50 hover:border-gray-300 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+              Logout
+            </a>
+          </div>
+        </div>
+      </div>
+
+<div class="container mx-auto py-10">
+  <h2 class="text-3xl font-bold text-center mb-10">Company wise List</h2>
+
+  <!-- Vertical Company List -->
+  <div class="max-w-4xl mx-auto space-y-6" id="companiesList">
+    <!-- Companies with jobs will be loaded dynamically here -->
+  </div>
+</div>
+
+<footer class="bg-gray-800 text-white py-12">
+    <div class="container mx-auto px-6 lg:px-8">
+        Thank You Admin.
+      <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+        <p class="text-gray-400">&copy; 2025 GoHire. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+<script>
+  const mobileMenuButton = document.querySelector('.mobile-menu-button');
+  const mobileMenu = document.querySelector('.mobile-menu');
+  
+  mobileMenuButton.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+    const menuIcons = mobileMenuButton.querySelectorAll('svg');
+    menuIcons.forEach(icon => icon.classList.toggle('hidden'));
+  });
+
+  function toggleDropdown(companyId) {
+    const dropdown = document.getElementById(`dropdown-${companyId}`);
+    const icon = document.getElementById(`icon-${companyId}`);
+
+    dropdown.classList.toggle("hidden");
+    icon.classList.toggle("rotate-180");
+  }
+
+  async function deleteJob(jobId) {
+    const confirmDelete = confirm(
+      "Are you sure you want to delete this job?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      const response = await fetch(`/job/${jobId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert(result.message);
+        loadJobs(); // Reload the list
+      } else {
+        alert(`Error: ${result.message}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong. Check console for details.");
+    }
+  }
+
+  // Load jobs dynamically
+  async function loadJobs() {
+    try {
+      const response = await fetch('/api/jobs');
+      const companies = await response.json();
+      
+      const companiesList = document.getElementById('companiesList');
+      companiesList.innerHTML = '';
+      
+      companies.forEach(company => {
+        const companyDiv = document.createElement('div');
+        companyDiv.className = 'bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-200 hover:shadow-xl';
+        
+        companyDiv.innerHTML = `
+          <!-- Company Header (always visible) -->
+          <div
+            class="flex items-center justify-between p-6 cursor-pointer"
+            onclick="toggleDropdown('${company._id}')"
+          >
+            <div class="flex items-center space-x-4">
+              <div>
+                <h3 class="text-xl font-semibold">${company.companyName}</h3>
+                <p class="text-gray-500">${company.location}</p>
+              </div>
+            </div>
+            <div class="flex items-center space-x-4">
+              <a
+                href="${company.website}"
+                target="_blank"
+                class="text-blue-500 hover:underline"
+                >Visit Website</a
+              >
+              <svg
+                id="icon-${company._id}"
+                class="w-5 h-5 text-gray-500 transition-transform"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Jobs Dropdown (hidden by default) -->
+          <div
+            id="dropdown-${company._id}"
+            class="hidden border-t border-gray-200"
+          >
+            <div class="p-6 pt-4">
+              <h4 class="font-medium text-lg mb-4">
+                Available Jobs (${company.jobs ? company.jobs.length : 0})
+              </h4>
+
+              ${company.jobs && company.jobs.length > 0 ? `
+                <div class="space-y-4">
+                  ${company.jobs.map(job => `
+                    <div class="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors">
+                      <div class="flex justify-between items-start">
+                        <div>
+                          <h5 class="font-semibold text-blue-600">
+                            ${job.jobTitle}
+                          </h5>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                          <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            ${job.noofPositions} positions
+                          </span>
+                          <button onclick="deleteJob('${job._id}')" class="text-red-500 hover:text-red-700 text-sm hover:underline transition-colors">
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                        <div>
+                          <p class="text-sm text-gray-500">Location</p>
+                          <p class="font-medium">${job.jobLocation}</p>
+                        </div>
+                        <div>
+                          <p class="text-sm text-gray-500">Salary</p>
+                          <p class="font-medium">₹${job.jobSalary} LPA</p>
+                        </div>
+                        <div>
+                          <p class="text-sm text-gray-500">Experience</p>
+                          <p class="font-medium">${job.jobExperience} years</p>
+                        </div>
+                      </div>
+
+                      <div class="mt-4 flex justify-between items-center">
+                        <div>
+                          <p class="text-sm text-gray-500">Posted on</p>
+                          <p class="text-sm">
+                            ${new Date(job.createdAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : `
+                <div class="text-center py-6">
+                  <p class="text-gray-500">No jobs currently available</p>
+                  <button class="mt-2 text-blue-500 hover:underline">
+                    Notify me when jobs open
+                  </button>
+                </div>
+              `}
+            </div>
+          </div>
+        `;
+        
+        companiesList.appendChild(companyDiv);
+      });
+    } catch (error) {
+      console.error('Error loading jobs:', error);
+      document.getElementById('companiesList').innerHTML = '<p class="text-center text-red-500">Error loading jobs</p>';
+    }
+  }
+
+  // Load jobs when page loads
+  document.addEventListener('DOMContentLoaded', loadJobs);
+</script>
+</body>
+</html>

@@ -31,8 +31,8 @@ app.use(
   })
 );
 
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+// Serve static HTML files instead of EJS
+app.use(express.static(path.join(__dirname, "views")));
 
 app.use(express.static(path.join(__dirname,'public')));
 app.use(express.json());
@@ -48,7 +48,7 @@ const validUsers = [
 ];
 
 app.get("/", (req, res) => {
-  res.render("login");
+  res.sendFile(path.join(__dirname, "views", "login.html"));
 });
 
 app.post("/login", (req, res) => {
@@ -69,7 +69,7 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/home", (req, res) => {
-  res.render("home");
+  res.sendFile(path.join(__dirname, "views", "home.html"));
 });
 
 function createUserModel(connection) {
@@ -104,7 +104,12 @@ function createUserModel(connection) {
   return connection.model("User", applicantSchema);
 }
 
-app.get("/applicantlist", async (req, res) => {
+app.get("/applicantlist", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "applicantlist.html"));
+});
+
+// API endpoint for applicants
+app.get("/api/applicants", async (req, res) => {
   try {
     // Connect to applicant database
     const applicantConn = await connectApplicantDB();
@@ -115,12 +120,10 @@ app.get("/applicantlist", async (req, res) => {
     // Fetch applicants (you might want to add filters if needed)
     const applicants = await UserModel.find({}); // Filter by role if exists
 
-    // console.log("Fetched applicants:", applicants); // Debug log
-
-    res.render("applicantlist", { applicants });
+    res.json(applicants);
   } catch (error) {
     console.error("Error fetching applicants:", error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
@@ -148,16 +151,21 @@ app.get("/applicantlist", async (req, res) => {
 // }
 
 
-app.get("/recruiterlist", async (req, res) => {
+app.get("/recruiterlist", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "recruiterlist.html"));
+});
+
+// API endpoint for recruiters
+app.get("/api/recruiters", async (req, res) => {
   try {
     const recruiterConn = await connectRecruiterDB(); // Ensure this is awaited
     const RecruiterModel = recruiterConn.model('RecruiterUser');
     const recruiters = await RecruiterModel.find({});
 
-    res.render("recruiterlist", {recruiters});
+    res.json(recruiters);
   } catch (error) {
     console.error("Error fetching recruiters:", error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
@@ -184,19 +192,24 @@ app.get("/recruiterlist", async (req, res) => {
 // });
 
 
-app.get("/companylist", async (req, res) => {
+app.get("/companylist", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "companylist.html"));
+});
+
+// API endpoint for companies
+app.get("/api/companies", async (req, res) => {
   try {
     const recruiterConn = await connectRecruiterDB();
     const CompanyModel = createCompanyModel(recruiterConn);
     const companies = await CompanyModel.find({});
-    res.render("companylist", { companies });
+    res.json(companies);
   } catch (error) {
     console.error("Error fetching companies:", error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-// company, job, applicant and recuiter delete route
+// company, job, applicant, recruiter and internship delete route
 app.delete('/:type/:id', async (req, res) => {
   try {
     const { type, id } = req.params;
@@ -213,13 +226,15 @@ app.delete('/:type/:id', async (req, res) => {
       Model = createCompanyModel(recruiterConn);
     } else if (type === 'job') {
       Model = createJobModel(recruiterConn);
+    } else if (type === 'internship') {
+      Model = createInternshipModel(recruiterConn);
     } else if (type === 'applicant'){
       Model = createUserModel(applicantConn);
     } else if (type === 'recruiter'){
       Model = recruiterConn.model('RecruiterUser')
     }
     else {
-      return res.status(400).json({ message: 'Invalid type. Use "company" or "job" or "applicant".' });
+      return res.status(400).json({ message: 'Invalid type. Use "company", "job", "internship", "applicant", or "recruiter".' });
     }
 
     const deletedDoc = await Model.findByIdAndDelete(id);
@@ -237,7 +252,12 @@ app.delete('/:type/:id', async (req, res) => {
 
 
 // internship list
-app.get("/internshiplist", async (req, res) => {
+app.get("/internshiplist", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "internshiplist.html"));
+});
+
+// API endpoint for internships
+app.get("/api/internships", async (req, res) => {
   try {
     const recruiterConn = await connectRecruiterDB();
 
@@ -272,18 +292,20 @@ app.get("/internshiplist", async (req, res) => {
       companyMap[companyName].internships.push(intern);
     });
 
-    res.render("internshiplist", {
-      companies: Object.values(companyMap),
-      filters: {},
-    });
+    res.json(Object.values(companyMap));
   } catch (err) {
     console.error("Error fetching internships:", err);
-    res.status(500).send("Internal Server Error");
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
 // joblist
-app.get("/joblist", async (req, res) => {
+app.get("/joblist", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "joblist.html"));
+});
+
+// API endpoint for jobs
+app.get("/api/jobs", async (req, res) => {
   try {
     const recruiterConn = await connectRecruiterDB();
     const JobModel = createJobModel(recruiterConn);
@@ -309,13 +331,10 @@ app.get("/joblist", async (req, res) => {
       companyMap[companyName].jobs.push(job);
     });
 
-    res.render("joblist", {
-      companies: Object.values(companyMap),
-      filters: {},
-    });
+    res.json(Object.values(companyMap));
   } catch (err) {
     console.error("Error fetching jobs from recruiter DB:", err);
-    res.status(500).send("Internal Server Error");
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
@@ -348,14 +367,16 @@ const isPremiumUser = (req, res, next) => {
 };
 
 app.get("/premiumuser", isPremiumUser, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "premiumuser.html"));
+});
+
+// API endpoint for premium users
+app.get("/api/premium-users", isPremiumUser, (req, res) => {
   const premiumUsers = validUsers
     .filter((user) => user.isPremium)
     .sort((a, b) => a.email.localeCompare(b.email));
 
-  res.render("premiumuser", {
-    user: req.session.user,
-    premiumUsers: premiumUsers,
-  });
+  res.json(premiumUsers);
 });
 
 connectDB();

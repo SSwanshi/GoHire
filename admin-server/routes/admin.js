@@ -1,11 +1,17 @@
 const express = require('express');
+const path = require('path');
 const router = express.Router();
 const mongoose = require('mongoose');
 const connectRecruiterDB = require('../config/recruiterDB'); // Import connection setup
 const { bucket, gfs } = require('../db/gridfs'); // Ensure this is set up in db/gridfs.js
 
 // 1️⃣ Route to view all companies awaiting verification
-router.get('/admin/companies/awaiting-verification', async (req, res) => {
+router.get('/admin/companies/awaiting-verification', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'views', 'admin-companies.html'));
+});
+
+// API endpoint for companies awaiting verification
+router.get('/api/companies/awaiting-verification', async (req, res) => {
     try {
         // Connect to recruiter DB
         const recruiterConn = await connectRecruiterDB();
@@ -15,7 +21,7 @@ router.get('/admin/companies/awaiting-verification', async (req, res) => {
 
         // Fetch companies that are not verified
         const companies = await Company.find({ verified: false });
-        res.render('admin-companies', { companies });
+        res.json(companies);
     } catch (error) {
         console.error("Error fetching companies awaiting verification:", error);
         res.status(500).json({ error: "Failed to fetch companies awaiting verification" });
