@@ -108,7 +108,7 @@ router.get('/companies', async (req, res) => {
 });
 
 router.get('/contact', async (req, res) => {
-  res.render('contact', { user: req.session.user });
+  res.sendFile(require('path').join(__dirname, '../views/contact.html'));
 })
 
 router.get('/search', async (req, res) => {

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Results</title>
+    <title>Contact Us - GoHire</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/css/styles.css">
     <style>
@@ -70,7 +70,7 @@
             </div>
 
             <!-- Desktop Menu -->
-            <ul class="hidden md:flex items-center space-x-8 text-white">
+            <ul class="hidden md:flex items-center space-x-8 text-white" id="desktop-menu">
                 <li><a href="/" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Home</a>
                 </li>
                 <li><a href="/jobs" class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Jobs</a>
@@ -79,51 +79,7 @@
                         class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Internship</a></li>
                 <li><a href="/contact"
                         class="hover:text-yellow-300 transition-colors duration-300 font-extrabold">Contact Us</a></li>
-
-                <% if (user) { %>
-                    <!-- Profile Dropdown -->
-                    <li class="relative group flex items-center">
-                        <button
-                            class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-4 rounded-full transition-all duration-300 hover:shadow-lg flex items-center">
-                            <% if (user.profileImageId) { %>
-                                <img src="/profile/image"
-                                    class="w-8 h-8 rounded-full object-cover mr-2 border-2 border-blue-800"
-                                    alt="Profile Image">
-                                <% } else { %>
-                                    <div
-                                        class="w-8 h-8 rounded-full bg-blue-800 text-white flex items-center justify-center mr-2 font-bold text-sm">
-                                        <%= user.firstName.charAt(0).toUpperCase() %>
-                                    </div>
-                                    <% } %>
-                                        <span class="leading-none flex items-center">
-                                            <%= user.firstName || 'Profile' %>
-                                        </span>
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="h-4 w-4 ml-1 transform transition-transform duration-300 group-hover:rotate-180"
-                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M19 9l-7 7-7-7" />
-                                        </svg>
-                        </button>
-
-                        <!-- Dropdown -->
-                        <div
-                            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform -translate-y-2 group-hover:translate-y-0">
-                            <a href="/profile" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-t-lg">My
-                                Profile</a>
-                            <a href="/logout"
-                                class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-b-lg">Logout</a>
-                        </div>
-                    </li>
-                    <% } else { %>
-                        <!-- Login Button -->
-                        <li>
-                            <a href="/login"
-                                class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg flex items-center">
-                                Login
-                            </a>
-                        </li>
-                        <% } %>
+                <!-- Dynamic content will be injected here -->
             </ul>
 
             <!-- Mobile Menu -->
@@ -234,9 +190,80 @@
     </section>
 
     <script>
-
         document.getElementById('mobile-menu').addEventListener('click', function () {
             document.getElementById('dropdown-menu').classList.toggle('hidden');
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            async function checkUserSession() {
+                try {
+                    const response = await fetch('/api/auth/check-session');
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success && data.user) {
+                            renderUserNav(data.user);
+                        } else {
+                            renderGuestNav();
+                        }
+                    } else {
+                        renderGuestNav();
+                    }
+                } catch (error) {
+                    console.error('Error checking user session:', error);
+                    renderGuestNav();
+                }
+            }
+
+            function renderUserNav(user) {
+                const desktopMenu = document.getElementById('desktop-menu');
+                const mobileMenu = document.getElementById('dropdown-menu');
+
+                const profileImageHtml = user.profileImageId
+                    ? `<img src="/profile/image" class="w-8 h-8 rounded-full object-cover mr-2 border-2 border-blue-800" alt="Profile Image">`
+                    : `<div class="w-8 h-8 rounded-full bg-blue-800 text-white flex items-center justify-center mr-2 font-bold text-sm">${user.firstName.charAt(0).toUpperCase()}</div>`;
+
+                // Desktop Profile Dropdown
+                const desktopProfile = `
+                    <li class="relative group flex items-center">
+                        <button class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-4 rounded-full transition-all duration-300 hover:shadow-lg flex items-center">
+                            ${profileImageHtml}
+                            <span class="leading-none flex items-center">${user.firstName || 'Profile'}</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 transform transition-transform duration-300 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform -translate-y-2 group-hover:translate-y-0 top-full">
+                            <a href="/profile.html" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-t-lg">My Profile</a>
+                            <a href="/auth/logout" class="block px-4 py-2 text-blue-800 hover:bg-blue-50 rounded-b-lg">Logout</a>
+                        </div>
+                    </li>`;
+                desktopMenu.insertAdjacentHTML('beforeend', desktopProfile);
+
+                // Mobile Profile Links
+                const mobileProfile = `
+                    <li><a href="/profile.html" class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">My Profile</a></li>
+                    <li><a href="/auth/logout" class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Logout</a></li>
+                `;
+                mobileMenu.insertAdjacentHTML('beforeend', mobileProfile);
+            }
+
+            function renderGuestNav() {
+                const desktopMenu = document.getElementById('desktop-menu');
+                const mobileMenu = document.getElementById('dropdown-menu');
+
+                // Desktop Login Button
+                const desktopLogin = `
+                    <li>
+                        <a href="/login.html" class="bg-yellow-400 hover:bg-yellow-500 text-blue-800 font-black py-2 px-6 rounded-full transition-all duration-300 hover:shadow-lg flex items-center">Login</a>
+                    </li>`;
+                desktopMenu.insertAdjacentHTML('beforeend', desktopLogin);
+
+                // Mobile Login Button
+                const mobileLogin = `<li><a href="/login.html" class="block px-4 py-2 hover:bg-blue-500 hover:text-yellow-500 text-center">Login</a></li>`;
+                mobileMenu.insertAdjacentHTML('beforeend', mobileLogin);
+            }
+
+            checkUserSession();
         });
     </script>
 
