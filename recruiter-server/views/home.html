@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoHire - Recruiter Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="/css/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .hover-grow {
+      transition: transform 0.2s;
+    }
+
+    .hover-grow:hover {
+      transform: scale(1.03);
+    }
+
+    .gradient-blue {
+      background: linear-gradient(to right, #1d4ed8, #ffe819);
+    }
+
+    .gradient-yellow {
+      background: linear-gradient(to right, #ffe819, #1d4ed8);
+    }
+
+    .yellow-accent {
+      background-color: #fbbf24;
+    }
+
+    .yellow-text {
+      color: #fbbf24;
+    }
+
+    .blue-bg-light {
+      background-color: #eff6ff;
+    }
+
+    .blue-bg {
+      background-color: #dbeafe;
+    }
+
+    .forgradient {
+      background: linear-gradient(to right, #a1c9fa, #0044ff);
+    }
+
+    .gradientyandb {
+      background: linear-gradient(to right, #e8f484, #a1c9fa);
+    }
+
+    .profile-image {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  </style>
+</head>
+
+<body class="blue-bg-light font-sans">
+  <header class="gradient-blue shadow-md sticky top-0 z-50">
+    <div class="container mx-auto px-4">
+      <nav class="flex justify-between items-center py-4">
+        <div>
+          <h2 class="text-2xl font-bold text-white"><span style="color: #dfcc24;">Go</span>Hire</h2>
+        </div>
+        <ul class="flex space-8 md:space-x-8">
+          <li><a href="/recruiter/home" class="hover:text-blue-900 font-medium transition-colors duration-300">Home</a>
+          </li>
+          <li><a href="/recruiter/companies"
+              class="hover:text-blue-900 font-medium transition-colors duration-300">Companies</a></li>
+          <li><a href="/recruiter/jobs" class="hover:text-blue-900 font-medium transition-colors duration-300">Jobs</a>
+          </li>
+          <li><a href="/recruiter/internships"
+              class="hover:text-blue-900 font-medium transition-colors duration-300">Internships</a></li>
+
+          <li class="flex items-center space-x-2">
+            <a href="/recruiter/profile" class="hover:text-blue-900 font-medium transition-colors duration-300">
+              <img id="headerProfileImage" src="/images/default.png" alt="Profile Photo"
+                class="w-8 h-8 rounded-full bg-gray-200 profile-image" />
+            </a>
+            <div class="md:hidden">
+              <a href="/recruiter/profile"
+                class="hover:text-blue-900 font-medium transition-colors duration-300">Profile</a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="forgradient py-16">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row items-center gap-12">
+        <div class="md:w-1/2">
+          <h1 class="text-4xl font-bold mb-6">Welcome <span class="text-blue-900" id="userName">Loading...</span></h1> 
+          <p class="text-lg mb-8">Streamline your hiring process with our powerful recruiter tools. Effortlessly manage job postings, track applicants, and maintain company profiles—all in one place.</p>
+        </div>
+        <div class="md:w-1/4 rounded-2xl md:ml-16">
+          <img src="https://img.freepik.com/premium-vector/employer-choice-flat-candidate-selection-employees-group-management-business-recruitment-concept-vector-cartoon-illustration_985641-3748.jpg" 
+               alt="recruiter image" 
+               class="w-full h-auto object-cover rounded-2xl">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center text-blue-800 mb-12">Quick Actions</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <a href="/recruiter/add-job" class="flex flex-col items-center p-6 blue-bg rounded-xl hover:bg-yellow-300 transition-colors duration-300 hover-grow">
+          <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+          </div>
+          <span class="font-medium font-bold">Add New Job</span>
+        </a>
+        <a href="/recruiter/add-company" class="flex flex-col items-center p-6 blue-bg rounded-xl hover:bg-yellow-300 transition-colors duration-300 hover-grow">
+          <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+          </div>
+          <span class="font-medium font-bold">Add New Company</span>
+        </a>
+        <a href="/recruiter/add-internship" class="flex flex-col items-center p-6 blue-bg rounded-xl hover:bg-yellow-300 transition-colors duration-300 hover-grow">
+          <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V6a4 4 0 018 0v1m4 0a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2h16zM10 12h4" />
+            </svg>
+          </div>
+          <span class="font-medium font-bold">Add New Internship</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 blue-bg">
+    <div class="container px-4">
+        <h2 class="text-3xl font-bold text-center text-blue-800 mb-12">Powerful Recruiting Tools</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            <div class="bg-white shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 hover-grow border-t-4 border-blue-600 max-w-md mx-auto">
+                <div class="h-48 overflow-hidden">
+                    <img src="https://cdn.pixabay.com/photo/2019/01/19/19/22/recruitment-3942378_640.jpg" 
+                        alt="Job Management" 
+                        class="w-full h-full object-cover rounded-none"/>
+                </div>
+                <div class="p-4">
+                    <h3 class="text-lg font-bold text-blue-700 mb-2">Job Management</h3>
+                    <p class="mb-3 text-sm">Create, edit, and manage all your job postings in one centralized dashboard.</p>
+                    <a href="/recruiter/jobs" class="text-blue-600 font-medium hover:text-blue-800 text-sm">Manage Jobs →</a>
+                </div>
+            </div>
+
+            <div class="bg-white shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 hover-grow border-t-4 border-blue-600 max-w-md mx-auto">
+              <div class="h-48 overflow-hidden">
+                  <img src="https://www.foundit.in/career-advice/wp-content/uploads/2022/03/interview-question-and-answer-for-hr-recruiter-1068x559.jpg" 
+                      alt="Job Management" 
+                      class="w-full h-full object-cover rounded-none"/>
+              </div>
+              <div class="p-4">
+                  <h3 class="text-lg font-bold text-blue-700 mb-2">Internship Management</h3>
+                  <p class="mb-3 text-sm">Create, edit, and manage all your internship postings in one centralized dashboard.</p>
+                  <a href="/recruiter/internships" class="text-blue-600 font-medium hover:text-blue-800 text-sm">Manage Internships →</a>
+              </div>
+          </div>
+
+            <div class="bg-white shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 hover-grow border-t-4 border-yellow-400 max-w-md mx-auto">
+                <div class="h-48 overflow-hidden">
+                    <img src="https://www.shutterstock.com/image-vector/real-estate-developer-entrepreneur-concept-600nw-487692952.jpg" alt="Company Profiles" class="w-full h-full object-cover rounded-none"/>
+                </div>
+                <div class="p-4">
+                    <h3 class="text-lg font-bold text-blue-700 mb-2">Company Profiles</h3>
+                    <p class="mb-3 text-sm">Maintain detailed company information and branding for all your clients.</p>
+                    <a href="/recruiter/companies" class="text-blue-600 font-medium hover:text-blue-800 text-sm">Manage Companies →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="mt-16"></div>
+<section class="py-16 bg-blue-300">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-8 text-center">
+      <div>
+        <p class="text-4xl font-bold mb-2" id="companyCount">Loading...</p>
+        <p class="text-blue-800 font-bold">Companies Registered</p>
+      </div>
+      <div>
+        <p class="text-4xl font-bold mb-2" id="jobCount">Loading...</p>
+        <p class="text-blue-800 font-bold">Jobs Posted</p>
+      </div>
+      <div>
+        <p class="text-4xl font-bold mb-2" id="internshipCount">Loading...</p>
+        <p class="text-blue-800 font-bold">Internships Offered</p>
+      </div>
+      <div>
+        <p class="text-4xl font-bold mb-2" id="candidateCount">Loading...</p>
+        <p class="text-blue-800 font-bold">Candidates</p>
+      </div>
+      <div>
+        <p class="text-4xl font-bold mb-2" id="clientSatisfaction">Loading...</p>
+        <p class="text-blue-800 font-bold">Client Satisfaction</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="mt-20"></div>
+
+<footer class="bg-gray-800 text-white py-8">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div>
+        <h3 class="text-xl font-bold mb-4"><span class="text-yellow-400">Go</span>Hire</h3>
+        <p class="text-gray-300">Streamline your hiring process with our powerful recruiter tools.</p>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+        <ul class="space-y-2">
+          <li><a href="/recruiter/home" class="text-gray-300 hover:text-white transition-colors">Home</a></li>
+          <li><a href="/recruiter/jobs" class="text-gray-300 hover:text-white transition-colors">Jobs</a></li>
+          <li><a href="/recruiter/internships" class="text-gray-300 hover:text-white transition-colors">Internships</a></li>
+          <li><a href="/recruiter/companies" class="text-gray-300 hover:text-white transition-colors">Companies</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-lg font-semibold mb-4">Contact</h4>
+        <p class="text-gray-300">Email: support@gohire.com</p>
+        <p class="text-gray-300">Phone: +1 (555) 123-4567</p>
+      </div>
+    </div>
+    <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+      <p class="text-gray-400">&copy; 2024 GoHire. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Check if user is logged in and load data
+  async function checkSessionAndLoadData() {
+    try {
+      const response = await fetch('/api/auth/check-session');
+      const data = await response.json();
+      
+      if (!data.success) {
+        // User is not logged in, redirect to login
+        window.location.href = '/auth/login';
+        return;
+      }
+      
+      // Load user data
+      loadUserData(data.user);
+      
+      // Load statistics
+      await loadStatistics();
+      
+    } catch (error) {
+      console.error('Session check failed:', error);
+      window.location.href = '/auth/login';
+    }
+  }
+
+  // Load user data
+  function loadUserData(user) {
+    // Update user name
+    const userName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'User';
+    document.getElementById('userName').textContent = userName;
+    
+    // Update profile image using endpoint approach
+    const profileImageUrl = `/auth/profile-image/${user.id}`;
+    const profileImage = document.getElementById('headerProfileImage');
+    
+    // Add cache busting to ensure fresh image loads
+    const timestamp = new Date().getTime();
+    profileImage.src = `${profileImageUrl}?t=${timestamp}`;
+    
+    // Handle image load errors
+    profileImage.onerror = function() {
+      console.log('Profile image not found, using default');
+      this.src = '/images/default.png';
+    };
+  }
+
+  // Load statistics
+  async function loadStatistics() {
+    try {
+      const response = await fetch('/api/home/statistics');
+      const data = await response.json();
+      
+      if (data.success) {
+        document.getElementById('companyCount').textContent = data.companyCount || 0;
+        document.getElementById('jobCount').textContent = data.jobCount || 0;
+        document.getElementById('internshipCount').textContent = data.internshipCount || 0;
+        document.getElementById('candidateCount').textContent = (data.candidateCount || 50) + '+';
+        document.getElementById('clientSatisfaction').textContent = data.clientSatisfaction || '98%';
+      } else {
+        console.error('Failed to load statistics:', data.error);
+        // Set default values
+        document.getElementById('companyCount').textContent = '0';
+        document.getElementById('jobCount').textContent = '0';
+        document.getElementById('internshipCount').textContent = '0';
+        document.getElementById('candidateCount').textContent = '50+';
+        document.getElementById('clientSatisfaction').textContent = '98%';
+      }
+    } catch (error) {
+      console.error('Error loading statistics:', error);
+      // Set default values
+      document.getElementById('companyCount').textContent = '0';
+      document.getElementById('jobCount').textContent = '0';
+      document.getElementById('internshipCount').textContent = '0';
+      document.getElementById('candidateCount').textContent = '50+';
+      document.getElementById('clientSatisfaction').textContent = '98%';
+    }
+  }
+
+  // Check session and load data on page load
+  checkSessionAndLoadData();
+</script>
+</body>
+
+</html>

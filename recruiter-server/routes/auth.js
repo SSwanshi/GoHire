@@ -4,91 +4,11 @@ const User = require('../models/User');
 const router = express.Router();
 const uploading = require('../middleware/multer');
 
-router.post('/signup', async (req, res) => {
-  const { firstName, lastName, email, phone, gender, password, confirmPassword } = req.body;
+// Signup POST route moved to API routes for HTML pages
 
-  // Validation
-  if (!firstName || !email || !phone || !gender || !password || !confirmPassword) {
-    return res.status(400).json({ error: 'All required fields must be filled' });
-  }
+// Login GET route moved to app.js to serve HTML file
 
-  // Password length validation (matches frontend)
-  if (password.length < 4) {
-    return res.status(400).json({ error: 'Password must be at least 4 characters long' });
-  }
-
-  if (password !== confirmPassword) {
-    return res.status(400).json({ error: 'Passwords do not match' });
-  }
-
-  // Basic email format validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    return res.status(400).json({ error: 'Please enter a valid email address' });
-  }
-
-  // Phone number validation (10 digits)
-  const phoneRegex = /^\d{10}$/;
-  if (!phoneRegex.test(phone)) {
-    return res.status(400).json({ error: 'Phone number must be 10 digits' });
-  }
-
-  try {
-    // Check if user exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ error: 'Email already registered' });
-    }
-
-    // Hash password and create user
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({
-      firstName,
-      lastName,
-      email,
-      phone,
-      gender,
-      password: hashedPassword
-    });
-
-    await newUser.save();
-
-    // Set success message and redirect
-    req.session.successMessage = 'Signed up successfully! Please login.';
-    return res.redirect('/auth/login');
-
-  } catch (error) {
-    console.error('Signup error:', error);
-    return res.status(500).json({
-      error: 'An unexpected error occurred. Please try again later.'
-    });
-  }
-});
-
-router.get('/login', (req, res) => {
-  const successMessage = req.session.successMessage;
-  req.session.successMessage = null;
-  res.render('login', { title: 'Login', successMessage });
-});
-
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const user = await User.findOne({ email });
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(400).json({ error: 'Invalid email or password' });
-    }
-
-    req.session.user = user;
-    req.session.userId = user._id;
-
-    res.redirect('/recruiter/home');
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+// Login POST route moved to API routes for HTML pages
 
 router.get('/user/:email', async (req, res) => {
   const { email } = req.params;
@@ -108,7 +28,10 @@ router.get('/user/:email', async (req, res) => {
 router.post('/:id/profile-image', uploading.single('image'), async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    if (!user) return res.status(404).send("User not found");
+    if (!user) return res.status(404).json({ 
+      success: false, 
+      error: "User not found" 
+    });
 
     user.profileImage = {
       data: req.file.buffer,
@@ -116,10 +39,16 @@ router.post('/:id/profile-image', uploading.single('image'), async (req, res) =>
     };
 
     await user.save();
-    res.redirect('/auth/profile');
+    res.json({ 
+      success: true, 
+      message: "Profile image updated successfully" 
+    });
   } catch (err) {
     console.error("Upload Error:", err);
-    res.status(500).send("Server Error");
+    res.status(500).json({ 
+      success: false, 
+      error: "Server Error" 
+    });
   }
 });
 
@@ -137,18 +66,7 @@ router.get('/profile-image/:id', async (req, res) => {
   }
 });
 
-router.get('/profile', async (req, res) => {
-  try {
-    const userId = req.session.user?._id;
-    if (!userId) return res.redirect('/auth/login');
-
-    const user = await User.findById(userId);
-    res.render('profile', { user });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Server error");
-  }
-});
+// Profile GET route moved to app.js to serve HTML file
 
 
 module.exports = router;

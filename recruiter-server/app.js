@@ -15,6 +15,7 @@ const User = require('./models/User');
 
 const authRoutes = require('./routes/auth');
 const recruiterRoutes = require('./routes/recruiter');
+const apiRoutes = require('./routes/api');
 const cron = require('node-cron');
 const deleteExpiredJobs = require('./routes/jobCleanup');
 const deleteExpiredInternship = require('./routes/intCleanup');
@@ -33,8 +34,11 @@ if (!fs.existsSync(uploadDir)) {
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key',
   resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false }
+  saveUninitialized: false,
+  cookie: { 
+    secure: false,
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
 }));
 
 app.use(async (req, res, next) => {
@@ -79,6 +83,7 @@ const upload = multer({
 
 app.use('/auth', authRoutes);
 app.use('/recruiter', recruiterRoutes);
+app.use('/api', apiRoutes);
 app.use('/applications', applicationRoutes);
 app.use('/internapplicants', intapplicationRoutes);
 
@@ -86,38 +91,29 @@ app.get('/', (req, res) => {
   res.redirect('/auth/login');
 });
 
-app.get('/auth/signup', (req, res) => {
-  res.render('signup');
+app.get('/auth/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'login.html'));
 });
+
+app.get('/auth/signup', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'signup.html'));
+});
+
+app.get('/recruiter/profile', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'profile.html'));
+});
+
 
 app.get('/logout', (req, res)=> {
   res.redirect('/auth/login');
 })
 
 
-app.get('/recruiter/home', async (req, res) => {
+app.get('/recruiter/home', (req, res) => {
   if (!req.session.user) return res.redirect('/auth/login');
-  
-  try {
-    const companyCount = await Company.countDocuments();
-    
-    const jobCount = await Job.countDocuments();
-    const internshipCount = await Internship.countDocuments();
-
-    res.render('home', {
-      title: 'Home',
-      user: req.session.user,
-      companyCount,
-      jobCount,
-      internshipCount,
-      candidateCount: 50, 
-      clientSatisfaction: '98%'
-    });
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    res.status(500).send('Server Error');
-  }
+  res.sendFile(path.join(__dirname, 'views', 'home.html'));
 });
+
 
 
 app.get('/recruiter/add-company', (req, res) => {

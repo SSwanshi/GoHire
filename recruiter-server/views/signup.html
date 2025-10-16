@@ -22,7 +22,7 @@
       <hr>
       <br>
 
-      <form action="/auth/signup" method="POST" class="signup-form">
+      <form id="signupForm" class="signup-form">
         <div class="form-row">
           <div class="form-group">
             <label for="firstName">First Name <span class="required">*</span></label>
@@ -118,6 +118,24 @@
   </div>
 
   <script>
+    // Check if user is already logged in
+    async function checkSession() {
+      try {
+        const response = await fetch('/api/auth/check-session');
+        const data = await response.json();
+        
+        if (data.success) {
+          // User is already logged in, redirect to home
+          window.location.href = '/recruiter/home';
+        }
+      } catch (error) {
+        console.log('Session check failed:', error);
+      }
+    }
+
+    // Check session on page load
+    checkSession();
+
     // Toggle password visibility
     document.getElementById('togglePassword').addEventListener('click', function () {
       const passwordInput = document.getElementById('password');
@@ -168,7 +186,9 @@
       }
     });
 
-    document.querySelector('.signup-form').addEventListener('submit', function (event) {
+    document.getElementById('signupForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+      
       let isValid = true;
 
       // Get form values
@@ -266,9 +286,76 @@
       }
 
       if (!isValid) {
-        event.preventDefault(); // Stop form submission
+        return;
+      }
+
+      // Show loading state
+      const submitBtn = document.querySelector('.next-button');
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating Account...';
+
+      try {
+        const response = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            email,
+            phone,
+            gender: document.querySelector('input[name="gender"]:checked').value,
+            password,
+            confirmPassword
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showNotification(data.message, 'success');
+          
+          // Redirect after a short delay
+          setTimeout(() => {
+            window.location.href = data.redirect;
+          }, 2000);
+        } else {
+          showNotification(data.error, 'error');
+          // Reset button
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
+      } catch (error) {
+        console.error('Signup error:', error);
+        showNotification('An error occurred. Please try again.', 'error');
+        // Reset button
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
       }
     });
+
+    function showNotification(message, type) {
+      // Remove existing notifications
+      const existing = document.querySelector('.notification');
+      if (existing) existing.remove();
+      
+      const notification = document.createElement('div');
+      notification.className = `notification fixed top-5 right-5 p-4 rounded-md shadow-lg z-50 ${
+        type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+      }`;
+      notification.textContent = message;
+      
+      document.body.appendChild(notification);
+      
+      // Auto remove after 3 seconds
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.parentNode.removeChild(notification);
+        }
+      }, 3000);
+    }
   </script>
 </body>
 

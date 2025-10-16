@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoHire - Profile</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="/css/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .hover-grow {
+      transition: transform 0.2s;
+    }
+
+    .hover-grow:hover {
+      transform: scale(1.03);
+    }
+
+    .gradient-blue {
+      background: linear-gradient(to right, #1d4ed8, #ffe819);
+    }
+
+    .gradient-yellow {
+      background: linear-gradient(to right, #ffe819, #1d4ed8);
+    }
+
+    .yellow-accent {
+      background-color: #fbbf24;
+    }
+
+    .yellow-text {
+      color: #fbbf24;
+    }
+
+    .blue-bg-light {
+      background-color: #eff6ff;
+    }
+
+    .blue-bg {
+      background-color: #dbeafe;
+    }
+
+    .forgradient {
+      background: linear-gradient(to right, #a1c9fa, #0044ff);
+    }
+
+    .gradientyandb {
+      background: linear-gradient(to right, #e8f484, #a1c9fa);
+    }
+
+    .profile-image {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  </style>
+</head>
+
+<body class="blue-bg-light font-sans">
+  <header class="gradient-blue shadow-md sticky top-0 z-50">
+    <div class="container mx-auto px-4">
+      <nav class="flex justify-between items-center py-4">
+        <div>
+          <h2 class="text-2xl font-bold text-white"><span style="color: #dfcc24;">Go</span>Hire</h2>
+        </div>
+        <ul class="flex space-8 md:space-x-8">
+          <li><a href="/recruiter/home" class="hover:text-blue-900 font-medium transition-colors duration-300">Home</a>
+          </li>
+          <li><a href="/recruiter/companies"
+              class="hover:text-blue-900 font-medium transition-colors duration-300">Companies</a></li>
+          <li><a href="/recruiter/jobs" class="hover:text-blue-900 font-medium transition-colors duration-300">Jobs</a>
+          </li>
+          <li><a href="/recruiter/internships"
+              class="hover:text-blue-900 font-medium transition-colors duration-300">Internships</a></li>
+
+          <li class="flex items-center space-x-2">
+            <a href="/recruiter/profile" class="hover:text-blue-900 font-medium transition-colors duration-300">
+              <img id="headerProfileImage" src="/images/default.png" alt="Profile Photo"
+                class="w-8 h-8 rounded-full bg-gray-200 profile-image" />
+            </a>
+            <div class="md:hidden">
+              <a href="/recruiter/profile"
+                class="hover:text-blue-900 font-medium transition-colors duration-300">Profile</a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="max-w-4xl mx-auto py-8 px-4">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Profile Dashboard</h1>
+      <p class="text-gray-600">Manage your account information and preferences</p>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Profile Card -->
+      <div class="lg:col-span-1">
+        <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+          <!-- Profile Image Section -->
+          <div class="flex flex-col items-center mb-6">
+            <div class="relative">
+              <img id="profileImage" src="/images/default.png" alt="Profile Image"
+                class="w-24 h-24 rounded-full border-4 border-blue-200 shadow-lg object-cover">
+              <label for="imageUpload"
+                class="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full w-7 h-7 flex items-center justify-center cursor-pointer hover:bg-blue-600 transition-all duration-200 shadow-md">
+                <i class="fas fa-camera text-xs"></i>
+              </label>
+              <input type="file" id="imageUpload" name="image" accept="image/*" class="hidden">
+            </div>
+            <h3 id="userName" class="text-lg font-semibold text-gray-900 mt-3">Loading...</h3>
+            <p id="userEmail" class="text-sm text-gray-500">Loading...</p>
+          </div>
+
+          <!-- Quick Stats -->
+          <div class="space-y-3">
+            <div class="flex items-center justify-between py-2 px-3 bg-blue-50 rounded-lg">
+              <span class="text-sm text-blue-700 font-medium">Account Status</span>
+              <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Active</span>
+            </div>
+            <div class="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg">
+              <span class="text-sm text-gray-700 font-medium">Member Since</span>
+              <span id="memberSince" class="text-xs text-gray-600">Loading...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="lg:col-span-2">
+        <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold text-gray-900">Personal Information</h2>
+            <button id="editProfileBtn"
+              class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2 text-sm">
+              <i class="fas fa-edit"></i>
+              <span>Edit Profile</span>
+            </button>
+          </div>
+
+          <!-- Profile Information -->
+          <div class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="group">
+                <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                  <i class="fas fa-user mr-2 text-blue-600"></i> First Name
+                </label>
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 group-hover:bg-gray-100 transition-colors">
+                  <p id="firstName" class="text-gray-900 font-medium">Loading...</p>
+                </div>
+              </div>
+
+              <div class="group">
+                <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                  <i class="fas fa-user mr-2 text-blue-600"></i> Last Name
+                </label>
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 group-hover:bg-gray-100 transition-colors">
+                  <p id="lastName" class="text-gray-900 font-medium">Loading...</p>
+                </div>
+              </div>
+
+              <div class="group">
+                <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                  <i class="fas fa-envelope mr-2 text-blue-600"></i> Email Address
+                </label>
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 group-hover:bg-gray-100 transition-colors">
+                  <p id="email" class="text-gray-900 font-medium">Loading...</p>
+                </div>
+              </div>
+
+              <div class="group">
+                <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                  <i class="fas fa-phone mr-2 text-blue-600"></i> Phone Number
+                </label>
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 group-hover:bg-gray-100 transition-colors">
+                  <p id="phone" class="text-gray-900 font-medium">Loading...</p>
+                </div>
+              </div>
+
+              <div class="group">
+                <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                  <i class="fas fa-venus-mars mr-2 text-blue-600"></i> Gender
+                </label>
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 group-hover:bg-gray-100 transition-colors">
+                  <p id="gender" class="text-gray-900 font-medium">Loading...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- Account Actions Card -->
+    <div class="mt-8">
+      <div id="accountActionsCard" class="bg-white rounded-xl shadow-lg p-6 border border-gray-100 cursor-pointer hover:shadow-xl transition-all duration-200 group">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+              <i class="fas fa-cog text-blue-600"></i>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">Account Actions</h3>
+              <p class="text-sm text-gray-500">Manage your account settings</p>
+            </div>
+          </div>
+          <i class="fas fa-chevron-down text-gray-400 group-hover:text-gray-600 transition-colors"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Account Actions Popup -->
+    <div id="accountActionsPopup" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+      <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="popupContent">
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-xl font-semibold text-gray-900">Account Actions</h3>
+              <button id="closePopup" class="text-gray-400 hover:text-gray-600 transition-colors">
+                <i class="fas fa-times text-xl"></i>
+              </button>
+            </div>
+            
+            <div class="space-y-3">
+              <button id="changePasswordBtn"
+                class="w-full flex items-center space-x-3 p-4 rounded-lg border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 group">
+                <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center group-hover:bg-gray-200 transition-colors">
+                  <i class="fas fa-key text-gray-600"></i>
+                </div>
+                <div class="text-left">
+                  <div class="font-medium text-gray-900">Change Password</div>
+                  <div class="text-sm text-gray-500">Update your account password</div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400 group-hover:text-gray-600 transition-colors ml-auto"></i>
+              </button>
+
+              <button id="logoutBtn"
+                class="w-full flex items-center space-x-3 p-4 rounded-lg border border-gray-200 hover:bg-red-50 hover:border-red-200 transition-all duration-200 group">
+                <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors">
+                  <i class="fas fa-sign-out-alt text-red-600"></i>
+                </div>
+                <div class="text-left">
+                  <div class="font-medium text-gray-900">Logout</div>
+                  <div class="text-sm text-gray-500">Sign out of your account</div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400 group-hover:text-red-600 transition-colors ml-auto"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check if user is logged in
+    async function checkSession() {
+      try {
+        const response = await fetch('/api/auth/check-session');
+        const data = await response.json();
+        
+        if (!data.success) {
+          // User is not logged in, redirect to login
+          window.location.href = '/auth/login';
+          return;
+        }
+        
+        // Load user profile data
+        await loadProfile();
+      } catch (error) {
+        console.error('Session check failed:', error);
+        window.location.href = '/auth/login';
+      }
+    }
+
+    // Load user profile data
+    async function loadProfile() {
+      try {
+        console.log('Loading profile data...');
+        console.log('Current session check...');
+        const sessionResponse = await fetch('/api/auth/check-session');
+        const sessionData = await sessionResponse.json();
+        console.log('Session check response:', sessionData);
+        
+        const response = await fetch('/api/user/profile');
+        console.log('Profile API response status:', response.status);
+        const data = await response.json();
+        console.log('Profile API response:', data);
+        
+        if (data.success) {
+          const user = data.user;
+          console.log('User data received:', user);
+          
+          // Update profile information
+          document.getElementById('firstName').textContent = user.firstName || 'N/A';
+          document.getElementById('lastName').textContent = user.lastName || 'N/A';
+          document.getElementById('email').textContent = user.email || 'N/A';
+          document.getElementById('phone').textContent = user.phone || 'N/A';
+          document.getElementById('gender').textContent = user.gender || 'N/A';
+          document.getElementById('memberSince').textContent = user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A';
+          
+          // Update header information
+          document.getElementById('userName').textContent = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'User';
+          document.getElementById('userEmail').textContent = user.email || '';
+          
+          // Store user ID for later use
+          window.currentUser = { id: user.id };
+          
+          // Update profile images - use the endpoint approach since it works
+          console.log('Setting profile images for user:', user.id);
+          const profileImageUrl = `/auth/profile-image/${user.id}?t=${Date.now()}`;
+          console.log('Profile image URL:', profileImageUrl);
+          
+          // Set both profile images to use the endpoint
+          document.getElementById('profileImage').src = profileImageUrl;
+          document.getElementById('headerProfileImage').src = profileImageUrl;
+          
+          // Add error handling for image loading
+          document.getElementById('profileImage').onerror = function() {
+            console.log('Profile image failed to load, using default');
+            this.src = '/images/default.png';
+          };
+          
+          document.getElementById('headerProfileImage').onerror = function() {
+            console.log('Header profile image failed to load, using default');
+            this.src = '/images/default.png';
+          };
+        } else {
+          showNotification('Failed to load profile data', 'error');
+        }
+      } catch (error) {
+        console.error('Profile load error:', error);
+        showNotification('Failed to load profile data', 'error');
+      }
+    }
+
+    // Handle profile image upload
+    document.getElementById('imageUpload').addEventListener('change', async function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        showNotification('Please select a valid image file', 'error');
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        showNotification('Image size should be less than 5MB', 'error');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('image', file);
+
+      try {
+        console.log('Uploading image...', file);
+        console.log('FormData created:', formData);
+        
+        const response = await fetch('/api/user/profile-image', {
+          method: 'POST',
+          body: formData
+        });
+
+        console.log('Upload response status:', response.status);
+        const data = await response.json();
+        console.log('Upload response data:', data);
+
+        if (data.success) {
+          showNotification('Profile image updated successfully!', 'success');
+          
+          // Update the profile image display using the endpoint approach
+          console.log('Updating profile images after upload');
+          const userId = window.currentUser ? window.currentUser.id : null;
+          if (userId) {
+            const profileImageUrl = `/auth/profile-image/${userId}?t=${Date.now()}`;
+            console.log('Updated profile image URL:', profileImageUrl);
+            
+            // Set both profile images to use the endpoint
+            document.getElementById('profileImage').src = profileImageUrl;
+            document.getElementById('headerProfileImage').src = profileImageUrl;
+          } else {
+            console.log('No user ID available, reloading page');
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          }
+          
+          // Add error handling for image loading
+          document.getElementById('profileImage').onerror = function() {
+            console.log('Profile image failed to load after upload, using default');
+            this.src = '/images/default.png';
+          };
+          
+          document.getElementById('headerProfileImage').onerror = function() {
+            console.log('Header profile image failed to load after upload, using default');
+            this.src = '/images/default.png';
+          };
+        } else {
+          showNotification(data.error || 'Failed to update profile image', 'error');
+        }
+      } catch (error) {
+        console.error('Image upload error:', error);
+        showNotification('Failed to update profile image', 'error');
+      }
+    });
+
+    // Handle edit profile button
+    document.getElementById('editProfileBtn').addEventListener('click', function() {
+      window.location.href = '/recruiter/edit-profile';
+    });
+
+    // Handle account actions card click
+    document.getElementById('accountActionsCard').addEventListener('click', function() {
+      showAccountActionsPopup();
+    });
+
+    // Handle close popup button
+    document.getElementById('closePopup').addEventListener('click', function() {
+      hideAccountActionsPopup();
+    });
+
+    // Handle popup background click
+    document.getElementById('accountActionsPopup').addEventListener('click', function(e) {
+      if (e.target === this) {
+        hideAccountActionsPopup();
+      }
+    });
+
+    // Handle change password button in popup
+    document.getElementById('changePasswordBtn').addEventListener('click', function() {
+      hideAccountActionsPopup();
+      window.location.href = '/recruiter/edit-profile';
+    });
+
+    // Handle logout
+    document.getElementById('logoutBtn').addEventListener('click', async function() {
+      if (confirm('Are you sure you want to logout?')) {
+        try {
+          const response = await fetch('/api/auth/logout', {
+            method: 'POST'
+          });
+          
+          const data = await response.json();
+          
+          if (data.success) {
+            showNotification('Logged out successfully', 'success');
+            setTimeout(() => {
+              window.location.href = data.redirect;
+            }, 1000);
+          } else {
+            showNotification('Failed to logout', 'error');
+          }
+        } catch (error) {
+          console.error('Logout error:', error);
+          showNotification('Failed to logout', 'error');
+        }
+      }
+    });
+
+    function showAccountActionsPopup() {
+      const popup = document.getElementById('accountActionsPopup');
+      const popupContent = document.getElementById('popupContent');
+      
+      popup.classList.remove('hidden');
+      
+      // Trigger animation after a small delay
+      setTimeout(() => {
+        popupContent.classList.remove('scale-95', 'opacity-0');
+        popupContent.classList.add('scale-100', 'opacity-100');
+      }, 10);
+      
+      // Prevent body scroll
+      document.body.style.overflow = 'hidden';
+    }
+
+    function hideAccountActionsPopup() {
+      const popup = document.getElementById('accountActionsPopup');
+      const popupContent = document.getElementById('popupContent');
+      
+      popupContent.classList.remove('scale-100', 'opacity-100');
+      popupContent.classList.add('scale-95', 'opacity-0');
+      
+      // Hide popup after animation
+      setTimeout(() => {
+        popup.classList.add('hidden');
+        document.body.style.overflow = '';
+      }, 300);
+    }
+
+    function showNotification(message, type) {
+      // Remove existing notifications
+      const existing = document.querySelector('.notification');
+      if (existing) existing.remove();
+      
+      const notification = document.createElement('div');
+      notification.className = `notification fixed top-5 right-5 p-4 rounded-md shadow-lg z-50 ${
+        type === 'success' ? 'bg-green-500 text-white' : 
+        type === 'error' ? 'bg-red-500 text-white' : 
+        'bg-blue-500 text-white'
+      }`;
+      notification.textContent = message;
+      
+      document.body.appendChild(notification);
+      
+      // Auto remove after 3 seconds
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.parentNode.removeChild(notification);
+        }
+      }, 3000);
+    }
+
+    // Handle ESC key to close popup
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const popup = document.getElementById('accountActionsPopup');
+        if (!popup.classList.contains('hidden')) {
+          hideAccountActionsPopup();
+        }
+      }
+    });
+
+    // Check session on page load
+    checkSession();
+  </script>
+</body>
+
+</html>

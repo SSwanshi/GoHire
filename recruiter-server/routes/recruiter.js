@@ -599,8 +599,16 @@ router.get('/edit-internship/:id', async (req, res) => {
       await user.save();
   
       req.session.successMessage = 'Profile updated successfully!';
-      req.session.user = user; 
-      res.redirect('/auth/profile');
+      req.session.user = {
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: user.phone,
+        gender: user.gender,
+        profileImage: user.profileImage
+      };
+      res.redirect('/recruiter/profile');
     } catch (err) {
       console.error('Error updating profile:', err);
       req.session.errorMessage = 'Something went wrong while updating profile.';
