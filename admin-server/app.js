@@ -370,13 +370,84 @@ app.get("/premiumuser", isPremiumUser, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "premiumuser.html"));
 });
 
-// API endpoint for premium users
-app.get("/api/premium-users", isPremiumUser, (req, res) => {
-  const premiumUsers = validUsers
-    .filter((user) => user.isPremium)
-    .sort((a, b) => a.email.localeCompare(b.email));
+// Function to create Premium User model
+function createPremiumUserModel(connection) {
+  const premiumUserSchema = new mongoose.Schema({
+    userId: {
+      type: String,
+      unique: true,
+      default: () => Math.random().toString(36).substring(2, 15) +
+          Math.random().toString(36).substring(2, 15)
+    },
+    firstName: {
+      type: String,
+      required: true
+    },
+    lastName: {
+      type: String,
+      required: true
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      match: [/.+\@.+\..+/, 'Please enter a valid email']
+    },
+    phone: {
+      type: String,
+      required: true
+    },
+    gender: {
+      type: String,
+      required: true,
+      enum: ['male', 'female', 'other']
+    },
+    password: {
+      type: String,
+      required: true
+    },
+    memberSince: {
+      type: Date,
+      default: Date.now
+    },
+    resumeId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'uploads.files'
+    }
+  }, { timestamps: true });
 
-  res.json(premiumUsers);
+  return connection.model("Premium_User", premiumUserSchema);
+}
+
+// API endpoint for premium users
+app.get("/api/premium-users", isPremiumUser, async (req, res) => {
+  try {
+    // Connect to applicant database
+    const applicantConn = await connectApplicantDB();
+    
+    // Create Premium_User model
+    const PremiumUserModel = createPremiumUserModel(applicantConn);
+    
+    // Fetch all premium users from the database
+    const premiumUsers = await PremiumUserModel.find({})
+      .select('email firstName lastName memberSince')
+      .sort({ email: 1 })
+      .lean();
+    
+    // Transform the data to match the expected format
+    const formattedUsers = premiumUsers.map(user => ({
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      memberSince: user.memberSince,
+      status: 'Premium'
+    }));
+
+    res.json(formattedUsers);
+  } catch (error) {
+    console.error("Error fetching premium users:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 connectDB();

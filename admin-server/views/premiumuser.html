@@ -93,7 +93,9 @@
             <table class="min-w-full divide-y divide-gray-200" id="premiumUsersTable">
                 <thead class="bg-gray-50">
                     <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Member Since</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                     </tr>
                 </thead>
@@ -140,10 +142,18 @@
           row.className = 'hover:bg-gray-50';
           row.innerHTML = `
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              ${user.firstName} ${user.lastName}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
               ${user.email}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-              Premium
+              ${new Date(user.memberSince).toLocaleDateString()}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                Premium
+              </span>
             </td>
           `;
           tableBody.appendChild(row);
@@ -151,7 +161,7 @@
       } else {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td colspan="2" class="px-6 py-4 text-center text-sm text-gray-500">
+          <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">
             No premium users found.
           </td>
         `;
@@ -159,7 +169,7 @@
       }
     } catch (error) {
       console.error('Error loading premium users:', error);
-      document.getElementById('premiumUsersTableBody').innerHTML = '<tr><td colspan="2" class="px-6 py-4 text-center text-sm text-red-500">Error loading premium users</td></tr>';
+      document.getElementById('premiumUsersTableBody').innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-sm text-red-500">Error loading premium users</td></tr>';
     }
   }
 
