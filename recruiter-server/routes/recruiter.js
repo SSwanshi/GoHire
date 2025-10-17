@@ -215,9 +215,11 @@ router.get('/companies', async (req, res) => {
         const companies = await Company.find({ createdBy: req.session.userId });
 
         const successMessage = req.session.successMessage;
+        const errorMessage = req.session.errorMessage;
         req.session.successMessage = null;
+        req.session.errorMessage = null;
 
-        res.render('companies', { companies, successMessage, user:req.session.user });
+        res.render('companies', { companies, successMessage, errorMessage, user:req.session.user });
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch Companies' });
     }
@@ -389,28 +391,47 @@ router.get("/edit-company/:id", async (req, res) => {
   });
   
 
-  router.post("/edit-company/:id", upload.single("logo"), async (req, res) => {
-    const { companyName, website, location } = req.body;
-    
-    const updateData = {
-        companyName: companyName.trim(),  // optional: can remove if you want it fixed
-        website: website.trim(),
-        location: location.trim()
-    };
+  router.post("/edit-company/:id", upload.fields([{ name: "logo" }, { name: "proofDocument" }]), async (req, res) => {
+    try {
+        const { companyName, website, location } = req.body;
+        
+        // Check if required fields are filled
+        if (!companyName || !website || !location) {
+            req.session.errorMessage = "All fields are required";
+            return res.redirect("/recruiter/companies");
+        }
+        
+        const updateData = {
+            companyName: companyName.trim(),
+            website: website.trim(),
+            location: location.trim()
+        };
 
-    // Only update logo if a new one is uploaded
-    if (req.file) {
-        const uploadStream = bucket.openUploadStream(req.file.originalname);
-        uploadStream.end(req.file.buffer);
-        updateData.logoId = uploadStream.id;
+        // Only update logo if a new one is uploaded
+        if (req.files && req.files.logo) {
+            const uploadStream = bucket.openUploadStream(req.files.logo[0].originalname);
+            uploadStream.end(req.files.logo[0].buffer);
+            updateData.logoId = uploadStream.id;
+        }
+
+        // Only update proof document if a new one is uploaded
+        if (req.files && req.files.proofDocument) {
+            const uploadStream = bucket.openUploadStream(req.files.proofDocument[0].originalname);
+            uploadStream.end(req.files.proofDocument[0].buffer);
+            updateData.proofDocumentId = uploadStream.id;
+        }
+
+        // Prevent proofDocumentId from being changed
+        delete req.body.proofDocumentId;
+
+        await Company.findByIdAndUpdate(req.params.id, updateData);
+        req.session.successMessage = "Company updated successfully!";
+        res.redirect("/recruiter/companies");
+    } catch (error) {
+        console.error("Error updating company:", error);
+        req.session.errorMessage = "Failed to update company. Please try again.";
+        res.redirect("/recruiter/companies");
     }
-
-    // Prevent proofDocumentId from being changed
-    delete req.body.proofDocumentId;
-
-    await Company.findByIdAndUpdate(req.params.id, updateData);
-    req.session.successMessage = "Company updated successfully!";
-    res.redirect("/recruiter/companies");
 });
 
 
