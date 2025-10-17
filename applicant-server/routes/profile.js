@@ -59,11 +59,19 @@ router.get('/', requireAuth, async (req, res) => {
 // Upload resume
 router.post('/resume', upload.single('resume'), async (req, res) => {
     try {
-        if (!req.file) return res.status(400).send('No file uploaded');
-        if (!req.session.user?.id) return res.status(401).send('Not logged in');
+        const isAjax = req.xhr || req.headers['x-requested-with'] === 'XMLHttpRequest' || (req.headers.accept && req.headers.accept.indexOf('json') > -1);
+        
+        if (!req.file) {
+            return isAjax ? res.status(400).json({ success: false, message: 'No file uploaded' }) : res.status(400).send('No file uploaded');
+        }
+        if (!req.session.user?.id) {
+            return isAjax ? res.status(401).json({ success: false, message: 'Not logged in' }) : res.status(401).send('Not logged in');
+        }
 
         const user = await User.findOne({ userId: req.session.user.id });
-        if (!user) return res.status(404).send('User not found');
+        if (!user) {
+            return isAjax ? res.status(404).json({ success: false, message: 'User not found' }) : res.status(404).send('User not found');
+        }
 
         const bucket = getBucket();
 
@@ -83,7 +91,7 @@ router.post('/resume', upload.single('resume'), async (req, res) => {
             user.resumeId = uploadStream.id;
             await user.save();
             // Check if it's an AJAX request
-            if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            if (isAjax) {
                 res.json({ success: true, message: 'Resume uploaded successfully' });
             } else {
                 res.redirect('/profile');
@@ -96,8 +104,9 @@ router.post('/resume', upload.single('resume'), async (req, res) => {
 
     } catch (error) {
         console.error('Upload error:', error);
-        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
-            res.status(500).json({ message: 'Upload failed' });
+        const isAjax = req.xhr || req.headers['x-requested-with'] === 'XMLHttpRequest' || (req.headers.accept && req.headers.accept.indexOf('json') > -1);
+        if (isAjax) {
+            res.status(500).json({ success: false, message: 'Upload failed' });
         } else {
             res.status(500).send('Upload failed');
         }
@@ -131,11 +140,17 @@ router.get('/resume', async (req, res) => {
 // Delete resume
 router.post('/resume/delete', async (req, res) => {
     try {
+        const isAjax = req.xhr || req.headers['x-requested-with'] === 'XMLHttpRequest' || (req.headers.accept && req.headers.accept.indexOf('json') > -1);
+        
         const userId = req.session.user?.id;
-        if (!userId) return res.status(401).send('Not logged in');
+        if (!userId) {
+            return isAjax ? res.status(401).json({ success: false, message: 'Not logged in' }) : res.status(401).send('Not logged in');
+        }
 
         const user = await User.findOne({ userId });
-        if (!user?.resumeId) return res.status(404).send('No resume found');
+        if (!user?.resumeId) {
+            return isAjax ? res.status(404).json({ success: false, message: 'No resume found' }) : res.status(404).send('No resume found');
+        }
 
         const bucket = getBucket();
         await bucket.delete(new ObjectId(user.resumeId));
@@ -144,15 +159,16 @@ router.post('/resume/delete', async (req, res) => {
         await user.save();
 
         // Check if it's an AJAX request
-        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+        if (isAjax) {
             res.json({ success: true, message: 'Resume deleted successfully' });
         } else {
             res.redirect('/profile');
         }
     } catch (error) {
         console.error('Delete error:', error);
-        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
-            res.status(500).json({ message: 'Error deleting resume' });
+        const isAjax = req.xhr || req.headers['x-requested-with'] === 'XMLHttpRequest' || (req.headers.accept && req.headers.accept.indexOf('json') > -1);
+        if (isAjax) {
+            res.status(500).json({ success: false, message: 'Error deleting resume' });
         } else {
             res.status(500).send('Error deleting resume');
         }
@@ -359,11 +375,19 @@ const profileImageUpload = multer({
 // Upload profile image
 router.post('/image', profileImageUpload.single('profileImage'), async (req, res) => {
     try {
-        if (!req.file) return res.status(400).send('No file uploaded');
-        if (!req.session.user?.id) return res.status(401).send('Not logged in');
+        const isAjax = req.xhr || req.headers['x-requested-with'] === 'XMLHttpRequest' || (req.headers.accept && req.headers.accept.indexOf('json') > -1);
+        
+        if (!req.file) {
+            return isAjax ? res.status(400).json({ success: false, message: 'No file uploaded' }) : res.status(400).send('No file uploaded');
+        }
+        if (!req.session.user?.id) {
+            return isAjax ? res.status(401).json({ success: false, message: 'Not logged in' }) : res.status(401).send('Not logged in');
+        }
 
         const user = await User.findOne({ userId: req.session.user.id });
-        if (!user) return res.status(404).send('User not found');
+        if (!user) {
+            return isAjax ? res.status(404).json({ success: false, message: 'User not found' }) : res.status(404).send('User not found');
+        }
 
         const bucket = getBucket();
 
@@ -383,7 +407,7 @@ router.post('/image', profileImageUpload.single('profileImage'), async (req, res
             user.profileImageId = uploadStream.id;
             await user.save();
             // Check if it's an AJAX request
-            if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            if (isAjax) {
                 res.json({ success: true, message: 'Profile image uploaded successfully' });
             } else {
                 res.redirect('/profile');
@@ -396,8 +420,9 @@ router.post('/image', profileImageUpload.single('profileImage'), async (req, res
 
     } catch (error) {
         console.error('Upload error:', error);
-        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
-            res.status(500).json({ message: 'Upload failed' });
+        const isAjax = req.xhr || req.headers['x-requested-with'] === 'XMLHttpRequest' || (req.headers.accept && req.headers.accept.indexOf('json') > -1);
+        if (isAjax) {
+            res.status(500).json({ success: false, message: 'Upload failed' });
         } else {
             res.status(500).send('Upload failed');
         }
@@ -432,11 +457,17 @@ router.get('/image', async (req, res) => {
 // Delete profile image
 router.delete('/image', async (req, res) => {
     try {
+        const isAjax = req.xhr || req.headers['x-requested-with'] === 'XMLHttpRequest' || (req.headers.accept && req.headers.accept.indexOf('json') > -1);
+        
         const userId = req.session.user?.id;
-        if (!userId) return res.status(401).send('Not logged in');
+        if (!userId) {
+            return isAjax ? res.status(401).json({ success: false, message: 'Not logged in' }) : res.status(401).send('Not logged in');
+        }
 
         const user = await User.findOne({ userId });
-        if (!user?.profileImageId) return res.status(404).send('No profile image found');
+        if (!user?.profileImageId) {
+            return isAjax ? res.status(404).json({ success: false, message: 'No profile image found' }) : res.status(404).send('No profile image found');
+        }
 
         const bucket = getBucket();
         await bucket.delete(new ObjectId(user.profileImageId));
@@ -444,10 +475,19 @@ router.delete('/image', async (req, res) => {
         user.profileImageId = null;
         await user.save();
 
-        res.sendStatus(200);
+        if (isAjax) {
+            res.json({ success: true, message: 'Profile image deleted successfully' });
+        } else {
+            res.sendStatus(200);
+        }
     } catch (error) {
         console.error('Delete error:', error);
-        res.status(500).send('Error deleting profile image');
+        const isAjax = req.xhr || req.headers['x-requested-with'] === 'XMLHttpRequest' || (req.headers.accept && req.headers.accept.indexOf('json') > -1);
+        if (isAjax) {
+            res.status(500).json({ success: false, message: 'Error deleting profile image' });
+        } else {
+            res.status(500).send('Error deleting profile image');
+        }
     }
 });
 

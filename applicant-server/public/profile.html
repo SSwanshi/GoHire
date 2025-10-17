@@ -509,12 +509,33 @@
       try {
         const response = await fetch('/profile/image', {
           method: 'POST',
-          body: formData
+          body: formData,
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
         });
         
         if (response.ok) {
-          showToast('Profile image uploaded successfully!', 'success');
-          setTimeout(() => location.reload(), 1500);
+          const data = await response.json();
+          showToast(data.message || 'Profile image uploaded successfully!', 'success');
+          
+          // Update profile image dynamically without reload
+          userData.profileImageId = true; // Mark as having image
+          hasProfileImage = true;
+          
+          // Update the main profile image
+          const profileImageContainer = document.getElementById('profileImageContainer');
+          const timestamp = Date.now();
+          profileImageContainer.innerHTML = `<img src="/profile/image?t=${timestamp}" class="w-32 h-32 rounded-full border-4 border-blue-200 shadow-lg object-cover" alt="Profile">`;
+          
+          // Show delete button
+          document.getElementById('deleteImageBtn').style.display = 'block';
+          
+          // Update navbar profile image
+          renderNavigation();
+          
+          // Clear file input
+          fileInput.value = '';
         } else {
           const data = await response.json();
           showToast(data.message || 'Upload failed', 'error');
@@ -533,12 +554,28 @@
       
       try {
         const response = await fetch('/profile/image', {
-          method: 'DELETE'
+          method: 'DELETE',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
         });
         
         if (response.ok) {
           showToast('Profile image deleted successfully!', 'success');
-          setTimeout(() => location.reload(), 1000);
+          
+          // Update UI dynamically without reload
+          userData.profileImageId = null;
+          hasProfileImage = false;
+          
+          // Update the main profile image to show initial
+          const profileImageContainer = document.getElementById('profileImageContainer');
+          profileImageContainer.innerHTML = `<div class="w-32 h-32 flex items-center justify-center rounded-full border-4 border-blue-200 shadow-lg bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-700 text-4xl font-bold">${userData.firstName.charAt(0).toUpperCase()}</div>`;
+          
+          // Hide delete button
+          document.getElementById('deleteImageBtn').style.display = 'none';
+          
+          // Update navbar to show initial
+          renderNavigation();
         } else {
           showToast('Failed to delete image', 'error');
         }
@@ -576,12 +613,18 @@
       try {
         const response = await fetch('/profile/resume', {
           method: 'POST',
-          body: formData
+          body: formData,
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
         });
         
         if (response.ok) {
-          showToast('Resume uploaded successfully!', 'success');
-          setTimeout(() => location.reload(), 1500);
+          const data = await response.json();
+          showToast(data.message || 'Resume uploaded successfully!', 'success');
+          
+          // Update resume section dynamically without reload
+          renderResumeSection(file.name);
         } else {
           const data = await response.json();
           showToast(data.message || 'Upload failed', 'error');
@@ -600,14 +643,21 @@
       
       try {
         const response = await fetch('/profile/resume/delete', {
-          method: 'POST'
+          method: 'POST',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
         });
         
         if (response.ok) {
-          showToast('Resume deleted successfully!', 'success');
-          setTimeout(() => location.reload(), 1000);
+          const data = await response.json();
+          showToast(data.message || 'Resume deleted successfully!', 'success');
+          
+          // Update resume section dynamically without reload
+          renderResumeSection(null);
         } else {
-          showToast('Failed to delete resume', 'error');
+          const data = await response.json();
+          showToast(data.message || 'Failed to delete resume', 'error');
         }
       } catch (error) {
         console.error('Error:', error);
